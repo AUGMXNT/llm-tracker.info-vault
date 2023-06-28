@@ -29,3 +29,10 @@ If you are more technical:
 - [openplayground](https://github.com/nat/openplayground)
 - [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [exllama](https://github.com/turboderp/exllama)
+
+ 
+
+Existing Resources
+
+- [LocalLLaMA Wiki](https://www.reddit.com/r/LocalLLaMA/wiki/index/)
+- [https://github.com/underlines/awesome-marketing-datascience/blob/master/README.md](https://github.com/underlines/awesome-marketing-datascience/blob/master/README.md)
