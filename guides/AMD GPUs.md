@@ -1,7 +1,7 @@
 As of June 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is only supported by Linux.
 
 # Linux
-Testing was done with a Radeon VII (16GB HBM2 rAM, gfx906) on Arch Linux
+Testing was done with a Radeon VII (16GB HBM2 VRAM, gfx906) on Arch Linux
 
 ## Arch Linux Setup
 Install rocm:
