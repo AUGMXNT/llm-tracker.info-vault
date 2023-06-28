@@ -1,11 +1,9 @@
 As of June 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is only supported by Linux.
 
-# Arch Linux
+# Linux
 Testing was done with a Radeon VII (16GB HBM2 rAM, gfx906) on Arch Linux
 
-## llama.cpp
-Getting this working was simpler than expected:
-
+## Arch Linux Setup
 Install rocm:
 ```
 yay -S radeontop rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
@@ -21,6 +19,7 @@ mamba create -n llm
 mamba activate llm
 ```
 
+## llama.cpp
 Let's first try llama.cpp
 ```
 mkdir ~/llm
