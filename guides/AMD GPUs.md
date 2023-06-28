@@ -249,4 +249,4 @@ In the Windows terminal, run it with `-ngl 99` to load all the layers into memor
 .\main.exe -m model.bin -ngl 99
 ```
 
-Performance on an RTX 7900XT was not impressive (about 9 t/s on a 13b-q5_1 model) but better than nothing (about 2X clblast w/o loading the layers into GPU memory).
+Performance on an Radeon 7900XT was not impressive (about 9 t/s on a 13b-q5_1 model) but better than nothing (about 2X clblast w/o loading the layers into GPU memory).
