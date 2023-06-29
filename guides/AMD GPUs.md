@@ -19,6 +19,14 @@ mamba create -n llm
 mamba activate llm
 ```
 
+## OC
+We have some previous known good memory timings for our Radeon VII card:
+```
+sudo sh -c 'echo manual > /sys/class/drm/card0/device/power_dpm_force_performance_level'
+sudo sh -c 'echo 8 > /sys/class/drm/card0/device/pp_dpm_sclk'
+sudo amdmemorytweak --gpu 0 --ref 7500 --rtp 6 --rrds 3 --faw 12 --ras 19 --rc 30 --rcdrd 11 --rp 11
+```
+
 ## llama.cpp
 Let's first try llama.cpp
 ```
@@ -31,57 +39,128 @@ LLAMA_CLBLAST=1 make
 * [https://www.reddit.com/r/LocalLLaMA/comments/13p8zq2/update_opencl_is_merged_amd_gpus_now_work_with/](https://www.reddit.com/r/LocalLLaMA/comments/13p8zq2/update_opencl_is_merged_amd_gpus_now_work_with/)
 * [https://www.reddit.com/r/LocalLLaMA/comments/13m8li2/finally_got_a_model_running_on_my_xtx_using/](https://www.reddit.com/r/LocalLLaMA/comments/13m8li2/finally_got_a_model_running_on_my_xtx_using/)
 
-We're running a random recent llama-13b fine tune: [https://huggingface.co/TheBloke/manticore-13b-chat-pyg-GGML](https://huggingface.co/TheBloke/manticore-13b-chat-pyg-GGML)
+We're benchmarking with with a recent llama-13b q4_0 fine tune ([Nous Hermes](https://huggingface.co/TheBloke/Nous-Hermes-13B-GGML))
 
-NOTE: updated 2023-06-13, we need at least `-ngl 41` (output layer in VRAM) but `-ngl 99` will ensure everything goes in memory. Re-running with latest code.
+Here are the results from 2023-06-29 [commit 96a712c](https://github.com/ggerganov/llama.cpp/commit/96a712ca1b7f427e3bd7ffc0c70b2105cfc7fbf1)
 
-This works and we get about 5.9 tokens/s at full context:
-```
-# OC
-sudo sh -c 'echo manual > /sys/class/drm/card0/device/power_dpm_force_performance_level'
-sudo sh -c 'echo 8 > /sys/class/drm/card0/device/pp_dpm_sclk'
-sudo amdmemorytweak --gpu 0 --ref 7500 --rtp 6 --rrds 3 --faw 12 --ras 19 --rc 30 --rcdrd 11 --rp 11
 
-./main -m ../models/Manticore-13B-Chat-Pyg.ggmlv3.q5_1.bin -ngl 99 -n 2048 --ignore-eos
-
-llama_print_timings:        load time =  5051.83 ms
-llama_print_timings:      sample time =  2263.84 ms /  2048 runs   (    1.11 ms per token)
-llama_print_timings: prompt eval time = 47732.06 ms /  1801 tokens (   26.50 ms per token)
-llama_print_timings:        eval time = 346007.66 ms /  2040 runs   (  169.61 ms per token)
-llama_print_timings:       total time = 399521.84 ms
+NOTE: We use `-ngl 99` to ensure all layers are loaded in memory.
 
 ```
+CUDA_VISIBLE_DEVICES=0 ./main -m ../models/nous-hermes-13b.ggmlv3.q4_0.bin -ngl 99 -n 2048 --ignore-eos
 
-`radeontop` looks something like:
+main: build = 762 (96a712c)
+main: seed  = 1688035176
+ggml_opencl: selecting platform: 'AMD Accelerated Parallel Processing'
+ggml_opencl: selecting device: 'gfx906:sramecc+:xnack-'
+ggml_opencl: device FP16 support: true
+llama.cpp: loading model from ../models/nous-hermes-13b.ggmlv3.q4_0.bin
+llama_model_load_internal: format     = ggjt v3 (latest)
+llama_model_load_internal: n_vocab    = 32001
+llama_model_load_internal: n_ctx      = 512
+llama_model_load_internal: n_embd     = 5120
+llama_model_load_internal: n_mult     = 256
+llama_model_load_internal: n_head     = 40
+llama_model_load_internal: n_layer    = 40
+llama_model_load_internal: n_rot      = 128
+llama_model_load_internal: ftype      = 2 (mostly Q4_0)
+llama_model_load_internal: n_ff       = 13824
+llama_model_load_internal: model size = 13B
+llama_model_load_internal: ggml ctx size =    0.09 MB
+llama_model_load_internal: using OpenCL for GPU acceleration
+llama_model_load_internal: mem required  = 2223.88 MB (+ 1608.00 MB per state)
+llama_model_load_internal: offloading 40 repeating layers to GPU
+llama_model_load_internal: offloading non-repeating layers to GPU
+llama_model_load_internal: offloading v cache to GPU
+llama_model_load_internal: offloading k cache to GPU
+llama_model_load_internal: offloaded 43/43 layers to GPU
+llama_model_load_internal: total VRAM used: 8416 MB
+llama_new_context_with_model: kv self size  =  400.00 MB
+
+system_info: n_threads = 4 / 8 | AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 | 
+sampling: repeat_last_n = 64, repeat_penalty = 1.100000, presence_penalty = 0.000000, frequency_penalty = 0.000000, top_k = 40, tfs_z = 1.000000, top_p = 0.950000, typical_p = 1.000000, temp = 0.800000, mirostat = 0, mirostat_lr = 0.100000, mirostat_ent = 5.000000
+generate: n_ctx = 512, n_batch = 512, n_predict = 2048, n_keep = 0
+
+...
+
+llama_print_timings:        load time =  6946.39 ms
+llama_print_timings:      sample time =  2172.76 ms /  2048 runs   (    1.06 ms per token,   942.58 tokens per second)
+llama_print_timings: prompt eval time = 51096.76 ms /  1801 tokens (   28.37 ms per token,    35.25 tokens per second)
+llama_print_timings:        eval time = 308604.23 ms /  2040 runs   (  151.28 ms per token,     6.61 tokens per second)
+llama_print_timings:       total time = 362807.86 ms
 ```
-GPU  Temp (DieEdge)  AvgPwr  SCLK     MCLK     Fan    Perf    PwrCap  VRAM%  GPU%
-0    58.0c           153.0W  1801Mhz  1000Mhz  51.37%  manual  250.0W   65%   58%
+
+We get 6.61 t/s.
+
+`rocm-smi` looks something like:
+```
+GPU  Temp (DieEdge)  AvgPwr  SCLK     MCLK    Fan     Perf    PwrCap  VRAM%  GPU%
+0    59.0c           112.0W  1801Mhz  800Mhz  44.71%  manual  250.0W   49%   40%
 ```
 ## llama.cpp HIP fork
 Now let's see if [HIPified CUDA](https://github.com/ggerganov/llama.cpp/pull/1087) makes a difference using [this fork](https://github.com/SlyEcho/llama.cpp/tree/hipblas)
+
+Here are the results from a 13b-q4_0 on 2023-06-29, [commit 04419f1](https://github.com/SlyEcho/llama.cpp/commit/04419f18947e7b0dc43c07869eac3965f22b34cf) 
 ```
 git clone https://github.com/SlyEcho/llama.cpp llama.cpp-hip
 cd llama.cpp-hip
 git fetch
 make -j8 LLAMA_HIPBLAS=1
 
-llama_print_timings:        load time = 15094.90 ms
-llama_print_timings:      sample time =   120.42 ms /   200 runs   (    0.60 ms per token)
-llama_print_timings: prompt eval time =  8700.99 ms /     2 tokens ( 4350.49 ms per token)
-llama_print_timings:        eval time = 25970.27 ms /   199 runs   (  130.50 ms per token)
-llama_print_timings:       total time = 41207.19 ms
+CUDA_VISIBLE_DEVICES=0 ./main -m ../models/nous-hermes-13b.ggmlv3.q4_0.bin -ngl 99 -n 2048 --ignore-eos
 
+main: build = 821 (04419f1)
+main: seed  = 1688034262
+ggml_init_cublas: found 1 CUDA devices:
+  Device 0: AMD Radeon VII
+llama.cpp: loading model from ../models/nous-hermes-13b.ggmlv3.q4_0.bin
+llama_model_load_internal: format     = ggjt v3 (latest)
+llama_model_load_internal: n_vocab    = 32001
+llama_model_load_internal: n_ctx      = 512
+llama_model_load_internal: n_embd     = 5120
+llama_model_load_internal: n_mult     = 256
+llama_model_load_internal: n_head     = 40
+llama_model_load_internal: n_layer    = 40
+llama_model_load_internal: n_rot      = 128
+llama_model_load_internal: ftype      = 2 (mostly Q4_0)
+llama_model_load_internal: n_ff       = 13824
+llama_model_load_internal: model size = 13B
+llama_model_load_internal: ggml ctx size =    0.09 MB
+llama_model_load_internal: using CUDA for GPU acceleration
+llama_model_load_internal: mem required  = 2135.99 MB (+ 1608.00 MB per state)
+llama_model_load_internal: allocating batch_size x 1 MB = 512 MB VRAM for the scratch buffer
+llama_model_load_internal: offloading 40 repeating layers to GPU
+llama_model_load_internal: offloading non-repeating layers to GPU
+llama_model_load_internal: offloading v cache to GPU
+llama_model_load_internal: offloading k cache to GPU
+llama_model_load_internal: offloaded 43/43 layers to GPU
+llama_model_load_internal: total VRAM used: 9016 MB
+llama_new_context_with_model: kv self size  =  400.00 MB
+
+system_info: n_threads = 4 / 8 | AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0
+ | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 |
+ sampling: repeat_last_n = 64, repeat_penalty = 1.100000, presence_penalty = 0.000000, frequency_penalty = 0.000000, top_k = 40, tfs_z = 1.000000, top_p = 0.950000, typical_p = 1.000000, temp = 0.800000, mirostat = 0, mirostat_lr = 0.100000, mirostat_ent = 5.000000
+generate: n_ctx = 512, n_batch = 512, n_predict = 2048, n_keep = 0
+
+...
+
+llama_print_timings:        load time =  4049.27 ms
+llama_print_timings:      sample time =  1307.03 ms /  2048 runs   (    0.64 ms per token,  1566.91 tokens per second)
+llama_print_timings: prompt eval time = 17486.67 ms /  1801 tokens (    9.71 ms per token,   102.99 tokens per second)
+llama_print_timings:        eval time = 157571.58 ms /  2040 runs   (   77.24 ms per token,    12.95 tokens per second)
+llama_print_timings:       total time = 176912.26 m
 ```
 * See also: [https://github.com/ggerganov/llama.cpp/pull/1087](https://github.com/ggerganov/llama.cpp/pull/1087)
 
-2023-06-13 Update: This is about 23% faster than the OpenCL version.
+We get 12.95 t/s, almost 2X faster than the OpenCL version. If you are using llama.cpp on AMD GPUs, I think it's safe to say you should definitely use this HIP fork.
 
-At the end of it though we're at 7.7 tokens/s, and about a 3.5X over running on CPU (2.2 token/s on an AMD 5 Ryzen 2400G).
+Note, the 4C Zen2 Ryzen 2400G CPU gets about 2.2 t/s, so performance is about 6X.
 
 ## exllama
 [ROCm support was merged](https://github.com/turboderp/exllama/pull/7) 2023-06-07.
 
-Wow, that's not bad. It runs full context at 15 tokens/s, 2X faster than the llama.cpp HIP code:
+We run a 13B 4-bit GPTQ ([Manticore-13B-GPTQ](https://huggingface.co/TheBloke/Manticore-13B-GPTQ)) on 2023-06-29 w/ [commit 93d50d1](https://github.com/turboderp/exllama/commit/93d50d1cebf7105cba56f89fa057397e95d60572)
+
 ```
 # make sure we have git-lfs working
 yay -S git-lfs
@@ -91,11 +170,12 @@ git clone https://huggingface.co/TheBloke/Manticore-13B-GPTQ
 
 git clone https://github.com/turboderp/exllama
 cd exllama
+
 # install ROCm PyTorch https://pytorch.org/get-started/locally/
 pip3 install torch --index-url https://download.pytorch.org/whl/rocm5.4.2
 pip install -r requirements.txt
 
-python test_benchmark_inference.py -d ~/llm/models/Manticore-13B-GPTQ/ -p                       (llm) 
+python test_benchmark_inference.py -d ~/llm/models/Manticore-13B-GPTQ/ -p
 Successfully preprocessed all matching files.
  -- Tokenizer: /home/lhl/llm/models/Manticore-13B-GPTQ/tokenizer.model
  -- Model config: /home/lhl/llm/models/Manticore-13B-GPTQ/config.json
@@ -110,25 +190,28 @@ Successfully preprocessed all matching files.
  -- --matmul_no_half2
  -- --silu_no_half2
  -- Options: ['perf']
- ** Time, Load model: 7.24 seconds
+ ** Time, Load model: 6.86 seconds
  ** Time, Load tokenizer: 0.01 seconds
  -- Groupsize (inferred): 128
  -- Act-order (inferred): no
  ** VRAM, Model: [cuda:0] 6,873.52 MB - [cuda:1] 0.00 MB
  -- Warmup pass 1...
- ** Time, Warmup: 4.77 seconds
+ ** Time, Warmup: 0.36 seconds
  -- Warmup pass 2...
- ** Time, Warmup: 4.54 seconds
+ ** Time, Warmup: 4.43 seconds
  -- Inference, first pass.
- ** Time, Inference: 4.53 seconds
- ** Speed: 423.57 tokens/second
+ ** Time, Inference: 4.52 seconds
+ ** Speed: 425.13 tokens/second
  -- Generating 128 tokens, 1920 token prompt...
- ** Speed: 15.06 tokens/second
+ ** Speed: 9.92 tokens/second
  -- Generating 128 tokens, 4 token prompt...
- ** Speed: 19.18 tokens/second
- ** VRAM, Inference: [cuda:0] 2,253.08 MB - [cuda:1] 0.00 MB
- ** VRAM, Total: [cuda:0] 9,126.60 MB - [cuda:1] 0.00 MB
+ ** Speed: 19.21 tokens/second
+ ** VRAM, Inference: [cuda:0] 2,253.20 MB - [cuda:1] 0.00 MB
+ ** VRAM, Total: [cuda:0] 9,126.72 MB - [cuda:1] 0.00 MB
 ```
+
+These results are actually a regression from [commit dd63e07](https://github.com/turboderp/exllama/commit/dd63e0734b7df5fcbd86d30ad82a582da25a3a73) (which was about 15 t/s). At 9.92 t/s, the llama.cpp HIP{ fork is now 30% faster.
+
 
 ## RTX 4090 Comparison
 As a point of comparison, running the same model on my stock RTX 4090 on `llama.cpp` with `make LLAMA_CUBLAS=1` runs at about 21 tokens/s:
