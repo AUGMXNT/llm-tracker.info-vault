@@ -214,59 +214,51 @@ These results are actually a regression from [commit dd63e07](https://github.com
 
 
 ## RTX 4090 Comparison
-As a point of comparison, running the same model on my stock RTX 4090 on `llama.cpp` with `make LLAMA_CUBLAS=1` runs at about 21 tokens/s:
+As a point of comparison, running `llama.cpp` with `make LLAMA_CUBLAS=1` runs at about 72 t/s:
 ```
-llama_print_timings:        load time =  2761.96 ms
-llama_print_timings:      sample time =   864.29 ms /  2048 runs   (    0.42 ms per token)
-llama_print_timings: prompt eval time =  6186.81 ms /  1801 tokens (    3.44 ms per token)
-llama_print_timings:        eval time = 97018.52 ms /  2040 runs   (   47.56 ms per token)
-llama_print_timings:       total time = 106992.91 ms
+./main -m /data/ai/models/llm/manticore/Manticore-13B-Chat-Pyg.ggmlv3.q4_0.bin -ngl 99 -n 2048 --ignore-eos
+
+...
+
+llama_print_timings:        load time =  3569.39 ms
+llama_print_timings:      sample time =   930.53 ms /  2048 runs   (    0.45 ms per token,  2200.89 tokens per second)
+llama_print_timings: prompt eval time =  2608.07 ms /  1801 tokens (    1.45 ms per token,   690.55 tokens per second)
+llama_print_timings:        eval time = 28273.11 ms /  2040 runs   (   13.86 ms per token,    72.15 tokens per second)
+llama_print_timings:       total time = 32225.03 ms
 ```
-And while not exactly 1:1 (since we're comparing vs q5_1), running the 4bit GPTQ on [exllama](https://github.com/turboderp/exllama), we get up to 78.75 tokens/s, about 3.7X faster than llama.cpp on the same GPU, and about 12X faster performance than the Radeon VII:
+
+[exllama](https://github.com/turboderp/exllama), performs about on-par to llama.cpp and we get 74.79 t/s:
 ```
 python test_benchmark_inference.py -p -d /models/llm/manticore/manticore-13b-chat-pyg-GPTQ
-
-** Time, Load model: 1.41 seconds
- -- Groupsize (inferred): 128
- -- Act-order (inferred): no
- ** VRAM, Model: [cuda:0] 6,683.17 MB
- -- Warmup pass 1...
- ** Time, Warmup: 1.50 seconds
- -- Warmup pass 2...
- ** Time, Warmup: 0.36 seconds
- -- Warmup pass 3...
- ** Time, Warmup: 0.35 seconds
- -- Inference, first pass.
- ** Time, Inference: 0.36 seconds
- ** Speed: 5391.67 tokens/second
- -- Generating 128 tokens, 1920 token prompt...
- ** Speed: 78.75 tokens/second
- -- Generating 128 tokens, 4 token prompt...
- ** Speed: 78.77 tokens/second
- ** VRAM, Inference: [cuda:0] 2,254.17 MB
- ** VRAM, Total: [cuda:0] 8,937.34 MB
-```
-On 2023-06-12 the current HEAD is running faster (6% at full context, 25% at smaller context), so use theses numbers just as a ballpark...
-```
- ** Time, Load model: 1.34 seconds
- ** Time, Load tokenizer: 0.00 seconds
+ -- Tokenizer: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/tokenizer.model
+ -- Model config: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/config.json
+ -- Model: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/Manticore-13B-Chat-Pyg-GPTQ-4bit-128g.no-act-order.safetensors
+ -- Sequence length: 2048
+ -- Tuning:
+ -- --matmul_recons_thd: 8
+ -- --fused_mlp_thd: 2
+ -- --sdp_thd: 8
+ -- Options: ['perf']
+ ** Time, Load model: 3.98 seconds
+ ** Time, Load tokenizer: 0.01 seconds
  -- Groupsize (inferred): 128
  -- Act-order (inferred): no
  ** VRAM, Model: [cuda:0] 6,873.52 MB
  -- Warmup pass 1...
- ** Time, Warmup: 0.65 seconds
+ ** Time, Warmup: 1.55 seconds
  -- Warmup pass 2...
- ** Time, Warmup: 0.26 seconds
+ ** Time, Warmup: 0.07 seconds
  -- Inference, first pass.
- ** Time, Inference: 0.26 seconds
- ** Speed: 7425.85 tokens/second
+ ** Time, Inference: 0.25 seconds
+ ** Speed: 7600.98 tokens/second
  -- Generating 128 tokens, 1920 token prompt...
- ** Speed: 83.39 tokens/second
+ ** Speed: 74.79 tokens/second
  -- Generating 128 tokens, 4 token prompt...
- ** Speed: 98.84 tokens/second
- ** VRAM, Inference: [cuda:0] 1,772.67 MB
- ** VRAM, Total: [cuda:0] 8,646.19 MB
+ ** Speed: 99.17 tokens/second
+ ** VRAM, Inference: [cuda:0] 1,772.79 MB
+ ** VRAM, Total: [cuda:0] 8,646.31 MB
 ```
+
 ## Recommendation
 Radeon VII 16GB cards are going for about $250-$300 on eBay (equivalent to an Instinct MI50 which range a lot in price; MI60 or MI100 are similar also similar generation cards but with 32GB of RAM). 
 
