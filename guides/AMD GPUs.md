@@ -267,50 +267,54 @@ For the performance, you're much better off paying about [$200](https://www.ebay
 ## Bonus: GTX 1080 Ti Comparison
 I dug out my old GTX 1080 Ti and installed it to get a ballpark vs P40 numbers. 
 
-As of [2023-06-07](https://github.com/ggerganov/llama.cpp/pull/1703), llama.cpp's CUDA support was refactored to for multi-GPU support (you can use `CUDA_VISIBLE_DEVICES` to force a device)
+We are running `llama.cpp` with the same checkout (2023-06-29 commit 96a712c). The GPU refactor no longer has a CUDA kernel for the 1080 Ti, so I've used `LLAMA_CLBLAST=1` instead, but it still runs faster than the older (un-optimized) CUDA version (previous tests output at 5.8 t/s).
 
-My 1080 Ti has 11GB of VRAM, which means it can't fit a q5_1 w/ full context, but here was a smaller `llama.cpp` run that gives a ballpark. It gets ~5.8 tokens/s, a similar speed to the Radeon VII:
 ```
-export CUDA_VISIBLE_DEVICES=1
-./main -m /data/ai/models/llm/manticore/Manticore-13B-Chat-Pyg.ggmlv3.q5_1.bin -ngl 40
+./main -m /data/ai/models/llm/manticore/Manticore-13B-Chat-Pyg.ggmlv3.q4_0.bin -ngl 99 -n 2048 --ignore-eos                                                (llama) 
+main: build = 762 (96a712c)
+main: seed  = 1688074299
+ggml_opencl: selecting platform: 'NVIDIA CUDA'
+ggml_opencl: selecting device: 'NVIDIA GeForce GTX 1080 Ti'
+ggml_opencl: device FP16 support: false
+llama.cpp: loading model from /data/ai/models/llm/manticore/Manticore-13B-Chat-Pyg.ggmlv3.q4_0.bin
+llama_model_load_internal: format     = ggjt v3 (latest)
+llama_model_load_internal: n_vocab    = 32000
+llama_model_load_internal: n_ctx      = 512
+llama_model_load_internal: n_embd     = 5120
+llama_model_load_internal: n_mult     = 256
+llama_model_load_internal: n_head     = 40
+llama_model_load_internal: n_layer    = 40
+llama_model_load_internal: n_rot      = 128
+llama_model_load_internal: ftype      = 2 (mostly Q4_0)
+llama_model_load_internal: n_ff       = 13824
+llama_model_load_internal: model size = 13B
+llama_model_load_internal: ggml ctx size =    0.09 MB
+llama_model_load_internal: using OpenCL for GPU acceleration
+llama_model_load_internal: mem required  = 2223.88 MB (+ 1608.00 MB per state)
+llama_model_load_internal: offloading 40 repeating layers to GPU
+llama_model_load_internal: offloading non-repeating layers to GPU
+llama_model_load_internal: offloading v cache to GPU
+llama_model_load_internal: offloading k cache to GPU
+llama_model_load_internal: offloaded 43/43 layers to GPU
+llama_model_load_internal: total VRAM used: 8416 MB
+llama_new_context_with_model: kv self size  =  400.00 MB
 
-llama_print_timings:        load time =  3365.11 ms
-llama_print_timings:      sample time =   193.96 ms /   475 runs   (    0.41 ms per token)
-llama_print_timings: prompt eval time =   392.34 ms /     2 tokens (  196.17 ms per token)
-llama_print_timings:        eval time = 81143.00 ms /   474 runs   (  171.19 ms per token)
-llama_print_timings:       total time = 84773.38 ms
+system_info: n_threads = 16 / 32 | AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 | 
+sampling: repeat_last_n = 64, repeat_penalty = 1.100000, presence_penalty = 0.000000, frequency_penalty = 0.000000, top_k = 40, tfs_z = 1.000000, top_p = 0.950000, typical_p = 1.000000, temp = 0.800000, mirostat = 0, mirostat_lr = 0.100000, mirostat_ent = 5.000000
+generate: n_ctx = 512, n_batch = 512, n_predict = 2048, n_keep = 0
+
+...
+
+llama_print_timings:        load time =  1459.18 ms
+llama_print_timings:      sample time =   884.79 ms /  2048 runs   (    0.43 ms per token,  2314.67 tokens per second)
+llama_print_timings: prompt eval time = 31935.74 ms /  1801 tokens (   17.73 ms per token,    56.39 tokens per second)
+llama_print_timings:        eval time = 220695.57 ms /  2040 runs   (  108.18 ms per token,     9.24 tokens per second)
+llama_print_timings:       total time = 253862.42 ms
 ```
-`exllama` now runs on Pascal GPUs. It inferences at full context at about 5.9 tokens/second (the app reports 8.7 GiB of memory used, but `nvidia-smi` puts it at 9.4 GiB). Warmup for some reason takes a **very** long time:
-```
- -- Tokenizer: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/tokenizer.model
- -- Model config: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/config.json
- -- Model: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/Manticore-13B-Chat-Pyg-GPTQ-4bit-128g.no-act-order.safetensors
- -- Sequence length: 2048
- -- Tuning:
- -- --matmul_recons_thd: 8
- -- --fused_mlp_thd: 2
- -- --sdp_thd: 8
- -- Options: ['perf']
- ** Time, Load model: 3.60 seconds
- ** Time, Load tokenizer: 0.00 seconds
- -- Groupsize (inferred): 128
- -- Act-order (inferred): no
- ** VRAM, Model: [cuda:0] 6,873.52 MB
- -- Warmup pass 1...
- ** Time, Warmup: 245.24 seconds
- -- Warmup pass 2...
- ** Time, Warmup: 244.93 seconds
- -- Inference, first pass.
- ** Time, Inference: 244.96 seconds
- ** Speed: 7.84 tokens/second
- -- Generating 128 tokens, 1920 token prompt...
- ** Speed: 5.87 tokens/second
- -- Generating 128 tokens, 4 token prompt...
- ** Speed: 6.11 tokens/second
- ** VRAM, Inference: [cuda:0] 1,772.67 MB
- ** VRAM, Total: [cuda:0] 8,646.19 MB
-```
-I was personally unable to get GPTQ-for-LLama running on it.
+
+Using CLBlast, we get 9.24 t/s, which is a little slower than the Radeon VII.
+
+`exllama` is no longer very happy with Pascal cards, although reports are that gptq-for-llama/autogptq can output at 20 t/s: [https://github.com/turboderp/exllama/issues/75](https://github.com/turboderp/exllama/issues/75)
 
 # Windows
 
