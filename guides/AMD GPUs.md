@@ -4,7 +4,7 @@ As of June 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU com
 Testing was done with a Radeon VII (16GB HBM2 VRAM, gfx906) on Arch Linux
 
 ## Arch Linux Setup
-Install rocm:
+Install ROCm:
 ```
 yay -S radeontop rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
 ```
@@ -315,6 +315,14 @@ llama_print_timings:       total time = 253862.42 ms
 Using CLBlast, we get 9.24 t/s, which is a little slower than the Radeon VII.
 
 `exllama` is no longer very happy with Pascal cards, although reports are that gptq-for-llama/autogptq can output at 20 t/s: [https://github.com/turboderp/exllama/issues/75](https://github.com/turboderp/exllama/issues/75)
+
+## ROCm Resources
+ROCm support is outside the scope of this guide (maybe someone can make a new page if they have experience and can refactor).
+
+* ROCm [officially supports RHEL, SLES, and Ubuntu](https://rocm.docs.amd.com/en/latest/release/gpu_os_support.html)
+* For Arch Linux, there are packages in [extra] (eg [rocm-core](https://archlinux.org/packages/extra/x86_64/rocm-core/)) but packages may be behind - eg, currently on version 5.4.3 and 5.5.1 did not make it out of staging before 5.6.0 was released. These appear to be built from source. See also:
+  * [rocm-arch/rocm-arch PKGBUILDS](https://github.com/rocm-arch/rocm-arch) - these appear different from the [extra] PKGBUILDS...
+  * [ComsimicFusion/rocm-polaris-arch](https://github.com/CosmicFusion/rocm-polaris-arch) - this looks useful if you're tyring to enable non-officially supported hardware
 
 # Windows
 
