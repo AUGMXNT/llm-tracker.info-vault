@@ -4,7 +4,7 @@ watch nvidia-smi
 ```
 * or [nvtop](https://github.com/Syllo/nvtop)
 
-Setting voltages:
+You can lower power limits if you're inferencing:
 ```
 sudo nvidia-smi -i 0 -pl 360
 ```
