@@ -3,6 +3,17 @@ As of June 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU com
 # Linux
 Testing was done with a Radeon VII (16GB HBM2 VRAM, gfx906) on Arch Linux
 
+[Officially Supported GPUs for ROCm 5.6](https://rocm.docs.amd.com/en/latest/release/gpu_os_support.html#supported-gpus) are: Radeon VII, Radeon Pro VII, V620, W6800, and MI Instinct MI50, MI100, MI210, MI250, MI250X
+
+
+## RDNA3 (eg 7900 XT, XTX)
+These **are not officially supported w/ ROCm 5.6** (but some support coming in 5.7 in Fall 2023), however you *might* be able to get it work for certain tasks (SD, LLM inferencing):
+* [https://github.com/RadeonOpenCompute/ROCm/issues/1880](https://github.com/RadeonOpenCompute/ROCm/issues/1880)
+* [https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63](https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63)
+* [https://github.com/are-we-gfx1100-yet]([https://github.com/are-we-gfx1100-yet)
+* [https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/](https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/)
+
+
 ## Arch Linux Setup
 Install ROCm:
 ```
