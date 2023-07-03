@@ -12,6 +12,7 @@ The bane of your existence is probably going to be managing all the different CU
   conda env config vars set CUDA_PATH="$CONDA_PREFIX"
   ```
 * This should be good enough, but if all else fails, you can use a [custom Docker container](https://docs.docker.com/compose/gpu-support/) as well.
+* There's [envd](https://github.com/tensorchord/envd), a Docker addon that promises easier dev environments for AI/ML, although it also has a number of [open bugs](https://github.com/tensorchord/envd/issues?q=is%3Aissue+is%3Aopen+label%3A%22type%2Fbug+%F0%9F%90%9B%22)
 
 
 # Tips and Tricks
