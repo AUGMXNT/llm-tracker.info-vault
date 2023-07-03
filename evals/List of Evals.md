@@ -1,0 +1,15 @@
+* [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)
+  - warning, their MMLU results are wrong, throwing off the whole ranking: [https://twitter.com/Francis_YAO_/status/1666833311279517696](https://twitter.com/Francis_YAO_/status/1666833311279517696)
+- [LMSys Chatbot Arena Leaderboard](https://chat.lmsys.org/?leaderboard) - ELO style ranking
+- [LLM-Leaderboard](https://llm-leaderboard.streamlit.app/)
+- [Gotzmann LLM Score v2](https://docs.google.com/spreadsheets/d/1ikqqIaptv2P4_15Ytzro46YysCldKY7Ub2wcX5H1jCQ/edit#gid=0) ([discussion](https://www.reddit.com/r/LocalLLaMA/comments/13wvd0j/llm_score_v2_modern_models_tested_by_human/))
+- [Chain-of-Thought Hub](https://github.com/FranxYao/chain-of-thought-hub)
+- [C-Eval Leaderboard](https://cevalbenchmark.com/static/leaderboard.html)
+- [llm-humaneval-benchmarks](https://github.com/my-other-github-account/llm-humaneval-benchmarks) - HuggingFace models evald vs HumanEval+
+- [CanAiCode Leaderboard](https://huggingface.co/spaces/mike-ravkine/can-ai-code-results) - using [Can AI Code? eval](https://github.com/the-crypt-keeper/can-ai-code)
+- [AlpacaEval Leaderboard](https://tatsu-lab.github.io/alpaca_eval/)
+- [YearZero's LLM Logic Tests](https://docs.google.com/spreadsheets/d/1NgHDxbVWJFolq8bLvLkuPWKC7i_R6I6W/edit#gid=1278290632)
+- [HELM Core Scenarios](https://crfm.stanford.edu/helm/latest/?group=core_scenarios)
+- [TextSynth Server](https://bellard.org/ts_server/)
+- [airate](https://github.com/catid/supercharger/tree/main/airate) - C++ bug catching test
+- [llm-jeopardy](https://github.com/aigoopy/llm-jeopardy) - automated quiz show answering
