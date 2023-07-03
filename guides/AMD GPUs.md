@@ -12,6 +12,7 @@ These **are not officially supported w/ ROCm 5.6** (but some support coming in 5
 * [https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63](https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63)
 * [https://github.com/are-we-gfx1100-yet]([https://github.com/are-we-gfx1100-yet)
 * [https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/](https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/)
+* [https://news.ycombinator.com/item?id=36574179](https://news.ycombinator.com/item?id=36574179)
 
 
 ## Arch Linux Setup
