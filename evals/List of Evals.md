@@ -6,10 +6,17 @@
 - [Chain-of-Thought Hub](https://github.com/FranxYao/chain-of-thought-hub)
 - [C-Eval Leaderboard](https://cevalbenchmark.com/static/leaderboard.html)
 - [llm-humaneval-benchmarks](https://github.com/my-other-github-account/llm-humaneval-benchmarks) - HuggingFace models evald vs HumanEval+
-- [CanAiCode Leaderboard](https://huggingface.co/spaces/mike-ravkine/can-ai-code-results) - using [Can AI Code? eval](https://github.com/the-crypt-keeper/can-ai-code)
+-   
+
 - [AlpacaEval Leaderboard](https://tatsu-lab.github.io/alpaca_eval/)
 - [YearZero's LLM Logic Tests](https://docs.google.com/spreadsheets/d/1NgHDxbVWJFolq8bLvLkuPWKC7i_R6I6W/edit#gid=1278290632)
 - [HELM Core Scenarios](https://crfm.stanford.edu/helm/latest/?group=core_scenarios)
-- [TextSynth Server](https://bellard.org/ts_server/)
-- [airate](https://github.com/catid/supercharger/tree/main/airate) - C++ bug catching test
+- [TextSynth Server](https://bellard.org/ts_server/)  
+
 - [llm-jeopardy](https://github.com/aigoopy/llm-jeopardy) - automated quiz show answering
+
+## Code
+
+- [code-eval](https://github.com/abacaj/code-eval) -  scripts for running/reproducing human-eval scores on models
+- [CanAiCode Leaderboard](https://huggingface.co/spaces/mike-ravkine/can-ai-code-results) - using [Can AI Code? eval](https://github.com/the-crypt-keeper/can-ai-code)
+- [airate](https://github.com/catid/supercharger/tree/main/airate) - C++ bug catching test
