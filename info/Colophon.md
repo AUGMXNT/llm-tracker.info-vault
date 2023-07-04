@@ -1,0 +1,3 @@
+This site runs on [BookStack](https://www.bookstackapp.com/), a PHP-based Wiki/documentation software. While there are other documentation generators I considered ([mdBook](https://rust-lang.github.io/mdBook/), [MkDocs](https://www.mkdocs.org/)) I wanted something that could allow collaboration/contribution without managing Github pull requests, which didn't leave too many easy/open source options ([HedgeDoc,](https://hedgedoc.org/), [Outline](https://github.com/outline/outline), and [Wiki.js](https://js.wiki/) were runners up).
+
+Bookstack is run with Docker Compose using [solidnerd/docker-bookstack](https://github.com/solidnerd/docker-bookstack). (I spent a detour setting up my own container without Apache 2.0 but ran into issues with php-fpm and ended up giving up).
