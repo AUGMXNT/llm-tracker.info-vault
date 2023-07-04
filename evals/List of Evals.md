@@ -4,9 +4,7 @@
 - [LLM-Leaderboard](https://llm-leaderboard.streamlit.app/)
 - [Gotzmann LLM Score v2](https://docs.google.com/spreadsheets/d/1ikqqIaptv2P4_15Ytzro46YysCldKY7Ub2wcX5H1jCQ/edit#gid=0) ([discussion](https://www.reddit.com/r/LocalLLaMA/comments/13wvd0j/llm_score_v2_modern_models_tested_by_human/))
 - [Chain-of-Thought Hub](https://github.com/FranxYao/chain-of-thought-hub)
-- [C-Eval Leaderboard](https://cevalbenchmark.com/static/leaderboard.html)
-- [llm-humaneval-benchmarks](https://github.com/my-other-github-account/llm-humaneval-benchmarks) - HuggingFace models evald vs HumanEval+
--   
+- [C-Eval Leaderboard](https://cevalbenchmark.com/static/leaderboard.html)  
 
 - [AlpacaEval Leaderboard](https://tatsu-lab.github.io/alpaca_eval/)
 - [YearZero's LLM Logic Tests](https://docs.google.com/spreadsheets/d/1NgHDxbVWJFolq8bLvLkuPWKC7i_R6I6W/edit#gid=1278290632)
@@ -14,9 +12,11 @@
 - [TextSynth Server](https://bellard.org/ts_server/)  
 
 - [llm-jeopardy](https://github.com/aigoopy/llm-jeopardy) - automated quiz show answering
+- [Troyanovsky/Local-LLM-comparison](https://github.com/Troyanovsky/Local-LLM-comparison/tree/main) - one person's testing on his own standardized eval against different community models (fine-tuned quants)
 
 ## Code
 
 - [code-eval](https://github.com/abacaj/code-eval) -  scripts for running/reproducing human-eval scores on models
+- [llm-humaneval-benchmarks](https://github.com/my-other-github-account/llm-humaneval-benchmarks) - HuggingFace models evald vs HumanEval+
 - [CanAiCode Leaderboard](https://huggingface.co/spaces/mike-ravkine/can-ai-code-results) - using [Can AI Code? eval](https://github.com/the-crypt-keeper/can-ai-code)
 - [airate](https://github.com/catid/supercharger/tree/main/airate) - C++ bug catching test
