@@ -4,18 +4,13 @@
 conda create -n replit
 mamba install pip
 
-### ggml
-git clone https://github.com/ggerganov/ggml
-mkdir build && cd build
-# using system CUDA is fine
-cmake -DGGML_CUBLAS=ON -DCMAKE_CUDA_COMPILER=/opt/cuda/bin/nvcc ..
-pip install -r ../requirements.txt
 ```
 
 # Running Replit HF
-First lets see if we can run the included code. Install any libs if it complains
+First let's see if we can run the included code. Install any libs if it complains
 ```
 git clone https://huggingface.co/sahil2801/replit-code-instruct-glaive
+pip install einops sentencepiece transformers torch
 ```
 
 Our `test.py`:
@@ -49,20 +44,24 @@ The attention mask and the pad token id were not set. As a consequence, you may 
 ...
 Executed in   70.49 secs    fish           external
 ```
-* Fine, but slow
+* Fine, but slow, let's ggml
 
 
 # Convert to GGML
 ```
-cd ggml/examples/replit
-# some missing libs
-pip install einops pygments
+git clone https://github.com/ggerganov/ggml
+mkdir build && cd build
+# using system CUDA is fine
+cmake -DGGML_CUBLAS=ON -DCMAKE_CUDA_COMPILER=/opt/cuda/bin/nvcc ..
+pip install -r ../requirements.txt
+pip install pygments
+
 # 0 for fp32, 1 for fp16
-python convert-h5-to-ggml.py [replit_model_folder] 1
+python ./examples/replit/convert-h5-to-ggml.py [replit_model_folder] 1
 # outputs ggml-model-f16.bin in folder
 ```
 
-# Test
+# Test GGML
 ```
 time build/bin/replit -m /data/ai/models/llm/replit/replit-code-instruct-glaive/ggml-model-f16.bin -p "# Python function to call OpenAI Completion API" -n 100
 ...
