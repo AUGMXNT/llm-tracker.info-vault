@@ -148,3 +148,7 @@ chatdocs download
 chatdocs add /path/to/documents
 chatdocs ui
 ```
+* I ran into some issues w/ ChromaDB's indexing. Will need to debug later
+
+# replit-3b-inference
+For just testing out simple interactive usage, adapting the [inference.py](https://github.com/abacaj/replit-3B-inference/blob/main/inference.py) worked well (just replace the model and ggml path).
