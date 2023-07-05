@@ -1,3 +1,5 @@
+Replit has trained a very strong [3B parameter code completion foundational model](https://huggingface.co/replit/replit-code-v1-3b) on [The Stack](https://arxiv.org/abs/2211.15533). One fine tune beats [WizardCoder-15B](https://huggingface.co/WizardLM/WizardCoder-15B-V1.0) ([StarCoder](https://huggingface.co/blog/starcoder) fine tune) [in human-eval](https://github.com/abacaj/code-eval), making it probably the strongest open code-completion model as of July 2023.
+
 # Setup
 ```
 ### Environment
@@ -119,4 +121,30 @@ Loading... 0.79s
 *** 0.786 s/t
 ...
 Executed in   13.22 secs    fish           external
+```
+
+# ChatDocs
+We can test how CTransformers works with [ChatDocs](https://github.com/marella/chatdocs).
+
+Our `chatdocs.yml`:
+```
+ctransformers:
+  model: /data/ai/models/llm/replit/replit-code-instruct-glaive
+  model_file: ggml-model-f16.bin
+  model_type: replit
+  config:
+    context_length: 2048
+```
+
+Setup:
+```
+pip install chatdocs
+
+# note you need to make sure chatdocs is using your conda Python
+# you can either run: python `which chatdocs` [command]
+# or you can modify the chatdocs bin
+
+chatdocs download
+chatdocs add /path/to/documents
+chatdocs ui
 ```
