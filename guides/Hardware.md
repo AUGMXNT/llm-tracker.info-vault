@@ -8,5 +8,6 @@ Relatively maintained resources:
 
 Possibly out of date articles:
 
+- 2023-07-06 [LLaMa 65B GPU benchmarks](https://www.reddit.com/r/LocalLLaMA/comments/14s7j9j/llama_65b_gpu_benchmarks/) - comparison of 3090, 4090, A6000, A600 Ada w/ exllama and llama.cpp
 - 2023-06-30 MosaicML [compares training with MI250X vs A100 and H100](https://www.mosaicml.com/blog/amd-mi250)
 - 2023-06-15 [r/LocalLLaMA: Free GPU options for LlaMA model experimentation](https://www.reddit.com/r/LocalLLaMA/comments/14a0bs9/free_gpu_options_for_llama_model_experimentation/)
