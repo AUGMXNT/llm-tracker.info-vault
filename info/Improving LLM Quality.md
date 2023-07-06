@@ -65,6 +65,8 @@ Long, Jieyi. “Large Language Model Guided Tree-of-Thought.” arXiv, May 14, 2
 
 Yao, Shunyu, Dian Yu, Jeffrey Zhao, Izhak Shafran, Thomas L. Griffiths, Yuan Cao, and Karthik Narasimhan. “Tree of Thoughts: Deliberate Problem Solving with Large Language Models.” arXiv, May 17, 2023. [https://doi.org/10.48550/arXiv.2305.10601](https://doi.org/10.48550/arXiv.2305.10601).
 
+Wang, Guanzhi, Yuqi Xie, Yunfan Jiang, Ajay Mandlekar, Chaowei Xiao, Yuke Zhu, Linxi Fan, and Anima Anandkumar. “Voyager: An Open-Ended Embodied Agent with Large Language Models.” arXiv, May 25, 2023. [https://doi.org/10.48550/arXiv.2305.16291](https://doi.org/10.48550/arXiv.2305.16291).
+
 Lin, Bill Yuchen, Yicheng Fu, Karina Yang, Prithviraj Ammanabrolu, Faeze Brahman, Shiyu Huang, Chandra Bhagavatula, Yejin Choi, and Xiang Ren. “SwiftSage: A Generative Agent with Fast and Slow Thinking for Complex Interactive Tasks.” arXiv, May 27, 2023. [https://doi.org/10.48550/arXiv.2305.17390](https://doi.org/10.48550/arXiv.2305.17390).  
 Shinn, Noah, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, and Shunyu Yao. “Reflexion: Language Agents with Verbal Reinforcement Learning.” arXiv, June 10, 2023. [https://doi.org/10.48550/arXiv.2303.11366](https://doi.org/10.48550/arXiv.2303.11366).
 
