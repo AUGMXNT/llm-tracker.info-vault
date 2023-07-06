@@ -7,6 +7,12 @@ Du, Nan, Yanping Huang, Andrew M. Dai, Simon Tong, Dmitry Lepikhin, Yuanzhong Xu
 
 Li, Margaret, Suchin Gururangan, Tim Dettmers, Mike Lewis, Tim Althoff, Noah A. Smith, and Luke Zettlemoyer. “Branch-Train-Merge: Embarrassingly Parallel Training of Expert Language Models.” arXiv, August 5, 2022. [http://arxiv.org/abs/2208.03306](http://arxiv.org/abs/2208.03306).
 
+Mustafa, Basil, Carlos Riquelme, Joan Puigcerver, Rodolphe Jenatton, and Neil Houlsby. “Multimodal Contrastive Learning with LIMoE: The Language-Image Mixture of Experts.” arXiv, June 6, 2022. [https://doi.org/10.48550/arXiv.2206.02770](https://doi.org/10.48550/arXiv.2206.02770).
+
+- [https://ai.googleblog.com/2022/06/limoe-learning-multiple-modalities-with.html](https://ai.googleblog.com/2022/06/limoe-learning-multiple-modalities-with.html)
+
+Shen, Sheng, Le Hou, Yanqi Zhou, Nan Du, Shayne Longpre, Jason Wei, Hyung Won Chung, et al. “Mixture-of-Experts Meets Instruction Tuning:A Winning Combination for Large Language Models.” arXiv, July 5, 2023. [http://arxiv.org/abs/2305.14705](http://arxiv.org/abs/2305.14705).
+
 ### Better/Synthetic Data
 
 autolabel: [https://github.com/refuel-ai/autolabel](https://github.com/refuel-ai/autolabel) - "Autolabel is a Python library to label, clean and enrich text datasets with any Large Language Models (LLM) of your choice." Start 2023-03
@@ -63,6 +69,9 @@ Lin, Bill Yuchen, Yicheng Fu, Karina Yang, Prithviraj Ammanabrolu, Faeze Brahman
 Shinn, Noah, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, and Shunyu Yao. “Reflexion: Language Agents with Verbal Reinforcement Learning.” arXiv, June 10, 2023. [https://doi.org/10.48550/arXiv.2303.11366](https://doi.org/10.48550/arXiv.2303.11366).
 
 Agrawal, Lakshya A., Aditya Kanade, Navin Goyal, Shuvendu K. Lahiri, and Sriram K. Rajamani. “Guiding Language Models of Code with Global Context Using Monitors.” arXiv, June 19, 2023. [https://doi.org/10.48550/arXiv.2306.10763](https://doi.org/10.48550/arXiv.2306.10763).  
+Yang, John, Akshara Prabhakar, Karthik Narasimhan, and Shunyu Yao. “InterCode: Standardizing and Benchmarking Interactive Coding with Execution Feedback.” arXiv, June 26, 2023. [https://doi.org/10.48550/arXiv.2306.14898](https://doi.org/10.48550/arXiv.2306.14898).  
+- [https://intercode-benchmark.github.io/](https://intercode-benchmark.github.io/)
+
 Sanchez, Guillaume, Honglu Fan, Alexander Spangher, Elad Levi, Pawan Sasanka Ammanamanchi, and Stella Biderman. “Stay on Topic with Classifier-Free Guidance.” arXiv, June 30, 2023. [https://doi.org/10.48550/arXiv.2306.17806](https://doi.org/10.48550/arXiv.2306.17806).
 
 ### Controlling Output
