@@ -30,9 +30,17 @@ If you are more technical:
 - [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [exllama](https://github.com/turboderp/exllama)
 
- 
+Most of the guides in this HOWTO section will assume:
 
-Existing Resources
+- On a UNIXy platform (Linux, macOS, WSL)
+- [Familiarity w/ the command line](https://mostlyobvious.org/?link=/Reference%2FSoftware%2FDevelopment%2FLearn%20to%20Code%2FLearn%20to%20Command%20Line), comfortable installing apps etc
+- Some [familiarity with Python, git](https://mostlyobvious.org/?link=/Reference%2FSoftware%2FDevelopment%2FLearn%20to%20Code%2FLearn%20to%20Program)
+
+Global Recommendations:
+
+[Install Mambaforge](https://mamba.readthedocs.io/en/latest/installation.html) and create a new conda environment anytime you are installing a package which have many dependencies. eg, create a separate `exllama` and `autogptq` or `lm-eval` environment.
+
+# Other Resources
 
 - [LocalLLaMA Wiki](https://www.reddit.com/r/LocalLLaMA/wiki/index/)
 - [https://github.com/underlines/awesome-marketing-datascience/blob/master/README.md](https://github.com/underlines/awesome-marketing-datascience/blob/master/README.md)
