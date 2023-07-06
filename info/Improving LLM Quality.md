@@ -9,6 +9,8 @@ Li, Margaret, Suchin Gururangan, Tim Dettmers, Mike Lewis, Tim Althoff, Noah A. 
 
 ### Better/Synthetic Data
 
+autolabel: [https://github.com/refuel-ai/autolabel](https://github.com/refuel-ai/autolabel) - "Autolabel is a Python library to label, clean and enrich text datasets with any Large Language Models (LLM) of your choice." Start 2023-03
+
 Eldan, Ronen, and Yuanzhi Li. “TinyStories: How Small Can Language Models Be and Still Speak Coherent English?” arXiv, May 24, 2023. [https://doi.org/10.48550/arXiv.2305.07759](https://doi.org/10.48550/arXiv.2305.07759).
 
 Xu, Can, Qingfeng Sun, Kai Zheng, Xiubo Geng, Pu Zhao, Jiazhan Feng, Chongyang Tao, and Daxin Jiang. “WizardLM: Empowering Large Language Models to Follow Complex Instructions.” arXiv, June 10, 2023. [https://doi.org/10.48550/arXiv.2304.12244](https://doi.org/10.48550/arXiv.2304.12244).
@@ -34,6 +36,23 @@ Gu, Yuxian, Li Dong, Furu Wei, and Minlie Huang. “Knowledge Distillation of La
 
 Agarwal, Rishabh, Nino Vieillard, Piotr Stanczyk, Sabela Ramos, Matthieu Geist, and Olivier Bachem. “GKD: Generalized Knowledge Distillation for Auto-Regressive Sequence Models.” arXiv, June 23, 2023. [https://doi.org/10.48550/arXiv.2306.13649](https://doi.org/10.48550/arXiv.2306.13649).
 
+### Context
+
+Sun, Yutao, Li Dong, Barun Patra, Shuming Ma, Shaohan Huang, Alon Benhaim, Vishrav Chaudhary, Xia Song, and Furu Wei. “A Length-Extrapolatable Transformer.” arXiv, December 20, 2022. [https://doi.org/10.48550/arXiv.2212.10554](https://doi.org/10.48550/arXiv.2212.10554).
+
+Poli, Michael, Stefano Massaroli, Eric Nguyen, Daniel Y. Fu, Tri Dao, Stephen Baccus, Yoshua Bengio, Stefano Ermon, and Christopher Ré. “Hyena Hierarchy: Towards Larger Convolutional Language Models.” arXiv, March 5, 2023. [http://arxiv.org/abs/2302.10866](http://arxiv.org/abs/2302.10866).  
+Yu, Lili, Dániel Simig, Colin Flaherty, Armen Aghajanyan, Luke Zettlemoyer, and Mike Lewis. “MEGABYTE: Predicting Million-Byte Sequences with Multiscale Transformers.” arXiv, May 19, 2023. [https://doi.org/10.48550/arXiv.2305.07185](https://doi.org/10.48550/arXiv.2305.07185).
+
+Mohtashami, Amirkeivan, and Martin Jaggi. “Landmark Attention: Random-Access Infinite Context Length for Transformers.” arXiv, May 25, 2023. [https://doi.org/10.48550/arXiv.2305.16300](https://doi.org/10.48550/arXiv.2305.16300).
+
+Liu, Hao, and Pieter Abbeel. “Blockwise Parallel Transformer for Long Context Large Models.” arXiv, May 30, 2023. [http://arxiv.org/abs/2305.19370](http://arxiv.org/abs/2305.19370).
+
+Nguyen, Eric, Michael Poli, Marjan Faizi, Armin Thomas, Callum Birch-Sykes, Michael Wornow, Aman Patel, et al. “HyenaDNA: Long-Range Genomic Sequence Modeling at Single Nucleotide Resolution.” arXiv, June 27, 2023. [https://doi.org/10.48550/arXiv.2306.15794](https://doi.org/10.48550/arXiv.2306.15794).
+
+Chen, Shouyuan, Sherman Wong, Liangjian Chen, and Yuandong Tian. “Extending Context Window of Large Language Models via Positional Interpolation.” arXiv, June 28, 2023. [https://doi.org/10.48550/arXiv.2306.15595](https://doi.org/10.48550/arXiv.2306.15595).  
+emozilla. “Dynamically Scaled RoPE Further Increases Performance of Long Context LLaMA with Zero Fine-Tuning.” Reddit Post. R/LocalLLaMA, June 30, 2023. [www.reddit.com/r/LocalLLaMA/comments/14mrgpr/dynamically_scaled_rope_further_increases/](https://www.reddit.com/r/LocalLLaMA/comments/14mrgpr/dynamically_scaled_rope_further_increases/).  
+Ding, Jiayu, Shuming Ma, Li Dong, Xingxing Zhang, Shaohan Huang, Wenhui Wang, and Furu Wei. “LongNet: Scaling Transformers to 1,000,000,000 Tokens.” arXiv, July 5, 2023. [https://doi.org/10.48550/arXiv.2307.02486](https://doi.org/10.48550/arXiv.2307.02486).
+
 ## Inference
 
 Long, Jieyi. “Large Language Model Guided Tree-of-Thought.” arXiv, May 14, 2023. [https://doi.org/10.48550/arXiv.2305.08291](https://doi.org/10.48550/arXiv.2305.08291).
@@ -45,3 +64,27 @@ Shinn, Noah, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan,
 
 Agrawal, Lakshya A., Aditya Kanade, Navin Goyal, Shuvendu K. Lahiri, and Sriram K. Rajamani. “Guiding Language Models of Code with Global Context Using Monitors.” arXiv, June 19, 2023. [https://doi.org/10.48550/arXiv.2306.10763](https://doi.org/10.48550/arXiv.2306.10763).  
 Sanchez, Guillaume, Honglu Fan, Alexander Spangher, Elad Levi, Pawan Sasanka Ammanamanchi, and Stella Biderman. “Stay on Topic with Classifier-Free Guidance.” arXiv, June 30, 2023. [https://doi.org/10.48550/arXiv.2306.17806](https://doi.org/10.48550/arXiv.2306.17806).
+
+### Controlling Output
+
+#### Jsonformer
+
+2023-04-30: " Jsonformer is a wrapper around Hugging Face models that fills in the fixed tokens during the generation process, and only delegates the generation of content tokens to the language model. This makes it more efficient and bulletproof than existing approaches."
+
+- [https://github.com/1rgs/jsonformer](https://github.com/1rgs/jsonformer)
+
+#### Context-Free Grammar Parsing with LLMs
+
+2023-05-14: "Use a context-free grammar and a parser generator to determine valid next tokens for an LLM generation."
+
+- [https://matt-rickard.com/context-free-grammar-parsing-with-llms](https://matt-rickard.com/context-free-grammar-parsing-with-llms)
+- [https://github.com/r2d4/parserllm](https://github.com/r2d4/parserllm)
+- [https://matt-rickard.com/rellm](https://matt-rickard.com/rellm)
+
+#### Logit Bias
+
+You can use LLMs as an output by using `logit_bias` to control output tokens:
+
+- [https://twitter.com/AAAzzam/status/1669753722828730378](https://twitter.com/AAAzzam/status/1669753722828730378)
+- [https://aidungeon.medium.com/controlling-gpt-3-with-logit-bias-55866d593292](https://aidungeon.medium.com/controlling-gpt-3-with-logit-bias-55866d593292)
+- [https://help.openai.com/en/articles/5247780-using-logit-bias-to-define-token-probability](https://help.openai.com/en/articles/5247780-using-logit-bias-to-define-token-probability)
