@@ -43,6 +43,9 @@ Ainslie, Joshua, James Lee-Thorp, Michiel de Jong, Yury Zemlyanskiy, Federico Le
 
 ## Activation Functions
 
+Shazeer, Noam. “GLU Variants Improve Transformer.” arXiv, February 12, 2020. [https://doi.org/10.48550/arXiv.2002.05202](https://doi.org/10.48550/arXiv.2002.05202).  
+Chowdhery, Aakanksha, Sharan Narang, Jacob Devlin, Maarten Bosma, Gaurav Mishra, Adam Roberts, Paul Barham, et al. “PaLM: Scaling Language Modeling with Pathways.” arXiv, October 5, 2022. [http://arxiv.org/abs/2204.02311](http://arxiv.org/abs/2204.02311).
+
 Fang, Haishuo, Ji-Ung Lee, Nafise Sadat Moosavi, and Iryna Gurevych. “Transformers with Learnable Activation Functions.” In Findings of the Association for Computational Linguistics: EACL 2023, 2382–98. Dubrovnik, Croatia: Association for Computational Linguistics, 2023. [https://aclanthology.org/2023.findings-eacl.181](https://aclanthology.org/2023.findings-eacl.181).  
 Liu, Hong, Zhiyuan Li, David Hall, Percy Liang, and Tengyu Ma. “Sophia: A Scalable Stochastic Second-Order Optimizer for Language Model Pre-Training.” arXiv, May 23, 2023. [http://arxiv.org/abs/2305.14342](http://arxiv.org/abs/2305.14342).
 
