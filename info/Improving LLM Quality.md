@@ -53,6 +53,8 @@ Liu, Hong, Zhiyuan Li, David Hall, Percy Liang, and Tengyu Ma. “Sophia: A Scal
 
 ## Grounding
 
+Guu, Kelvin, Kenton Lee, Zora Tung, Panupong Pasupat, and Ming-Wei Chang. “REALM: Retrieval-Augmented Language Model Pre-Training.” arXiv, February 10, 2020. [https://doi.org/10.48550/arXiv.2002.08909](https://doi.org/10.48550/arXiv.2002.08909).
+
 Lewis, Patrick, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, et al. “Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.” arXiv, April 12, 2021. [https://doi.org/10.48550/arXiv.2005.11401](https://doi.org/10.48550/arXiv.2005.11401).
 
 Jiang, Zhengbao, Frank F. Xu, Luyu Gao, Zhiqing Sun, Qian Liu, Jane Dwivedi-Yu, Yiming Yang, Jamie Callan, and Graham Neubig. “Active Retrieval Augmented Generation.” arXiv, May 11, 2023. [https://doi.org/10.48550/arXiv.2305.06983](https://doi.org/10.48550/arXiv.2305.06983).
@@ -61,10 +63,11 @@ Ma, Xinbei, Yeyun Gong, Pengcheng He, Hai Zhao, and Nan Duan. “Query Rewriting
 
 Shi, Weijia, Sewon Min, Michihiro Yasunaga, Minjoon Seo, Rich James, Mike Lewis, Luke Zettlemoyer, and Wen-tau Yih. “REPLUG: Retrieval-Augmented Black-Box Language Models.” arXiv, May 24, 2023. [https://doi.org/10.48550/arXiv.2301.12652](https://doi.org/10.48550/arXiv.2301.12652).
 
-Pan, Shirui, Linhao Luo, Yufei Wang, Chen Chen, Jiapu Wang, and Xindong Wu. “Unifying Large Language Models and Knowledge Graphs: A Roadmap.” arXiv, June 20, 2023. [https://doi.org/10.48550/arXiv.2306.08302](https://doi.org/10.48550/arXiv.2306.08302).  
 Liu, Jiongnan, Jiajie Jin, Zihan Wang, Jiehan Cheng, Zhicheng Dou, and Ji-Rong Wen. “RETA-LLM: A Retrieval-Augmented Large Language Model Toolkit.” arXiv, June 8, 2023. [https://doi.org/10.48550/arXiv.2306.05212](https://doi.org/10.48550/arXiv.2306.05212).
 
 Wang, Weizhi, Li Dong, Hao Cheng, Xiaodong Liu, Xifeng Yan, Jianfeng Gao, and Furu Wei. “Augmenting Language Models with Long-Term Memory.” arXiv, June 12, 2023. [https://doi.org/10.48550/arXiv.2306.07174](https://doi.org/10.48550/arXiv.2306.07174).
+
+Pan, Shirui, Linhao Luo, Yufei Wang, Chen Chen, Jiapu Wang, and Xindong Wu. “Unifying Large Language Models and Knowledge Graphs: A Roadmap.” arXiv, June 20, 2023. [https://doi.org/10.48550/arXiv.2306.08302](https://doi.org/10.48550/arXiv.2306.08302).
 
 ## Training
 
