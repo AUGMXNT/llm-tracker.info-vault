@@ -51,6 +51,21 @@ Chowdhery, Aakanksha, Sharan Narang, Jacob Devlin, Maarten Bosma, Gaurav Mishra,
 Fang, Haishuo, Ji-Ung Lee, Nafise Sadat Moosavi, and Iryna Gurevych. “Transformers with Learnable Activation Functions.” In Findings of the Association for Computational Linguistics: EACL 2023, 2382–98. Dubrovnik, Croatia: Association for Computational Linguistics, 2023. [https://aclanthology.org/2023.findings-eacl.181](https://aclanthology.org/2023.findings-eacl.181).  
 Liu, Hong, Zhiyuan Li, David Hall, Percy Liang, and Tengyu Ma. “Sophia: A Scalable Stochastic Second-Order Optimizer for Language Model Pre-Training.” arXiv, May 23, 2023. [http://arxiv.org/abs/2305.14342](http://arxiv.org/abs/2305.14342).
 
+## Grounding
+
+Lewis, Patrick, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, et al. “Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.” arXiv, April 12, 2021. [https://doi.org/10.48550/arXiv.2005.11401](https://doi.org/10.48550/arXiv.2005.11401).
+
+Jiang, Zhengbao, Frank F. Xu, Luyu Gao, Zhiqing Sun, Qian Liu, Jane Dwivedi-Yu, Yiming Yang, Jamie Callan, and Graham Neubig. “Active Retrieval Augmented Generation.” arXiv, May 11, 2023. [https://doi.org/10.48550/arXiv.2305.06983](https://doi.org/10.48550/arXiv.2305.06983).
+
+Ma, Xinbei, Yeyun Gong, Pengcheng He, Hai Zhao, and Nan Duan. “Query Rewriting for Retrieval-Augmented Large Language Models.” arXiv, May 23, 2023. [https://doi.org/10.48550/arXiv.2305.14283](https://doi.org/10.48550/arXiv.2305.14283).
+
+Shi, Weijia, Sewon Min, Michihiro Yasunaga, Minjoon Seo, Rich James, Mike Lewis, Luke Zettlemoyer, and Wen-tau Yih. “REPLUG: Retrieval-Augmented Black-Box Language Models.” arXiv, May 24, 2023. [https://doi.org/10.48550/arXiv.2301.12652](https://doi.org/10.48550/arXiv.2301.12652).
+
+Pan, Shirui, Linhao Luo, Yufei Wang, Chen Chen, Jiapu Wang, and Xindong Wu. “Unifying Large Language Models and Knowledge Graphs: A Roadmap.” arXiv, June 20, 2023. [https://doi.org/10.48550/arXiv.2306.08302](https://doi.org/10.48550/arXiv.2306.08302).  
+Liu, Jiongnan, Jiajie Jin, Zihan Wang, Jiehan Cheng, Zhicheng Dou, and Ji-Rong Wen. “RETA-LLM: A Retrieval-Augmented Large Language Model Toolkit.” arXiv, June 8, 2023. [https://doi.org/10.48550/arXiv.2306.05212](https://doi.org/10.48550/arXiv.2306.05212).
+
+Wang, Weizhi, Li Dong, Hao Cheng, Xiaodong Liu, Xifeng Yan, Jianfeng Gao, and Furu Wei. “Augmenting Language Models with Long-Term Memory.” arXiv, June 12, 2023. [https://doi.org/10.48550/arXiv.2306.07174](https://doi.org/10.48550/arXiv.2306.07174).
+
 ## Training
 
 Liu, Hao, and Pieter Abbeel. “Blockwise Parallel Transformer for Long Context Large Models.” arXiv, May 30, 2023. [http://arxiv.org/abs/2305.19370](http://arxiv.org/abs/2305.19370).
@@ -61,6 +76,8 @@ Liu, Zhuang, Zhiqiu Xu, Joseph Jin, Zhiqiang Shen, and Trevor Darrell. “Dropou
 ### Better Data
 
 autolabel: [https://github.com/refuel-ai/autolabel](https://github.com/refuel-ai/autolabel) - "Autolabel is a Python library to label, clean and enrich text datasets with any Large Language Models (LLM) of your choice." Start 2023-03
+
+Trajanoska, Milena, Riste Stojanov, and Dimitar Trajanov. “Enhancing Knowledge Graph Construction Using Large Language Models.” arXiv, May 8, 2023. [https://doi.org/10.48550/arXiv.2305.04676](https://doi.org/10.48550/arXiv.2305.04676).
 
 Eldan, Ronen, and Yuanzhi Li. “TinyStories: How Small Can Language Models Be and Still Speak Coherent English?” arXiv, May 24, 2023. [https://doi.org/10.48550/arXiv.2305.07759](https://doi.org/10.48550/arXiv.2305.07759).
 
