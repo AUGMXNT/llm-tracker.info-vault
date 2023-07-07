@@ -1,4 +1,4 @@
-## Training
+## Model Architecture
 
 ### Mixture of Experts / Ensemble
 
@@ -12,35 +12,6 @@ Mustafa, Basil, Carlos Riquelme, Joan Puigcerver, Rodolphe Jenatton, and Neil Ho
 - [https://ai.googleblog.com/2022/06/limoe-learning-multiple-modalities-with.html](https://ai.googleblog.com/2022/06/limoe-learning-multiple-modalities-with.html)
 
 Shen, Sheng, Le Hou, Yanqi Zhou, Nan Du, Shayne Longpre, Jason Wei, Hyung Won Chung, et al. “Mixture-of-Experts Meets Instruction Tuning:A Winning Combination for Large Language Models.” arXiv, July 5, 2023. [http://arxiv.org/abs/2305.14705](http://arxiv.org/abs/2305.14705).
-
-### Better/Synthetic Data
-
-autolabel: [https://github.com/refuel-ai/autolabel](https://github.com/refuel-ai/autolabel) - "Autolabel is a Python library to label, clean and enrich text datasets with any Large Language Models (LLM) of your choice." Start 2023-03
-
-Eldan, Ronen, and Yuanzhi Li. “TinyStories: How Small Can Language Models Be and Still Speak Coherent English?” arXiv, May 24, 2023. [https://doi.org/10.48550/arXiv.2305.07759](https://doi.org/10.48550/arXiv.2305.07759).
-
-Xu, Can, Qingfeng Sun, Kai Zheng, Xiubo Geng, Pu Zhao, Jiazhan Feng, Chongyang Tao, and Daxin Jiang. “WizardLM: Empowering Large Language Models to Follow Complex Instructions.” arXiv, June 10, 2023. [https://doi.org/10.48550/arXiv.2304.12244](https://doi.org/10.48550/arXiv.2304.12244).
-
-Luo, Ziyang, Can Xu, Pu Zhao, Qingfeng Sun, Xiubo Geng, Wenxiang Hu, Chongyang Tao, Jing Ma, Qingwei Lin, and Daxin Jiang. “WizardCoder: Empowering Code Large Language Models with Evol-Instruct.” arXiv, June 14, 2023. [https://doi.org/10.48550/arXiv.2306.08568](https://doi.org/10.48550/arXiv.2306.08568).
-
-Gunasekar, Suriya, Yi Zhang, Jyoti Aneja, Caio César Teodoro Mendes, Allie Del Giorno, Sivakanth Gopi, Mojan Javaheripi, et al. “Textbooks Are All You Need.” arXiv, June 20, 2023. [https://doi.org/10.48550/arXiv.2306.11644](https://doi.org/10.48550/arXiv.2306.11644).  
-Lee, Alycia, Brando Miranda, and Sanmi Koyejo. “Beyond Scale: The Diversity Coefficient as a Data Quality Metric Demonstrates LLMs Are Pre-Trained on Formally Diverse Data.” arXiv, June 23, 2023. [https://doi.org/10.48550/arXiv.2306.13840](https://doi.org/10.48550/arXiv.2306.13840).
-
-### Self Supervised Training
-
-Sun, Zhiqing, Yikang Shen, Qinhong Zhou, Hongxin Zhang, Zhenfang Chen, David Cox, Yiming Yang, and Chuang Gan. “Principle-Driven Self-Alignment of Language Models from Scratch with Minimal Human Supervision.” arXiv, May 4, 2023. [https://doi.org/10.48550/arXiv.2305.03047](https://doi.org/10.48550/arXiv.2305.03047).
-
-Manikandan, Hariharan, Yiding Jiang, and J. Zico Kolter. “Language Models Are Weak Learners.” arXiv, June 24, 2023. [https://doi.org/10.48550/arXiv.2306.14101](https://doi.org/10.48550/arXiv.2306.14101).
-
-Jain, Neel, Khalid Saifullah, Yuxin Wen, John Kirchenbauer, Manli Shu, Aniruddha Saha, Micah Goldblum, Jonas Geiping, and Tom Goldstein. “Bring Your Own Data! Self-Supervised Evaluation for Large Language Models.” arXiv, June 29, 2023. [https://doi.org/10.48550/arXiv.2306.13651](https://doi.org/10.48550/arXiv.2306.13651).
-
-Song, Feifan, Bowen Yu, Minghao Li, Haiyang Yu, Fei Huang, Yongbin Li, and Houfeng Wang. “Preference Ranking Optimization for Human Alignment.” arXiv, June 30, 2023. [https://doi.org/10.48550/arXiv.2306.17492](https://doi.org/10.48550/arXiv.2306.17492).
-
-### Distillation
-
-Gu, Yuxian, Li Dong, Furu Wei, and Minlie Huang. “Knowledge Distillation of Large Language Models.” arXiv, June 14, 2023. [https://doi.org/10.48550/arXiv.2306.08543](https://doi.org/10.48550/arXiv.2306.08543).
-
-Agarwal, Rishabh, Nino Vieillard, Piotr Stanczyk, Sabela Ramos, Matthieu Geist, and Olivier Bachem. “GKD: Generalized Knowledge Distillation for Auto-Regressive Sequence Models.” arXiv, June 23, 2023. [https://doi.org/10.48550/arXiv.2306.13649](https://doi.org/10.48550/arXiv.2306.13649).
 
 ### Context
 
@@ -58,6 +29,60 @@ Nguyen, Eric, Michael Poli, Marjan Faizi, Armin Thomas, Callum Birch-Sykes, Mich
 Chen, Shouyuan, Sherman Wong, Liangjian Chen, and Yuandong Tian. “Extending Context Window of Large Language Models via Positional Interpolation.” arXiv, June 28, 2023. [https://doi.org/10.48550/arXiv.2306.15595](https://doi.org/10.48550/arXiv.2306.15595).  
 emozilla. “Dynamically Scaled RoPE Further Increases Performance of Long Context LLaMA with Zero Fine-Tuning.” Reddit Post. R/LocalLLaMA, June 30, 2023. [www.reddit.com/r/LocalLLaMA/comments/14mrgpr/dynamically_scaled_rope_further_increases/](https://www.reddit.com/r/LocalLLaMA/comments/14mrgpr/dynamically_scaled_rope_further_increases/).  
 Ding, Jiayu, Shuming Ma, Li Dong, Xingxing Zhang, Shaohan Huang, Wenhui Wang, and Furu Wei. “LongNet: Scaling Transformers to 1,000,000,000 Tokens.” arXiv, July 5, 2023. [https://doi.org/10.48550/arXiv.2307.02486](https://doi.org/10.48550/arXiv.2307.02486).
+
+Tworkowski, Szymon, Konrad Staniszewski, Mikołaj Pacek, Yuhuai Wu, Henryk Michalewski, and Piotr Miłoś. “Focused Transformer: Contrastive Training for Context Scaling.” arXiv, July 6, 2023. [https://doi.org/10.48550/arXiv.2307.03170](https://doi.org/10.48550/arXiv.2307.03170).
+
+## MQA
+
+Shazeer, Noam. “Fast Transformer Decoding: One Write-Head Is All You Need.” arXiv, November 5, 2019. [https://doi.org/10.48550/arXiv.1911.02150](https://doi.org/10.48550/arXiv.1911.02150).  
+Pope, Reiner, Sholto Douglas, Aakanksha Chowdhery, Jacob Devlin, James Bradbury, Anselm Levskaya, Jonathan Heek, Kefan Xiao, Shivani Agrawal, and Jeff Dean. “Efficiently Scaling Transformer Inference.” arXiv, November 9, 2022. [http://arxiv.org/abs/2211.05102](http://arxiv.org/abs/2211.05102).
+
+Xu, Yangyang, Xiangtai Li, Haobo Yuan, Yibo Yang, and Lefei Zhang. “Multi-Task Learning with Multi-Query Transformer for Dense Prediction.” arXiv, April 7, 2023. [http://arxiv.org/abs/2205.14354](http://arxiv.org/abs/2205.14354).
+
+Ainslie, Joshua, James Lee-Thorp, Michiel de Jong, Yury Zemlyanskiy, Federico Lebrón, and Sumit Sanghai. “GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints.” arXiv, May 22, 2023. [https://doi.org/10.48550/arXiv.2305.13245](https://doi.org/10.48550/arXiv.2305.13245).
+
+## Activation Functions
+
+Fang, Haishuo, Ji-Ung Lee, Nafise Sadat Moosavi, and Iryna Gurevych. “Transformers with Learnable Activation Functions.” In Findings of the Association for Computational Linguistics: EACL 2023, 2382–98. Dubrovnik, Croatia: Association for Computational Linguistics, 2023. [https://aclanthology.org/2023.findings-eacl.181](https://aclanthology.org/2023.findings-eacl.181).  
+Liu, Hong, Zhiyuan Li, David Hall, Percy Liang, and Tengyu Ma. “Sophia: A Scalable Stochastic Second-Order Optimizer for Language Model Pre-Training.” arXiv, May 23, 2023. [http://arxiv.org/abs/2305.14342](http://arxiv.org/abs/2305.14342).
+
+## Training
+
+Liu, Hao, and Pieter Abbeel. “Blockwise Parallel Transformer for Long Context Large Models.” arXiv, May 30, 2023. [http://arxiv.org/abs/2305.19370](http://arxiv.org/abs/2305.19370).
+
+### 
+
+Liu, Zhuang, Zhiqiu Xu, Joseph Jin, Zhiqiang Shen, and Trevor Darrell. “Dropout Reduces Underfitting.” arXiv, May 31, 2023. [https://doi.org/10.48550/arXiv.2303.01500](https://doi.org/10.48550/arXiv.2303.01500).  
+### Better Data
+
+autolabel: [https://github.com/refuel-ai/autolabel](https://github.com/refuel-ai/autolabel) - "Autolabel is a Python library to label, clean and enrich text datasets with any Large Language Models (LLM) of your choice." Start 2023-03
+
+Eldan, Ronen, and Yuanzhi Li. “TinyStories: How Small Can Language Models Be and Still Speak Coherent English?” arXiv, May 24, 2023. [https://doi.org/10.48550/arXiv.2305.07759](https://doi.org/10.48550/arXiv.2305.07759).
+
+Xu, Can, Qingfeng Sun, Kai Zheng, Xiubo Geng, Pu Zhao, Jiazhan Feng, Chongyang Tao, and Daxin Jiang. “WizardLM: Empowering Large Language Models to Follow Complex Instructions.” arXiv, June 10, 2023. [https://doi.org/10.48550/arXiv.2304.12244](https://doi.org/10.48550/arXiv.2304.12244).
+
+Luo, Ziyang, Can Xu, Pu Zhao, Qingfeng Sun, Xiubo Geng, Wenxiang Hu, Chongyang Tao, Jing Ma, Qingwei Lin, and Daxin Jiang. “WizardCoder: Empowering Code Large Language Models with Evol-Instruct.” arXiv, June 14, 2023. [https://doi.org/10.48550/arXiv.2306.08568](https://doi.org/10.48550/arXiv.2306.08568).
+
+Gunasekar, Suriya, Yi Zhang, Jyoti Aneja, Caio César Teodoro Mendes, Allie Del Giorno, Sivakanth Gopi, Mojan Javaheripi, et al. “Textbooks Are All You Need.” arXiv, June 20, 2023. [https://doi.org/10.48550/arXiv.2306.11644](https://doi.org/10.48550/arXiv.2306.11644).  
+Lee, Alycia, Brando Miranda, and Sanmi Koyejo. “Beyond Scale: The Diversity Coefficient as a Data Quality Metric Demonstrates LLMs Are Pre-Trained on Formally Diverse Data.” arXiv, June 23, 2023. [https://doi.org/10.48550/arXiv.2306.13840](https://doi.org/10.48550/arXiv.2306.13840).
+
+### Self Supervised Training
+
+Sun, Zhiqing, Yikang Shen, Qinhong Zhou, Hongxin Zhang, Zhenfang Chen, David Cox, Yiming Yang, and Chuang Gan. “Principle-Driven Self-Alignment of Language Models from Scratch with Minimal Human Supervision.” arXiv, May 4, 2023. [https://doi.org/10.48550/arXiv.2305.03047](https://doi.org/10.48550/arXiv.2305.03047).
+
+Rafailov, Rafael, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher D. Manning, and Chelsea Finn. “Direct Preference Optimization: Your Language Model Is Secretly a Reward Model.” arXiv, May 29, 2023. [https://doi.org/10.48550/arXiv.2305.18290](https://doi.org/10.48550/arXiv.2305.18290).
+
+Manikandan, Hariharan, Yiding Jiang, and J. Zico Kolter. “Language Models Are Weak Learners.” arXiv, June 24, 2023. [https://doi.org/10.48550/arXiv.2306.14101](https://doi.org/10.48550/arXiv.2306.14101).
+
+Jain, Neel, Khalid Saifullah, Yuxin Wen, John Kirchenbauer, Manli Shu, Aniruddha Saha, Micah Goldblum, Jonas Geiping, and Tom Goldstein. “Bring Your Own Data! Self-Supervised Evaluation for Large Language Models.” arXiv, June 29, 2023. [https://doi.org/10.48550/arXiv.2306.13651](https://doi.org/10.48550/arXiv.2306.13651).
+
+Song, Feifan, Bowen Yu, Minghao Li, Haiyang Yu, Fei Huang, Yongbin Li, and Houfeng Wang. “Preference Ranking Optimization for Human Alignment.” arXiv, June 30, 2023. [https://doi.org/10.48550/arXiv.2306.17492](https://doi.org/10.48550/arXiv.2306.17492).
+
+### Distillation
+
+Gu, Yuxian, Li Dong, Furu Wei, and Minlie Huang. “Knowledge Distillation of Large Language Models.” arXiv, June 14, 2023. [https://doi.org/10.48550/arXiv.2306.08543](https://doi.org/10.48550/arXiv.2306.08543).
+
+Agarwal, Rishabh, Nino Vieillard, Piotr Stanczyk, Sabela Ramos, Matthieu Geist, and Olivier Bachem. “GKD: Generalized Knowledge Distillation for Auto-Regressive Sequence Models.” arXiv, June 23, 2023. [https://doi.org/10.48550/arXiv.2306.13649](https://doi.org/10.48550/arXiv.2306.13649).
 
 ## Inference
 
