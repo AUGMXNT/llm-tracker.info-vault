@@ -15,6 +15,8 @@ Shen, Sheng, Le Hou, Yanqi Zhou, Nan Du, Shayne Longpre, Jason Wei, Hyung Won Ch
 
 ### Context
 
+Haviv, Adi, Ori Ram, Ofir Press, Peter Izsak, and Omer Levy. “Transformer Language Models without Positional Encodings Still Learn Positional Information.” arXiv, December 5, 2022. [https://doi.org/10.48550/arXiv.2203.16634](https://doi.org/10.48550/arXiv.2203.16634).
+
 Sun, Yutao, Li Dong, Barun Patra, Shuming Ma, Shaohan Huang, Alon Benhaim, Vishrav Chaudhary, Xia Song, and Furu Wei. “A Length-Extrapolatable Transformer.” arXiv, December 20, 2022. [https://doi.org/10.48550/arXiv.2212.10554](https://doi.org/10.48550/arXiv.2212.10554).
 
 Poli, Michael, Stefano Massaroli, Eric Nguyen, Daniel Y. Fu, Tri Dao, Stephen Baccus, Yoshua Bengio, Stefano Ermon, and Christopher Ré. “Hyena Hierarchy: Towards Larger Convolutional Language Models.” arXiv, March 5, 2023. [http://arxiv.org/abs/2302.10866](http://arxiv.org/abs/2302.10866).  
