@@ -1,16 +1,16 @@
 # Getting Started
-If you're starting from nothing. Just go to Wikipedia and start reading:
+ If you're starting from nothing. Just go to Wikipedia and start reading:
 * https://en.wikipedia.org/wiki/Large_language_model
 * https://en.wikipedia.org/wiki/Foundation_models
 * https://en.wikipedia.org/wiki/Artificial_neural_network
 * https://en.wikipedia.org/wiki/Machine_learning
 * etc, just keep reading
 
-You can use an LLM to help you summarize and better understand/query, although I would not use anything less than ChatGPT 4 or ChatGPT/with Web Browsing to minimize hallucinations.
+You can use an LLM to help you summarize and better understand/query, although I would not use anything less than ChatGPT 4 or ChatGPT/with Web Browsing (or Bing Chat, which is also designed to do retrieval-augmented replies) to minimize hallucinations. This has the added benefit of getting better first hand experiences of what LLMs can do well (or poorly).
 
 There are plenty of resource lists for research:
-* https://github.com/Hannibal046/Awesome-LLM - a good list of fundamental papers to read
-* https://github.com/Mooler0410/LLMsPracticalGuide - another good resource that is a little better organized IMO and supports a survey paper https://arxiv.org/abs/2304.13712 of LLMs and their applications
+* [https://github.com/Hannibal046/Awesome-LLM](https://github.com/Hannibal046/Awesome-LLM) - a good list of fundamental papers to read
+* [https://github.com/Mooler0410/LLMsPracticalGuide](https://github.com/Mooler0410/LLMsPracticalGuide) - another good resource that is a little better organized IMO and supports a survey paper https://arxiv.org/abs/2304.13712 of LLMs and their applications
 * [Understanding Large Language Models -- A Transformative Reading List, Sebastian Raschka](https://sebastianraschka.com/blog/2023/llm-reading-list.html)
 * Rather than just a list of papers, it also has a short description of why the linked papers are important.
 
