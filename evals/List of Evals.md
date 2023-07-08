@@ -14,6 +14,7 @@
 - [llm-jeopardy](https://github.com/aigoopy/llm-jeopardy) - automated quiz show answering
 - [Troyanovsky/Local-LLM-comparison](https://github.com/Troyanovsky/Local-LLM-comparison/tree/main) - one person's testing on his own standardized eval against different community models (fine-tuned quants)
 
+See also: [Papers and resources for LLMs evaluation](https://github.com/mlgroupjlu/llm-eval-survey)  
 ## Code
 
 - [code-eval](https://github.com/abacaj/code-eval) -  scripts for running/reproducing human-eval scores on models
