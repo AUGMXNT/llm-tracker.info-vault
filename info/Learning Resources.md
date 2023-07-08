@@ -129,6 +129,7 @@ https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineerin
 
 # Blogs
 
+* [Ethan Mollick's Substack](https://www.oneusefulthing.org/)
 * [https://lilianweng.github.io/](https://lilianweng.github.io/)
 * [https://llm-utils.org/Home](https://llm-utils.org/Home)
 * [https://yaofu.notion.site/Yao-Fu-s-Blog-b536c3d6912149a395931f1e871370db](https://yaofu.notion.site/Yao-Fu-s-Blog-b536c3d6912149a395931f1e871370db)
