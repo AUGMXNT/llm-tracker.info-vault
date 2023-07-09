@@ -63,6 +63,10 @@ pip install pygments
 # 0 for fp32, 1 for fp16
 python ./examples/replit/convert-h5-to-ggml.py [replit_model_folder] 1
 # outputs ggml-model-f16.bin in folder
+
+# Optional quantize - for me fp16 is 105ms/tok, q8_0 is 60ms/tok, q5_1 is 50ms/tok
+build/bin/replit-quantize ggml-model-f16.bin q8_0.bin 7
+build/bin/replit-quantize ggml-model-f16.bin q5_1.bin 9
 ```
 
 # Test GGML
