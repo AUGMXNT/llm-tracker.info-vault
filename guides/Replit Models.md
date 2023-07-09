@@ -55,6 +55,8 @@ git clone https://github.com/ggerganov/ggml
 mkdir build && cd build
 # using system CUDA is fine
 cmake -DGGML_CUBLAS=ON -DCMAKE_CUDA_COMPILER=/opt/cuda/bin/nvcc ..
+# or -j`nproc`
+make -j32 all
 pip install -r ../requirements.txt
 pip install pygments
 
