@@ -34,6 +34,26 @@ Ding, Jiayu, Shuming Ma, Li Dong, Xingxing Zhang, Shaohan Huang, Wenhui Wang, an
 
 Tworkowski, Szymon, Konrad Staniszewski, Mikołaj Pacek, Yuhuai Wu, Henryk Michalewski, and Piotr Miłoś. “Focused Transformer: Contrastive Training for Context Scaling.” arXiv, July 6, 2023. [https://doi.org/10.48550/arXiv.2307.03170](https://doi.org/10.48550/arXiv.2307.03170).
 
+## Sparsity and Efficiency
+
+Child, Rewon, Scott Gray, Alec Radford, and Ilya Sutskever. “Generating Long Sequences with Sparse Transformers.” arXiv, April 23, 2019. [http://arxiv.org/abs/1904.10509](http://arxiv.org/abs/1904.10509).  
+DeepSpeed. “DeepSpeed Sparse Attention,” September 8, 2020. [https://www.deepspeed.ai/2020/09/08/sparse-attention.html](https://www.deepspeed.ai/2020/09/08/sparse-attention.html).
+
+Zaheer, Manzil, Guru Guruganesh, Avinava Dubey, Joshua Ainslie, Chris Alberti, Santiago Ontanon, Philip Pham, et al. “Big Bird: Transformers for Longer Sequences.” arXiv, January 8, 2021. [https://doi.org/10.48550/arXiv.2007.14062](https://doi.org/10.48550/arXiv.2007.14062).
+
+Jaszczur, Sebastian, Aakanksha Chowdhery, Afroz Mohiuddin, Łukasz Kaiser, Wojciech Gajewski, Henryk Michalewski, and Jonni Kanerva. “Sparse Is Enough in Scaling Transformers.” arXiv, November 24, 2021. [https://doi.org/10.48550/arXiv.2111.12763](https://doi.org/10.48550/arXiv.2111.12763).
+
+Tay, Yi, Mostafa Dehghani, Dara Bahri, and Donald Metzler. “Efficient Transformers: A Survey.” arXiv, March 14, 2022. [https://doi.org/10.48550/arXiv.2009.06732](https://doi.org/10.48550/arXiv.2009.06732).
+
+Fedus, William, Barret Zoph, and Noam Shazeer. “Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity.” arXiv, June 16, 2022. [http://arxiv.org/abs/2101.03961](http://arxiv.org/abs/2101.03961).
+
+Cho, Sungjun, Seonwoo Min, Jinwoo Kim, Moontae Lee, Honglak Lee, and Seunghoon Hong. “Transformers Meet Stochastic Block Models: Attention with Data-Adaptive Sparsity and Cost.” arXiv, October 27, 2022. [https://doi.org/10.48550/arXiv.2210.15541](https://doi.org/10.48550/arXiv.2210.15541).
+
+Thangarasa, Vithursan, Abhay Gupta, William Marshall, Tianda Li, Kevin Leong, Dennis DeCoste, Sean Lie, and Shreyas Saxena. “SPDF: Sparse Pre-Training and Dense Fine-Tuning for Large Language Models.” arXiv, March 18, 2023. [https://doi.org/10.48550/arXiv.2303.10464](https://doi.org/10.48550/arXiv.2303.10464).  
+Zhuang, Bohan, Jing Liu, Zizheng Pan, Haoyu He, Yuetian Weng, and Chunhua Shen. “A Survey on Efficient Training of Transformers.” arXiv, May 3, 2023. [https://doi.org/10.48550/arXiv.2302.01107](https://doi.org/10.48550/arXiv.2302.01107).
+
+Dettmers, Tim, Ruslan Svirschevski, Vage Egiazarian, Denis Kuznedelev, Elias Frantar, Saleh Ashkboos, Alexander Borzunov, Torsten Hoefler, and Dan Alistarh. “SpQR: A Sparse-Quantized Representation for Near-Lossless LLM Weight Compression.” arXiv, June 5, 2023. [https://doi.org/10.48550/arXiv.2306.03078](https://doi.org/10.48550/arXiv.2306.03078).
+
 ## MQA
 
 Shazeer, Noam. “Fast Transformer Decoding: One Write-Head Is All You Need.” arXiv, November 5, 2019. [https://doi.org/10.48550/arXiv.1911.02150](https://doi.org/10.48550/arXiv.1911.02150).  
