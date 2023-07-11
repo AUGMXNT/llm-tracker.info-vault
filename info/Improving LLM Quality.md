@@ -3,6 +3,8 @@
 ### Mixture of Experts / Ensemble
 
 Zoph, Barret, Irwan Bello, Sameer Kumar, Nan Du, Yanping Huang, Jeff Dean, Noam Shazeer, and William Fedus. “ST-MoE: Designing Stable and Transferable Sparse Expert Models.” arXiv, April 29, 2022. [https://doi.org/10.48550/arXiv.2202.08906](https://doi.org/10.48550/arXiv.2202.08906).  
+Rajbhandari, Samyam, Conglong Li, Zhewei Yao, Minjia Zhang, Reza Yazdani Aminabadi, Ammar Ahmad Awan, Jeff Rasley, and Yuxiong He. “DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training to Power Next-Generation AI Scale.” arXiv, July 21, 2022. [https://doi.org/10.48550/arXiv.2201.05596](https://doi.org/10.48550/arXiv.2201.05596).
+
 Du, Nan, Yanping Huang, Andrew M. Dai, Simon Tong, Dmitry Lepikhin, Yuanzhong Xu, Maxim Krikun, et al. “GLaM: Efficient Scaling of Language Models with Mixture-of-Experts.” arXiv, August 1, 2022. [https://doi.org/10.48550/arXiv.2112.06905](https://doi.org/10.48550/arXiv.2112.06905).
 
 Li, Margaret, Suchin Gururangan, Tim Dettmers, Mike Lewis, Tim Althoff, Noah A. Smith, and Luke Zettlemoyer. “Branch-Train-Merge: Embarrassingly Parallel Training of Expert Language Models.” arXiv, August 5, 2022. [http://arxiv.org/abs/2208.03306](http://arxiv.org/abs/2208.03306).
@@ -98,6 +100,22 @@ Pan, Shirui, Linhao Luo, Yufei Wang, Chen Chen, Jiapu Wang, and Xindong Wu. “U
 
 ## Training
 
+Rajbhandari, Samyam, Jeff Rasley, Olatunji Ruwase, and Yuxiong He. “ZeRO: Memory Optimizations Toward Training Trillion Parameter Models.” arXiv, May 13, 2020. [https://doi.org/10.48550/arXiv.1910.02054](https://doi.org/10.48550/arXiv.1910.02054).
+
+Ren, Jie, Samyam Rajbhandari, Reza Yazdani Aminabadi, Olatunji Ruwase, Shuangyan Yang, Minjia Zhang, Dong Li, and Yuxiong He. “ZeRO-Offload: Democratizing Billion-Scale Model Training.” arXiv, January 17, 2021. [https://doi.org/10.48550/arXiv.2101.06840](https://doi.org/10.48550/arXiv.2101.06840).
+
+Rajbhandari, Samyam, Olatunji Ruwase, Jeff Rasley, Shaden Smith, and Yuxiong He. “ZeRO-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning.” arXiv, April 15, 2021. [https://doi.org/10.48550/arXiv.2104.07857](https://doi.org/10.48550/arXiv.2104.07857).
+
+Caggiano, Myle Ott, Sam Shleifer, Min Xu, Priya Goyal, Quentin Duval, Vittorio. “Fully Sharded Data Parallel: Faster AI Training with Fewer GPUs.” Engineering at Meta (blog), July 15, 2021. [https://engineering.fb.com/2021/07/15/open-source/fsdp/](https://engineering.fb.com/2021/07/15/open-source/fsdp/).
+
+Smith, Shaden, Mostofa Patwary, Brandon Norick, Patrick LeGresley, Samyam Rajbhandari, Jared Casper, Zhun Liu, et al. “Using DeepSpeed and Megatron to Train Megatron-Turing NLG 530B, A Large-Scale Generative Language Model.” arXiv, February 4, 2022. [https://doi.org/10.48550/arXiv.2201.11990](https://doi.org/10.48550/arXiv.2201.11990).
+
+Aminabadi, Reza Yazdani, Samyam Rajbhandari, Minjia Zhang, Ammar Ahmad Awan, Cheng Li, Du Li, Elton Zheng, et al. “DeepSpeed Inference: Enabling Efficient Inference of Transformer Models at Unprecedented Scale.” arXiv, June 30, 2022. [https://doi.org/10.48550/arXiv.2207.00032](https://doi.org/10.48550/arXiv.2207.00032).
+
+Li, Conglong, Zhewei Yao, Xiaoxia Wu, Minjia Zhang, Connor Holmes, Cheng Li, and Yuxiong He. “DeepSpeed Data Efficiency: Improving Deep Learning Model Quality and Training Efficiency via Efficient Data Sampling and Routing.” arXiv, February 7, 2023. [https://doi.org/10.48550/arXiv.2212.03597](https://doi.org/10.48550/arXiv.2212.03597).
+
+Zhao, Yanli, Andrew Gu, Rohan Varma, Liang Luo, Chien-Chin Huang, Min Xu, Less Wright, et al. “PyTorch FSDP: Experiences on Scaling Fully Sharded Data Parallel.” arXiv, April 21, 2023. [https://doi.org/10.48550/arXiv.2304.11277](https://doi.org/10.48550/arXiv.2304.11277).
+
 Liu, Hao, and Pieter Abbeel. “Blockwise Parallel Transformer for Long Context Large Models.” arXiv, May 30, 2023. [http://arxiv.org/abs/2305.19370](http://arxiv.org/abs/2305.19370).
 
 ### 
@@ -154,6 +172,16 @@ Yang, John, Akshara Prabhakar, Karthik Narasimhan, and Shunyu Yao. “InterCode:
 - [https://intercode-benchmark.github.io/](https://intercode-benchmark.github.io/)
 
 Sanchez, Guillaume, Honglu Fan, Alexander Spangher, Elad Levi, Pawan Sasanka Ammanamanchi, and Stella Biderman. “Stay on Topic with Classifier-Free Guidance.” arXiv, June 30, 2023. [https://doi.org/10.48550/arXiv.2306.17806](https://doi.org/10.48550/arXiv.2306.17806).
+
+### Performance
+
+Xia, Heming, Tao Ge, Furu Wei, and Zhifang Sui. “Lossless Speedup of Autoregressive Translation with Generalized Aggressive Decoding.” arXiv, May 20, 2022. [https://doi.org/10.48550/arXiv.2203.16487](https://doi.org/10.48550/arXiv.2203.16487).
+
+Chen, Charlie, Sebastian Borgeaud, Geoffrey Irving, Jean-Baptiste Lespiau, Laurent Sifre, and John Jumper. “Accelerating Large Language Model Decoding with Speculative Sampling.” arXiv, February 2, 2023. [https://doi.org/10.48550/arXiv.2302.01318](https://doi.org/10.48550/arXiv.2302.01318).
+
+Miao, Xupeng, Gabriele Oliaro, Zhihao Zhang, Xinhao Cheng, Zeyu Wang, Rae Ying Yee Wong, Zhuoming Chen, Daiyaan Arfeen, Reyna Abhyankar, and Zhihao Jia. “SpecInfer: Accelerating Generative LLM Serving with Speculative Inference and Token Tree Verification.” arXiv, May 16, 2023. [https://doi.org/10.48550/arXiv.2305.09781](https://doi.org/10.48550/arXiv.2305.09781).
+
+Leviathan, Yaniv, Matan Kalman, and Yossi Matias. “Fast Inference from Transformers via Speculative Decoding.” arXiv, May 18, 2023. [https://doi.org/10.48550/arXiv.2211.17192](https://doi.org/10.48550/arXiv.2211.17192).
 
 ### Controlling Output
 
