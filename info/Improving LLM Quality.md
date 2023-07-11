@@ -54,6 +54,13 @@ Zhuang, Bohan, Jing Liu, Zizheng Pan, Haoyu He, Yuetian Weng, and Chunhua Shen. 
 
 Dettmers, Tim, Ruslan Svirschevski, Vage Egiazarian, Denis Kuznedelev, Elias Frantar, Saleh Ashkboos, Alexander Borzunov, Torsten Hoefler, and Dan Alistarh. “SpQR: A Sparse-Quantized Representation for Near-Lossless LLM Weight Compression.” arXiv, June 5, 2023. [https://doi.org/10.48550/arXiv.2306.03078](https://doi.org/10.48550/arXiv.2306.03078).
 
+## MLP
+
+Liu, Hanxiao, Zihang Dai, David R. So, and Quoc V. Le. “Pay Attention to MLPs.” arXiv, June 1, 2021. [https://doi.org/10.48550/arXiv.2105.08050](https://doi.org/10.48550/arXiv.2105.08050).  
+Yu, Ping, Mikel Artetxe, Myle Ott, Sam Shleifer, Hongyu Gong, Ves Stoyanov, and Xian Li. “Efficient Language Modeling with Sparse All-MLP.” arXiv, May 31, 2022. [https://doi.org/10.48550/arXiv.2203.06850](https://doi.org/10.48550/arXiv.2203.06850).
+
+Bachmann, Gregor, Sotiris Anagnostidis, and Thomas Hofmann. “Scaling MLPs: A Tale of Inductive Bias.” arXiv, June 23, 2023. [https://doi.org/10.48550/arXiv.2306.13575](https://doi.org/10.48550/arXiv.2306.13575).
+
 ## MQA
 
 Shazeer, Noam. “Fast Transformer Decoding: One Write-Head Is All You Need.” arXiv, November 5, 2019. [https://doi.org/10.48550/arXiv.1911.02150](https://doi.org/10.48550/arXiv.1911.02150).  
@@ -124,6 +131,8 @@ Jain, Neel, Khalid Saifullah, Yuxin Wen, John Kirchenbauer, Manli Shu, Aniruddha
 Song, Feifan, Bowen Yu, Minghao Li, Haiyang Yu, Fei Huang, Yongbin Li, and Houfeng Wang. “Preference Ranking Optimization for Human Alignment.” arXiv, June 30, 2023. [https://doi.org/10.48550/arXiv.2306.17492](https://doi.org/10.48550/arXiv.2306.17492).
 
 ### Distillation
+
+Wu, Lirong, Haitao Lin, Yufei Huang, and Stan Z. Li. “Quantifying the Knowledge in GNNs for Reliable Distillation into MLPs.” arXiv, June 8, 2023. [https://doi.org/10.48550/arXiv.2306.05628](https://doi.org/10.48550/arXiv.2306.05628).
 
 Gu, Yuxian, Li Dong, Furu Wei, and Minlie Huang. “Knowledge Distillation of Large Language Models.” arXiv, June 14, 2023. [https://doi.org/10.48550/arXiv.2306.08543](https://doi.org/10.48550/arXiv.2306.08543).
 
