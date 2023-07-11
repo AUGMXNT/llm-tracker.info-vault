@@ -13,6 +13,13 @@
 
 - [llm-jeopardy](https://github.com/aigoopy/llm-jeopardy) - automated quiz show answering
 - [Troyanovsky/Local-LLM-comparison](https://github.com/Troyanovsky/Local-LLM-comparison/tree/main) - one person's testing on his own standardized eval against different community models (fine-tuned quants)
+- [paperswithcode](https://paperswithcode.com/) (based off of numbers published in paper, not independently verified or standardized) 
+  - [MMLU](https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu)
+  - [ARC-c](https://paperswithcode.com/sota/common-sense-reasoning-on-arc-challenge)
+  - [Hellaswag](https://paperswithcode.com/sota/sentence-completion-on-hellaswag)
+  - [Winogrande](https://paperswithcode.com/sota/common-sense-reasoning-on-winogrande)
+  - [BoolQ](https://paperswithcode.com/sota/question-answering-on-boolq)
+  - [HumanEval](https://paperswithcode.com/sota/code-generation-on-humaneval)
 
 See also: [Papers and resources for LLMs evaluation](https://github.com/mlgroupjlu/llm-eval-survey)  
 ## Code
