@@ -183,6 +183,10 @@ Miao, Xupeng, Gabriele Oliaro, Zhihao Zhang, Xinhao Cheng, Zeyu Wang, Rae Ying Y
 
 Leviathan, Yaniv, Matan Kalman, and Yossi Matias. “Fast Inference from Transformers via Speculative Decoding.” arXiv, May 18, 2023. [https://doi.org/10.48550/arXiv.2211.17192](https://doi.org/10.48550/arXiv.2211.17192).
 
+Sheng, Ying, Lianmin Zheng, Binhang Yuan, Zhuohan Li, Max Ryabinin, Daniel Y. Fu, Zhiqiang Xie, et al. “FlexGen: High-Throughput Generative Inference of Large Language Models with a Single GPU.” arXiv, June 12, 2023. [https://doi.org/10.48550/arXiv.2303.06865](https://doi.org/10.48550/arXiv.2303.06865).
+
+Team, vLLM. “VLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention,” June 21, 2023. [https://vllm.ai/](https://vllm.ai/).
+
 ### Controlling Output
 
 #### Jsonformer
