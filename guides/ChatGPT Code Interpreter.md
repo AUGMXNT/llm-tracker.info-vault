@@ -4,6 +4,7 @@ This is an extremely powerful tool for both programmers and non-programmers alik
 
 * [https://www.oneusefulthing.org/p/what-ai-can-do-with-a-toolbox-getting](https://www.oneusefulthing.org/p/what-ai-can-do-with-a-toolbox-getting) - Ethan Mollick (non-programmer University professor) has been poking around quite a bit with Code Interpreter and this is a good way to start on how it might be useful
 * [swyx ai-notes: ChatGPT Code Interpreter Capabilities](https://github.com/swyxio/ai-notes/blob/main/Resources/ChatGPT%20Code%20Interpreter%20Capabilities.md) - a running set of notes tracking many details about the Code Interpreter
+* [chatgpt speech_balloon + code interpreter computer experiments](https://github.com/SkalskiP/awesome-chatgpt-code-interpreter-experiments) - poking around (installing additional packages, binaries, etc)
 
 # Interpreter Details
 
