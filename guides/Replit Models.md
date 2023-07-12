@@ -1,6 +1,6 @@
 Replit has trained a very strong [3B parameter code completion foundational model](https://huggingface.co/replit/replit-code-v1-3b) on [The Stack](https://arxiv.org/abs/2211.15533). One fine tune beats [WizardCoder-15B](https://huggingface.co/WizardLM/WizardCoder-15B-V1.0) ([StarCoder](https://huggingface.co/blog/starcoder) fine tune) [in human-eval](https://github.com/abacaj/code-eval), making it probably the strongest open code-completion model as of July 2023.
 
-2023-07-12: Sadly, it appears that replit-code-instruct-glaive's extremely strong HumanEval performance may be mostly due to training data contamination: [https://huggingface.co/sahil2801/replit-code-instruct-glaive/discussions/3](https://huggingface.co/sahil2801/replit-code-instruct-glaive/discussions/3) (also, I noticed a [v2](https://huggingface.co/sahil2801/replit-code-instruct-glaive-v2) in progress...
+2023-07-12: Sadly, it appears that replit-code-instruct-glaive's extremely strong HumanEval performance may be mostly due to training data contamination: [https://huggingface.co/sahil2801/replit-code-instruct-glaive/discussions/3](https://huggingface.co/sahil2801/replit-code-instruct-glaive/discussions/3) (also, I noticed a [v2](https://huggingface.co/sahil2801/replit-code-instruct-glaive-v2) in progress...)
 
 # Setup
 ```
