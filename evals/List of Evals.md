@@ -22,7 +22,7 @@
   - [HumanEval](https://paperswithcode.com/sota/code-generation-on-humaneval)
 
 See also: [Papers and resources for LLMs evaluation](https://github.com/mlgroupjlu/llm-eval-survey)  
-## Code
+### Code
 
 - [code-eval](https://github.com/abacaj/code-eval) -  scripts for running/reproducing human-eval scores on models
 - [llm-humaneval-benchmarks](https://github.com/my-other-github-account/llm-humaneval-benchmarks) - HuggingFace models evald vs HumanEval+
@@ -30,3 +30,7 @@ See also: [Papers and resources for LLMs evaluation](https://github.com/mlgroupj
 - [airate](https://github.com/catid/supercharger/tree/main/airate) - C++ bug catching test
 - [phi-1 prompt tests](https://twitter.com/khandelia1000/status/1675939866389934097)
   - [https://colab.research.google.com/drive/1mSb2t8NDz0o_Cc8VgTMbhOg8kIh-cRIu?usp=sharing](https://colab.research.google.com/drive/1mSb2t8NDz0o_Cc8VgTMbhOg8kIh-cRIu?usp=sharing)
+
+### Roleplay  
+- [Another LLM Roleplay Rankings](https://rentry.co/ALLMRR)
+- [The 'Ayumi' Inofficial LLM ERP Model Rating](https://rentry.org/ayumi_erp_rating)
