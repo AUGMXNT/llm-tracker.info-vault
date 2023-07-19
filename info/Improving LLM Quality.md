@@ -63,7 +63,7 @@ Yu, Ping, Mikel Artetxe, Myle Ott, Sam Shleifer, Hongyu Gong, Ves Stoyanov, and 
 
 Bachmann, Gregor, Sotiris Anagnostidis, and Thomas Hofmann. “Scaling MLPs: A Tale of Inductive Bias.” arXiv, June 23, 2023. [https://doi.org/10.48550/arXiv.2306.13575](https://doi.org/10.48550/arXiv.2306.13575).
 
-## MQA
+## MQA/GQA
 
 Shazeer, Noam. “Fast Transformer Decoding: One Write-Head Is All You Need.” arXiv, November 5, 2019. [https://doi.org/10.48550/arXiv.1911.02150](https://doi.org/10.48550/arXiv.1911.02150).  
 Pope, Reiner, Sholto Douglas, Aakanksha Chowdhery, Jacob Devlin, James Bradbury, Anselm Levskaya, Jonathan Heek, Kefan Xiao, Shivani Agrawal, and Jeff Dean. “Efficiently Scaling Transformer Inference.” arXiv, November 9, 2022. [http://arxiv.org/abs/2211.05102](http://arxiv.org/abs/2211.05102).
