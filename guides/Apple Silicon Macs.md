@@ -10,8 +10,9 @@ For non-technical users, there are several "1-click" methods that leverage llama
 * When context becomes full, [llama.cpp currently suffers huge slowdowns](https://github.com/ggerganov/llama.cpp/issues/1730#issuecomment-1585580602) that manifest as multi-second pauses (computation falls back to CPU). If your goal is simply to run inference (chat with) the largest public models, you will get much better performance with say, 2 x 24GB RTX 3090s (~$1500 used) or a single RTX A6000 48GB ($4000).
 * If you are planning on using Apple Silicon for ML/training, I'd also be wary. There are [multi-year long open bugs](https://github.com/pytorch/pytorch/issues?q=is%3Aissue+is%3Aopen+apple+metal+sort%3Acreated-asc+) in PyTorch, and most major LLM libs like [bitsandbytes have no Apple Silicon support](https://github.com/TimDettmers/bitsandbytes/issues/485)
 
+## llama.cpp
 
-llama.cpp is a breeze to get running:
+llama.cpp is a breeze to get running without any additional dependencies:
 ```
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
@@ -38,3 +39,8 @@ If you are benchmarking vs other inference engines, I recommend using these stan
 * Metal uses `-ngl 1` (or any really) since it's unified memory, but for CUDA systems you'd want something like `-ngl 99` to get all layers in memory
 * Default prompt context is 512 - this is probably fine to leave as is? Most testing I've seen online doesn't change this
 * `-n` should be the max context you want to test to and `--ignore-eos` is required so it doesn't end prematurely (as context gets longer, speed tends to slow down
+
+## MLC LLM
+[MLC LLM](https://mlc.ai/mlc-llm/) is an implementation that runs not just on Windows, Linux, and Mac, but also iOS, Android, and even in web browsers w/ WebGPU support. Assuming you have `conda` setup already, the [instructions for installing](https://mlc.ai/mlc-llm/docs/get_started/try_out.html) are up to date and work without hitches.
+
+Currently, the performance is about 50% slower than llama.cpp on my M2 MBA.
