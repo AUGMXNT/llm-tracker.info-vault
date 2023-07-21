@@ -19,6 +19,11 @@ bloop is a developer assistant that uses GPT-4 to answer questions about your co
 * Free version for individual use
 * Uses OpenAI GPT-4
 
+## [Mutable.ai]
+Supposedly will let you talk to your code base, create tests, review PRs, refactor folders, auto-document, etc...
+* Free version doest no have multifile codegen or code search
+* [Discussion on HN](https://news.ycombinator.com/item?id=30458465)
+
 
 # OpenAI API
 
@@ -68,7 +73,6 @@ Index and search through local files w/ local models
 
 # Other
 Maybe useful, but not going to organize...
-* https://mutable.ai/ - another talk to your codebase app (also creates tests, reviews PRs, refactors folders, autodoc) - maybe need to compare/contrast to Cody/Bloop (see also https://news.ycombinator.com/item?id=30458465)
 * https://www.codium.ai/ - write tests
 * https://writer.mintlify.com/ Auto comment/document
 * https://readable.so/ - auto comment
