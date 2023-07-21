@@ -46,6 +46,10 @@ Write commit messages/does code review via git hook w/ OpenAI API
 * https://github.com/iamgreggarcia/codesherpa
 * https://github.com/KillianLucas/open-interpreter
 
+## [OpenAI ChatGPT-4 Code Interpreter](https://chat.openai.com/?model=gpt-4-code-interpreter)
+You get a VM sandbox and GPT-4 that knows how to run Python with it.
+* Limit of 50 exchanges/3 hours
+* VM will be recycled after a timeout period
 
 # Local
 
