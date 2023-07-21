@@ -19,7 +19,7 @@ bloop is a developer assistant that uses GPT-4 to answer questions about your co
 * Free version for individual use
 * Uses OpenAI GPT-4
 
-## [Mutable.ai]
+## [Mutable.ai](https://mutable.ai/)
 Supposedly will let you talk to your code base, create tests, review PRs, refactor folders, auto-document, etc...
 * Free version doest no have multifile codegen or code search
 * [Discussion on HN](https://news.ycombinator.com/item?id=30458465)
