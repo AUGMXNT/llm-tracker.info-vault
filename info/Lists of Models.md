@@ -6,7 +6,7 @@ We will eventually be hosting an API and list of LLMs.  In the meantime:
 
   - Also available [as a Google Sheet](https://docs.google.com/spreadsheets/d/1PtrPwDV8Wcdhzh-N_Siaofc2R6TImebnFvv0GuCCzdo/edit?usp=sharing), this is a curated list of fine tunes and quantized models
 - [CRFM Ecosystem Graphs Table](https://crfm.stanford.edu/ecosystem-graphs/index.html?mode=table)
-  - Maintained by CRFM, this tracks a large number of models (beyond LLMs) along with metadata.
+  - Maintained by CRFM, this tracks a large number of models (beyond LLMs) along with metadata
 - [Viktor Garske's AI / ML / LLM / Transformer Models Timeline and List](https://ai.v-gar.de/ml/transformer/timeline/)  
 
   - A timeline of select papers and models
@@ -16,5 +16,7 @@ We will eventually be hosting an API and list of LLMs.  In the meantime:
   - This is a good place if you're looking for the latest fine tunes of open foundational models
 - [Hugging Face: Text Generation Models (sorted by recently modified)](https://huggingface.co/models?pipeline_tag=text-generation&sort=modified)
   - This is where almost every public fine-tune, quantize, as well as foundational model lives, so it's a bit much and not where to start, but where you might end up.
+- [2023 LifeArchitect.ai data](https://docs.google.com/spreadsheets/d/1O5KVQW1Hx5ZAkcg8AIRjbQLQzx2wVaLl0SqUu-ir9Fs/edit#gid=1158069878)
+  - A Google Sheet w/ mixed list of various models, datasets, and lots of random data
 
 See Evals for potentially more models and how they compare.
