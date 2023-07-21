@@ -18,5 +18,6 @@ We will eventually be hosting an API and list of LLMs.  In the meantime:
   - This is where almost every public fine-tune, quantize, as well as foundational model lives, so it's a bit much and not where to start, but where you might end up.
 - [2023 LifeArchitect.ai data](https://docs.google.com/spreadsheets/d/1O5KVQW1Hx5ZAkcg8AIRjbQLQzx2wVaLl0SqUu-ir9Fs/edit#gid=1158069878)
   - A Google Sheet w/ mixed list of various models, datasets, and lots of random data
+- [Constellation: An Atlas of 15,000 Large Language Models](https://llmconstellation.olafblitz.repl.co/)
 
 See Evals for potentially more models and how they compare.
