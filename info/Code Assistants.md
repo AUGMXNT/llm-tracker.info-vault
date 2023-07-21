@@ -24,7 +24,6 @@ Supposedly will let you talk to your code base, create tests, review PRs, refact
 * Free version doest no have multifile codegen or code search
 * [Discussion on HN](https://news.ycombinator.com/item?id=30458465)
 
-
 # OpenAI API
 
 ## [GPT-4 Coding Assistant](https://github.com/alfiedennen/GPT-4-coding-assistant)
@@ -88,6 +87,7 @@ Maybe useful, but not going to organize...
 * https://stepsize.com/ - (CollabGPT) team updates and collab
 * https://www.lindy.ai/ - personal assistant
 * https://www.hyperwriteai.com/personal-assistant - personal assistant
+* [Codesee](https://www.codesee.io/) - A general code-mapping/refactoring tool that for $29/mo has an AI chat feature (but has a [waitlist](https://www.codesee.io/ai)?) 
 
 Toys
 * [Dev-GPT](https://github.com/jina-ai/dev-gpt)
