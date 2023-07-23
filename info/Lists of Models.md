@@ -21,3 +21,25 @@ We will eventually be hosting an API and list of LLMs.  In the meantime:
 - [Constellation: An Atlas of 15,000 Large Language Models](https://llmconstellation.olafblitz.repl.co/)
 
 See Evals for potentially more models and how they compare.
+
+### lhl's opinionated list of local llms
+
+May move this out if anyone else ever starts contributing and just give a recommended starting list. I don't do RP or require character writing/fiction. My main uses are for factual q&a, and ideally coding/tech support.
+
+Last updated: 2023-07-24
+
+- Current best local model (any size) 
+  - [Stability AI FreeWilly2](https://huggingface.co/stabilityai/FreeWilly2) (llama2-70b fine tune) - unquantized will take 160-200GB of VRAM, 4-bit GPTQ on exllama in 41-48GB
+- Current best local model for 24GB GPU (eg, 3090, 4090) 
+  - There are a bunch of very strong llama-30b fine tunes. Expect this to be replaced by llama2-34b fine tunes when that is released...
+  - Use exllama w/ GPTQ as you will want all the VRAM as you can get for context
+  - [TheBloke/upstage-llama-30b-instruct-2048-GPTQ](https://huggingface.co/TheBloke/upstage-llama-30b-instruct-2048-GPTQ)  
+
+  - [lilloukas/GPlatty-30B](https://huggingface.co/lilloukas/GPlatty-30B)
+  - [lilloukas/Platypus-30B](https://huggingface.co/lilloukas/Platypus-30B)
+  - For tool use 
+    - [arielnlee/SuperPlatty-30B](https://huggingface.co/arielnlee/SuperPlatty-30B)
+- Current best local model for 16GB GPU or Apple Silicon Mac 
+  - [NousResearch/Nous-Hermes-Llama2-13b](https://huggingface.co/NousResearch/Nous-Hermes-Llama2-13b) (GPTQ on GPU, GGML on Mac)
+- Current best local coding model 
+  - [WizardLM/WizardCoder-15B-V1.0](https://huggingface.co/WizardLM/WizardCoder-15B-V1.0) (maybe [LoupGarou/WizardCoder-Guanaco-15B-V1.1](https://huggingface.co/LoupGarou/WizardCoder-Guanaco-15B-V1.1), untested)
