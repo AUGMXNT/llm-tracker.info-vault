@@ -334,7 +334,7 @@ ROCm support is outside the scope of this guide (maybe someone can make a new pa
 * ROCm [officially supports RHEL, SLES, and Ubuntu](https://rocm.docs.amd.com/en/latest/release/gpu_os_support.html)
 * For Arch Linux, there are packages in [extra] (eg [rocm-core](https://archlinux.org/packages/extra/x86_64/rocm-core/)) but packages may be behind - eg, currently on version 5.4.3 and 5.5.1 did not make it out of staging before 5.6.0 was released. These appear to be built from source. See also:
   * [rocm-arch/rocm-arch PKGBUILDS](https://github.com/rocm-arch/rocm-arch) - these appear different from the [extra] PKGBUILDS...
-  * [ComsimicFusion/rocm-polaris-arch](https://github.com/CosmicFusion/rocm-polaris-arch) - this looks useful if you're tyring to enable non-officially supported hardware
+  * [CosmicFusion/rocm-polaris-arch](https://github.com/CosmicFusion/rocm-polaris-arch) - this looks useful if you're tyring to enable non-officially supported hardware
 
 # Windows
 
