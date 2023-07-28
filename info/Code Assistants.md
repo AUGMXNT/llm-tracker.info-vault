@@ -26,6 +26,11 @@ Supposedly will let you talk to your code base, create tests, review PRs, refact
 
 # OpenAI API
 
+## [Mentat](https://github.com/biobootloader/mentat)
+Mentat is an interactive command-line tool that can load and coordinate edits from your command line. It can directly edit files without copy and pasting (Y/n/i)
+* GPT-4 API
+* Shows tokens and costs for operations
+
 ## [GPT-4 Coding Assistant](https://github.com/alfiedennen/GPT-4-coding-assistant)
 GPT-4 Coding Assistant is a web application that leverages the power of OpenAI's GPT-4 to help developers with their coding tasks. The application serves as an interactive chatbot that assists in code generation, understanding, and troubleshooting. It also utilizes embeddings and the Annoy library to search for similar code snippets in the provided codebase, offering more contextually relevant responses.
 * Uses OpenAI Embeddings
