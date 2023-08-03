@@ -50,10 +50,10 @@ git clone https://github.com/mlc-ai/relax.git --recursive
 cd relax
 mkdir build
 cp cmake/config.cmake build
-sed -i 's/set(USE_CUDA OFF)/set(USE_CUDA ON)/g' build/config.make
-sed -i 's/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH OFF)/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH ON)/g' build/config.make
-sed -i 's/set(USE_CUDNN OFF)/set(USE_CUDNN ON)/g' build/config.make
-sed -i 's/set(USE_CUBLAS OFF)/set(USE_CUBLAS ON)/g' build/config.make
+sed -i 's/set(USE_CUDA OFF)/set(USE_CUDA ON)/g' build/config.cmake
+sed -i 's/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH OFF)/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH ON)/g' build/config.cmake
+sed -i 's/set(USE_CUDNN OFF)/set(USE_CUDNN ON)/g' build/config.cmake
+sed -i 's/set(USE_CUBLAS OFF)/set(USE_CUBLAS ON)/g' build/config.cmake
 make -j`nproc`
 export TVM_HOME=`pwd`
 cd ..
