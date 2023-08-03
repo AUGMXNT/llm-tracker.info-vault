@@ -1,4 +1,5 @@
-* [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)
+* [MosaicML Model Gauntlet](https://www.mosaicml.com/llm-evaluation) - 34 benchmarks in 6 categories
+- [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)
   - warning, their MMLU results are wrong, throwing off the whole ranking: [https://twitter.com/Francis_YAO_/status/1666833311279517696](https://twitter.com/Francis_YAO_/status/1666833311279517696)
 - [LMSys Chatbot Arena Leaderboard](https://chat.lmsys.org/?leaderboard) - ELO style ranking
 - [LLM-Leaderboard](https://llm-leaderboard.streamlit.app/)
