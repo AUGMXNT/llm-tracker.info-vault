@@ -26,6 +26,7 @@ See also: [Papers and resources for LLMs evaluation](https://github.com/mlgroupj
 
 - [code-eval](https://github.com/abacaj/code-eval) -  scripts for running/reproducing human-eval scores on models
 - [llm-humaneval-benchmarks](https://github.com/my-other-github-account/llm-humaneval-benchmarks) - HuggingFace models evald vs HumanEval+
+- Multilingual Code Models Evaluation - base multilingual code generation models 
 - [CanAiCode Leaderboard](https://huggingface.co/spaces/mike-ravkine/can-ai-code-results) - using [Can AI Code? eval](https://github.com/the-crypt-keeper/can-ai-code)
 - [airate](https://github.com/catid/supercharger/tree/main/airate) - C++ bug catching test
 - [phi-1 prompt tests](https://twitter.com/khandelia1000/status/1675939866389934097)
