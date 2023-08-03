@@ -59,6 +59,7 @@ export TVM_HOME=`pwd`
 cd ..
 
 # Make model
+# IMPORTANT: CUDA is targeted per GPU. Be sure to use CUDA_VISIBLE_DEVICES if you have multiple generations of CUDA...
 git clone https://github.com/mlc-ai/mlc-llm.git --recursive
 cd mlc-llm
 python3 -m mlc_llm.build --target cuda --quantization q4f16_1 --model /models/llm/llama2/meta-llama_Llama-2-7b-chat-hf
