@@ -51,20 +51,10 @@ git clone https://github.com/mlc-ai/relax.git --recursive
 cd relax
 mkdir build
 cp cmake/config.cmake build
-
-# These flags are from https://github.com/junrushao/llm-perf-bench/blob/main/install/tvm.sh and much faster
-echo "set(CMAKE_BUILD_TYPE RelWithDebInfo)" >>build/config.cmake
-echo "set(CMAKE_EXPORT_COMPILE_COMMANDS ON)" >>build/config.cmake
-echo "set(USE_GTEST OFF)" >>build/config.cmake
-echo "set(USE_CUDA ON)" >>build/config.cmake
-echo "set(USE_LLVM ON)" >>build/config.cmake
-echo "set(USE_VULKAN OFF)" >>build/config.cmake
-echo "set(USE_CUTLASS ON)" >>build/config.cmake
-
-# sed -i 's/set(USE_CUDA OFF)/set(USE_CUDA ON)/g' build/config.cmake
-# sed -i 's/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH OFF)/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH ON)/g' build/config.cmake
-# sed -i 's/set(USE_CUDNN OFF)/set(USE_CUDNN ON)/g' build/config.cmake
-# sed -i 's/set(USE_CUBLAS OFF)/set(USE_CUBLAS ON)/g' build/config.cmake
+sed -i 's/set(USE_CUDA OFF)/set(USE_CUDA ON)/g' build/config.cmake
+sed -i 's/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH OFF)/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH ON)/g' build/config.cmake
+sed -i 's/set(USE_CUDNN OFF)/set(USE_CUDNN ON)/g' build/config.cmake
+sed -i 's/set(USE_CUBLAS OFF)/set(USE_CUBLAS ON)/g' build/config.cmake
 
 make -j`nproc`
 export TVM_HOME=`pwd`
@@ -87,6 +77,58 @@ build/mlc_chat_cli --local-id meta-llama_Llama-2-7b-chat-hf-q4f16_1 --device-nam
 ```
 * [https://mlc.ai/mlc-llm/docs/compilation/compile_models.html](https://mlc.ai/mlc-llm/docs/compilation/compile_models.html)
 * [https://github.com/mlc-ai/mlc-llm/issues/229#issuecomment-1564139277](https://github.com/mlc-ai/mlc-llm/issues/229#issuecomment-1564139277)
+
+
+Note, the main branch, as of 2023-08-03 runs at about the same speed as ExLlama and a behind llama.cpp, however there is a separate "benchmark" version that has performance optimizations that have not yet made it's way back to the main branch. This can be found at this repo: https://github.com/junrushao/llm-perf-bench
+
+And here's how to get it working
+```
+# Otherwise GLIBCXX_3.4.32 not happy
+mamba install cmake
+
+git clone --recursive https://github.com/junrushao/mlc-llm/ --branch benchmark mlc-llm.junrushao-benchmark
+cd mlc-llm.junrushao-benchmark
+
+# Adapted from https://github.com/junrushao/llm-perf-bench/blob/main/install/tvm.sh
+export MLC_HOME=`pwd`
+export TVM_HOME=$MLC_HOME/3rdparty/tvm
+export PYTHONPATH=$TVM_HOME/python
+cd $TVM_HOME && mkdir build && cd build && cp ../cmake/config.cmake .
+echo "set(CMAKE_BUILD_TYPE RelWithDebInfo)" >>config.cmake
+echo "set(CMAKE_EXPORT_COMPILE_COMMANDS ON)" >>config.cmake
+echo "set(USE_GTEST OFF)" >>config.cmake
+echo "set(USE_CUDA ON)" >>config.cmake
+echo "set(USE_LLVM ON)" >>config.cmake
+echo "set(USE_VULKAN OFF)" >>config.cmake
+echo "set(USE_CUTLASS ON)" >>config.cmake
+cmake .. && make -j$(nproc)
+
+# Adapted from https://github.com/junrushao/llm-perf-bench/blob/main/install/mlc.sh
+cd $MLC_HOME && mkdir build && cd build && touch config.cmake
+echo "set(CMAKE_BUILD_TYPE RelWithDebInfo)" >>config.cmake
+echo "set(CMAKE_EXPORT_COMPILE_COMMANDS ON)" >>config.cmake
+echo "set(USE_CUDA ON)" >>config.cmake
+echo "set(USE_VULKAN OFF)" >>config.cmake
+echo "set(USE_METAL OFF)" >>config.cmake
+echo "set(USE_OPENCL OFF)" >>config.cmake
+cmake .. && make -j$(nproc)
+
+cd $MLC_HOME
+CUDA_VISIBLE_DEVICES=0 python build.py --target cuda --quantization q4f16_1 --model /models/llm/llama2/meta-llama_Llama-2-7b-chat-hf --use-cache=0
+
+### or in the Docker container
+micromamba activate python311
+cd $MLC_HOME
+CUDA_VISIBLE_DEVICES=0 python build.py   --model /models/llm/llama2/meta-llama_Llama-2-7b-chat-hf   --target cuda   --quantization q4f16_1   --artifact-path "./dist"   --use-cache 0
+mv dist/meta-llama_Llama-2-7b-chat-hf-q4f16_1 dist/4090-meta-llama_Llama-2-7b-chat-hf-q4f16_1
+
+CUDA_VISIBLE_DEVICES=1 python build.py   --model /models/llm/llama2/meta-llama_Llama-2-7b-chat-hf   --target cuda   --quantization q4f16_1   --artifact-path "./dist"   --use-cache 0
+mv dist/meta-llama_Llama-2-7b-chat-hf-q4f16_1 dist/3090-meta-llama_Llama-2-7b-chat-hf-q4f16_1
+
+# copy dist folder to where you want
+scp -r -P 45678 root@0.0.0.0:/mlc-llm/dist ./
+
+```
 
 On my 4090, the `q4f16_1` is 165.98 t/s vs 106.70 t/s for a `q4 32g act-order GPTQ` w/ ExLlama, and 138.83 t/s with a `q4_K_M` GGMLv3 with llama.cpp.
 
