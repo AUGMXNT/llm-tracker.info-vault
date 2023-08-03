@@ -36,9 +36,10 @@ The bane of your existence is probably going to be managing all the different CU
 
 Here's how to set up on Arch Linux
 ```
-# Rust required
+# Required
 paru -S rustup
 rustup default stable
+paru -S llvm
 
 # Environment
 conda create -n mlc
@@ -50,10 +51,21 @@ git clone https://github.com/mlc-ai/relax.git --recursive
 cd relax
 mkdir build
 cp cmake/config.cmake build
-sed -i 's/set(USE_CUDA OFF)/set(USE_CUDA ON)/g' build/config.cmake
-sed -i 's/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH OFF)/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH ON)/g' build/config.cmake
-sed -i 's/set(USE_CUDNN OFF)/set(USE_CUDNN ON)/g' build/config.cmake
-sed -i 's/set(USE_CUBLAS OFF)/set(USE_CUBLAS ON)/g' build/config.cmake
+
+# These flags are from https://github.com/junrushao/llm-perf-bench/blob/main/install/tvm.sh and much faster
+echo "set(CMAKE_BUILD_TYPE RelWithDebInfo)" >>build/config.cmake
+echo "set(CMAKE_EXPORT_COMPILE_COMMANDS ON)" >>build/config.cmake
+echo "set(USE_GTEST OFF)" >>build/config.cmake
+echo "set(USE_CUDA ON)" >>build/config.cmake
+echo "set(USE_LLVM ON)" >>build/config.cmake
+echo "set(USE_VULKAN OFF)" >>build/config.cmake
+echo "set(USE_CUTLASS ON)" >>build/config.cmake
+
+# sed -i 's/set(USE_CUDA OFF)/set(USE_CUDA ON)/g' build/config.cmake
+# sed -i 's/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH OFF)/set(USE_GRAPH_EXECUTOR_CUDA_GRAPH ON)/g' build/config.cmake
+# sed -i 's/set(USE_CUDNN OFF)/set(USE_CUDNN ON)/g' build/config.cmake
+# sed -i 's/set(USE_CUBLAS OFF)/set(USE_CUBLAS ON)/g' build/config.cmake
+
 make -j`nproc`
 export TVM_HOME=`pwd`
 cd ..
