@@ -29,7 +29,17 @@ The bane of your existence is probably going to be managing all the different CU
 * This should be good enough, but if all else fails, you can use a [custom Docker container](https://docs.docker.com/compose/gpu-support/) as well.
 * There's [envd](https://github.com/tensorchord/envd), a Docker addon that promises easier dev environments for AI/ML, although it also has a number of [open bugs](https://github.com/tensorchord/envd/issues?q=is%3Aissue+is%3Aopen+label%3A%22type%2Fbug+%F0%9F%90%9B%22)
 
-# Software
+# Inferencing Packages
+| Package       | Commit  | Model         | Quant    | Memory Usage | 4090 @ 400PL | 3090 @ 360PL |
+|---------------|---------|---------------|----------|--------------|--------------|--------------|
+| MLC LLM CUDA  | 3c53eeb | llama2-7b-chat | q4f16_1  | 5932         | 115.87       | 83.63        |
+| MLC LLM Perf  | c40be6a | llama2-7b-chat | q4f16_1  | 5244         | 165.57       | 131.73       |
+| llama.cpp     | 8183159 | llama2-7b-chat | q4_0     | 5226         | 146.79       | 125.54       |
+| llama.cpp     | 8183159 | llama2-7b     | q4_K_M   | 5480         | 138.83       | 114.66       |
+| ExLlama       | 91b9b12 | llama2-7b-chat | q4_128gs | 5466         | 115.92       | 81.91        |
+| ExLlama       | 91b9b12 | llama2-7b     | q4_32gs_act | 5672    | 107.21       | 73.54        |
+* See [LLM Worksheet](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1788227831) for more details
+
 
 ## MLC LLM
 [mlc-llm](https://github.com/mlc-ai/mlc-llm) is an interesting project that lets you compile models (from HF format) to be used on multiple platforms (Android, iOS, Mac/Win/Linux, and even WebGPU). On PC however, the [install instructions](https://mlc.ai/mlc-llm/#windows-linux-mac) will only give you a pre-compiled Vulkan version, which is [much slower than ExLLama or llama.cpp](https://github.com/mlc-ai/mlc-llm/issues/15#issuecomment-1657190790), however when a CUDA version is compiled, it looks like it's actually possibly the fastest inferencing engine currently available (2023-08-03).
