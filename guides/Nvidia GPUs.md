@@ -12,7 +12,7 @@ For inferencing you have a few options:
   * ExLlama is a smaller project but contributions are being actively merged (I submitted a PR) and the maintainer is super responsive.
 * [AutoGPTQ](https://github.com/PanQiWei/AutoGPTQ) - this engine, while generally slower may be better for older GPU architectures. There is a CUDA and Triton mode, but the biggest selling point is that it can not only inference, but also quantize and fine-tune many model types.
   * Unfortunately, recently PRs have been slow to get upstreamed and [the maintainer has been busy/inaccessible](https://github.com/PanQiWei/AutoGPTQ/issues/187).
-
+* [MLC LLM](https://mlc.ai/mlc-llm/) - this was a bit of a challenge to setup, but turns out to perform quite well (perhaps better than all other engines?)
 
 
 ##  CUDA Version Hell
