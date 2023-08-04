@@ -91,8 +91,9 @@ build/mlc_chat_cli --local-id meta-llama_Llama-2-7b-chat-hf-q4f16_1 --device-nam
 
 Note, the main branch, as of 2023-08-03 runs at about the same speed as ExLlama and a behind llama.cpp, however there is a separate "benchmark" version that has performance optimizations that have not yet made it's way back to the main branch. This can be found at this repo: https://github.com/junrushao/llm-perf-bench
 
-And here's how to get it working
+And here's how to get it working:
 ```
+paru -S cutlass
 # Otherwise GLIBCXX_3.4.32 not happy
 mamba install cmake
 
