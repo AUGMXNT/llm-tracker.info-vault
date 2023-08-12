@@ -26,6 +26,16 @@ The bane of your existence is probably going to be managing all the different CU
   mamba install -c "nvidia/label/cuda-11.7.0" cuda-toolkit
   conda env config vars set CUDA_PATH="$CONDA_PREFIX"
   ```
+  Additionally, if you need to use a specific g++ version (eg, CUDA 11.7 requires g++ < 12):
+  ```
+  # see valid versions: https://anaconda.org/conda-forge/gxx/files
+  mamba install gxx=11.4.0
+  conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"$CONDA_PREFIX"/lib
+  ```
+  And if you need to install PyTorch manually...
+  ```
+  mamba install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+  ```
 * This should be good enough, but if all else fails, you can use a [custom Docker container](https://docs.docker.com/compose/gpu-support/) as well.
 * There's [envd](https://github.com/tensorchord/envd), a Docker addon that promises easier dev environments for AI/ML, although it also has a number of [open bugs](https://github.com/tensorchord/envd/issues?q=is%3Aissue+is%3Aopen+label%3A%22type%2Fbug+%F0%9F%90%9B%22)
 
