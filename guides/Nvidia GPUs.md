@@ -25,12 +25,12 @@ The bane of your existence is probably going to be managing all the different CU
   conda activate autogptq
   mamba install -c "nvidia/label/cuda-11.7.0" cuda-toolkit
   conda env config vars set CUDA_PATH="$CONDA_PREFIX"
+  conda env config vars set CUDA_HOME="$CONDA_PREFIX"
   ```
   Additionally, if you need to use a specific g++ version (eg, CUDA 11.7 requires g++ < 12):
   ```
   # see valid versions: https://anaconda.org/conda-forge/gxx/files
   mamba install gxx=11.4.0
-  conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"$CONDA_PREFIX"/lib
   ```
   And if you need to install PyTorch manually...
   ```
