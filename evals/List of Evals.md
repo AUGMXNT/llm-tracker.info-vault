@@ -22,7 +22,12 @@
   - [BoolQ](https://paperswithcode.com/sota/question-answering-on-boolq)
   - [HumanEval](https://paperswithcode.com/sota/code-generation-on-humaneval)
 
-See also: [Papers and resources for LLMs evaluation](https://github.com/mlgroupjlu/llm-eval-survey)  
+See also:
+
+- [Papers and resources for LLMs evaluation](https://github.com/mlgroupjlu/llm-eval-survey)  
+
+- [2023-08-17 HN Discussion on evals](https://news.ycombinator.com/item?id=37157323)
+
 ### Code
 
 - [code-eval](https://github.com/abacaj/code-eval) -  scripts for running/reproducing human-eval scores on models
