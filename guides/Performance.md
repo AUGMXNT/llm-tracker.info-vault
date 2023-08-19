@@ -8,11 +8,12 @@
   - [https://github.com/mlc-ai/llm-perf-bench](https://github.com/mlc-ai/llm-perf-bench)
     - MLC LLM vs ExLlama, llama.cpp
   - [2023-08-09 Making AMD GPUs competitive for LLM inference](https://blog.mlc.ai/2023/08/09/Making-AMD-GPUs-competitive-for-LLM-inference)
+- [2023-07-31 7 Frameworks for Serving LLMs  
+](https://betterprogramming.pub/frameworks-for-serving-llms-60b7f7b23407)
+  - vLLM, TGI, CTranslate2, DS, OpenLLM, Ray Serve, MLC LLM
 - [2023-07-06 LLaMa 65B GPU benchmarks](https://www.reddit.com/r/LocalLLaMA/comments/14s7j9j/comment/jqy8shq/) - great benchmark and writeups 
   - 3090 v 4090 v A6000 v A6000 ADA
   - ExLlama, ExLlama_HF, llama.cpp
-
- 
 
 My testing:
 
