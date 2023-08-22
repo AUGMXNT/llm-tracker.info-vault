@@ -23,6 +23,8 @@ sys	0m5.718s
 ❯ cat jfk.txt 
 And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country.
 ```
+* For a real world example using diarization, see [https://github.com/AUGMXNT/transcribe/](https://github.com/AUGMXNT/transcribe/)
+
 
 # SeamlessM4T
 * [Bringing the world closer together with a foundational multimodal model for speech translation](https://ai.meta.com/blog/seamless-m4t/)
