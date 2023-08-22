@@ -28,6 +28,11 @@ And so my fellow Americans, ask not what your country can do for you, ask what y
 * [Bringing the world closer together with a foundational multimodal model for speech translation](https://ai.meta.com/blog/seamless-m4t/)
 * [https://github.com/facebookresearch/seamless_communication/](https://github.com/facebookresearch/seamless_communication/)
 
+**IMPORTANT NOTE:** Appears to be limited to 4096 words/tokens?
+```
+ValueError: The input sequence length must be less than or equal to the maximum sequence length (4096), but is 99945 instead.
+```
+
 The installation instructions are a bit incomplete. Here's how I got it running:
 ```
 conda create -n seamless
@@ -68,3 +73,6 @@ real	0m8.740s
 user	0m15.413s
 sys	0m9.285s
 ```
+
+Docs for use:
+* [https://github.com/facebookresearch/seamless_communication/tree/main/scripts/m4t/predict](https://github.com/facebookresearch/seamless_communication/tree/main/scripts/m4t/predict)
