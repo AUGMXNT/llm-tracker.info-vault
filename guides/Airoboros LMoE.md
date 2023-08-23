@@ -76,7 +76,6 @@ HOST = 'http://127.0.0.1:7777'
 MODEL = 'meta-llama_Llama-2-7b-hf' 
 MAX_CONTEXT = 4096
 
-
 def send_request(messages):
     url = f'{HOST}/v1/chat/completions'
     headers = {'content-type': 'application/json'}
@@ -87,30 +86,23 @@ def send_request(messages):
         'messages': messages
     }
 
+
     response = requests.post(url, json=payload, headers=headers)
     return response.json()
 
 def get_assistant_reply(response):
     return response['choices'][0]['message']['content']
 
-def ensure_max_context(messages, total_tokens):
-    while total_tokens > MAX_CONTEXT and len(messages) > 1:
-        removed_message = messages.pop(1) # Remove the oldest user messages, keep system prompt
-        total_tokens -= len(removed_message['content'].split())
-    return messages
-
 def interactive_chat():
-    messages = [{'role': 'system', 'content': SYSTEM_PROMPT}]
-    total_tokens = len(SYSTEM_PROMPT.split())
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     while True:
-        user_input = input('You: ')
-        messages.append({'role': 'user', 'content': user_input})
-        total_tokens += len(user_input.split())
+        user_input = input("You: ")
+        messages.append({"role": "user", "content": user_input})
         response = send_request(messages)
-        total_tokens += response['usage']['completion_tokens']
-        messages = ensure_max_context(messages, total_tokens)
+        print(response)
         assistant_reply = get_assistant_reply(response)
-        print('Assistant:', assistant_reply)
+        messages.append({"role": "assistant", "content": assistant_reply})
+        print("Assistant:", assistant_reply)
         if user_input.lower() == 'exit':
             break
 
