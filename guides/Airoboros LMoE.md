@@ -62,3 +62,56 @@ And test:
 }'
 {"id":"cmpl-589cfd58-628d-493d-a348-9b49344ed325","object":"chat.completion","created":1692807132,"duration":1.069636,"routing_duration":0.023938,"model":"meta-llama_Llama-2-7b-hf","expert":"creative","choices":[{"index":0,"message":{"role":"assistant","content":"100% of a woodchuck's weight."},"finish_reason":"stop"}],"usage":{"prompt_tokens":33,"completion_tokens":48,"total_tokens":81}}
 ```
+
+# Client
+The current version of the API is quite picky and I couldn't find anything compatible... here's a simple client that ChatGPT-4 CI helped me write:
+
+```import requests
+import json
+
+SYSTEM_PROMPT = 'A chat with a helpful assistant.'
+
+HOST = 'http://127.0.0.1:7777'
+MODEL = 'meta-llama_Llama-2-7b-hf' 
+MAX_CONTEXT = 4096
+
+
+def send_request(messages):
+    url = f'{HOST}/v1/chat/completions'
+    headers = {'content-type': 'application/json'}
+    payload = {
+        'model': MODEL,
+        'temperature': 0.7,
+        'max_tokens': 2048,
+        'messages': messages
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    return response.json()
+
+def get_assistant_reply(response):
+    return response['choices'][0]['message']['content']
+
+def ensure_max_context(messages, total_tokens):
+    while total_tokens > MAX_CONTEXT and len(messages) > 1:
+        removed_message = messages.pop(1) # Remove the oldest user messages, keep system prompt
+        total_tokens -= len(removed_message['content'].split())
+    return messages
+
+def interactive_chat():
+    messages = [{'role': 'system', 'content': SYSTEM_PROMPT}]
+    total_tokens = len(SYSTEM_PROMPT.split())
+    while True:
+        user_input = input('You: ')
+        messages.append({'role': 'user', 'content': user_input})
+        total_tokens += len(user_input.split())
+        response = send_request(messages)
+        total_tokens += response['usage']['completion_tokens']
+        messages = ensure_max_context(messages, total_tokens)
+        assistant_reply = get_assistant_reply(response)
+        print('Assistant:', assistant_reply)
+        if user_input.lower() == 'exit':
+            break
+
+interactive_chat()
+```
