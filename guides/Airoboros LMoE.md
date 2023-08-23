@@ -66,7 +66,8 @@ And test:
 # Client
 The current version of the API is quite picky and I couldn't find anything compatible... here's a simple client that ChatGPT-4 CI helped me write:
 
-```import requests
+```
+import requests
 import json
 
 SYSTEM_PROMPT = 'A chat with a helpful assistant.'
