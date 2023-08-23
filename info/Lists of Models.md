@@ -26,20 +26,21 @@ See Evals for potentially more models and how they compare.
 
 May move this out if anyone else ever starts contributing and just give a recommended starting list. I don't do RP or require character writing/fiction. My main uses are for factual q&a, and ideally coding/tech support.
 
-Last updated: 2023-07-24
+Note, llama.cpp just updated to GGUF format, so you should try to find or convert to one of those (or TheBloke may have converted by the time you read this). It should make using non-llama and extended context window models much easier moving forward. GPTQs remain the same.
+
+My general preference for bang/bit quants is either 4-bit 32g actorder=True GPTQ w/ ExLlama or q4_K_M GGML w/ llama.cpp.
+
+Last updated: 2023-08-23
 
 - Current best local model (any size) 
-  - [Stability AI FreeWilly2](https://huggingface.co/stabilityai/FreeWilly2) (llama2-70b fine tune) - unquantized will take 160-200GB of VRAM, 4-bit GPTQ on exllama in 41-48GB
+  - All the top ranked models are currently llama2-70b fine tunes. While I didn't try them all, I recently tested most of the top leaderboard models and Pankaj Mathur's [Orca Mini V3](https://huggingface.co/psmathur/orca_mini_v3_70b) did the best at instruction following for a [basic text manipulation task](https://github.com/AUGMXNT/transcribe#readme).
 - Current best local model for 24GB GPU (eg, 3090, 4090) 
-  - There are a bunch of very strong llama-30b fine tunes. Expect this to be replaced by llama2-34b fine tunes when that is released...
-  - Use exllama w/ GPTQ as you will want all the VRAM as you can get for context
-  - [TheBloke/upstage-llama-30b-instruct-2048-GPTQ](https://huggingface.co/TheBloke/upstage-llama-30b-instruct-2048-GPTQ)  
-
-  - [lilloukas/GPlatty-30B](https://huggingface.co/lilloukas/GPlatty-30B)
-  - [lilloukas/Platypus-30B](https://huggingface.co/lilloukas/Platypus-30B)
-  - For tool use 
-    - [arielnlee/SuperPlatty-30B](https://huggingface.co/arielnlee/SuperPlatty-30B)
+  - While the llama2-34b has yet to be released, new llama2-13b models have largely overtaken llama-30b in the leaderboards. Due to their extended (4K vs 2K token) native context window, for most usage, I think the llama2-13bs should probably be preferred. I don't have strong opinions on the "best" models atm, but I'd give a few a try: 
+    - [Open-Orca/OpenOrca-Platypus2-13B](https://huggingface.co/Open-Orca/OpenOrca-Platypus2-13B)
+    - [totally-not-an-llm/EverythingLM-13b-V2-16k](https://huggingface.co/totally-not-an-llm/EverythingLM-13b-V2-16k) - this is an extended context model that's worth playing around with. The q4_K_M GGML should just barely fit into exactly 24GB of VRAM. Be sure to use `-c 16384 --rope-freq-base 10000 --rope-freq-scale 0.25` to get it to inference sensically.
 - Current best local model for 16GB GPU or Apple Silicon Mac 
-  - [NousResearch/Nous-Hermes-Llama2-13b](https://huggingface.co/NousResearch/Nous-Hermes-Llama2-13b) (GPTQ on GPU, GGML on Mac)
+  - You can try any llama2-13b fine tune  
+
 - Current best local coding model 
   - [WizardLM/WizardCoder-15B-V1.0](https://huggingface.co/WizardLM/WizardCoder-15B-V1.0) (maybe [LoupGarou/WizardCoder-Guanaco-15B-V1.1](https://huggingface.co/LoupGarou/WizardCoder-Guanaco-15B-V1.1), untested)
+  - There have also been [recent developments on the SQL generation front](https://www.reddit.com/r/LocalLLaMA/comments/15y6pfm/sqlcoder_new_15b_oss_llm_claims_better/)
