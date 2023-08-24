@@ -110,7 +110,7 @@ interactive_chat()
 ```
 
 Just as an FYI, here are the clients I tried that didn't work:
-* [mckaywrigley](https://github.com/mckaywrigley/chatbot-ui)
+* [mckaywrigley/chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
 * https://github.com/blrchen/chatgpt-minimal
 * https://github.com/kierangilliam/chatwithme.chat
 * https://github.com/chatgptui/desktop
