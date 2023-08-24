@@ -108,6 +108,9 @@ def interactive_chat():
 
 interactive_chat()
 ```
+Part of these were bugs that I reported and got stamped out:
+* `/v1/models` endpoint bug
+* CORS errors
 
 Just as an FYI, here are the clients I tried that didn't work:
 * [mckaywrigley/chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
