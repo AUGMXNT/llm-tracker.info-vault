@@ -123,7 +123,7 @@ Write me a haiku.
 
 # reasoning
 There are two ducks in front of a duck, two ducks behind a duck and a duck in the middle. How many ducks are there?
-``
+```
 
 Part of these were bugs that I reported and got stamped out:
 * `/v1/models` endpoint bug
