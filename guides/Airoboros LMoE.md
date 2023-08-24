@@ -108,6 +108,11 @@ def interactive_chat():
 
 interactive_chat()
 ```
+* This is a super simple client, you'd want to add token counting and message log truncation if you were going to use it seriously
+* For me on a fast system (NVMe SSD, 5950X, 4090), takes 2-3min to load, maybe shortened w/ bitsandbytes...
+* The routing works but obvious not well, it's just a POC and could be improved tremendously
+* llama2-7b is dumb as a box of rocks, lol
+
 Part of these were bugs that I reported and got stamped out:
 * `/v1/models` endpoint bug
 * CORS errors
