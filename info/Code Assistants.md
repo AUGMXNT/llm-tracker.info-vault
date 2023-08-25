@@ -4,7 +4,10 @@ I'm looking for practical tools for production use here, and less of the neat to
 
 # Hosted Services
 
-## [Sourcegraph Cody]()
+## [Cursor](https://www.cursor.so/)
+GPT-4 backed VSCode-like editor
+
+## Sourcegraph Cody
 * [Desktop app](https://sourcegraph.com/get-cody) + official [neovim plugin](https://github.com/sourcegraph/sg.nvim) and [Visual Studio Code plugin](https://marketplace.visualstudio.com/items?itemName=sourcegraph.cody-ai)
 * Free version for individual use (technically [Cody open sourced](https://news.ycombinator.com/item?id=35339010) but uses Sourcegraph APIs
 * [No model training on your data](https://about.sourcegraph.com/terms/cody-notice)
@@ -25,6 +28,9 @@ Supposedly will let you talk to your code base, create tests, review PRs, refact
 * [Discussion on HN](https://news.ycombinator.com/item?id=30458465)
 
 # OpenAI API
+
+## [Maccarone](https://github.com/bsilverthorn/maccarone)
+VSCode plugin that uses GPT-4 to write stubbed code snippets
 
 ## [Mentat](https://github.com/biobootloader/mentat)
 Mentat is an interactive command-line tool that can load and coordinate edits from your command line. It can directly edit files without copy and pasting (Y/n/i)
