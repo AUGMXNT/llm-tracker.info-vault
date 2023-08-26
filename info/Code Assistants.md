@@ -87,10 +87,10 @@ Refact is an open-source Copilot alternative available as a self-hosted or cloud
 * Does not embed/search through code base yet
 
 ## [TurboPilot](https://github.com/ravenscroftj/turbopilot)
-TurboPilot is a self-hosted copilot clone which uses the library behind llama.cpp to run the 6 Billion Parameter Salesforce Codegen model in 4GiB of RAM. It is heavily based and inspired by on the fauxpilot project.
-* Not updated very recently
-* Uses [ggml fork](https://github.com/ravenscroftj/ggml/tree/6c4fe0ef5e50b76dd2539130c109e12179da0bd2) - probably could be much better if updated to [master](https://github.com/ggerganov/ggml)
-* Could be updated to Codegen25-7b presumably or WizardCoder-13b
+TurboPilot is a self-hosted copilot clone which uses GGML,the library behind llama.cpp, to run local code completion models. It was originally designed to run Salesforce codegen models but has recently been updated to provide support for [Starcoder](https://huggingface.co/blog/starcoder), [Wizardcoder](https://github.com/nlpxucan/WizardLM/tree/main/WizardCoder) and most recently, [StableCode Instruct](https://stability.ai/blog/stablecode-llm-generative-ai-coding) from StabilityAI. It is heavily based and inspired by on the [fauxpilot](https://github.com/fauxpilot/fauxpilot) project.
+
+* Provides GPU inference via CUDA for Nvidia devices and OpenCL for Intel/AMD CPUS
+* Used to depend on a custom ggml fork but now tracks the [ggerganov/ggml](https://github.com/ggerganov/ggml) project.
 
 ## [ggml p1](https://github.com/ggml-org/p1/discussions/1)
 This project is an attempt to implement a local code completion engine utilizing large language models (LLM).
