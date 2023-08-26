@@ -19,6 +19,9 @@ cd [/models/path]
 hfdownloader -t <hf_token> -m meta-llama/Llama-2-7b-hf -s ./
 hfdownloader -m jondurbin/airoboros-lmoe-7b-2.1 -s ./
 
+# flash attention install bug: https://github.com/Dao-AILab/flash-attention/issues/453
+pip install -U flash-attn --no-build-isolation
+
 # code
 cd [~/airoboros]
 git clone https://github.com/jondurbin/airoboros
