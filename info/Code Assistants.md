@@ -61,7 +61,22 @@ You get a VM sandbox and GPT-4 that knows how to run Python with it.
 * Limit of 50 exchanges/3 hours
 * VM will be recycled after a timeout period
 
-# Local
+
+# Local Models
+With the release of [Meta's Code Llama](https://about.fb.com/news/2023/08/code-llama-ai-for-coding/) there is finally a model that is competitive with GPT-4 for code generation:
+* [Beating GPT-4 on HumanEval with a Fine-Tuned CodeLlama-34B](https://www.phind.com/blog/code-llama-beats-gpt4)
+* [WizardCode 34B](https://twitter.com/WizardLM_AI/status/1695396881218859374) also just dropped.
+
+Also, it's worth pointing out there was another model, a Llama2 70B full fine tune, [Lemur](https://github.com/OpenLemur/Lemur) that also performs quite well.
+
+Note there are some API providers for those that can't run these locally:
+* [https://codellama.lepton.run/](https://codellama.lepton.run/) and https://codellama.lepton.run/api/v1
+* [https://labs.perplexity.ai/](https://labs.perplexity.ai/)
+* [https://app.endpoints.anyscale.com/](https://app.endpoints.anyscale.com/)
+* [https://api.together.xyz/playground](https://api.together.xyz/playground)
+* [https://github.com/TheBlokeAI/dockerLLM/](https://github.com/TheBlokeAI/dockerLLM/) - RunPod One-Click
+
+# Local Apps
 
 ## [Refact](https://github.com/smallcloudai/refact)
 Refact is an open-source Copilot alternative available as a self-hosted or cloud option.
