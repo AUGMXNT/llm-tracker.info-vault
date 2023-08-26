@@ -72,6 +72,7 @@ Also, it's worth pointing out there was another model, a Llama2 70B full fine tu
 Note there are some API providers for those that can't run these locally:
 * [https://codellama.lepton.run/](https://codellama.lepton.run/) and https://codellama.lepton.run/api/v1
 * [https://labs.perplexity.ai/](https://labs.perplexity.ai/)
+* [https://openrouter.ai/](https://openrouter.ai/)
 * [https://app.endpoints.anyscale.com/](https://app.endpoints.anyscale.com/)
 * [https://api.together.xyz/playground](https://api.together.xyz/playground)
 * [https://github.com/TheBlokeAI/dockerLLM/](https://github.com/TheBlokeAI/dockerLLM/) - RunPod One-Click
