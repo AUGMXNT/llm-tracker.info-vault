@@ -92,6 +92,9 @@ TurboPilot is a self-hosted copilot clone which uses GGML,the library behind lla
 * Provides GPU inference via CUDA for Nvidia devices and OpenCL for Intel/AMD CPUS
 * Used to depend on a custom ggml fork but now tracks the [ggerganov/ggml](https://github.com/ggerganov/ggml) project.
 
+## [Code Llama for VSCode](https://github.com/xNul/code-llama-for-vscode)
+An API which mocks llama.cpp to enable support for Code Llama with the Continue Visual Studio Code extension.
+
 ## [ggml p1](https://github.com/ggml-org/p1/discussions/1)
 This project is an attempt to implement a local code completion engine utilizing large language models (LLM).
 Think of it as an open-source alternative to Github Copliot that runs on your device.
