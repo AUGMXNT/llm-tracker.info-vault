@@ -1,9 +1,9 @@
 # Getting Started
  If you're starting from nothing. Just go to Wikipedia and start reading:
-* https://en.wikipedia.org/wiki/Large_language_model
-* https://en.wikipedia.org/wiki/Foundation_models
-* https://en.wikipedia.org/wiki/Artificial_neural_network
-* https://en.wikipedia.org/wiki/Machine_learning
+* [https://en.wikipedia.org/wiki/Large_language_model](https://en.wikipedia.org/wiki/Large_language_model)
+* [https://en.wikipedia.org/wiki/Foundation_models](https://en.wikipedia.org/wiki/Foundation_models)
+* [https://en.wikipedia.org/wiki/Artificial_neural_network](https://en.wikipedia.org/wiki/Artificial_neural_network)
+* [https://en.wikipedia.org/wiki/Machine_learning](https://en.wikipedia.org/wiki/Machine_learning)
 * etc, just keep reading
 
 You can use an LLM to help you summarize and better understand/query, although I would not use anything less than ChatGPT 4 or ChatGPT/with Web Browsing (or Bing Chat, which is also designed to do retrieval-augmented replies) to minimize hallucinations. This has the added benefit of getting better first hand experiences of what LLMs can do well (or poorly).
@@ -11,30 +11,31 @@ You can use an LLM to help you summarize and better understand/query, although I
 There are plenty of resource lists for research:
 * [https://github.com/Hannibal046/Awesome-LLM](https://github.com/Hannibal046/Awesome-LLM) - a good list of fundamental papers to read
 * [https://github.com/Mooler0410/LLMsPracticalGuide](https://github.com/Mooler0410/LLMsPracticalGuide) - another good resource that is a little better organized IMO and supports a survey paper https://arxiv.org/abs/2304.13712 of LLMs and their applications
-* [Understanding Large Language Models -- A Transformative Reading List, Sebastian Raschka](https://sebastianraschka.com/blog/2023/llm-reading-list.html)
-* Rather than just a list of papers, it also has a short description of why the linked papers are important.
+* [Understanding Large Language Models -- A Transformative Reading List, Sebastian Raschka](https://sebastianraschka.com/blog/2023/llm-reading-list.html) - rather than just a list of papers, it also has a short description of why the linked papers are important.
+* [Anti-hype LLM reading list
+](https://gist.github.com/veekaybee/be375ab33085102f9027853128dc5f0e) - a nice condensed reading list
 
 ## Announcements
-For a layperson wanting to learn more, I actually think that reading the various announcements on models (and using an LLM to interrogate parts you don't understand) are probably a decent way to get started:
+For a layperson wanting to learn more, I actually think that reading the various announcements on models (and using an LLM to interrogate parts you don't understand) are probably a decent way to get started. You might not understand everything, but they start give you the "flavor-text" so to speak of AI attributes, keywords, etc:
 
 * OpenAI GPT-4
-  * https://openai.com/gpt-4
-  * https://openai.com/research/gpt-4
-  * https://cdn.openai.com/papers/gpt-4-system-card.pdf
+  * [https://openai.com/gpt-4](https://openai.com/gpt-4)
+  * [https://openai.com/research/gpt-4](https://openai.com/research/gpt-4)
+  * [https://cdn.openai.com/papers/gpt-4-system-card.pdf](https://cdn.openai.com/papers/gpt-4-system-card.pdf)
 * Meta LLaMA
-  * https://ai.facebook.com/blog/large-language-model-llama-meta-ai/
-  * https://arxiv.org/abs/2302.13971
-  * https://github.com/facebookresearch/llama/blob/main/MODEL_CARD.md
+  * [https://ai.facebook.com/blog/large-language-model-llama-meta-ai/](https://ai.facebook.com/blog/large-language-model-llama-meta-ai/)
+  * [https://arxiv.org/abs/2302.13971](https://arxiv.org/abs/2302.13971)
+  * [https://github.com/facebookresearch/llama/blob/main/MODEL_CARD.md](https://github.com/facebookresearch/llama/blob/main/MODEL_CARD.md)
 * Cerebras-GPT
-  * https://www.cerebras.net/blog/cerebras-gpt-a-family-of-open-compute-efficient-large-language-models/
+  * [https://www.cerebras.net/blog/cerebras-gpt-a-family-of-open-compute-efficient-large-language-models/](https://www.cerebras.net/blog/cerebras-gpt-a-family-of-open-compute-efficient-large-language-models/)
 * MosaicML MPT-30B
-  * https://www.mosaicml.com/blog/mpt-30b
+  * [https://www.mosaicml.com/blog/mpt-30b](https://www.mosaicml.com/blog/mpt-30b)
 * TII Falcon
-  * https://huggingface.co/blog/falcon
+  * [https://huggingface.co/blog/falcon](https://huggingface.co/blog/falcon)
 * Salesforce XGen
-  * https://blog.salesforceairesearch.com/xgen/
+  * [https://blog.salesforceairesearch.com/xgen/](https://blog.salesforceairesearch.com/xgen/)
 * OpenOrca
-  * https://erichartford.com/openorca
+  * [https://erichartford.com/openorca](https://erichartford.com/openorca)
 
 Reading the announcements and model cards for models (and looking up what you don't understand) is a great way to get up to speed fast.
 
