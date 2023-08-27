@@ -42,6 +42,9 @@ Last updated: 2023-08-23
 - Current best local model for 16GB GPU or Apple Silicon Mac 
   - You can try any llama2-13b fine tune  
 
-- Current best local coding model 
-  - [WizardLM/WizardCoder-15B-V1.0](https://huggingface.co/WizardLM/WizardCoder-15B-V1.0) (maybe [LoupGarou/WizardCoder-Guanaco-15B-V1.1](https://huggingface.co/LoupGarou/WizardCoder-Guanaco-15B-V1.1), untested)
+- With the release of [CodeLlama](https://about.fb.com/news/2023/08/code-llama-ai-for-coding/), the landscape for coding assistants have changed: 
+  - [WizardCoder-Python-34B-V1.0](https://huggingface.co/WizardLM/WizardCoder-Python-34B-V1.0)
+  - [Phind-CodeLlama-34B-Python-v1](https://huggingface.co/Phind/Phind-CodeLlama-34B-Python-v1)  
+
+  - see also [Lemur 70b](https://github.com/OpenLemur/Lemur)
   - There have also been [recent developments on the SQL generation front](https://www.reddit.com/r/LocalLLaMA/comments/15y6pfm/sqlcoder_new_15b_oss_llm_claims_better/)
