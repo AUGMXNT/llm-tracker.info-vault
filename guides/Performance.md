@@ -23,3 +23,9 @@ My testing:
   - MLC v llama.cpp v ExLlama
 - [2023-07-28 3090 and 4090 Power Limit performance](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=535675890)
   - You can shave 50-100W off the PL and retain 97% of performance
+
+ 
+
+Theory:
+
+- [How continuous batching enables 23x throughput in LLM inference while reducing p50 latency](https://www.anyscale.com/blog/continuous-batching-llm-inference)
