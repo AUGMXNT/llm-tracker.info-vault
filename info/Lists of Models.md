@@ -36,7 +36,8 @@ Last updated: 2023-08-23
   - All the top ranked models are currently llama2-70b fine tunes. While I didn't try them all, I recently tested most of the top leaderboard models and Pankaj Mathur's [Orca Mini V3](https://huggingface.co/psmathur/orca_mini_v3_70b) did the best at instruction following for a [basic text manipulation task](https://github.com/AUGMXNT/transcribe#readme).
 - Current best local model for 24GB GPU (eg, 3090, 4090) 
   - While the llama2-34b has yet to be released, new llama2-13b models have largely overtaken llama-30b in the leaderboards. Due to their extended (4K vs 2K token) native context window, for most usage, I think the llama2-13bs should probably be preferred. I don't have strong opinions on the "best" models atm, but I'd give a few a try: 
-    - [Open-Orca/OpenOrca-Platypus2-13B](https://huggingface.co/Open-Orca/OpenOrca-Platypus2-13B)
+    - [Open-Orca/OpenOrca-Platypus2-13B](https://huggingface.co/Open-Orca/OpenOrca-Platypus2-13B) - for instruction following, tasks
+    - [MythoMax-L2-13b](https://huggingface.co/Gryphe/MythoMax-L2-13b) - for anything creative or chatting w/ personas
     - [totally-not-an-llm/EverythingLM-13b-V2-16k](https://huggingface.co/totally-not-an-llm/EverythingLM-13b-V2-16k) - this is an extended context model that's worth playing around with. The q4_K_M GGML should just barely fit into exactly 24GB of VRAM. Be sure to use `-c 16384 --rope-freq-base 10000 --rope-freq-scale 0.25` to get it to inference sensically.
 - Current best local model for 16GB GPU or Apple Silicon Mac 
   - You can try any llama2-13b fine tune  
