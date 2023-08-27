@@ -14,6 +14,7 @@
 
 - [llm-jeopardy](https://github.com/aigoopy/llm-jeopardy) - automated quiz show answering
 - [Troyanovsky/Local-LLM-comparison](https://github.com/Troyanovsky/Local-LLM-comparison/tree/main) - one person's testing on his own standardized eval against different community models (fine-tuned quants)
+- [LLM Logic Tests](https://docs.google.com/spreadsheets/d/1NgHDxbVWJFolq8bLvLkuPWKC7i_R6I6W/htmlview)
 - [paperswithcode](https://paperswithcode.com/) (based off of numbers published in paper, not independently verified or standardized) 
   - [MMLU](https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu)
   - [ARC-c](https://paperswithcode.com/sota/common-sense-reasoning-on-arc-challenge)
@@ -30,6 +31,7 @@ See also:
 
 ### Code
 
+- [Zero-Shot Replication Framework](https://github.com/emrgnt-cmplxty/zero-shot-replication) - replicate HumanEval, LeetCodeSparks, LeetCode100
 - [code-eval](https://github.com/abacaj/code-eval) -  scripts for running/reproducing human-eval scores on models
 - [llm-humaneval-benchmarks](https://github.com/my-other-github-account/llm-humaneval-benchmarks) - HuggingFace models evald vs HumanEval+
 - Multilingual Code Models Evaluation - base multilingual code generation models 
