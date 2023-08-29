@@ -25,6 +25,7 @@
 
 See also:
 
+- [OpenAI Evals](https://github.com/openai/evals)
 - [Papers and resources for LLMs evaluation](https://github.com/mlgroupjlu/llm-eval-survey)  
 
 - [2023-08-17 HN Discussion on evals](https://news.ycombinator.com/item?id=37157323)
