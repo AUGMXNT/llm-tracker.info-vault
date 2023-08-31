@@ -8,8 +8,13 @@ A good summary from [2023-08-29 ELYZA blog post](https://note.com/elyza/n/na405a
 
 The best way to track new models is probably via [momonga's HF](https://huggingface.co/mmnga) as he is doing quants of Japanese models.
 
-See also: [https://huggingface.co/datasets?sort=downloads&search=japanese](https://huggingface.co/datasets?sort=downloads&search=japanese)
-
+See also:
+* [https://huggingface.co/datasets?sort=downloads&search=japanese](https://huggingface.co/datasets?sort=downloads&search=japanese)
+* [Sparticle/llama-2-13b-chat-japanese-lora](https://huggingface.co/Sparticle/llama-2-13b-chat-japanese-lora)
+* [AIgroup-CVM-utokyohospital/Llama-2-70b-chat-4bit-japanese](https://huggingface.co/AIgroup-CVM-utokyohospital/Llama-2-70b-chat-4bit-japanese)
+* [izumi-lab/llama-13b-japanese-lora-v0-1ep](https://huggingface.co/izumi-lab/llama-13b-japanese-lora-v0-1ep)
+* https://llm-jp.nii.ac.jp/
+* https://llm.msuzuki.me/
 
 # GPT-4
 Quality: Great
