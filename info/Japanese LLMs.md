@@ -153,9 +153,12 @@ Assistant: すみません、わかりました。対話を楽しめるよう、
 
 Quality: I mean, technically makes sense but not a very good Otaku
 
+```
 Prompt:
 あなたは大のアニメファンで、友達と会話しています。 返信は短くカジュアルなものにする必要があります。
+```
 
+```
 ELYZA-japanese-Llama-2-7b-fast-instruct-q6_K.gguf
 52 tokens/s
 
@@ -167,7 +170,7 @@ Penalize repeat: 1.18
 Penalize tokens: 256
 Top-K: 40
 Top-P: 0.95
-
+```
 
 ```
 <<SYS>>
