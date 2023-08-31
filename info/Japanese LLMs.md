@@ -8,6 +8,8 @@ A good summary from [2023-08-29 ELYZA blog post](https://note.com/elyza/n/na405a
 
 The best way to track new models is probably via [momonga's HF](https://huggingface.co/mmnga) as he is doing quants of Japanese models.
 
+See also: [https://huggingface.co/datasets?sort=downloads&search=japanese](https://huggingface.co/datasets?sort=downloads&search=japanese)
+
 
 # GPT-4
 Quality: Great
