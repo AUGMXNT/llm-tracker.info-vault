@@ -22,6 +22,7 @@ AWQ
 
 - [https://github.com/mit-han-lab/llm-awq](https://github.com/mit-han-lab/llm-awq)
 - [https://arxiv.org/abs/2306.00978](https://arxiv.org/abs/2306.00978)
+- [https://github.com/casper-hansen/AutoAWQ/](https://github.com/casper-hansen/AutoAWQ/)
 
 GGML k-quants
 
@@ -31,6 +32,11 @@ SmoothQuant
 
 - [https://github.com/mit-han-lab/smoothquant](https://github.com/mit-han-lab/smoothquant)
 -   [https://arxiv.org/abs/2211.10438](https://arxiv.org/abs/2211.10438)
+
+SpQR
+
+- [https://github.com/Vahe1994/SpQR](https://github.com/Vahe1994/SpQR)
+- [https://arxiv.org/abs/2306.03078](https://arxiv.org/abs/2306.03078)
 
 GPTQ/OPTQ
 
