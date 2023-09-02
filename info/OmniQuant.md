@@ -197,12 +197,15 @@ The 3090 results are slower, but still respectable.
 Just to make sure we were doing an apples-to-apples comparison though, I've also run the same test against a new `q4f16_1` build with the same (2023-09-02 TVM and MLC):
 
 ```
+# Build Model
 ❯ CUDA_VISIBLE_DEVICES=1 python build.py --target cuda --quantization q4f16_1 --model /models/llm/hf/meta-llama_Llama-2-7b-hf --use-cache=0
 
+# 4090
 ❯ CUDA_VISIBLE_DEVICES=0 build/mlc_chat_cli --model meta-llama_Llama-2-7b-hf-q4f16_1 --evaluate --eval-prompt-len 128 --eval-gen-len 1920
 ...
 [21:32:42] /home/local/llm/omniquant/mlc-llm/cpp/llm_chat.cc:706: [i: 2048] decoding-time=6.50777ms tok/s: 172.947.
 
+# 3090
 ❯ CUDA_VISIBLE_DEVICES=1 build/mlc_chat_cli --model meta-llama_Llama-2-7b-hf-q4f16_1 --evaluate --eval-prompt-len 128 --eval-gen-len 1920
 ...
 [21:35:55] /home/local/llm/omniquant/mlc-llm/cpp/llm_chat.cc:706: [i: 2048] decoding-time=8.13898ms tok/s: 141.371.
