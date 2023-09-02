@@ -68,10 +68,10 @@ mlc_chat_cli: symbol lookup error: /home/local/llm/omniquant/OmniQuant/dist/Llam
 Unfortunately, the nightly build **does not work with CUDA**. (if you search for `undefined symbol: __cudaRegisterFatBinary` you will find that it refers to binaries not being linked properly to the CUDA runtime libs (eg `-lcudart`). To solve this, you need to build your own `mlc_chat_cli`. I [use my previous docs](https://llm-tracker.info/books/howto-guides/page/nvidia-gpus#bkmrk-mlc-llm):
 ```
 # Note, you need TVM, but you no longer need to build them separately for CUDA support
-# I'm using CUDA 12.1, but pick your appropriate package
+# I'm using CUDA 12.1, but pick your appropriate package from https://mlc.ai/package/
 pip install --pre --force-reinstall mlc-ai-nightly-cu121 mlc-chat-nightly-cu121 -f https://mlc.ai/wheels
 
-# yes, even with mlc-chat-nightlyt-cu121 CUDA error remains
+# yes, even with mlc-chat-nightly-cu121 CUDA error occurs
 
 # Compile
 git clone https://github.com/mlc-ai/mlc-llm.git --recursive
