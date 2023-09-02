@@ -36,6 +36,7 @@ Ding, Jiayu, Shuming Ma, Li Dong, Xingxing Zhang, Shaohan Huang, Wenhui Wang, an
 
 Tworkowski, Szymon, Konrad Staniszewski, Mikołaj Pacek, Yuhuai Wu, Henryk Michalewski, and Piotr Miłoś. “Focused Transformer: Contrastive Training for Context Scaling.” arXiv, July 6, 2023. [https://doi.org/10.48550/arXiv.2307.03170](https://doi.org/10.48550/arXiv.2307.03170).
 
+Han, Chi, Qifan Wang, Wenhan Xiong, Yu Chen, Heng Ji, and Sinong Wang. “LM-Infinite: Simple On-the-Fly Length Generalization for Large Language Models.” arXiv, August 30, 2023. [https://doi.org/10.48550/arXiv.2308.16137](https://doi.org/10.48550/arXiv.2308.16137).  
 ## Sparsity and Efficiency
 
 Child, Rewon, Scott Gray, Alec Radford, and Ilya Sutskever. “Generating Long Sequences with Sparse Transformers.” arXiv, April 23, 2019. [http://arxiv.org/abs/1904.10509](http://arxiv.org/abs/1904.10509).  
