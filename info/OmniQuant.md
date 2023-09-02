@@ -73,7 +73,7 @@ pip install --pre --force-reinstall mlc-ai-nightly-cu121 mlc-chat-nightly-cu121 
 
 # yes, even with mlc-chat-nightlyt-cu121 CUDA error remains
 
-# Comipile
+# Compile
 git clone https://github.com/mlc-ai/mlc-llm.git --recursive
 cd mlc-llm
 mkdir build && cd build
