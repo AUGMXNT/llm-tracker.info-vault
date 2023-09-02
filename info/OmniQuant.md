@@ -135,7 +135,7 @@ CUDA_VISIBLE_DEVICES=0 python main.py \
 
 You now have a "fake quantize" checkpoint that is ready to be processed into a "real" quant. This pre-quant checkpoint will be the same size as an FP16 model (~13GB for llama2-7b).
 
-After that, you will want to run `build.py` from your `mlc-llm` repo checkout, but here's the crucial step that's **undocumented in the README.md**. You need to add their quantization scheme to [mlc_llm/quantization/__init__.py](https://github.com/mlc-ai/mlc-llm/blob/main/mlc_llm/quantization/__init__.py):
+After that, you will want to run `build.py` from your `mlc-llm` repo checkout, but here's the crucial step that's **undocumented in the README.md**. You need to add their quantization scheme to [mlc_llm/quantization/\_\_init__.py](https://github.com/mlc-ai/mlc-llm/blob/main/mlc_llm/quantization/__init__.py):
 
 ```
     "w3a16g128asym": QuantizationScheme(
