@@ -180,12 +180,6 @@ Here I was pleasantly surprised. The llama2-7b inferencing on the 4090 at 176 t/
 
 The 3090 results are slower, but still respectable.
 
-Check out my [performance page](https://llm-tracker.info/books/howto-guides/page/performance) for links to more perf benchmarks.
-
-Note, the W3A16g128 I ran doesn't seem to save much more memory - 5.1GiB VRAM used vs 5.2-5.5GiB for MLC-LLM q4f16_1, GGML q4_K_M, and GPTQ q4_128gs.
-
-While OmniQuant does seem like an incremental improvement overall, it's not really a "quant"um leap and probably not worth running out and requantizing all your models, especially considering how time consuming it can be. That being said, I've only tested out the weight quantization model, and have no idea how the weight-activation models perform, but I'll leave that for others to test.
-
 ```
 # 4090
 ❯ CUDA_VISIBLE_DEVICES=0 build/mlc_chat_cli --model llama2-7b-omniquant-w3a16g128-w3a16g128asym --evaluate --eval-prompt-len 128 --eval-gen-len 1920
@@ -197,3 +191,25 @@ While OmniQuant does seem like an incremental improvement overall, it's not real
 ...
 [20:45:35] /home/local/llm/omniquant/mlc-llm/cpp/llm_chat.cc:706: [i: 2048] decoding-time=12.3842ms tok/s: 88.736.
 ```
+
+Just to make sure we were doing an apples-to-apples comparison though, I've also run the same test against a new `q4f16_1` build with the same (2023-09-02 TVM and MLC):
+
+```
+❯ CUDA_VISIBLE_DEVICES=1 python build.py --target cuda --quantization q4f16_1 --model /models/llm/hf/meta-llama_Llama-2-7b-hf --use-cache=0
+
+❯ CUDA_VISIBLE_DEVICES=0 build/mlc_chat_cli --model meta-llama_Llama-2-7b-hf-q4f16_1 --evaluate --eval-prompt-len 128 --eval-gen-len 1920
+...
+[21:32:42] /home/local/llm/omniquant/mlc-llm/cpp/llm_chat.cc:706: [i: 2048] decoding-time=6.50777ms tok/s: 172.947.
+
+❯ CUDA_VISIBLE_DEVICES=1 build/mlc_chat_cli --model meta-llama_Llama-2-7b-hf-q4f16_1 --evaluate --eval-prompt-len 128 --eval-gen-len 1920
+...
+[21:35:55] /home/local/llm/omniquant/mlc-llm/cpp/llm_chat.cc:706: [i: 2048] decoding-time=8.13898ms tok/s: 141.371.
+```
+
+It looks like TVM/MLC have gotten even faster in the past month or so, although on the 4090, WA3A16g128 still *barely* edges out q4f16_1. 
+
+Check out my [performance page](https://llm-tracker.info/books/howto-guides/page/performance) for links to more perf benchmarks, although as this test shows, keep in mind that software perf is constantly improving.
+
+Also note, in my testing, the W3A16g128 doesn't seem to save much more memory - nvidia-smi reported a top usage of 5.1GiB VRAM used vs 5.2-5.5GiB for MLC-LLM q4f16_1, GGML q4_K_M, and GPTQ q4_128gs. With MLC LLM, the W3A16g128 saves about 250MiB of memory vs the q4f16_1 or about 4-5%, so it's not nothing, especially as model sizes grow. And according to Table 3 of the paper, a LLaMA-65B W4A16 uses 41.0G and the W3A16 uses only 35.1G.
+
+While OmniQuant does seem like an incremental improvement overall, it's probably not worth running out and requantizing all your models, especially considering how time consuming it can be (and how much less usable MLC LLM is atm for most batch=1 workflows). That being said, it looks like it *does* work, and is a viable option to use if you are trying to squeeze into the least memory available. Also, I've only tested out the weight quantization model, and have no idea how the weight-activation models perform, but I'll leave that for others to test.
