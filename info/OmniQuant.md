@@ -1,9 +1,9 @@
 # Summary
 OmniQuant (omnidirectionally calibrated quantization) is a quantization technique published (2023-08-25) by [Wenqi Shao](https://wqshao126.github.io/) and [Mengzhao Chen](https://chenmnz.github.io/) from the [General Vision Group, Shanghai AI Lab](https://github.com/OpenGVLab). Instead of hand-crafted quantization parameters, OmniQuant uses trained Learnable Weight Clipping (LWC) that modulates the extreme values of weights by optimizing the clipping threshold and Learnable Equivalent Transformation (LET) to handle activation outliers.
 
-The paper (Table 1) shows better WikiText2 perplexity than GPTQ and AWQ at every weight quantization for Llama 1 & 2, 7B-70B. Most interesting is that it has good (close to W4A16 RTN) perplexity at W3A16/W3A16g128. Interestingly, there is also weight activation quantization that scores in real-world benchmarks (ARC, HellaSwag, Winogrande, etc), with W6A6 results close to FP16 (Table 2).
+The paper (Table 1) shows better WikiText2 perplexity than GPTQ and AWQ at every weight quantization for Llama 1 & 2, 7B-70B. Most interesting is that it has good (close to W4A16 RTN) perplexity at W3A16/W3A16g128. Also, there is also weight activation quantization that scores well in real-world benchmarks (ARC, HellaSwag, Winogrande, etc), with W6A6 results close to FP16 (Table 2).
 
-On performance, using MLC the W4A16g128 performs well (2X unquantized), but the W3A16g128 is only slightly faster - it also doesn't seem to save much more memory (5.1GiB vs 5.2-5.5GiB for MLC-LLM q4f16_1, GGML q4_K_M, and GPTQ q4_128gs).
+On performance, the paper reports that using MLC the W4A16g128 performs well (2X unquantized FP16), but that W3A16g128 is only slightly faster - spoiler alert, but at the bottom of the page you can see my test results, which are much improved from the paper results.
 
 * Paper: [https://arxiv.org/abs/2308.13137](https://arxiv.org/abs/2308.13137) ([PDF](https://arxiv.org/pdf/2308.13137.pdf))
 * Code: [https://github.com/OpenGVLab/OmniQuant](https://github.com/OpenGVLab/OmniQuant)
@@ -43,7 +43,7 @@ cd ..
 ./mlc_chat_cli: error while loading shared libraries: libmlc_llm.so: cannot open shared object file: No such file or directory
 ```
 
-So, I've [familiarized myself with MLC-LLM before](https://llm-tracker.info/books/howto-guides/page/nvidia-gpus#bkmrk-mlc-llm) and the next obvious step is to install our own `mlc_chat_cli`:
+So, I've [familiarized myself with MLC LLM before](https://llm-tracker.info/books/howto-guides/page/nvidia-gpus#bkmrk-mlc-llm) and the next obvious step is to install our own `mlc_chat_cli`:
 
 ```
 conda install -c mlc-ai -c conda-forge mlc-chat-cli-nightly
@@ -160,6 +160,8 @@ python build.py --target cuda --quantization w3a16g128asym --model /models/llm/h
 ```
 * Note: `build.py` still looks at your active GPU to decide which architecture to use, so I set `CUDA_VISIBLE_DEVICES=1` to allow the model to get arch=sm_86 and allow my 3090 and 4090 to run the compiled model. There's no inferencing speed difference atm between architectures on the 4090.
 
+OK, so this was everything I needed to get things working.
+
 ## Quantize Times
 Note, OmniQuant runs 20 epochs per layer and takes some time to run. Here is the quantization time provided from Table A1 of the paper on how long LLaMA (1) models took the researchers to quant using a single NVIDIA A100-80G:
 
@@ -174,9 +176,15 @@ On my RTX 4090, a llama2-7b took ~1.7-1.8h to for a weight-only quantize.
 # Inferencing Performance
 mlc_chat_cli afaik doesn't have an easy method for measuring perplexity, but it *does* have an ``--evaluate` flag now that lets me set my standard comparison parameters.
 
-Here I was pleasantly surprised. The llama2-7b inferencing on the 4090 at 176 t/s actually manages to be
+Here I was pleasantly surprised. The llama2-7b inferencing on the 4090 at 176 t/s actually manages to [beat MLC LLM's q4f16_1 results](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1788227831) (165 t/s, the previous speed champ).
 
-q4f16_1
+The 3090 results are slower, but still respectable.
+
+Check out my [performance page](https://llm-tracker.info/books/howto-guides/page/performance) for links to more perf benchmarks.
+
+Note, the W3A16g128 I ran doesn't seem to save much more memory - 5.1GiB VRAM used vs 5.2-5.5GiB for MLC-LLM q4f16_1, GGML q4_K_M, and GPTQ q4_128gs.
+
+While OmniQuant does seem like an incremental improvement overall, it's not really a "quant"um leap and probably not worth running out and requantizing all your models, especially considering how time consuming it can be. That being said, I've only tested out the weight quantization model, and have no idea how the weight-activation models perform, but I'll leave that for others to test.
 
 ```
 # 4090
