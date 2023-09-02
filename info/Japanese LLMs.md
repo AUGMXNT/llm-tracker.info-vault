@@ -13,8 +13,9 @@ See also:
 * [Sparticle/llama-2-13b-chat-japanese-lora](https://huggingface.co/Sparticle/llama-2-13b-chat-japanese-lora)
 * [AIgroup-CVM-utokyohospital/Llama-2-70b-chat-4bit-japanese](https://huggingface.co/AIgroup-CVM-utokyohospital/Llama-2-70b-chat-4bit-japanese)
 * [izumi-lab/llama-13b-japanese-lora-v0-1ep](https://huggingface.co/izumi-lab/llama-13b-japanese-lora-v0-1ep)
-* https://llm-jp.nii.ac.jp/
-* https://llm.msuzuki.me/
+* [https://github.com/lighttransport/japanese-llama-experiment](https://github.com/lighttransport/japanese-llama-experiment)
+* [https://llm-jp.nii.ac.jp/](https://llm-jp.nii.ac.jp/)
+* [https://llm.msuzuki.me/](https://llm.msuzuki.me/) 
 
 # GPT-4
 Quality: Great
