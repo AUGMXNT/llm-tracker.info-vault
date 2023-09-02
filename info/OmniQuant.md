@@ -103,7 +103,7 @@ prefill: 42862.4 tok/s, decode: -nan tok/s
 * [https://mlc.ai/mlc-llm/docs/install/tvm.html#install-tvm-unity](https://mlc.ai/mlc-llm/docs/install/tvm.html#install-tvm-unity)
 * [https://mlc.ai/package/](https://mlc.ai/package/)
 
-# Quantize A Model
+# Quantize a Model
 OK, well that was a PITA, but lets turn our eye onto quantizing a model. Here, [the docs](https://github.com/OpenGVLab/OmniQuant#usage) are sadly incomplete, although one of the primary authors, [ChenMnZ](https://github.com/ChenMnZ) was [very quick to respond](https://github.com/OpenGVLab/OmniQuant/issues/4). Thanks!
 
 I'll go through this step by step. First the shifts and scales available for download are only for their specific model-zoo, so you'll definitely need to generate them for your specific raw unquantized model:
@@ -111,6 +111,8 @@ I'll go through this step by step. First the shifts and scales available for dow
 ```
 python generate_act_scale_shift.py --model /models/llm/hf/meta-llama_Llama-2-7b-hf
 ```
+
+Note: before you can create a custom model you will need to add the name of your model to `net_choices` in `main.py` ([here](https://github.com/OpenGVLab/OmniQuant/blob/main/main.py#L30)) or it'll barf at you.
 
 From here, they suggest that you run 2) a weight-only quantization:
 ```
@@ -120,7 +122,7 @@ CUDA_VISIBLE_DEVICES=0 python main.py \
 --epochs 20 --output_dir ./log/llama2-7b-w3a16g128 \
 --eval_ppl --wbits 3 --abits 16 --group_size 128 --lwc
 ```
-However, if you do this, you will end up with a set of logs (about 200MB for llama2-7b) that you will need to further process. If you accidentally did this (which takes almost 2 hours on a 4090), then you can "set `--epochs` to `0` and add `--resume` ([see full reply](https://github.com/OpenGVLab/OmniQuant/issues/4#issuecomment-1703768260)) to the "fake quantize" step, but this "fake quantize" is really what you want to do. I recommend skipping to this directly:
+However, if you do this, you will end up with a set of logs (about 200MB for llama2-7b) that you will need to further process. If you accidentally did this (which takes almost 2 hours on a 4090), then you can "set `--epochs` to `0` and add `--resume` ([see full reply](https://github.com/OpenGVLab/OmniQuant/issues/4#issuecomment-1703768260)) to the "fake quantize" step, but this "fake quantize" is really what you want to do if you want an *actual* quantized model. I recommend skipping to this directly:
 
 ```
 # W3A16g128
