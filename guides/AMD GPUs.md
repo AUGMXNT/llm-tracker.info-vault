@@ -353,12 +353,12 @@ On a Radeon 7900XT, you should get about double the performance of CPU-only exec
 ### Compile for ROCm
 This was last update 2023-09-03 so things might change, but here's how I was able to get things working in Windows.
 
-### Requirements
+#### Requirements
 * Follow AMD's directions and [install the ROCm software for Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/index.html).
 * You'll need [Microsoft Visual Studio](https://visualstudio.microsoft.com/vs/) installed as well.
 * You might need to use [Chocolatey](https://chocolatey.org/) to `choco install git` or some other stuff like that
 
-### Instructions
+#### Instructions
 
 First, launch "x64 Native Tools Command Prompt" from the Windows Menu.
 
