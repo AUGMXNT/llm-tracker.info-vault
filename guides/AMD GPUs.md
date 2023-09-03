@@ -388,7 +388,8 @@ cmake.exe --build .
 
 NOTE: If your PATH is wonky for some reason you may get missing .dll errors. You can either fix that, or if all else fails, copy the missing files from `"C:\Program Files\AMD\ROCm\5.5\bin` into the `build/bin` folder since life is too short.
 
-Here's my results running a llama2-7b q4_0 and q4_K_M:
+#### Results
+Here's my `llama-bench` results running a llama2-7b q4_0 and q4_K_M:
 ```
 C:\Users\lhl\Desktop\llama.cpp\build\bin>llama-bench.exe -m ..\..\meta-llama-2-7b-q4_0.gguf -p 3968 -n 128 -ngl 99
 ggml_init_cublas: found 1 ROCm devices:
