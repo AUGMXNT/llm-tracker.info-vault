@@ -82,9 +82,10 @@ cd ..
 
 # Make model
 # IMPORTANT: CUDA is targeted per GPU. Be sure to use CUDA_VISIBLE_DEVICES if you have multiple generations of CUDA...
+# NOTE: the maximum context length is determined for a model at compile-time here. It defaults to 2048 so you will want to set it to a longer one if your model supports it (I don't believe MLC currently supports RoPE extension
 git clone https://github.com/mlc-ai/mlc-llm.git --recursive
 cd mlc-llm
-python3 -m mlc_llm.build --target cuda --quantization q4f16_1 --model /models/llm/llama2/meta-llama_Llama-2-7b-chat-hf
+python3 -m mlc_llm.build --target cuda --quantization q4f16_1 --model /models/llm/llama2/meta-llama_Llama-2-7b-chat-hf --max-seq-len 4096
 
 # Compile mlc-llm
 mkdir build && cd build
@@ -93,7 +94,7 @@ make -j`nproc`
 cd ..
 
 # In `mlc-llm` folder you should now be able to run
-build/mlc_chat_cli --local-id meta-llama_Llama-2-7b-chat-hf-q4f16_1 --device-name cuda --device_id 0 --evaluate --eval-prompt-len 128 --eval-gen-len=1920
+build/mlc_chat_cli --local-id meta-llama_Llama-2-7b-chat-hf-q4f16_1 --device-name cuda --device_id 0 --evaluate --eval-prompt-len 3968 --eval-gen-len=128
 ```
 * [https://mlc.ai/mlc-llm/docs/compilation/compile_models.html](https://mlc.ai/mlc-llm/docs/compilation/compile_models.html)
 * [https://github.com/mlc-ai/mlc-llm/issues/229#issuecomment-1564139277](https://github.com/mlc-ai/mlc-llm/issues/229#issuecomment-1564139277)
