@@ -20,12 +20,16 @@ You can try many of these for free if you've never tried one (although most of t
 
 You can also run LLMs locally on most modern computers (although larger models require strong GPUs).
 
-The easiest (virtually one-click, no command line futzing) way to test out some models is with [Nomic's GPT4All](https://gpt4all.io/) ([Github](https://github.com/nomic-ai/gpt4all)).
+The easiest (virtually one-click, no command line futzing) way to test out some models is with [LM Studio](https://lmstudio.ai/) (Windows, Mac). Other alternatives include:
+
+- [Nomic's GPT4All](https://gpt4all.io/) ([Github](https://github.com/nomic-ai/gpt4all)) - Windows, Mac, Linux  
+
+- [Ollama](https://ollama.ai/) ([Github](https://github.com/jmorganca/ollama)) - Mac
 
 If you are more technical:
 
-- [oobabooga](https://github.com/oobabooga/text-generation-webui)
-- [koboldcpp](https://github.com/LostRuins/koboldcpp)
+- [oobabooga](https://github.com/oobabooga/text-generation-webui) - think of it as the automatic1111 of LLMs
+- [koboldcpp](https://github.com/LostRuins/koboldcpp) - more oriented for character/roleplay, see also [SillyTavern](https://sillytavernai.com/)
 - [openplayground](https://github.com/nat/openplayground)
 - [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [exllama](https://github.com/turboderp/exllama)
