@@ -1,4 +1,4 @@
-As of June 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is only supported by Linux.
+As of August 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is available for Linux or [Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html).
 
 # Linux
 Testing was done with a Radeon VII (16GB HBM2 VRAM, gfx906) on Arch Linux
@@ -340,7 +340,7 @@ ROCm support is outside the scope of this guide (maybe someone can make a new pa
 
 ## llama.cpp
 
-Go to [llama.cpp's release page](https://github.com/ggerganov/llama.cpp/releases) and download a `bin-win-clblast` version.
+For an easy time, go to [llama.cpp's release page](https://github.com/ggerganov/llama.cpp/releases) and download a `bin-win-clblast` version.
 
 In the Windows terminal, run it with `-ngl 99` to load all the layers into memory.
 
@@ -348,4 +348,66 @@ In the Windows terminal, run it with `-ngl 99` to load all the layers into memor
 .\main.exe -m model.bin -ngl 99
 ```
 
-Performance on an Radeon 7900XT was not impressive (about 9 t/s on a 13b-q5_1 model) but better than nothing (about 2X clblast w/o loading the layers into GPU memory).
+On a Radeon 7900XT, you should get about double the performance of CPU-only execution.
+
+### Compile for ROCm
+This was last update 2023-09-03 so things might change, but here's how I was able to get things working in Windows.
+
+### Requirements
+* Follow AMD's directions and [install the ROCm software for Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/index.html).
+* You'll need [Microsoft Visual Studio](https://visualstudio.microsoft.com/vs/) installed as well.
+* You might need to use [Chocolatey](https://chocolatey.org/) to `choco install git` or some other stuff like that
+
+### Instructions
+
+First, launch "x64 Native Tools Command Prompt" from the Windows Menu.
+
+You will want to set your path variables
+```
+# Global
+setx PATH "C:\Program Files\AMD\ROCm\5.5\bin;%PATH%"
+setx HIP_PATH "C:\Program Files\AMD\ROCm\5.5"
+
+# Or for session
+set PATH="C:\Program Files\AMD\ROCm\5.5\bin;%PATH%"
+set HIP_PATH="C:\Program Files\AMD\ROCm\5.5"
+```
+
+If you set just the global you may need to start a new shell before running this in the `llama.cpp` checkout.
+
+```
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
+
+# Make sure the HIP stuff gets picked up
+cmake.exe .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DLLAMA_HIPBLAS=on  -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DAMDGPU_TARGETS="gfx1100" -DCMAKE_PREFIX_PATH="C:\Program Files\AMD\ROCm\5.5"
+
+# should build binaries in a bin/ folder
+cmake.exe --build .
+```
+
+NOTE: If your PATH is wonky for some reason you may get missing .dll errors. You can either fix that, or if all else fails, copy the missing files from `"C:\Program Files\AMD\ROCm\5.5\bin` into the `build/bin` folder since life is too short.
+
+Here's my results running a llama2-7b q4_0 and q4_K_M:
+```
+C:\Users\lhl\Desktop\llama.cpp\build\bin>llama-bench.exe -m ..\..\meta-llama-2-7b-q4_0.gguf -p 3968 -n 128 -ngl 99
+ggml_init_cublas: found 1 ROCm devices:
+  Device 0: AMD Radeon RX 7900 XT, compute capability 11.0
+| model                      	|   	size | 	params | backend	| ngl | test   	|          	t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
+| LLaMA v2 7B mostly Q4_0    	|   3.56 GiB | 	6.74 B | ROCm   	|  99 | pp 3968	|	882.92 ± 1.10 |
+| LLaMA v2 7B mostly Q4_0    	|   3.56 GiB | 	6.74 B | ROCm   	|  99 | tg 128 	| 	94.55 ± 0.07 |
+
+build: 69fdbb9 (1148)
+
+
+C:\Users\lhl\Desktop\llama.cpp\build\bin>llama-bench.exe -m ..\..\meta-llama-2-7b-q4_K_M.gguf -p 3968 -n 128 -ngl 99
+ggml_init_cublas: found 1 ROCm devices:
+  Device 0: AMD Radeon RX 7900 XT, compute capability 11.0
+| model                      	|   	size | 	params | backend	| ngl | test   	|          	t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
+| LLaMA v2 7B mostly Q4_K - Medium |   3.80 GiB | 	6.74 B | ROCm   	|  99 | pp 3968	|	858.74 ± 1.32 |
+| LLaMA v2 7B mostly Q4_K - Medium |   3.80 GiB | 	6.74 B | ROCm   	|  99 | tg 128 	| 	78.78 ± 0.04 |
+
+build: 69fdbb9 (1148)
+```
