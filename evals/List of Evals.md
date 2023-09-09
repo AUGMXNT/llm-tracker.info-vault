@@ -15,6 +15,8 @@
 - [llm-jeopardy](https://github.com/aigoopy/llm-jeopardy) - automated quiz show answering
 - [Troyanovsky/Local-LLM-comparison](https://github.com/Troyanovsky/Local-LLM-comparison/tree/main) - one person's testing on his own standardized eval against different community models (fine-tuned quants)
 - [LLM Logic Tests](https://docs.google.com/spreadsheets/d/1NgHDxbVWJFolq8bLvLkuPWKC7i_R6I6W/htmlview)
+- [Asking 60+ LLMs a set of 20 questions](https://benchmarks.llmonitor.com/)  
+
 - [paperswithcode](https://paperswithcode.com/) (based off of numbers published in paper, not independently verified or standardized) 
   - [MMLU](https://paperswithcode.com/sota/multi-task-language-understanding-on-mmlu)
   - [ARC-c](https://paperswithcode.com/sota/common-sense-reasoning-on-arc-challenge)
