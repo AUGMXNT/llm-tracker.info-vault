@@ -378,6 +378,8 @@ If you set just the global you may need to start a new shell before running this
 ```
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
+mkdir build
+cd build
 
 # Make sure the HIP stuff gets picked up
 cmake.exe .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DLLAMA_HIPBLAS=on  -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DAMDGPU_TARGETS="gfx1100" -DCMAKE_PREFIX_PATH="C:\Program Files\AMD\ROCm\5.5"
