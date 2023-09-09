@@ -354,39 +354,44 @@ On a Radeon 7900XT, you should get about double the performance of CPU-only exec
 This was last update 2023-09-03 so things might change, but here's how I was able to get things working in Windows.
 
 #### Requirements
+* You'll need [Microsoft Visual Studio](https://visualstudio.microsoft.com/vs/) installed. Install it with the basic C++ environment.
 * Follow AMD's directions and [install the ROCm software for Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/index.html).
-* You'll need [Microsoft Visual Studio](https://visualstudio.microsoft.com/vs/) installed as well.
-* You might need to use [Chocolatey](https://chocolatey.org/) to `choco install git` or some other stuff like that
+* You'll need `git` if you want to pull the latest from the repo (you can either get the [official Windows installer](https://git-scm.com/download/win) or use a package manager like [Chocolatey](https://chocolatey.org/) to `choco install git`) - note, as an alternative, you could just download the Source code.zip from the [https://github.com/ggerganov/llama.cpp/releases/](https://github.com/ggerganov/llama.cpp/releases/)
 
 #### Instructions
 
-First, launch "x64 Native Tools Command Prompt" from the Windows Menu.
+First, launch "x64 Native Tools Command Prompt" from the Windows Menu (you can hit the Windows key and just start typing x64 and it should pop up).
 
-You will want to set your path variables
-```
-# Global
-setx PATH "C:\Program Files\AMD\ROCm\5.5\bin;%PATH%"
-setx HIP_PATH "C:\Program Files\AMD\ROCm\5.5"
-
-# Or for session
-set PATH="C:\Program Files\AMD\ROCm\5.5\bin;%PATH%"
-set HIP_PATH="C:\Program Files\AMD\ROCm\5.5"
-```
-
-If you set just the global you may need to start a new shell before running this in the `llama.cpp` checkout.
 
 ```
+# You should probably change to a folder you want first for grabbing the source
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
+
+# Make a build folder
 mkdir build
 cd build
 
 # Make sure the HIP stuff gets picked up
 cmake.exe .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DLLAMA_HIPBLAS=on  -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DAMDGPU_TARGETS="gfx1100" -DCMAKE_PREFIX_PATH="C:\Program Files\AMD\ROCm\5.5"
 
-# should build binaries in a bin/ folder
+# This should build binaries in a bin/ folder
 cmake.exe --build .
 ```
+
+That's it, now you have compiled executables in `build/bin`.
+
+
+Start a new terminal to run llama.CPP
+```
+# You can do this in the GUI search for "environment variable" as well
+setx /M PATH "C:\Program Files\AMD\ROCm\5.5\bin;%PATH%"
+
+# Or for session
+set PATH="C:\Program Files\AMD\ROCm\5.5\bin;%PATH%"
+```
+
+If you set just the global you may need to start a new shell before running this in the `llama.cpp` checkout. You can double check it'S working by outputing the path `echo %PATH%` or just running `hipInfo` or another exe in the ROCm bin folder.
 
 NOTE: If your PATH is wonky for some reason you may get missing .dll errors. You can either fix that, or if all else fails, copy the missing files from `"C:\Program Files\AMD\ROCm\5.5\bin` into the `build/bin` folder since life is too short.
 
