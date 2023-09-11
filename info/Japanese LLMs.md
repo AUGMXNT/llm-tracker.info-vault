@@ -15,7 +15,17 @@ See also:
 * [izumi-lab/llama-13b-japanese-lora-v0-1ep](https://huggingface.co/izumi-lab/llama-13b-japanese-lora-v0-1ep)
 * [https://github.com/lighttransport/japanese-llama-experiment](https://github.com/lighttransport/japanese-llama-experiment)
 * [https://llm-jp.nii.ac.jp/](https://llm-jp.nii.ac.jp/)
-* [https://llm.msuzuki.me/](https://llm.msuzuki.me/) 
+* [https://llm.msuzuki.me/](https://llm.msuzuki.me/)
+* [https://jxiv.jst.go.jp/index.php/jxiv/preprint/view/422/1350](https://jxiv.jst.go.jp/index.php/jxiv/preprint/view/422/1350)
+* [https://www.passaglia.jp/gpt-japanese/](https://www.passaglia.jp/gpt-japanese/)
+
+Other models:
+
+Both are built with gpt-neox, due to its good Japanese support: https://huggingface.co/docs/transformers/model_doc/gpt_neox_japanese
+
+* CyberAgent just trained OpenCALM, up to a 7B parameter model: https://huggingface.co/cyberagent/open-calm-large
+* Rinna also just trained a similar 3.6B parameter model: https://huggingface.co/rinna/japanese-gpt-neox-3.6b - smaller, but there is both pre-trained and RLHF'd versions.
+
 
 # GPT-4
 Quality: Great
