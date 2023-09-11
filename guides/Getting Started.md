@@ -1,13 +1,17 @@
 [Large Language Models](https://en.wikipedia.org/wiki/Large_language_model) (LLM) are a type of [generative AI](https://en.wikipedia.org/wiki/Generative_artificial_intelligence) that power chatbot systems like [ChatGPT](https://openai.com/blog/chatgpt).
 
-You can try many of these for free if you've never tried one (although most of this site is aimed at those with more familiarity with these types of systems). All of these have free access, although many may require user registration:
+You can try many of these for free if you've never tried one (although most of this site is aimed at those with more familiarity with these types of systems).
+
+All of these have free access, although many may require user registration, and remember, all data is being sent online to third parties so don't say anything you'd want to keep very private:
 
 - Chat Services 
   - [OpenAI ChatGPT](https://chat.openai.com/) - the free version uses 3.5, and is not as smart, but good for dipping your toe in. 
     - [chat.getgpt.world](https://chat.getgpt.world/) - HK (Alibaba Cloud) based server w/ gpt-3.5-turbo access
   - [Anthropic Claude](https://claude.ai/) - this is an interesting alternative, has super long context window (short-term memory) so can interact w/ very long files for summarization, etc.
   - [ChatNBX](https://chat.nbox.ai/) - talk to some of the best open models and compare
-  - [Perplexity.ai](https://www.perplexity.ai/) - the best free service w/ web search capabilities
+  - [Perplexity.ai](https://www.perplexity.ai/) - the best free service w/ web search capabilities 
+    - [Perplexity Labs](https://labs.perplexity.ai/) - hosts some open models to try as well
+-  More 
   - [Bing Chat](https://www.bing.com/chat) (requires Microsoft Edge lol) - also has web capabilities 
   - [Google Bard](https://bard.google.com/)
   - [You.com](https://you.com/) - 100 free AI chat searches
