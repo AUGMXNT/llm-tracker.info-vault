@@ -13,6 +13,8 @@ All of these have free access, although many may require user registration, and 
     - [Perplexity Labs](https://labs.perplexity.ai/) - hosts some open models to try as well
 -  More 
   - [Bing Chat](https://www.bing.com/chat) (requires Microsoft Edge lol) - also has web capabilities 
+    - [Bing Chat History extension](https://chrome.google.com/webstore/detail/bing-chat-history/hjhpahdglfjddhhecnjlhckicdpcdhpg) ([Github](https://github.com/benf2004/Bing-Chat-History))  
+
   - [Google Bard](https://bard.google.com/)
   - [You.com](https://you.com/) - 100 free AI chat searches
   - [DeepAI Chat](https://deepai.org/chat)  
