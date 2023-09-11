@@ -3,15 +3,18 @@
 You can try many of these for free if you've never tried one (although most of this site is aimed at those with more familiarity with these types of systems). All of these have free access, although many may require user registration:
 
 - Chat Services 
-  - [OpenAI ChatGPT](https://chat.openai.com/)
+  - [OpenAI ChatGPT](https://chat.openai.com/) - the free version uses 3.5, and is not as smart, but good for dipping your toe in. 
     - [chat.getgpt.world](https://chat.getgpt.world/) - HK (Alibaba Cloud) based server w/ gpt-3.5-turbo access
-  - [Bing Chat](https://www.bing.com/chat) (requires Microsoft Edge lol)
+  - [Anthropic Claude](https://claude.ai/) - this is an interesting alternative, has super long context window (short-term memory) so can interact w/ very long files for summarization, etc.
+  - [ChatNBX](https://chat.nbox.ai/) - talk to some of the best open models and compare
+  - [Perplexity.ai](https://www.perplexity.ai/) - the best free service w/ web search capabilities
+  - [Bing Chat](https://www.bing.com/chat) (requires Microsoft Edge lol) - also has web capabilities 
   - [Google Bard](https://bard.google.com/)
   - [You.com](https://you.com/) - 100 free AI chat searches
   - [DeepAI Chat](https://deepai.org/chat)  
 
-  - [Hugging Face Spaces](https://huggingface.co/spaces)
-    - [Falcon-Chat demo](https://huggingface.co/spaces/HuggingFaceH4/falcon-chat) - for a real trip, take a look at this Wikipedia article, [Human rights in the United Arab Emirates](https://en.wikipedia.org/wiki/Human_rights_in_the_United_Arab_Emirates) and ask it questions of legal facts about the UAE. Falcon will consistently lie to you about it. 
+  - [Hugging Face Spaces](https://huggingface.co/spaces)  
+
 - Comparisons 
   - [Vercel SDK Playground](https://sdk.vercel.ai/) 
   - [nat.dev Playground](https://nat.dev/)
