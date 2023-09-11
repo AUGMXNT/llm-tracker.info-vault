@@ -96,12 +96,6 @@ For programmers who don't know ML, it may be easier to learn by doing:
 * https://github.com/zetavg/LLaMA-LoRA-Tuner
 * https://github.com/artidoro/qlora
 
-
-# Prompting
-https://www.promptingguide.ai/
-https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
-
-
 ## Resource Lists
 * https://www.reddit.com/r/LocalLLaMA/wiki/models/
 * https://gist.github.com/rain-1/eebd5e5eb2784feecf450324e3341c8d
