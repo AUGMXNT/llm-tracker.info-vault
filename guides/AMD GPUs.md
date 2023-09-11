@@ -419,3 +419,6 @@ ggml_init_cublas: found 1 ROCm devices:
 
 build: 69fdbb9 (1148)
 ```
+
+### Unsupported Architectures
+On Windows, it may not be possible to apply an `HSA_OVERRIDE_GFX_VERSION` override. In that case, these instructions for compiling custom kernels may help: [https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/](https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/)
