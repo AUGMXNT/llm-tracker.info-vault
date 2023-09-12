@@ -1,3 +1,7 @@
+[How does quantisation affect model output?](https://rentry.org/quants) - 15 basic tests on different quant levels
+
+ 
+
 OmniQuant
 
 - [https://github.com/OpenGVLab/OmniQuant](https://github.com/OpenGVLab/OmniQuant)
