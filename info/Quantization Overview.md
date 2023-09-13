@@ -1,8 +1,8 @@
 [How does quantisation affect model output?](https://rentry.org/quants) - 15 basic tests on different quant levels
 
- 
-
 OmniQuant
+
+Here are my docs for how run it: [OmniQuant](https://llm-tracker.info/books/llms/page/omniquant)
 
 - [https://github.com/OpenGVLab/OmniQuant](https://github.com/OpenGVLab/OmniQuant)
 - [https://arxiv.org/abs/2308.13137](https://arxiv.org/abs/2308.13137)
