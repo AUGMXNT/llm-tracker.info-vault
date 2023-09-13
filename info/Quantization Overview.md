@@ -1,5 +1,10 @@
 [How does quantisation affect model output?](https://rentry.org/quants) - 15 basic tests on different quant levels
 
+EXL2 (ExLlamaV2)
+
+- [https://github.com/turboderp/exllamav2](https://github.com/turboderp/exllamav2)
+- Based off of GPTQ but iteratively selects from quants vs calibration and averages bit depth to target an arbitrary bit-weight
+
 OmniQuant
 
 Here are my docs for how run it: [OmniQuant](https://llm-tracker.info/books/llms/page/omniquant)
