@@ -14,6 +14,7 @@ There are plenty of resource lists for research:
 * [Understanding Large Language Models -- A Transformative Reading List, Sebastian Raschka](https://sebastianraschka.com/blog/2023/llm-reading-list.html) - rather than just a list of papers, it also has a short description of why the linked papers are important.
 * [Anti-hype LLM reading list
 ](https://gist.github.com/veekaybee/be375ab33085102f9027853128dc5f0e) - a nice condensed reading list
+* [A Hacker's Guide to Language Models](https://www.youtube.com/watch?v=jkrNMKz9pWU) - 1.5h video by Jeremy Howard ([fast.ai](https://www.fast.ai/)) w/ [accompanying ipynb](https://github.com/fastai/lm-hackers/blob/main/lm-hackers.ipynb) - fast.ai also has a free [Practical Deep Learning course](https://course.fast.ai/).
 
 ## Announcements
 For a layperson wanting to learn more, I actually think that reading the various announcements on models (and using an LLM to interrogate parts you don't understand) are probably a decent way to get started. You might not understand everything, but they start give you the "flavor-text" so to speak of AI attributes, keywords, etc:
