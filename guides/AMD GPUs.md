@@ -18,7 +18,11 @@ These **are not officially supported w/ ROCm 5.6** (but some support coming in 5
 ## Arch Linux Setup
 Install ROCm:
 ```
-yay -S radeontop rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
+# all the amd gpu compute stuff
+yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
+
+# third party monitoring
+yay -S amdgpu_top radeontop
 ```
 Install conda (mamba)
 ```
