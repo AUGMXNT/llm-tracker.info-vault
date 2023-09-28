@@ -2,6 +2,9 @@ We'll probably move this somewhere else, but I figure it might be useful to put 
 
 I'm looking for practical tools for production use here, and less of the neat toys that's popular atm.
 
+See also: 
+* [https://github.com/ErikBjare/are-copilots-local-yet](https://github.com/ErikBjare/are-copilots-local-yet)
+
 # Hosted Services
 
 ## [Cursor](https://www.cursor.so/)
