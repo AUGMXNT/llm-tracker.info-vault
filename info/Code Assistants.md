@@ -109,6 +109,14 @@ Index and search through local files w/ local models
 
 # Other
 Maybe useful, but not going to organize...
+
+Code Interpreters
+* https://github.com/KillianLucas/open-interpreter
+
+* https://docs.lmql.ai/en/latest/quickstart.html
+  * https://lmql.ai/playground/?snippet=gist:lbeurerkellner/24d68046a3c88c43cf09185f0f5c3680/raw/eval-and-call.json
+
+
 * https://www.codium.ai/ - write tests
 * https://writer.mintlify.com/ Auto comment/document
 * https://readable.so/ - auto comment
