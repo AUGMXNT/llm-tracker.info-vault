@@ -2,6 +2,27 @@ We'll try to fine tune [Mistral 7B](https://mistral.ai/news/announcing-mistral-7
 ).
 
 # autotune-advanced
+If you just want to try a finetune, this is pretty dead simple:
+```
+pip install git+https://github.com/huggingface/transformers
+pip install autotrain-advanced
+
+time autotrain llm \
+        --train \
+        --model "/models/llm/hf/mistralai_Mistral-7B-Instruct-v0.1" \
+        --data-path timdettmers/openassistant-guanaco \
+        --use-peft \
+        --use-int4 \
+        --lr 2e-4 \
+        --batch-size 4\
+        --epochs 1 \
+        --trainer sft \
+        --project-name m7b-airoboros \
+        --target-modules q_proj,v_proj
+```
+
+Note: [looking at the code](https://github.com/huggingface/autotrain-advanced/blob/4ef5f411158867c56ea2d1ef7bb43e5fb588be43/src/autotrain/cli/run_llm.py#L63C18-L63C18), it only has a single `--text_column` so it's limited in the types of datasets it can process (no chat or other multipart instruction datasets)?
+
 
 
 # Airoboros
