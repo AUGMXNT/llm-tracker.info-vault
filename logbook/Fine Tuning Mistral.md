@@ -41,7 +41,8 @@ mamba install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch-nightl
 
 # This is required but not in the requirements.txt
 pip install packaging
-# If you don't have this and need flash_attn you will be in trouble
+# If you don't have this and need flash_attn you will be sad
+# https://github.com/facebookresearch/xformers/issues/550#issuecomment-1331715980
 pip install ninja
 ```
 
