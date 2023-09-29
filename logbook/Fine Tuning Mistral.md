@@ -144,6 +144,7 @@ Improve smoothness of train/loss:
 Packages
 * [https://github.com/artidoro/qlora](https://github.com/artidoro/qlora)
   * Try unforked copy
+* [https://github.com/OpenAccess-AI-Collective/axolotl](https://github.com/OpenAccess-AI-Collective/axolotl)
 * [https://github.com/Alpha-VLLM/LLaMA2-Accessory](https://github.com/Alpha-VLLM/LLaMA2-Accessory)
 * [https://github.com/hiyouga/LLaMA-Efficient-Tuning](https://github.com/hiyouga/LLaMA-Efficient-Tuning)
   * FA2 for "RTX4090, A100 or H100 GPUs"
