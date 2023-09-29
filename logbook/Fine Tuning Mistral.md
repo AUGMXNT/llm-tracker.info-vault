@@ -1,6 +1,21 @@
 We'll try to fine tune [Mistral 7B](https://mistral.ai/news/announcing-mistral-7b/
 ).
 
+# Training Details
+The [Mistral AI Discord](https://discord.gg/mistralai) has a `#finetuning` channel which has some info/discussion:
+
+> dhokas: here are the main parameters we used for the instruct model :
+optimizer: adamw, max_lr: 2.5e-5, warmup steps: 50, total steps: 1250, seqlen: 32K, dropout: 0.2, world_size: 8
+>
+> dhokas: Peak lr.
+>
+> dhokas: Dropout added after the ffn layer
+>
+> dhokas: Dropout does not make a huge difference iirc
+
+* Mistral HF PR: [https://github.com/huggingface/transformers/pull/26464/files](https://github.com/huggingface/transformers/pull/26464/files)
+
+
 # autotune-advanced
 If you just want to try a finetune, this is pretty dead simple:
 ```
@@ -58,7 +73,7 @@ pip install flash-attn
 pip install git+https://github.com/huggingface/transformers
 ```
 
-At this point we need to poke around with the `train.sh` script:
+At this point we need to poke around with the `train.sh` script. Here I largely stuck w/ Jon's Airoboros training scheme vs Mistral's instruction settings:
 ```
 export BASE_DIR="."
 export WANDB_PROJECT=mistral-instruct-7b-airoboros-2.2.1
