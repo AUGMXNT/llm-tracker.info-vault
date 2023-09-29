@@ -165,3 +165,8 @@ Examples
 * https://github.com/Abinesh-moonpai/Finetune-llama-7B-QLORA
 * https://github.com/KevKibe/Finetuning-Llama2-with-QLoRA
 * https://github.com/jianzhnie/Efficient-Tuning-LLMs
+* https://github.com/baichuan-inc/baichuan-7B/blob/main/config/deepspeed.json
+  * https://www.deepspeed.ai/tutorials/autotuning/
+  * https://www.deepspeed.ai/getting-started/
+  * https://www.deepspeed.ai/docs/config-json/
+  * https://github.com/git-cloner/llama-lora-fine-tuning/blob/main/deepspeed-config.json
