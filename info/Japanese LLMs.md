@@ -25,6 +25,7 @@ Both are built with gpt-neox, due to its good Japanese support: https://huggingf
 
 * CyberAgent just trained OpenCALM, up to a 7B parameter model: https://huggingface.co/cyberagent/open-calm-large
 * Rinna also just trained a similar 3.6B parameter model: https://huggingface.co/rinna/japanese-gpt-neox-3.6b - smaller, but there is both pre-trained and RLHF'd versions.
+* [https://github.com/llm-jp/awesome-japanese-llm](https://github.com/llm-jp/awesome-japanese-llm)
 
 
 # GPT-4
