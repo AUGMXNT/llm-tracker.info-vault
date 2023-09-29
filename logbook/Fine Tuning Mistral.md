@@ -126,3 +126,42 @@ You can add, but maybe I'll do that next time (or just do it separately)
 ```
 
 Sharing the train/loss chart: [https://api.wandb.ai/links/augmxnt/eznbmx2x](https://api.wandb.ai/links/augmxnt/eznbmx2x)
+
+
+# TODO
+Improve smoothness of train/loss:
+* increased batch size (move to A100?)
+* lower LR
+* increase gradient accumulation (set to auto)
+* increase gradient steps to 32
+
+> On full 4096 context
+> * 7B uses 10gb
+> * 13B uses 15.6gb
+> * 34B uses little more than 24gb
+> * 70 uses 65gb
+
+Packages
+* [https://github.com/artidoro/qlora](https://github.com/artidoro/qlora)
+  * Try unforked copy
+* [https://github.com/Alpha-VLLM/LLaMA2-Accessory](https://github.com/Alpha-VLLM/LLaMA2-Accessory)
+* [https://github.com/hiyouga/LLaMA-Efficient-Tuning](https://github.com/hiyouga/LLaMA-Efficient-Tuning)
+  * FA2 for "RTX4090, A100 or H100 GPUs"
+* [https://github.com/OpenGVLab/LLaMA-Adapter](https://github.com/OpenGVLab/LLaMA-Adapter)
+* [https://github.com/facebookresearch/llama-recipes](https://github.com/facebookresearch/llama-recipes)
+* [https://github.com/modal-labs/llama-finetuning](https://github.com/modal-labs/llama-finetuning)
+* [https://github.com/mbalesni/deepspeed_llama](https://github.com/mbalesni/deepspeed_llama)
+* [https://github.com/git-cloner/llama-lora-fine-tuning](https://github.com/git-cloner/llama-lora-fine-tuning)
+  * fine tuning on 16GB
+* [https://github.com/OptimalScale/LMFlow](https://github.com/OptimalScale/LMFlow)
+* [https://github.com/huggingface/peft](https://github.com/huggingface/peft)
+* [https://github.com/Lightning-AI/lit-gpt](https://github.com/Lightning-AI/lit-gpt)
+  * [Finetune with Adapters](https://github.com/Lightning-AI/lit-gpt/blob/main/tutorials/finetune_adapter.md)
+  * [Finetune with LoRA or QLoRA](https://github.com/Lightning-AI/lit-gpt/blob/main/tutorials/finetune_lora.md)
+  * [https://github.com/dvlab-research/LongLoRA](https://github.com/dvlab-research/LongLoRA)
+
+Examples
+* https://github.com/mert-delibalta/llama2-fine-tune-qlora
+* https://github.com/Abinesh-moonpai/Finetune-llama-7B-QLORA
+* https://github.com/KevKibe/Finetuning-Llama2-with-QLoRA
+* https://github.com/jianzhnie/Efficient-Tuning-LLMs
