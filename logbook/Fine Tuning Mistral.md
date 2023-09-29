@@ -32,7 +32,7 @@ time autotrain llm \
         --batch-size 4\
         --epochs 1 \
         --trainer sft \
-        --project-name m7b-airoboros \
+        --project-name m7b-guanaco \
         --target-modules q_proj,v_proj
 ```
 
