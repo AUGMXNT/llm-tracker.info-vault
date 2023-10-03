@@ -48,7 +48,7 @@ My changes, mainly include doing file output:
 # import IPython.display as ipd
 # display(ipd.Audio(wav, rate=24000))
 
-## Yese
+## Yes
 import soundfile as sf
 sf.write('output.df5.wav', wav, 24000)
 ```
