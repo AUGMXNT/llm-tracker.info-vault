@@ -1,4 +1,4 @@
-# [StyleTTS 2: Towards Human-Level Text-to-Speech through Style Diffusion and Adversarial Training with Large Speech Language Models<svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"></svg>](https://github.com/yl4579/StyleTTS2#styletts-2-towards-human-level-text-to-speech-through-style-diffusion-and-adversarial-training-with-large-speech-language-models)
+## [StyleTTS 2: Towards Human-Level Text-to-Speech through Style Diffusion and Adversarial Training with Large Speech Language Models<svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"></svg>](https://github.com/yl4579/StyleTTS2#styletts-2-towards-human-level-text-to-speech-through-style-diffusion-and-adversarial-training-with-large-speech-language-models)
 * Samples: [https://styletts2.github.io/](https://styletts2.github.io/) 
 * Paper: [https://arxiv.org/abs/2306.07691](https://arxiv.org/abs/2306.07691) 
 * Repo: [https://github.com/yl4579/StyleTTS2](https://github.com/yl4579/StyleTTS2)
