@@ -21,6 +21,7 @@ mamba create -n styletts2 python=3.11
 mamba activate styletts2
 
 # pytorch - current nightly works w/ Python 3.11 but not 3.12
+# pick your version here: https://pytorch.org/get-started/locally/
 mamba install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch-nightly -c nvidia
 
 # reqs - torch stuff already installed 
