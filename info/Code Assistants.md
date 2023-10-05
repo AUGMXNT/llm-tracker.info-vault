@@ -92,11 +92,9 @@ Refact is an open-source Copilot alternative available as a self-hosted or cloud
 * Uses AutoGPTQ/HF - supports WizardCoder for code, Llama2 for chat
 * Does not embed/search through code base yet
 
-## [TurboPilot](https://github.com/ravenscroftj/turbopilot)
-TurboPilot is a self-hosted copilot clone which uses GGML,the library behind llama.cpp, to run local code completion models. It was originally designed to run Salesforce codegen models but has recently been updated to provide support for [Starcoder](https://huggingface.co/blog/starcoder), [Wizardcoder](https://github.com/nlpxucan/WizardLM/tree/main/WizardCoder) and most recently, [StableCode Instruct](https://stability.ai/blog/stablecode-llm-generative-ai-coding) from StabilityAI. It is heavily based and inspired by on the [fauxpilot](https://github.com/fauxpilot/fauxpilot) project.
 
-* Provides GPU inference via CUDA for Nvidia devices and OpenCL for Intel/AMD CPUS
-* Used to depend on a custom ggml fork but now tracks the [ggerganov/ggml](https://github.com/ggerganov/ggml) project.
+## [Continue](https://github.com/continuedev/continue)
+Continue is the open-source autopilot for software development—an IDE extension that brings the power of ChatGPT to VS Code and JetBrains
 
 ## [localpilot](https://github.com/danielgross/localpilot)
 Slick menubar interface to allow switching Github Copilot to use local models (built for Macs). Uses llama-cpp-python so should support any GGUF.
@@ -108,6 +106,12 @@ An API which mocks llama.cpp to enable support for Code Llama with the Continue 
 This project is an attempt to implement a local code completion engine utilizing large language models (LLM).
 Think of it as an open-source alternative to Github Copliot that runs on your device.
 * No code yet
+
+## (deprecated) [TurboPilot](https://github.com/ravenscroftj/turbopilot)
+TurboPilot is a self-hosted copilot clone which uses GGML,the library behind llama.cpp, to run local code completion models. It was originally designed to run Salesforce codegen models but has recently been updated to provide support for [Starcoder](https://huggingface.co/blog/starcoder), [Wizardcoder](https://github.com/nlpxucan/WizardLM/tree/main/WizardCoder) and most recently, [StableCode Instruct](https://stability.ai/blog/stablecode-llm-generative-ai-coding) from StabilityAI. It is heavily based and inspired by on the [fauxpilot](https://github.com/fauxpilot/fauxpilot) project.
+
+* Provides GPU inference via CUDA for Nvidia devices and OpenCL for Intel/AMD CPUS
+* Used to depend on a custom ggml fork but now tracks the [ggerganov/ggml](https://github.com/ggerganov/ggml) project.
 
 ## [localGPT](https://github.com/PromtEngineer/localGPT)
 Index and search through local files w/ local models
