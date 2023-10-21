@@ -23,7 +23,8 @@ bloop is a developer assistant that uses GPT-4 to answer questions about your co
 * Github Access (OAuth)
 * [Tantivy](https://github.com/quickwit-oss/tantivy) local search and [Qdrnt](https://github.com/qdrant/qdrant) local vector DB
 * Free version for individual use
-* Uses OpenAI GPT-4
+  * Free version updated to only **10 uses per day**! ($20/mo)
+* Uses OpenAI GPT-4, not possible to use your own API key
 
 ## [Mutable.ai](https://mutable.ai/)
 Supposedly will let you talk to your code base, create tests, review PRs, refactor folders, auto-document, etc...
