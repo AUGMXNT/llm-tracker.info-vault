@@ -28,3 +28,11 @@ More:
 
 - [How continuous batching enables 23x throughput in LLM inference while reducing p50 latency](https://www.anyscale.com/blog/continuous-batching-llm-inference)
 - [LMDeploy / Turbomind](https://github.com/InternLM/lmdeploy)
+
+For batch=1 performance, you can roughly estimate performance:
+
+- 20:1 flop/byte ratio for compute vs memory bandwidth limitation
+- Use [MT/s to GB/s Unit Converter](https://www.unitsconverters.com/en/Mt/S-To-Gb/S/Utu-6007-3760) to get memory bandwidth (memory channels x MT/s) = GB/s 
+  - You can divide memory bandwidth by memory used for a model to get a ballpark estimate of batch=1 perf
+  - For a q4 quant, you can also ballpark w/ # of parameters.
+  - As an example, a 4090 w/ 1,008 GB/s of memory bandwidth would be expected to get around 150 or 144 t/s depending on the which estimate and pretty close to benchmark results
