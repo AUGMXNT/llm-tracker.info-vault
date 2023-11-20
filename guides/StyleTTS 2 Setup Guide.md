@@ -12,7 +12,7 @@ This write-up is done on the first day after release, and only adapting [the LJS
 Recommended System Pre-requisites
 * `espeak-ng` - you need this
 * [CUDA](https://llm-tracker.info/books/howto-guides/page/nvidia-gpus#bkmrk-cuda-version-hell) - you could probably use CPU or ROCm but idk
-* [Mamba](https://github.com/conda-forge/miniforge#mambaforge) - not required but will make your life a lot easier
+* [Mamba](https://github.com/conda-forge/miniforge#install) - not required but will make your life a lot easier
 
 Environment setup:
 ```
