@@ -1,3 +1,6 @@
+https://github.com/mit-han-lab/smoothquant
+https://neuralmagic.com/blog/fast-llama-2-on-cpus-with-sparse-fine-tuning-and-deepsparse/
+
 Future Project
 * for different quants
 
