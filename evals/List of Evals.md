@@ -47,5 +47,16 @@ See also:
 - [The 'Ayumi' Inofficial LLM ERP Model Rating](https://rentry.org/ayumi_erp_rating)
 
 # New
-
-# GPQA: https://arxiv.org/abs/2311.12022
+* GPQA: A Graduate-Level Google-Proof Q&A Benchmark
+  * https://arxiv.org/abs/2311.12022
+* AgentBench
+  * https://github.com/THUDM/AgentBench
+  * https://github.com/THUDM/AgentBench#leaderboard
+* Skill-Mix
+  * https://arxiv.org/abs/2310.17567
+* Flash HELM
+  * https://arxiv.org/abs/2308.11696
+* FLASK
+  * https://twitter.com/SeonghyeonYe/status/1682209670302408705
+  * https://arxiv.org/abs/2307.10928
+  * https://kaistai.github.io/FLASK/
