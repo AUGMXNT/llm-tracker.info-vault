@@ -47,6 +47,15 @@ See also:
 - [The 'Ayumi' Inofficial LLM ERP Model Rating](https://rentry.org/ayumi_erp_rating)
 
 # New
+* EvalPlus 0.2 - https://github.com/evalplus/evalplus/releases/tag/v0.2.0
+* MMMU
+  * https://huggingface.co/papers/2311.16502
+  * https://arxiv.org/pdf/2311.16502.pdf
+  * https://github.com/MMMU-Benchmark/MMMU
+  * https://mmmu-benchmark.github.io/
+  * https://twitter.com/xiangyue96/status/1729698316554801358
+* GAIA: a benchmark for General AI Assistants
+  * https://arxiv.org/abs/2311.12983
 * GPQA: A Graduate-Level Google-Proof Q&A Benchmark
   * https://arxiv.org/abs/2311.12022
 * AgentBench
