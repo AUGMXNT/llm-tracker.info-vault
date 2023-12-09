@@ -8,6 +8,8 @@ To test:
 * Prompt/Inference speed
 * Perplexity
 * Standardized benchmark numbers (OpenAPI layer w/ lm-eval?)
+  * Sweep of fastest tests (Wiki, C4, Winogrande, PIQA, ARCe) - lambada and coqa? - run standard timings first
+  * EvalPlus (code!)
 
 
 ## Formats
