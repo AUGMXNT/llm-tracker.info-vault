@@ -1,4 +1,6 @@
-* [2023-08-14 Aman Sanger (cursor.so) comparing high batch throughput](https://twitter.com/amanrsanger/status/1690828453233463297)
+* 2023-11 - llama.cpp Mac performance 
+  - [https://github.com/ggerganov/llama.cpp/discussions/4167](https://github.com/ggerganov/llama.cpp/discussions/4167)
+- [2023-08-14 Aman Sanger (cursor.so) comparing high batch throughput](https://twitter.com/amanrsanger/status/1690828453233463297)
 - [2023-08-11 Optimizing latency](https://hamel.dev/notes/llm/inference/03_inference.html)
   - mlc, ctranslate2, vllm, tgi
   - A6000
