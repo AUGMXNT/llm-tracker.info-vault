@@ -20,7 +20,11 @@ QUIP
 - [https://github.com/AlpinDale/QuIP-for-Llama](https://github.com/AlpinDale/QuIP-for-Llama)
 - [https://arxiv.org/abs/2307.13304](https://arxiv.org/abs/2307.13304)
 - Not just PPL but also benchmark accuracy tests
-- 3-bit almost matches FP16
+- 3-bit almost matches FP1
+
+QuIP#
+
+- [https://cornell-relaxml.github.io/quip-sharp/](https://cornell-relaxml.github.io/quip-sharp/)
 
 SqueezeLM
 
