@@ -10,6 +10,7 @@ To test:
 * Standardized benchmark numbers (OpenAPI layer w/ lm-eval?)
   * Sweep of fastest tests (Wiki, C4, Winogrande, PIQA, ARCe) - lambada and coqa? - run standard timings first
   * EvalPlus (code!)
+* KL Divergence: https://www.reddit.com/r/LocalLLaMA/comments/1816h1x/how_much_does_quantization_actually_impact_models/
 
 
 ## Formats
