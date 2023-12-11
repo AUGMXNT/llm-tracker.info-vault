@@ -18,6 +18,7 @@ To test:
 ### QuIP#
 
 - [https://cornell-relaxml.github.io/quip-sharp/](https://cornell-relaxml.github.io/quip-sharp/)
+  - https://github.com/turboderp/exllamav2/issues/176
 
 ### EXL2 (ExLlamaV2)
 
