@@ -11,3 +11,9 @@ Most instruct/chat fine tunes use their own formatting (which can wildly differ)
 * [https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates](https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates)
 
 If using HF, see also the documentation on [chat templating](https://huggingface.co/docs/transformers/main/chat_templating)
+
+## Jailbreaks
+Most of these will probably work on open models: https://www.jailbreakchat.com/
+
+See:
+* https://twitter.com/abacaj/status/1734450551381754063
