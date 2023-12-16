@@ -17,3 +17,7 @@ Most of these will probably work on open models: https://www.jailbreakchat.com/
 
 See:
 * https://twitter.com/abacaj/status/1734450551381754063
+
+## System Prompts
+* https://github.com/spdustin/ChatGPT-AutoExpert/blob/main/System%20Prompts.md
+* https://news.ycombinator.com/item?id=37879077
