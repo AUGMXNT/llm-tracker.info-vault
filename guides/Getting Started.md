@@ -8,6 +8,7 @@ All of these have free access, although many may require user registration, and 
   - [OpenAI ChatGPT](https://chat.openai.com/) - the free version uses 3.5, and is not as smart, but good for dipping your toe in. 
     - [chat.getgpt.world](https://chat.getgpt.world/) - HK (Alibaba Cloud) based server w/ gpt-3.5-turbo access
   - [Anthropic Claude](https://claude.ai/) - this is an interesting alternative, has super long context window (short-term memory) so can interact w/ very long files for summarization, etc.
+  - [HuggingFace Chat](https://huggingface.co/chat/) - chat for free w/ some of the best open models
   - [ChatNBX](https://chat.nbox.ai/) - talk to some of the best open models and compare
   - [Perplexity.ai](https://www.perplexity.ai/) - the best free service w/ web search capabilities 
     - [Perplexity Labs](https://labs.perplexity.ai/) - hosts some open models to try as well
