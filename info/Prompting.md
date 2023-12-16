@@ -21,3 +21,6 @@ See:
 ## System Prompts
 * https://github.com/spdustin/ChatGPT-AutoExpert/blob/main/System%20Prompts.md
 * https://news.ycombinator.com/item?id=37879077
+
+* https://arxiv.org/abs/2309.16797
+* https://github.com/vaughanlove/PromptBreeder/tree/main
