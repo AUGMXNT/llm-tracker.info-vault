@@ -1,3 +1,4 @@
+# General
 - [MosaicML Model Gauntlet](https://www.mosaicml.com/llm-evaluation) - 34 benchmarks in 6 categories
 - [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)
     - warning, their MMLU results are wrong, throwing off the whole ranking: [https://twitter.com/Francis\_YAO\_/status/1666833311279517696](https://twitter.com/Francis_YAO_/status/1666833311279517696)
@@ -28,7 +29,11 @@ See also:
 - [Papers and resources for LLMs evaluation](https://github.com/mlgroupjlu/llm-eval-survey)
 - [2023-08-17 HN Discussion on evals](https://news.ycombinator.com/item?id=37157323)
 
-### Code
+# Hallucination
+[Vectara Hallucination Leaderboard
+](https://huggingface.co/spaces/vectara/Hallucination-evaluation-leaderboard)
+
+# Code
 
 - [Big Code Models Leaderboard](https://huggingface.co/spaces/bigcode/bigcode-models-leaderboard) - HF style leaderboard
 - [Zero-Shot Replication Framework](https://github.com/emrgnt-cmplxty/zero-shot-replication) - replicate HumanEval, LeetCodeSparks, LeetCode100
@@ -40,11 +45,20 @@ See also:
 - [phi-1 prompt tests](https://twitter.com/khandelia1000/status/1675939866389934097)
     - [https://colab.research.google.com/drive/1mSb2t8NDz0o\_Cc8VgTMbhOg8kIh-cRIu?usp=sharing](https://colab.research.google.com/drive/1mSb2t8NDz0o_Cc8VgTMbhOg8kIh-cRIu?usp=sharing)
 
-### Roleplay  
+# Roleplay  
 
 
 - [Another LLM Roleplay Rankings](https://rentry.co/ALLMRR)
 - [The 'Ayumi' Inofficial LLM ERP Model Rating](https://rentry.org/ayumi_erp_rating)
+
+# Context
+## InfiniteBench
+* https://github.com/OpenBMB/InfiniteBench 
+* https://huggingface.co/datasets/xinrongzhang2022/InfiniteBench 
+* https://www.reddit.com/r/LocalLLaMA/comments/18ct9xh/infinitebench_100k_longcontext_benchmark/
+
+# Japanese
+* 
 
 # New
 * EvalPlus 0.2 - https://github.com/evalplus/evalplus/releases/tag/v0.2.0
