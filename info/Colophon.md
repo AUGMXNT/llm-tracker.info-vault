@@ -18,6 +18,10 @@ While Bookstack has worked pretty well, I'm actually not such a big fan of it's 
 
 ### Options
 * Bookstack - our current winner, just keep running it
+* Flowershow or Quartz - skip contributors, just keep this as a personal logbook? Will make editin a lot smoother
 
 ### Unsuitable
 * Hedgedoc - doesn't support good search, navigation, but very convenient editing
+* Outline - slick, but was impossible to setup/lost data before
+* Affine, Appflowy, AnyType are neat Notion clones but aren't suitable for publishing
+* [OtterWiki](https://github.com/redimp/otterwiki) - neat, but not quite right for this
