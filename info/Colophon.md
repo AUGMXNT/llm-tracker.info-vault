@@ -8,6 +8,7 @@ While Bookstack has worked pretty well, I'm actually not such a big fan of it's 
 
 ### Requirements
 * Fast Editing
+  * Ideally collaboration support but not necessary
 * Good Markdown support (ideally in-line editing)
   * Ideally could work w/ git, MarkText, Obsidian etc, but not a requirement
 * Navigation (eg Hedgedoc much faster to edit but has no nav)
