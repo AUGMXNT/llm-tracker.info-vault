@@ -21,3 +21,4 @@ Groq
 https://news.ycombinator.com/item?id=38739199
 https://chat.groq.com/
 https://groq.com/wp-content/uploads/2023/05/GroqISCAPaper2022_ASoftwareDefinedTensorStreamingMultiprocessorForLargeScaleMachineLearning-1.pdf
+https://www.bittware.com/products/groq/
