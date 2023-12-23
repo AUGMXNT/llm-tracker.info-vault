@@ -1,6 +1,9 @@
 Speed collection:
 https://huggingface.co/collections/leonardlin/speed-6583d7a3b02f38ef348139ef
 
+Good recent summary of techniques:
+https://vgel.me/posts/faster-inference/
+
 
 Exponentially Faster Language Modelling
   * https://arxiv.org/abs/2311.10770
