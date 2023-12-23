@@ -14,3 +14,6 @@ https://lmsys.org/blog/2023-11-21-lookahead-decoding/
 
 Medusa
 https://sites.google.com/view/medusa-llm
+
+https://chat.groq.com/
+https://groq.com/wp-content/uploads/2023/05/GroqISCAPaper2022_ASoftwareDefinedTensorStreamingMultiprocessorForLargeScaleMachineLearning-1.pdf
