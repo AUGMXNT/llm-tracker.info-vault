@@ -22,3 +22,5 @@ https://news.ycombinator.com/item?id=38739199
 https://chat.groq.com/
 https://groq.com/wp-content/uploads/2023/05/GroqISCAPaper2022_ASoftwareDefinedTensorStreamingMultiprocessorForLargeScaleMachineLearning-1.pdf
 https://www.bittware.com/products/groq/
+
+https://yaofu.notion.site/Towards-100x-Speedup-Full-Stack-Transformer-Inference-Optimization-43124c3688e14cffaf2f1d6cbdf26c6c
