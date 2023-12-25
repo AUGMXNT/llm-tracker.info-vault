@@ -24,4 +24,4 @@ While Bookstack has worked pretty well, I'm actually not such a big fan of it's 
 * Hedgedoc - doesn't support good search, navigation, but very convenient editing
 * Outline - slick, but was impossible to setup/lost data before
 * Affine, Appflowy, AnyType are neat Notion clones but aren't suitable for publishing
-* [OtterWiki](https://github.com/redimp/otterwiki) - neat, but not quite right for this
+* [OtterWiki](https://github.com/redimp/otterwiki) - neat, but I don't n
