@@ -17,6 +17,8 @@ After maintaining llm-tracker for a year, I'm not seeing any third party contrib
 * Publishing
 	* https://facebook.github.io/watchman/ script?
 	* Git Action?
+* Site-Wide Index Page
+	* 404 should renderr this component?
 * Git Blame rendering view (see how hold something is)
 
 
