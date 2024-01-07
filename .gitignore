@@ -1,0 +1,8 @@
+# https://publish.obsidian.md/git-doc/Tips-and-Tricks
+
+# to exclude Obsidian's settings (including plugin and hotkey configurations)
+.obsidian/
+
+# Add below lines to exclude OS settings and caches
+.trash/
+.DS_Store
