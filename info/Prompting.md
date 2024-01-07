@@ -6,6 +6,8 @@
 * https://oneusefulthing.substack.com/p/power-and-weirdness-how-to-use-bing
 * [Prompt Engineering for 7b LLMs](https://www.reddit.com/r/LocalLLaMA/comments/18e929k/prompt_engineering_for_7b_llms/)
 
+https://arxiv.org/abs/2312.16171v1
+
 ## Prompt Format
 Most instruct/chat fine tunes use their own formatting (which can wildly differ). These can usually be dug out of model card/repos/localllama discussion/discords, but the best single reference I've found is oobabooga's Instruction Templates: 
 * [https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates](https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates)

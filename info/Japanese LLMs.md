@@ -1,3 +1,19 @@
+For more in depth discussions on Japanese LLMs, see:
+* https://github.com/AUGMXNT/shisa/wiki
+
+
+ELYZA-100 Testing
+https://qiita.com/wayama_ryousuke/items/105a164e5c80c150caf1#appendix-2-%E4%BB%96%E3%81%AE%E3%83%A2%E3%83%87%E3%83%AB%E3%82%82%E8%A9%95%E4%BE%A1%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F
+https://docs.google.com/spreadsheets/d/1nOWtneRdrkxwQbAN0rWmXqiJXR9IXK9lVkyDjQTqNGc/edit#gid=1023787356
+
+JA-MT-Bench
+https://github.com/AUGMXNT/shisa/wiki/Evals-:-JA-MT%E2%80%90Bench
+
+https://github.com/AUGMXNT/gpt4-autoeval
+
+
+
+
 There has been a stream of open Japanese LLMs being trained but they are on average far behind their English counterparts. The current most promising open model for conversation and instruction are the ELYZA Llama2-based models.
 
 GPT-4 and gpt-3.5-turbo are still far ahead, however.
