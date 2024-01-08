@@ -307,7 +307,11 @@ Traceback (most recent call last):
     from vllm._C import cuda_utils
 ImportError: /home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/_C.cpython-311-x86_64-linux-gnu.so: undefined symbol: _Z9gptq_gemmN2at6TensorES0_S0_S0_S0_b
 ```
-
+## bitsandbytes
+For current status, see:
+- https://github.com/TimDettmers/bitsandbytes/pull/756
+The most current working fork (related to the that PR):
+- https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6/tree/rocm
 ## TensorFlow
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
 ```
