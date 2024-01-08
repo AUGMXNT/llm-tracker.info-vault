@@ -1,4 +1,12 @@
-As of August 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is available for Linux or [Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html).
+As of August 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is available for Linux or [Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html). It's best to check the latest docs for information:
+* https://rocm.docs.amd.com/en/latest/
+# Hardware
+These are the latest officially supported cards:
+* https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html
+* https://rocm.docs.amd.com/projects/install-on-windows/en/latest/reference/system-requirements.html
+If you have a supported family, you can usually use set `HSA_OVERRIDE_GFX_VERSION` to the closest supported version (eg, `HSA_OVERRIDE_GFX_VERSION=10.3.0`) and get things working.
+
+
 
 # Linux
 Testing was done with a Radeon VII (16GB HBM2 VRAM, gfx906) on Arch Linux
@@ -7,11 +15,9 @@ Testing was done with a Radeon VII (16GB HBM2 VRAM, gfx906) on Arch Linux
 
 
 ## RDNA3 (eg 7900 XT, XTX)
-These **are not officially supported w/ ROCm 5.6** (but some support coming in 5.7 in Fall 2023), however you *might* be able to get it work for certain tasks (SD, LLM inferencing):
-* [https://github.com/RadeonOpenCompute/ROCm/issues/1880](https://github.com/RadeonOpenCompute/ROCm/issues/1880)
-* [https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63](https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63)
-* [https://github.com/are-we-gfx1100-yet]([https://github.com/are-we-gfx1100-yet)
-* [https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/](https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/)
+As of ROCm 5.7, Radeon RX 7900 XTX, XT, and PRO W7900 are officially supported and many old hacks are no longer necessary:
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/compatibility.html
+- https://are-we-gfx1100-yet.github.io/
 * [https://news.ycombinator.com/item?id=36574179](https://news.ycombinator.com/item?id=36574179)
 
 ## AMD APU
