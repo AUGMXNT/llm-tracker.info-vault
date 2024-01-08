@@ -24,7 +24,8 @@ For publishing, we use [Quartz](https://quartz.jzhao.xyz/). It's very similar to
 | Weirdness | Does not seem to pick up changes to `config.mjs` in the content folder? | When generating, the `public` folder, although it has the same inode appears empty when directly mounted in docker (for Caddy). This can be worked around by mounting the parent folder |
 
 ## TODO
-* Workflow
+* Should Quartz repo be public?
+* Workflow (temp: update.sh script)
 	* Github action for pull to run a publish
 * Nav
 	* Always Show?
