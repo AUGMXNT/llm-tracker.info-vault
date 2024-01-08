@@ -253,6 +253,17 @@ The ROCm kernel is very un-optimized vs the CUDA version, but you can see while 
 | Inference tok/s | 57.9 | 61.2 | 116.5 | 137.6 |
 | Inference % | -5.4% | 0% | +90.4% | +124.8% |
 * Tested 2024-01-08 with ExLlamaV2 `3b0f523` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.6.7-arch1-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
+## MLC
+### Setup
+```
+mamba create -n mlc python=3.11
+mamba install -c conda-forge libgcc-ng
+python3 -m pip install --pre -U -f https://mlc.ai/wheels mlc-chat-nightly-rocm57 mlc-ai-nightly-rocm57
+
+export PATH=/opt/rocm/llvm/bin:$PATH
+```
+* https://llm.mlc.ai/docs/install/mlc_llm.html#install-mlc-packages
+* https://github.com/mlc-ai/mlc-llm/issues/1216
 ## vLLM
 vLLM supports ROCm starting w/ v0.2.4, but only on MI200 cards...
 https://docs.vllm.ai/en/latest/getting_started/amd-installation.html#build-from-source-rocm
