@@ -6,14 +6,6 @@ These are the latest officially supported cards:
 * https://rocm.docs.amd.com/projects/install-on-windows/en/latest/reference/system-requirements.html
 If you have a supported family, you can usually use set `HSA_OVERRIDE_GFX_VERSION` to the closest supported version (eg, `HSA_OVERRIDE_GFX_VERSION=10.3.0`) and get things working.
 
-
-
-# Linux
-Testing was done with a Radeon VII (16GB HBM2 VRAM, gfx906) on Arch Linux
-
-[Officially Supported GPUs for ROCm 5.6](https://rocm.docs.amd.com/en/latest/release/gpu_os_support.html#supported-gpus) are: Radeon VII, Radeon Pro VII, V620, W6800, and MI Instinct MI50, MI100, MI210, MI250, MI250X
-
-
 ## RDNA3 (eg 7900 XT, XTX)
 As of ROCm 5.7, Radeon RX 7900 XTX, XT, and PRO W7900 are officially supported and many old hacks are no longer necessary:
 - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/compatibility.html
@@ -25,14 +17,24 @@ Performance 65W 7940HS w/ 64GB of DDR5-5600 (83GB/s theoretical memory bandwidth
 * On small (7B) models that fit within the UMA VRAM, ROCm performance is very similar to my M2 MBA's Metal performance. Inference is barely faster than CLBlast/CPU though (~10% faster).
 * On a big (70B) model that doesn't fit into allocated VRAM, the ROCm inferences slower than CPU w/ -ngl 0 (CLBlast crashes), and CPU perf is about as expected - about 1.3 t/s inferencing a Q4_K_M. Besides being slower, the ROCm version also caused amdgpu exceptions that killed Wayland 2/3 times (I'm running Linux 6.5.4, ROCm 5.6.1, mesa 23.1.8).
 
-Note BIOS allows me to set up to 8GB for VRAM in BIOS (UMA_SPECIFIED GART), ROCm does not support GTT (about 35GB/64GB if it did support it, which is not enough for a 70B Q4_0, not that you'd want to at those speeds).
+Note: BIOS allows me to set up to 8GB for VRAM in BIOS (UMA_SPECIFIED GART), ROCm does not support GTT (about 35GB/64GB if it did support it, which is not enough for a 70B Q4_0, not that you'd want to at those speeds).
 
 Vulkan drivers can use GTT memory dynamically, but w/ MLC LLM, Vulkan version is 35% slower than CPU-only llama.cpp. Also, the max GART+GTT is still too small for 70B models.
 * It may be possible to unlock more UMA/GART memory: [https://winstonhyypia.medium.com/amd-apu-how-to-modify-the-dedicated-gpu-memory-e27b75905056](https://winstonhyypia.medium.com/amd-apu-how-to-modify-the-dedicated-gpu-memory-e27b75905056)
 * There is custom allocator that may allow PyTorch to use GTT memory (only useful for PyTorch inferencing obviously): [https://github.com/pomoke/torch-apu-helper](https://github.com/pomoke/torch-apu-helper)
 * A writeup of someone playing around w/ ROCm and SD on an older APU: [https://www.gabriel.urdhr.fr/2022/08/28/trying-to-run-stable-diffusion-on-amd-ryzen-5-5600g/](https://www.gabriel.urdhr.fr/2022/08/28/trying-to-run-stable-diffusion-on-amd-ryzen-5-5600g/)
+## Radeon VII
+We have some previous known good memory timings for an old Radeon VII card:
+```
+sudo sh -c 'echo manual > /sys/class/drm/card0/device/power_dpm_force_performance_level'
+sudo sh -c 'echo 8 > /sys/class/drm/card0/device/pp_dpm_sclk'
+sudo amdmemorytweak --gpu 0 --ref 7500 --rtp 6 --rrds 3 --faw 12 --ras 19 --rc 30 --rcdrd 11 --rp 11
+```
 
+# Linux
 ## Arch Linux Setup
+Arch Linux setup is fairly straightforward (can be easier than the official install!) but is community supported by [rocm-arch](https://github.com/rocm-arch/rocm-arch). If you're running an Arch system already, this should be fine, but if you're running a system dedicated to ML, then you should prefer Ubuntu.
+
 Install ROCm:
 ```
 # all the amd gpu compute stuff
@@ -52,142 +54,141 @@ mamba create -n llm
 mamba activate llm
 ```
 
-## OC
-We have some previous known good memory timings for our Radeon VII card:
-```
-sudo sh -c 'echo manual > /sys/class/drm/card0/device/power_dpm_force_performance_level'
-sudo sh -c 'echo 8 > /sys/class/drm/card0/device/pp_dpm_sclk'
-sudo amdmemorytweak --gpu 0 --ref 7500 --rtp 6 --rrds 3 --faw 12 --ras 19 --rc 30 --rcdrd 11 --rp 11
-```
+## Ubuntu
+Ubuntu is the most well documented of the officially supported distros:
+* https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/index.html
+* I recommend using the latest LTS (22.04.3) with the HWE kernel
+	* https://ubuntu.com/kernel/lifecycle
+* The install documents are pretty much complete
+	* https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/ubuntu.html
+* You can now use `apt install rocm` to install "everything" (except the drivers, you'll still need `amdgpu-dkms` first).
+* Be sure also to look at the "post-install instructions"
+	* https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/post-install.html
 
-## llama.cpp
-Let's first try llama.cpp
+## cmath
+You may run into some compile errors. You will need `libstdc++-12-dev` in Ubuntu:
 ```
-mkdir ~/llm
-cd ~/llm
+/opt/rocm-6.0.0/lib/llvm/lib/clang/17.0.0/include/cuda_wrappers/cmath:27:15: fatal error: 'cmath' file not found
+#include_next <cmath>
+
+sudo apt install libstdc++-12-dev
+```
+## llama.cpp
+llama.cpp has  ROCm support built-in now:
+```
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
-LLAMA_CLBLAST=1 make
+make LLAMA_HIPBLAS=1
 ```
-* [https://www.reddit.com/r/LocalLLaMA/comments/13p8zq2/update_opencl_is_merged_amd_gpus_now_work_with/](https://www.reddit.com/r/LocalLLaMA/comments/13p8zq2/update_opencl_is_merged_amd_gpus_now_work_with/)
-* [https://www.reddit.com/r/LocalLLaMA/comments/13m8li2/finally_got_a_model_running_on_my_xtx_using/](https://www.reddit.com/r/LocalLLaMA/comments/13m8li2/finally_got_a_model_running_on_my_xtx_using/)
+* https://github.com/ggerganov/llama.cpp/#hipblas
+* You can use `LLAMA_HIP_UMA=1` for unified memory for APUs
 
-We're benchmarking with with a recent llama-13b q4_0 fine tune ([Nous Hermes](https://huggingface.co/TheBloke/Nous-Hermes-13B-GGML))
-
-Here are the results from 2023-06-29 [commit 96a712c](https://github.com/ggerganov/llama.cpp/commit/96a712ca1b7f427e3bd7ffc0c70b2105cfc7fbf1)
-
-
-NOTE: We use `-ngl 99` to ensure all layers are loaded in memory.
-
+7900 XT + 7900 XTX used together segfaults :(
 ```
-CUDA_VISIBLE_DEVICES=0 ./main -m ../models/nous-hermes-13b.ggmlv3.q4_0.bin -ngl 99 -n 2048 --ignore-eos
+$ ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
+ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
+ggml_init_cublas: CUDA_USE_TENSOR_CORES: yes
+ggml_init_cublas: found 2 ROCm devices:
+  Device 0: Radeon RX 7900 XT, compute capability 11.0, VMM: no
+  Device 1: Radeon RX 7900 XTX, compute capability 11.0, VMM: no
+| model                          |       size |     params | backend    | ngl | test       |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
+Segmentation fault (core dumped)
+```
 
-main: build = 762 (96a712c)
-main: seed  = 1688035176
-ggml_opencl: selecting platform: 'AMD Accelerated Parallel Processing'
-ggml_opencl: selecting device: 'gfx906:sramecc+:xnack-'
-ggml_opencl: device FP16 support: true
-llama.cpp: loading model from ../models/nous-hermes-13b.ggmlv3.q4_0.bin
-llama_model_load_internal: format     = ggjt v3 (latest)
-llama_model_load_internal: n_vocab    = 32001
-llama_model_load_internal: n_ctx      = 512
-llama_model_load_internal: n_embd     = 5120
-llama_model_load_internal: n_mult     = 256
-llama_model_load_internal: n_head     = 40
-llama_model_load_internal: n_layer    = 40
-llama_model_load_internal: n_rot      = 128
-llama_model_load_internal: ftype      = 2 (mostly Q4_0)
-llama_model_load_internal: n_ff       = 13824
-llama_model_load_internal: model size = 13B
-llama_model_load_internal: ggml ctx size =    0.09 MB
-llama_model_load_internal: using OpenCL for GPU acceleration
-llama_model_load_internal: mem required  = 2223.88 MB (+ 1608.00 MB per state)
-llama_model_load_internal: offloading 40 repeating layers to GPU
-llama_model_load_internal: offloading non-repeating layers to GPU
-llama_model_load_internal: offloading v cache to GPU
-llama_model_load_internal: offloading k cache to GPU
-llama_model_load_internal: offloaded 43/43 layers to GPU
-llama_model_load_internal: total VRAM used: 8416 MB
-llama_new_context_with_model: kv self size  =  400.00 MB
+7900 XT:
+```
+$ CUDA_VISIBLE_DEVICES=0 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
+ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
+ggml_init_cublas: CUDA_USE_TENSOR_CORES: yes
+ggml_init_cublas: found 1 ROCm devices:
+  Device 0: Radeon RX 7900 XT, compute capability 11.0, VMM: no
+| model                          |       size |     params | backend    | ngl | test       |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |   2065.04 ± 4.61 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |     96.58 ± 0.02 |
 
-system_info: n_threads = 4 / 8 | AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 | 
-sampling: repeat_last_n = 64, repeat_penalty = 1.100000, presence_penalty = 0.000000, frequency_penalty = 0.000000, top_k = 40, tfs_z = 1.000000, top_p = 0.950000, typical_p = 1.000000, temp = 0.800000, mirostat = 0, mirostat_lr = 0.100000, mirostat_ent = 5.000000
-generate: n_ctx = 512, n_batch = 512, n_predict = 2048, n_keep = 0
+build: b7e7982 (1787)
+```
 
+7900 XTX:
+```
+$ CUDA_VISIBLE_DEVICES=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
+ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
+ggml_init_cublas: CUDA_USE_TENSOR_CORES: yes
+ggml_init_cublas: found 1 ROCm devices:
+  Device 0: Radeon RX 7900 XTX, compute capability 11.0, VMM: no
+| model                          |       size |     params | backend    | ngl | test       |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |   2424.44 ± 1.23 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |    118.93 ± 0.04 |
+
+build: b7e7982 (1787)
+```
+
+While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and compute, in practice, with ROCm 6.0, hipBLAS still falls behind cuBLAS in llama.cpp:
+
+|  | 7900 XT | 7900 XTX | RTX 3090 | RTX 4090 |
+| ---- | ---- | ---- | ---- | ---- |
+| Memory GB | 20 | 24 | 24 | 24 |
+| Memory BW GB/s | 800 | 960 | 936.2 | 1008 |
+| FP32 TFLOPS | 51.48 | 61.42 | 35.58 | 82.58 |
+| FP16 TFLOPS | 103.0 | 122.8 | 35.58 | 82.58 |
+| Prompt tok/s | 2065 | 2424 | 2764 | 4650 |
+| Prompt % | -14.8% | 0% | +14.0% | +91.8% |
+| Inference tok/s | 96.6 | 118.9 | 136.1 | 162.1 |
+| Inference % | -18.8% | 0% | +14.5% | +36.3% |
+* Tested 2024-01-08 with llama.cpp `b737982 (1787)` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.6.7-arch1-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
+
+## ExLlamaV2
+Install is straightforward:
+```bash
+mamba create -n exllamav2 python=3.11
+mamba activate exllamav2
+
+# PyTorch: https://pytorch.org/get-started/locally/
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+
+# Regular install
+git clone https://github.com/turboderp/exllamav2
+cd exllamav2
+pip install -r requirements.txt
+```
+
+7900 XT
+```bash
+$ CUDA_VISIBLE_DEVICES=0 python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -ps
 ...
+ ** Length  4096 tokens:   3457.0153 t/s
 
-llama_print_timings:        load time =  6946.39 ms
-llama_print_timings:      sample time =  2172.76 ms /  2048 runs   (    1.06 ms per token,   942.58 tokens per second)
-llama_print_timings: prompt eval time = 51096.76 ms /  1801 tokens (   28.37 ms per token,    35.25 tokens per second)
-llama_print_timings:        eval time = 308604.23 ms /  2040 runs   (  151.28 ms per token,     6.61 tokens per second)
-llama_print_timings:       total time = 362807.86 ms
-```
-
-We get 6.61 t/s.
-
-`rocm-smi` looks something like:
-```
-GPU  Temp (DieEdge)  AvgPwr  SCLK     MCLK    Fan     Perf    PwrCap  VRAM%  GPU%
-0    59.0c           112.0W  1801Mhz  800Mhz  44.71%  manual  250.0W   49%   40%
-```
-## llama.cpp HIP fork
-Now let's see if [HIPified CUDA](https://github.com/ggerganov/llama.cpp/pull/1087) makes a difference using [this fork](https://github.com/SlyEcho/llama.cpp/tree/hipblas)
-
-Here are the results from a 13b-q4_0 on 2023-06-29, [commit 04419f1](https://github.com/SlyEcho/llama.cpp/commit/04419f18947e7b0dc43c07869eac3965f22b34cf) 
-```
-git clone https://github.com/SlyEcho/llama.cpp llama.cpp-hip
-cd llama.cpp-hip
-git fetch
-make -j8 LLAMA_HIPBLAS=1
-
-CUDA_VISIBLE_DEVICES=0 ./main -m ../models/nous-hermes-13b.ggmlv3.q4_0.bin -ngl 99 -n 2048 --ignore-eos
-
-main: build = 821 (04419f1)
-main: seed  = 1688034262
-ggml_init_cublas: found 1 CUDA devices:
-  Device 0: AMD Radeon VII
-llama.cpp: loading model from ../models/nous-hermes-13b.ggmlv3.q4_0.bin
-llama_model_load_internal: format     = ggjt v3 (latest)
-llama_model_load_internal: n_vocab    = 32001
-llama_model_load_internal: n_ctx      = 512
-llama_model_load_internal: n_embd     = 5120
-llama_model_load_internal: n_mult     = 256
-llama_model_load_internal: n_head     = 40
-llama_model_load_internal: n_layer    = 40
-llama_model_load_internal: n_rot      = 128
-llama_model_load_internal: ftype      = 2 (mostly Q4_0)
-llama_model_load_internal: n_ff       = 13824
-llama_model_load_internal: model size = 13B
-llama_model_load_internal: ggml ctx size =    0.09 MB
-llama_model_load_internal: using CUDA for GPU acceleration
-llama_model_load_internal: mem required  = 2135.99 MB (+ 1608.00 MB per state)
-llama_model_load_internal: allocating batch_size x 1 MB = 512 MB VRAM for the scratch buffer
-llama_model_load_internal: offloading 40 repeating layers to GPU
-llama_model_load_internal: offloading non-repeating layers to GPU
-llama_model_load_internal: offloading v cache to GPU
-llama_model_load_internal: offloading k cache to GPU
-llama_model_load_internal: offloaded 43/43 layers to GPU
-llama_model_load_internal: total VRAM used: 9016 MB
-llama_new_context_with_model: kv self size  =  400.00 MB
-
-system_info: n_threads = 4 / 8 | AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0
- | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 |
- sampling: repeat_last_n = 64, repeat_penalty = 1.100000, presence_penalty = 0.000000, frequency_penalty = 0.000000, top_k = 40, tfs_z = 1.000000, top_p = 0.950000, typical_p = 1.000000, temp = 0.800000, mirostat = 0, mirostat_lr = 0.100000, mirostat_ent = 5.000000
-generate: n_ctx = 512, n_batch = 512, n_predict = 2048, n_keep = 0
-
+$ CUDA_VISIBLE_DEVICES=0 python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -s
 ...
-
-llama_print_timings:        load time =  4049.27 ms
-llama_print_timings:      sample time =  1307.03 ms /  2048 runs   (    0.64 ms per token,  1566.91 tokens per second)
-llama_print_timings: prompt eval time = 17486.67 ms /  1801 tokens (    9.71 ms per token,   102.99 tokens per second)
-llama_print_timings:        eval time = 157571.58 ms /  2040 runs   (   77.24 ms per token,    12.95 tokens per second)
-llama_print_timings:       total time = 176912.26 m
+ ** Position  3968 + 128 tokens:   57.9066 t/s
 ```
-* See also: [https://github.com/ggerganov/llama.cpp/pull/1087](https://github.com/ggerganov/llama.cpp/pull/1087)
 
-We get 12.95 t/s, almost 2X faster than the OpenCL version. If you are using llama.cpp on AMD GPUs, I think it's safe to say you should definitely use this HIP fork.
+7900 XTX
+```bash
+$ CUDA_VISIBLE_DEVICES=1 python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -ps
+...
+ ** Length  4096 tokens:   3927.6424 t/s
 
-Note, the 4C Zen2 Ryzen 2400G CPU gets about 2.2 t/s, so performance is about 6X.
+$ CUDA_VISIBLE_DEVICES=1 python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -s
+...
+ ** Position  3968 + 128 tokens:   61.2481 t/s
+```
+
+Running with both GPUs work, although it defaults to loading everything onto one. If you force the VRAM, interestingly, you can get batch=1 inference to perform slightly better:
+```
+$ python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -ps -gs 4,4
+...
+ ** Length  4096 tokens:   3458.9969 t/s
+
+$ python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -s -gs 4,4
+...
+ ** Position  3968 + 128 tokens:   65.2594 t/s 
+```
+
+Obviously, the ROCm kernel is very unoptimized vs the CUDA
 
 ## exllama
 [ROCm support was merged](https://github.com/turboderp/exllama/pull/7) 2023-06-07.
