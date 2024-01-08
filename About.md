@@ -1,9 +1,8 @@
 This site was started in early 2023 and is maintained by [Leonard Lin](https://leonardlin.com/)  as a way to track his exploration of LLMs and generative AI.
 
-The contents of the site is now an [obsidian-git](https://github.com/denolehov/obsidian-git) backed Obsidian notebook and pull requests for content can be submitted to the [vault repo](https://github.com/AUGMXNT/llm-tracker.info-vault/).
+This site was originally using [BookStack](https://www.bookstackapp.com/) but is now published with [Quartz](https://quartz.jzhao.xyz/), backed by an [obsidian-git](https://github.com/denolehov/obsidian-git) synced [Obisdian](https://obsidian.md/) notebook and pull requests for content can be submitted to the [vault repo](https://github.com/AUGMXNT/llm-tracker.info-vault/).
 
 For publishing, we use [Quartz](https://quartz.jzhao.xyz/). It's very similar to [Flowershow](https://flowershow.app/) but a bit faster, more active, and speedy.
-
 
 |  | [Flowershow](https://flowershow.app) | [Quartz](https://quartz.jzhao.xyz/) |
 | ---- | ---- | ---- |
@@ -23,16 +22,24 @@ For publishing, we use [Quartz](https://quartz.jzhao.xyz/). It's very similar to
 | Graph View |  |  |
 | Markup |  |  |
 | Weirdness | Does not seem to pick up changes to `config.mjs` in the content folder? | When generating, the `public` folder, although it has the same inode appears empty when directly mounted in docker (for Caddy). This can be worked around by mounting the parent folder |
-Testing update
-## TODO:
-* Add Comments
-	* https://flowershow.app/docs/comments
 
-Questions:
-* Can we do redirects with Vercel?
-	* We need to edit the router...
-	* We should figure out existing URLs
-	* And auto search for redirects
-
-LLM List
-https://llm.extractum.io/list/lm.extractum.io/list/tum.io/list//list//
+## TODO
+* Workflow
+	* Github action for pull to run a publish
+* Nav
+	* Always Show?
+	* Don't have scrollbar:overflow
+	* Always expand?
+* Components
+	* Top Links component
+		* Track most popular articles and dynamically update
+	* Last Updated component
+	* Newly Created component
+* Publishing
+	* https://facebook.github.io/watchman/ script?
+	* Git Action?
+* Site-Wide Index Page
+	* 404 should render this component?
+* Git Blame rendering view (see how hold something is)
+* Comments
+	* https://giscus.app/
