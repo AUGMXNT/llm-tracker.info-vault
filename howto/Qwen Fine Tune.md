@@ -7,12 +7,12 @@ Qwen is pretty tricky to work with.  Some things to watch out for:
 
 ### Transformers
 Qwen wants you to use `transformers==4.32.0` primarily because `4.35.0` changes how gradient checkpointing works. Still we should use the latest to get the fixes for NEFTune etc.
-```
+```shell
 pip install -U git+https://github.com/huggingface/transformers.git
 ```
 
 To fix this we have to change `modeling_qwen.py` in the model folder:
-```
+```python
 def _set_gradient_checkpointing(self, enable: bool = False, gradient_checkpointing_func: Callable = None):
         is_gradient_checkpointing_set = False
 
@@ -36,16 +36,16 @@ def _set_gradient_checkpointing(self, enable: bool = False, gradient_checkpointi
 ### QLoRA
 I ran into this problem trying to QLoRA. This also requires a change to `modeling_qwen.py` otherwise you will get an error in [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) like:
 
-```
+```shell
 RuntimeError: value cannot be converted to type at::Half without overflow
 ```
 or with Jon Durbin's [QLora fork](https://github.com/jondurbin/qlora) like:
-```
+```shell
 RuntimeError: one of the variables needed for gradient computation has been modified by an inplace operation: [torch.cuda.FloatTensor [2, 1, 1, 363]] is at version 41; expected version 39 instead. Hint: enable anomaly detection to find the operation that failed to compute its gradient, with torch.autograd.set_detect_anomaly(True).
 ```
 
 Here's the fix:
-```
+```python
 # Change `attention_mask.masked_fill_(~causal_mask, torch.finfo(query.dtype).min)`
 
 attention_mask.masked_fill(~causal_mask, -65504.0)
@@ -54,7 +54,7 @@ attention_mask.masked_fill(~causal_mask, -65504.0)
 * Translated: https://github-com.translate.goog/hiyouga/LLaMA-Factory/issues/1475?_x_tr_sl=zh-CN&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp
 
 When I was using `use_flash_attn` I was also getting this error:
-```
+```python
 assert all((i.dtype in [torch.float16, torch.bfloat16] for i in (q, k, v)))
 ```
 
@@ -65,7 +65,7 @@ For 4/8-bit usage, I think you can't use Flash Attention...
 ## jondurbin/qlora
 
 Set in model `config.json`:
-```
+```json
 "use_flash_attn": false,
 ```
 * https://github.com/hiyouga/LLaMA-Factory/issues/601
@@ -81,7 +81,7 @@ This time, we'll try a QLoRA w/ https://github.com/hiyouga/LLaMA-Factory that ha
 
 We will be doing a tune on the new https://huggingface.co/rinna/nekomata-14b continued pre-train (+66B JA/EN tokens).
 
-```
+```shell
 # Base
 git clone https://github.com/hiyouga/LLaMA-Factory.git
 mamba create -n llama-factory python=3.11
@@ -105,7 +105,7 @@ pip install "unsloth[kaggle] @ git+https://github.com/unslothai/unsloth.git"
 ```
 
 Basic config that worked:
-```
+```shell
 CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
     --stage sft \
     --do_train True \
@@ -141,7 +141,7 @@ CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
 ### More QLoRA
 Settings + DeepSpeed 3 from [XVERSE-65B repo](https://github.com/xverse-ai/XVERSE-65B#%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83):
 
-```
+```shell
 deepspeed --num_gpus 8 src/train_bash.py \
     --deepspeed deepspeed.json \
     --stage sft \
@@ -189,7 +189,7 @@ deepspeed --num_gpus 8 src/train_bash.py \
 
 ### ShareGPT Formt
 It doesn't work with our dataset:
-```
+```shell
 ^^^^^^^^^^^^^
   File "/home/local/shisa/train/nekomata/LLaMA-Factory/src/llmtuner/data/loader.py", line 122, in convert_format
     raise ValueError("Only accepts conversation in u/a/u/a/u/a order.")
@@ -202,7 +202,7 @@ But you can use the (smaller, so better for testing anyway) [chatntq sharegpt da
 **STATUS:** Uh, I couldn't get this working...
 
 To take advantage of unsloth, first we need to llamafy Qwen models with https://github.com/hiyouga/LLaMA-Factory/blob/main/tests/llamafy_qwen.py:
-```
+```shell
 # Convert to safetensors first:
 wget https://raw.githubusercontent.com/oobabooga/text-generation-webui/main/convert-to-safetensors.py
 time CUDA_VISIBLE_DEVICES=0 python convert-to-safetensors.py /models/llm/hf/rinna_nekomata-14b --output /models/llm/hf/rinna_nekomata-14b --max-shard-size=10GB --bf16
@@ -220,7 +220,7 @@ cp /models/llm/hf/rinna_nekomata-14b/token* ./
 ```
 
 In `data/dataset_info.json` add as the first item:
-```
+```json
 "ultra-orca-boros-en-ja-v1": {
     "hf_hub_url": "augmxnt/ultra-orca-boros-en-ja-v1",
     "formatting": "sharegpt"
@@ -228,13 +228,13 @@ In `data/dataset_info.json` add as the first item:
 ```
 
 OK, now we should be ready to tune. To get the web interface:
-```
+```shell
 # only single device supported by llama-factory and unsloth
 CUDA_VISIBLE_DEVICES=0 python src/train_web.py
 ```
 
 It'll generate a script we'll mostly use:
-```
+```shell
 CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
     --stage sft \
     --do_train True \
@@ -274,9 +274,9 @@ CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
 ## Axolotl
 To get Axolotl with Qwen working we need to be *very* careful and specific about our libraries:
 
-## Manual Setup
+### Manual Setup
 Default environment setup:
-```
+```shell
 # in case you need to start over... (which I did, many, many, times)
 # mamba env remove --name axolotl
 
@@ -286,7 +286,7 @@ mamba activate axolotl
 ```
 
 We will install the latest CUDA 11.8.0. See the available versions here: https://anaconda.org/nvidia/cuda-toolkit/labels
-```
+```shell
 # CUDA
 mamba install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
 mamba env config vars set CUDA_PATH="$CONDA_PREFIX"
@@ -302,7 +302,7 @@ mamba activate axolotl
 Let's install the important libs ourselves. We need to do this our we will end up in CUDA hell (eg some things need 11, some need 12)
 
 PyTorch
-```
+```shell
 mamba install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 
 # Make sure we're on the right CUDA version
@@ -313,12 +313,12 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 ```
 
 Transformers (see above note on Qwen models needing modifications to `qwen_modeling.py` w/ >=4.35.0)
-```
+```shell
 pip install transformers
 ```
 
 Flash Attention (barfs if you install regularly, wants CUDA 11)
-```
+```shell
 pip install packaging
 mamba install ninja
 pip install flash-attn --no-build-isolation --no-cache-dir
@@ -326,7 +326,7 @@ python3 -c "import flash_attn; print(flash_attn.__version__)"
 ```
 
 DeepSpeed (tries to install CUDA 12)
-```
+```shell
 pip install deepspeed --no-deps --no-cache-dir
 pip install hjson pydantic pynvml py-cpuinfo
 # pay attention to the PyTorch CUDA verson - if it changed to 12.1 you f'd up
@@ -334,7 +334,7 @@ ds_report
 ```
 
 Qwen Libraries
-```
+```shell
 pip install einops transformers_stream_generator
 # You don't strictly need this, but it's supposed to be faster
 # and it's a good way to make sure your gcc setup is OK
@@ -346,7 +346,7 @@ pip install csrc/layer_norm
 
 Now we should be ready for `axolotl`. We are *not* going to install dependencies, which messes with our above libs and will handle it all manuallly.
 
-```
+```shell
 git clone https://github.com/OpenAccess-AI-Collective/axolotl
 
 # Axolotl
@@ -361,13 +361,13 @@ pip install gradio
 ```
 ### Potential Gotchas
 You may still need to rebuild Flash Attention:
-```
+```python
 ImportEror: ... flash_attn_2_cuda.cpython-311-x86_64-linux-gnu.so: undefined symbol: _ZN3c104cuda9SetDeviceEi
 ```
 * https://github.com/Dao-AILab/flash-attention/issues/620
 
 You *shouldn't* get this DeepSpeed problem (check `ds_report`) if you installed everything manually:
-```
+```shell
 deepspeed.ops.op_builder.builder.CUDAMismatchException: >- DeepSpeed Op Builder: Installed CUDA version 11.7 does not match the version torch was compiled with 12.1, unable to compile cuda/cpp extensions without
 ```
 * https://www.deepspeed.ai/tutorials/advanced-install/
