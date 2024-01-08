@@ -243,7 +243,7 @@ https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/t
 mamba create -n tf python=3.10
 sudo apt install rocm-libs rccl
 pip install protobuf=3.19.0
-pip install tensorflow
+pip install tensorflow-rocm
 python3 -c 'import tensorflow' 2> /dev/null && echo 'Success' || echo 'Failure'
 ```
 # Windows
