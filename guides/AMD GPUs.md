@@ -65,6 +65,54 @@ Ubuntu is the most well documented of the officially supported distros:
 * Be sure also to look at the "post-install instructions"
 	* https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/post-install.html
 
+### HWE Kernel
+```bash
+sudo apt install --install-recommends linux-generic-hwe-22.04
+reboot
+```
+* https://ubuntu.com/kernel/lifecycle
+
+### Prereqs
+```bash
+# Make the directory if it doesn't exist yet.
+# This location is recommended by the distribution maintainers.
+sudo mkdir --parents --mode=0755 /etc/apt/keyrings
+
+# Download the key, convert the signing-key to a full
+# keyring required by apt and store in the keyring directory
+wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
+    gpg --dearmor | sudo tee /etc/apt/keyrings/rocm.gpg > /dev/null
+
+# Add the AMDGPU repository for the driver.
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.0/ubuntu jammy main" \
+    | sudo tee /etc/apt/sources.list.d/amdgpu.list
+sudo apt update
+
+# Add the ROCm repository.
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.0 jammy main" \
+    | sudo tee --append /etc/apt/sources.list.d/rocm.list
+echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
+    | sudo tee /etc/apt/preferences.d/rocm-pin-600
+
+```
+* https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/ubuntu.html
+
+### Install
+```bash
+sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+# See prerequisites. Adding current user to Video and Render groups
+sudo usermod -a -G render,video $LOGNAME
+sudo apt update
+
+# Driver
+sudo apt install --install-recommends amdgpu-dkms
+
+# Everything else
+sudo apt install --install-recommends rocm
+
+reboot
+```
+
 ## cmath
 You may run into some compile errors. You will need `libstdc++-12-dev` in Ubuntu:
 ```
@@ -128,7 +176,7 @@ build: b7e7982 (1787)
 
 While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and compute, in practice, with ROCm 6.0, hipBLAS still falls behind cuBLAS in llama.cpp:
 
-|  | 7900 XT | 7900 XTX | RTX 3090 | RTX 4090 |
+|  | [7900 XT](https://www.techpowerup.com/gpu-specs/radeon-rx-7900-xt.c3912) | [7900 XTX](https://www.techpowerup.com/gpu-specs/radeon-rx-7900-xtx.c3941) | [RTX 3090](https://www.techpowerup.com/gpu-specs/geforce-rtx-3090.c3622) | [RTX 4090](https://www.techpowerup.com/gpu-specs/geforce-rtx-4090.c3889) |
 | ---- | ---- | ---- | ---- | ---- |
 | Memory GB | 20 | 24 | 24 | 24 |
 | Memory BW GB/s | 800 | 960 | 936.2 | 1008 |
@@ -188,176 +236,16 @@ $ python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -s -gs 
  ** Position  3968 + 128 tokens:   65.2594 t/s 
 ```
 
-Obviously, the ROCm kernel is very unoptimized vs the CUDA
-
-## exllama
-[ROCm support was merged](https://github.com/turboderp/exllama/pull/7) 2023-06-07.
-
-We run a 13B 4-bit GPTQ ([Manticore-13B-GPTQ](https://huggingface.co/TheBloke/Manticore-13B-GPTQ)) on 2023-06-29 w/ [commit 93d50d1](https://github.com/turboderp/exllama/commit/93d50d1cebf7105cba56f89fa057397e95d60572)
-
+The ROCm kernel is very un-optimized vs the CUDA version. Inferencing runs at 116 tok/s on 3090, 137 tok/s on 4090, and prompt processing is even faster (5862 tok/s on 3090, 13955 tok/s on 4090). Fast prompt processing is one of ExLlama's biggest strengths. This becomes especially important with large-context/long multi-turn conversations.
+## TensorFlow
+https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
 ```
-# make sure we have git-lfs working
-yay -S git-lfs
-git lfs install
-# in models folder
-git clone https://huggingface.co/TheBloke/Manticore-13B-GPTQ
-
-git clone https://github.com/turboderp/exllama
-cd exllama
-
-# install ROCm PyTorch https://pytorch.org/get-started/locally/
-pip3 install torch --index-url https://download.pytorch.org/whl/rocm5.4.2
-pip install -r requirements.txt
-
-python test_benchmark_inference.py -d ~/llm/models/Manticore-13B-GPTQ/ -p
-Successfully preprocessed all matching files.
- -- Tokenizer: /home/lhl/llm/models/Manticore-13B-GPTQ/tokenizer.model
- -- Model config: /home/lhl/llm/models/Manticore-13B-GPTQ/config.json
- -- Model: /home/lhl/llm/models/Manticore-13B-GPTQ/Manticore-13B-GPTQ-4bit-128g.no-act-order.safetensors
- -- Sequence length: 2048
- -- Tuning:
- -- --matmul_recons_thd: 8
- -- --fused_mlp_thd: 2
- -- --sdp_thd: 8
- -- --rmsnorm_no_half2
- -- --rope_no_half2
- -- --matmul_no_half2
- -- --silu_no_half2
- -- Options: ['perf']
- ** Time, Load model: 6.86 seconds
- ** Time, Load tokenizer: 0.01 seconds
- -- Groupsize (inferred): 128
- -- Act-order (inferred): no
- ** VRAM, Model: [cuda:0] 6,873.52 MB - [cuda:1] 0.00 MB
- -- Warmup pass 1...
- ** Time, Warmup: 0.36 seconds
- -- Warmup pass 2...
- ** Time, Warmup: 4.43 seconds
- -- Inference, first pass.
- ** Time, Inference: 4.52 seconds
- ** Speed: 425.13 tokens/second
- -- Generating 128 tokens, 1920 token prompt...
- ** Speed: 9.92 tokens/second
- -- Generating 128 tokens, 4 token prompt...
- ** Speed: 19.21 tokens/second
- ** VRAM, Inference: [cuda:0] 2,253.20 MB - [cuda:1] 0.00 MB
- ** VRAM, Total: [cuda:0] 9,126.72 MB - [cuda:1] 0.00 MB
+mamba create -n tf python=3.10
+sudo apt install rocm-libs rccl
+pip install protobuf=3.19.0
+pip install tensorflow
+python3 -c 'import tensorflow' 2> /dev/null && echo 'Success' || echo 'Failure'
 ```
-
-These results are actually a regression from [commit dd63e07](https://github.com/turboderp/exllama/commit/dd63e0734b7df5fcbd86d30ad82a582da25a3a73) (which was about 15 t/s). At 9.92 t/s, the llama.cpp HIP{ fork is now 30% faster.
-
-
-## RTX 4090 Comparison
-As a point of comparison, running `llama.cpp` with `make LLAMA_CUBLAS=1` runs at about 72 t/s:
-```
-./main -m /data/ai/models/llm/manticore/Manticore-13B-Chat-Pyg.ggmlv3.q4_0.bin -ngl 99 -n 2048 --ignore-eos
-
-...
-
-llama_print_timings:        load time =  3569.39 ms
-llama_print_timings:      sample time =   930.53 ms /  2048 runs   (    0.45 ms per token,  2200.89 tokens per second)
-llama_print_timings: prompt eval time =  2608.07 ms /  1801 tokens (    1.45 ms per token,   690.55 tokens per second)
-llama_print_timings:        eval time = 28273.11 ms /  2040 runs   (   13.86 ms per token,    72.15 tokens per second)
-llama_print_timings:       total time = 32225.03 ms
-```
-
-[exllama](https://github.com/turboderp/exllama), performs about on-par to llama.cpp and we get 74.79 t/s:
-```
-python test_benchmark_inference.py -p -d /models/llm/manticore/manticore-13b-chat-pyg-GPTQ
- -- Tokenizer: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/tokenizer.model
- -- Model config: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/config.json
- -- Model: /data/ai/models/llm/manticore/manticore-13b-chat-pyg-GPTQ/Manticore-13B-Chat-Pyg-GPTQ-4bit-128g.no-act-order.safetensors
- -- Sequence length: 2048
- -- Tuning:
- -- --matmul_recons_thd: 8
- -- --fused_mlp_thd: 2
- -- --sdp_thd: 8
- -- Options: ['perf']
- ** Time, Load model: 3.98 seconds
- ** Time, Load tokenizer: 0.01 seconds
- -- Groupsize (inferred): 128
- -- Act-order (inferred): no
- ** VRAM, Model: [cuda:0] 6,873.52 MB
- -- Warmup pass 1...
- ** Time, Warmup: 1.55 seconds
- -- Warmup pass 2...
- ** Time, Warmup: 0.07 seconds
- -- Inference, first pass.
- ** Time, Inference: 0.25 seconds
- ** Speed: 7600.98 tokens/second
- -- Generating 128 tokens, 1920 token prompt...
- ** Speed: 74.79 tokens/second
- -- Generating 128 tokens, 4 token prompt...
- ** Speed: 99.17 tokens/second
- ** VRAM, Inference: [cuda:0] 1,772.79 MB
- ** VRAM, Total: [cuda:0] 8,646.31 MB
-```
-
-## Recommendation
-Radeon VII 16GB cards are going for about $250-$300 on eBay (equivalent to an Instinct MI50 which range a lot in price; MI60 or MI100 are similar also similar generation cards but with 32GB of RAM). 
-
-For the performance, you're much better off paying about [$200](https://www.ebay.com/itm/195565620918) ([alt](https://www.ebay.com/itm/195745134833)) for an Nvidia Tesla P40 24GB (1080Ti class but with more RAM) or about $700 for an RTX 3090 24GB. The P40 can [reportedly run 13b models at about 15 tokens/s](https://www.reddit.com/r/LocalLLaMA/comments/13n8bqh/my_results_using_a_tesla_p40/), over 2X faster than a Radeon VII and with lots more software support. Also, 24GB cards support 30b models, which 16GB cards can't do.
-
-## Bonus: GTX 1080 Ti Comparison
-I dug out my old GTX 1080 Ti and installed it to get a ballpark vs P40 numbers. 
-
-We are running `llama.cpp` with the same checkout (2023-06-29 commit 96a712c). The GPU refactor no longer has a CUDA kernel for the 1080 Ti, so I've used `LLAMA_CLBLAST=1` instead, but it still runs faster than the older (un-optimized) CUDA version (previous tests output at 5.8 t/s).
-
-```
-./main -m /data/ai/models/llm/manticore/Manticore-13B-Chat-Pyg.ggmlv3.q4_0.bin -ngl 99 -n 2048 --ignore-eos                                                (llama) 
-main: build = 762 (96a712c)
-main: seed  = 1688074299
-ggml_opencl: selecting platform: 'NVIDIA CUDA'
-ggml_opencl: selecting device: 'NVIDIA GeForce GTX 1080 Ti'
-ggml_opencl: device FP16 support: false
-llama.cpp: loading model from /data/ai/models/llm/manticore/Manticore-13B-Chat-Pyg.ggmlv3.q4_0.bin
-llama_model_load_internal: format     = ggjt v3 (latest)
-llama_model_load_internal: n_vocab    = 32000
-llama_model_load_internal: n_ctx      = 512
-llama_model_load_internal: n_embd     = 5120
-llama_model_load_internal: n_mult     = 256
-llama_model_load_internal: n_head     = 40
-llama_model_load_internal: n_layer    = 40
-llama_model_load_internal: n_rot      = 128
-llama_model_load_internal: ftype      = 2 (mostly Q4_0)
-llama_model_load_internal: n_ff       = 13824
-llama_model_load_internal: model size = 13B
-llama_model_load_internal: ggml ctx size =    0.09 MB
-llama_model_load_internal: using OpenCL for GPU acceleration
-llama_model_load_internal: mem required  = 2223.88 MB (+ 1608.00 MB per state)
-llama_model_load_internal: offloading 40 repeating layers to GPU
-llama_model_load_internal: offloading non-repeating layers to GPU
-llama_model_load_internal: offloading v cache to GPU
-llama_model_load_internal: offloading k cache to GPU
-llama_model_load_internal: offloaded 43/43 layers to GPU
-llama_model_load_internal: total VRAM used: 8416 MB
-llama_new_context_with_model: kv self size  =  400.00 MB
-
-system_info: n_threads = 16 / 32 | AVX = 1 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | FMA = 1 | NEON = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 1 | SSE3 = 1 | VSX = 0 | 
-sampling: repeat_last_n = 64, repeat_penalty = 1.100000, presence_penalty = 0.000000, frequency_penalty = 0.000000, top_k = 40, tfs_z = 1.000000, top_p = 0.950000, typical_p = 1.000000, temp = 0.800000, mirostat = 0, mirostat_lr = 0.100000, mirostat_ent = 5.000000
-generate: n_ctx = 512, n_batch = 512, n_predict = 2048, n_keep = 0
-
-...
-
-llama_print_timings:        load time =  1459.18 ms
-llama_print_timings:      sample time =   884.79 ms /  2048 runs   (    0.43 ms per token,  2314.67 tokens per second)
-llama_print_timings: prompt eval time = 31935.74 ms /  1801 tokens (   17.73 ms per token,    56.39 tokens per second)
-llama_print_timings:        eval time = 220695.57 ms /  2040 runs   (  108.18 ms per token,     9.24 tokens per second)
-llama_print_timings:       total time = 253862.42 ms
-```
-
-Using CLBlast, we get 9.24 t/s, which is a little slower than the Radeon VII.
-
-`exllama` is no longer very happy with Pascal cards, although reports are that gptq-for-llama/autogptq can output at 20 t/s: [https://github.com/turboderp/exllama/issues/75](https://github.com/turboderp/exllama/issues/75)
-
-## ROCm Resources
-ROCm support is outside the scope of this guide (maybe someone can make a new page if they have experience and can refactor).
-
-* ROCm [officially supports RHEL, SLES, and Ubuntu](https://rocm.docs.amd.com/en/latest/release/gpu_os_support.html)
-* For Arch Linux, there are packages in [extra] (eg [rocm-core](https://archlinux.org/packages/extra/x86_64/rocm-core/)) but packages may be behind - eg, currently on version 5.4.3 and 5.5.1 did not make it out of staging before 5.6.0 was released. These appear to be built from source. See also:
-  * [rocm-arch/rocm-arch PKGBUILDS](https://github.com/rocm-arch/rocm-arch) - these appear different from the [extra] PKGBUILDS...
-  * [CosmicFusion/rocm-polaris-arch](https://github.com/CosmicFusion/rocm-polaris-arch) - this looks useful if you're tyring to enable non-officially supported hardware
-
 # Windows
 
 ## llama.cpp
@@ -371,20 +259,14 @@ In the Windows terminal, run it with `-ngl 99` to load all the layers into memor
 ```
 
 On a Radeon 7900XT, you should get about double the performance of CPU-only execution.
-
 ### Compile for ROCm
 This was last update 2023-09-03 so things might change, but here's how I was able to get things working in Windows.
-
 #### Requirements
 * You'll need [Microsoft Visual Studio](https://visualstudio.microsoft.com/vs/) installed. Install it with the basic C++ environment.
 * Follow AMD's directions and [install the ROCm software for Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/index.html).
 * You'll need `git` if you want to pull the latest from the repo (you can either get the [official Windows installer](https://git-scm.com/download/win) or use a package manager like [Chocolatey](https://chocolatey.org/) to `choco install git`) - note, as an alternative, you could just download the Source code.zip from the [https://github.com/ggerganov/llama.cpp/releases/](https://github.com/ggerganov/llama.cpp/releases/)
-
 #### Instructions
-
 First, launch "x64 Native Tools Command Prompt" from the Windows Menu (you can hit the Windows key and just start typing x64 and it should pop up).
-
-
 ```
 # You should probably change to a folder you want first for grabbing the source
 git clone https://github.com/ggerganov/llama.cpp
@@ -403,7 +285,6 @@ cmake.exe --build .
 
 That's it, now you have compiled executables in `build/bin`.
 
-
 Start a new terminal to run llama.CPP
 ```
 # You can do this in the GUI search for "environment variable" as well
@@ -416,7 +297,6 @@ set PATH="C:\Program Files\AMD\ROCm\5.5\bin;%PATH%"
 If you set just the global you may need to start a new shell before running this in the `llama.cpp` checkout. You can double check it'S working by outputing the path `echo %PATH%` or just running `hipInfo` or another exe in the ROCm bin folder.
 
 NOTE: If your PATH is wonky for some reason you may get missing .dll errors. You can either fix that, or if all else fails, copy the missing files from `"C:\Program Files\AMD\ROCm\5.5\bin` into the `build/bin` folder since life is too short.
-
 #### Results
 Here's my `llama-bench` results running a llama2-7b q4_0 and q4_K_M:
 ```
@@ -430,7 +310,6 @@ ggml_init_cublas: found 1 ROCm devices:
 
 build: 69fdbb9 (1148)
 
-
 C:\Users\lhl\Desktop\llama.cpp\build\bin>llama-bench.exe -m ..\..\meta-llama-2-7b-q4_K_M.gguf -p 3968 -n 128 -ngl 99
 ggml_init_cublas: found 1 ROCm devices:
   Device 0: AMD Radeon RX 7900 XT, compute capability 11.0
@@ -441,11 +320,8 @@ ggml_init_cublas: found 1 ROCm devices:
 
 build: 69fdbb9 (1148)
 ```
-
 ### Unsupported Architectures
 On Windows, it may not be possible to apply an `HSA_OVERRIDE_GFX_VERSION` override. In that case, these instructions for compiling custom kernels may help: [https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/](https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/)
 
 ## Misc
 Here's a ROCm fork of DeepSpeed: https://github.com/ascent-tek/rocm_containers/blob/main/README_DeepSpeed.md
-
-Part of a set of ROCm docker instances.
