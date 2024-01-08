@@ -250,6 +250,18 @@ export GPU_ARCHS=gfx1100
 pip install .
 ```
 * https://github.com/ROCm/composable_kernel/discussions/1032
+
+Now let's continue:
+```bash
+git clone https://github.com/vllm-project/vllm 
+cd vllm
+pip install xformers==0.0.23 --no-deps
+bash patch_xformers.rocm.sh
+
+pip install -U -r requirements-rocm.txt
+python setup.py install # This may take 5-10 minutes. Currently, `pip install .`` does not work for ROCm installation
+```
+
 ## TensorFlow
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
 ```
