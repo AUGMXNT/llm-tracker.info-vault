@@ -15,7 +15,7 @@ Recommended System Pre-requisites
 * [Mamba](https://github.com/conda-forge/miniforge#install) - not required but will make your life a lot easier
 
 Environment setup:
-```
+```shell
 # you may need 3.10, depends on your pytorch version
 mamba create -n styletts2 python=3.11
 mamba activate styletts2
@@ -33,7 +33,7 @@ cd StyleTTS2
 ```
 
 Get models:
-```
+```shell
 # way useful for servers
 pip install gdown
 gdown 'https://drive.google.com/file/d/1K3jt1JEbtohBLUA0X75KLw36TW7U1yxq/view?usp=sharing'
@@ -44,7 +44,7 @@ Inferencing
 * Well, just use [Inference_LJSpeech.ipynb](https://github.com/yl4579/StyleTTS2/blob/main/Demo/Inference_LJSpeech.ipynb) basically. Latest version should work.
 
 My changes, mainly include doing file output:
-```
+```python
 ## No
 # import IPython.display as ipd
 # display(ipd.Audio(wav, rate=24000))
@@ -55,7 +55,7 @@ sf.write('output.df5.wav', wav, 24000)
 ```
 
 Oh, and I like to output some more timing stuff, eg:
-```
+```python
 end = time.time()
 rtf = (end - start) / (len(wav) / 24000)
 print(f"Clip duration: {len(wav)/24000:.2f}s")

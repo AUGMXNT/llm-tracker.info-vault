@@ -5,7 +5,7 @@ Released 2023-08-23: [https://x.com/jon_durbin/status/1694360998797250856](https
 Code: [https://github.com/jondurbin/airoboros#lmoe](https://github.com/jondurbin/airoboros#lmoe)
 
 # Setup
-```
+```shell
 # env
 conda create -n airoboros
 mamba env config vars set CUDA_VISIBLE_DEVICES=0
@@ -34,7 +34,7 @@ pip install .
 
 # Run
 Uses 17.54GB VRAM
-```
+```shell
 python -m airoboros.lmoe.api \
   --base-model /models/llm/hf/meta-llama_Llama-2-7b-hf \
   --lmoe /models/llm/lora/jondurbin_airoboros-lmoe-7b-2.1 \
@@ -46,7 +46,7 @@ python -m airoboros.lmoe.api \
 
 And test:
 
-```
+```shell
 ❯ curl -H 'content-type: application/json' http://127.0.0.1:7777/v1/chat/completions -d '
 {
   "model": "meta-llama_Llama-2-7b-hf",
@@ -69,7 +69,7 @@ And test:
 # Client
 The current version of the API is quite picky and I couldn't find anything compatible... here's a simple client that ChatGPT-4 CI helped me write:
 
-```
+```python
 import requests
 import json
 
@@ -117,7 +117,7 @@ interactive_chat()
 * llama2-7b is dumb as a box of rocks, lol
 
 To test the routing, I recommend some simple queries like:
-```
+```shell
 # function/code
 Write me Python "hello world" FastAPI script.
 
