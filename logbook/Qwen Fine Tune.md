@@ -1,6 +1,8 @@
 I've done some raw Qwen tuning before with the included scripts:
 * https://github.com/AUGMXNT/shisa/tree/main/train/qwen
 * https://github.com/QwenLM/Qwen/#finetuning
+
+Qwen is pretty tricky to work with.  Some things to watch out for:
 ## Compatibility
 
 ### Transformers
@@ -31,24 +33,35 @@ def _set_gradient_checkpointing(self, enable: bool = False, gradient_checkpointi
 ```
 * https://github.com/QwenLM/Qwen/issues/661#issuecomment-1835520079
 
-Errors:
+### QLoRA
+I ran into this problem trying to QLoRA. This also requires a change to `modeling_qwen.py` otherwise you will get an error in [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) like:
+
 ```
-/home/local/.cache/huggingface/modules/transformers_modules/rinna_nekomata-14b/modeling_qwen.py:527: UserWarning: Use of masked_fill_ on expanded tens
-ors is deprecated. Please clone() the tensor before performing this operation. This also applies to advanced indexing e.g. tensor[mask] = scalar (Trig
-gered internally at ../aten/src/ATen/native/cuda/Indexing.cu:1564.)                                                                                   
-  attention_mask.masked_fill_(~causal_mask, torch.finfo(query.dtype).min)                                                                             
-/home/local/.cache/huggingface/modules/transformers_modules/rinna_nekomata-14b/modeling_qwen.py:527: UserWarning: Use of masked_fill_ on expanded tens
-ors is deprecated. Please clone() the tensor before performing this operation. This also applies to advanced indexing e.g. tensor[mask] = scalar (Trig
-gered internally at ../aten/src/ATen/native/cuda/Indexing.cu:1564.)                                                                                   
-  attention_mask.masked_fill_(~causal_mask, torch.finfo(query.dtype).min)
-
-...
-
-
+RuntimeError: value cannot be converted to type at::Half without overflow
+```
+or with Jon Durbin's [QLora fork](https://github.com/jondurbin/qlora) like:
+```
 RuntimeError: one of the variables needed for gradient computation has been modified by an inplace operation: [torch.cuda.FloatTensor [2, 1, 1, 363]] is at version 41; expected version 39 instead. Hint: enable anomaly detection to find the operation that failed to compute its gradient, with torch.autograd.set_detect_anomaly(True).
 ```
 
+Here's the fix:
+```
+# Change `attention_mask.masked_fill_(~causal_mask, torch.finfo(query.dtype).min)`
 
+attention_mask.masked_fill(~causal_mask, -65504.0)
+```
+* In Chinese: https://github.com/hiyouga/LLaMA-Factory/issues/1475
+* Translated: https://github-com.translate.goog/hiyouga/LLaMA-Factory/issues/1475?_x_tr_sl=zh-CN&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp
+
+When I was using `use_flash_attn` I was also getting this error:
+```
+assert all((i.dtype in [torch.float16, torch.bfloat16] for i in (q, k, v)))
+```
+
+For 4/8-bit usage, I think you can't use Flash Attention...
+
+### Tuning Tips
+- [Analysis of LoRA parameters](https://medium.com/@drishtisharma96505/comparative-analysis-of-lora-parameters-on-llama-2-with-flash-attention-574b913295d4) - bigger `lora_alpha` better, rest doesn't really matter
 ## jondurbin/qlora
 
 Set in model `config.json`:
@@ -57,8 +70,11 @@ Set in model `config.json`:
 ```
 * https://github.com/hiyouga/LLaMA-Factory/issues/601
 
+Our dataset, [ultra-orca-boros-en-ja-v1](https://huggingface.co/datasets/augmxnt/ultra-orca-boros-en-ja-v1) is a sharegpt-formatted parquet file (but with system prompts) and this fork is built to handle it.
 
+Once we make the modeling fixes, the current code should work OOTB. You may have to lower max_tokens, max_length, and the gradient and batch sizes to get it to fit in 24GB of RAM (also add a memory limit), even if you are using DeepSpeed-ZeRO3 (using Axolotl's [zero3_bf16.json](https://github.com/OpenAccess-AI-Collective/axolotl/blob/main/deepspeed/zero3_bf16.json) seems to work).
 
+However, I noticed that when training, loss almost immediately goes to 0, so... so you might need to check on that...
 ## LLaMA-Factory
 
 This time, we'll try a QLoRA w/ https://github.com/hiyouga/LLaMA-Factory that has just integrated https://github.com/unslothai/unsloth support for improved performance.
@@ -193,71 +209,191 @@ CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
     --report_to wandb True
 ```
 
+### QLoRA
+Settings + DeepSpeed 3 from [XVERSE-65B repo](https://github.com/xverse-ai/XVERSE-65B#%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83):
+
+```
+deepspeed --num_gpus 8 src/train_bash.py \
+    --deepspeed deepspeed.json \
+    --stage sft \
+    --model_name_or_path /  \
+    --do_train \
+    --dataset alpaca_gpt4_zh \
+    --template default \
+    --finetuning_type lora \
+    --lora_target q_proj,v_proj \
+    --output_dir  output_model_path \
+    --overwrite_cache \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 4 \
+    --lr_scheduler_type cosine \
+    --logging_steps 1 \
+    --save_steps 1000 \
+    --learning_rate 5e-5 \
+    --num_train_epochs 3.0 \
+    --plot_loss \
+    --bf16
+```
+
+`deepspeed.json`
+```json
+{
+    "train_micro_batch_size_per_gpu":"auto",
+    "gradient_accumulation_steps":"auto",
+    "gradient_clipping":"auto",
+    "zero_allow_untested_optimizer":true,
+    "fp16":{
+        "enabled":false
+    },
+    "bfloat16":{
+        "enabled":true
+    },
+    "zero_optimization":{
+        "stage":3,
+        "allgather_partitions":true,
+        "reduce_scatter":true,
+        "overlap_comm":false,
+        "contiguous_gradients":true
+    }
+}
+```
+
+It doesn't work with our dataset:
+```
+^^^^^^^^^^^^^
+  File "/home/local/shisa/train/nekomata/LLaMA-Factory/src/llmtuner/data/loader.py", line 122, in convert_format
+    raise ValueError("Only accepts conversation in u/a/u/a/u/a order.")
+ValueError: Only accepts conversation in u/a/u/a/u/a order.
+```
+
+But you can use the (smaller, so better for testing anyway) [chatntq sharegpt dataset](https://huggingface.co/datasets/NTQAI/sharegpt-clean-ja) as a sharegpt formatted example.
 
 ## Axolotl
+To get Axolotl with Qwen working we need to be *very* careful and specific about our libraries:
 
-### Setup
+## Manual Setup
+Default environment setup:
 ```
+# in case you need to start over... (which I did, many, many, times)
+# mamba env remove --name axolotl
+
 # Base
-https://github.com/OpenAccess-AI-Collective/axolotl
 mamba create -n axolotl python=3.11
 mamba activate axolotl
+```
 
+We will install the latest CUDA 11.8.0. See the available versions here: https://anaconda.org/nvidia/cuda-toolkit/labels
+```
 # CUDA
-mamba install -c "nvidia/label/cuda-11.7.1" cuda-toolkit
-mamba install -c "nvidia/label/cuda-12.3.1" cuda-toolkit
+mamba install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
 mamba env config vars set CUDA_PATH="$CONDA_PREFIX"
 mamba env config vars set CUDA_HOME="$CONDA_PREFIX"
+
+# required for nvcc 11:
+mamba install gxx=11.4.0
+# zomg this was messing w/ my cheerios - somehow ccbin set and was screwing up compiles
+mamba env config vars set NVCC_PREPEND_FLAGS=""
 mamba activate axolotl
+```
+
+Let's install the important libs ourselves. We need to do this our we will end up in CUDA hell (eg some things need 11, some need 12)
+
+PyTorch
+```
+mamba install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+
+# Make sure we're on the right CUDA version
+python3 -c "import torch; print(torch.__version__)"
+
+# If you need to blast it - this is 2GB+ so the biggest thing to get right
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+
+Transformers (see above note on Qwen models needing modifications to `qwen_modeling.py` w/ >=4.35.0)
+```
+pip install transformers
+```
+
+Flash Attention (barfs if you install regularly, wants CUDA 11)
+```
+pip install packaging
+mamba install ninja
+pip install flash-attn --no-build-isolation --no-cache-dir
+python3 -c "import flash_attn; print(flash_attn.__version__)"
+```
+
+DeepSpeed (tries to install CUDA 12)
+```
+pip install deepspeed --no-deps --no-cache-dir
+pip install hjson pydantic pynvml py-cpuinfo
+# pay attention to the PyTorch CUDA verson - if it changed to 12.1 you f'd up
+ds_report
+```
+
+Qwen Libraries
+```
+pip install einops transformers_stream_generator
+# You don't strictly need this, but it's supposed to be faster
+# and it's a good way to make sure your gcc setup is OK
+# otherwise it will bite you later
+git clone https://github.com/Dao-AILab/flash-attention
+cd flash-attention
+pip install csrc/layer_norm
+```
+
+Now we should be ready for `axolotl`. We are *not* going to install dependencies, which messes with our above libs and will handle it all manuallly.
+
+```
+git clone https://github.com/OpenAccess-AI-Collective/axolotl
 
 # Axolotl
 cd axolotl
-pip install packaging
-pip install -e '.[flash-attn,deepspeed]'
+pip install -e '.' --no-deps
 
-# Qwen
-pip install einops transformers_stream_generator
+# Install rest of reqs
+pip install accelerate addict art auto-gptq bert-score bitsandbytes colorama datasets evaluate fire fschat gcsfs gradio hf_transfer numba optimum peft rouge-score s3fs scikit-learn scipy sentencepiece tensorboard wandb xformers
 
-# this will take 10min+ to build...
-# git clone https://github.com/Dao-AILab/flash-attention
-# cd flash-attention
-# pip install csrc/layer_norm
-
-pip install flash_attn -U --force-reinstall
+# You may need to reinstall gradio (pydantic version issue)
+pip install gradio
 ```
-
-### Flash Attention
-Grr:
+### Potential Gotchas
+You may still need to rebuild Flash Attention:
 ```
-ImportError: /home/local/.conda/envs/axolotl/lib/python3.11/site-packages/flash_attn_2_cuda.cpython-311-x86_64-linux-gnu.so: undefined symbol: _ZN3c104cuda9SetDeviceEi
+ImportEror: ... flash_attn_2_cuda.cpython-311-x86_64-linux-gnu.so: undefined symbol: _ZN3c104cuda9SetDeviceEi
 ```
 * https://github.com/Dao-AILab/flash-attention/issues/620
 
-Let's make sure we have the right nvcc...
+You *shouldn't* get this DeepSpeed problem (check `ds_report`) if you installed everything manually:
 ```
-nvcc --version
-which nvcc
+deepspeed.ops.op_builder.builder.CUDAMismatchException: >- DeepSpeed Op Builder: Installed CUDA version 11.7 does not match the version torch was compiled with 12.1, unable to compile cuda/cpp extensions without
 ```
-
-We need to do this
-```
-pip install flash_attn -U --force-reinstall
-```
-* https://github.com/Dao-AILab/flash-attention/issues/620
-
-### DeepSpeed
-Well w/ FlashAttention happy, we need to update CUDA for DeepSpeed... 
-```
-# deepspeed.ops.op_builder.builder.CUDAMismatchException: >- DeepSpeed Op Builder: Installed CUDA version 11.7 does not match the version torch was compiled with 12.1, unable to compile cuda/cpp extensions without
-
-mamba install -c "nvidia/label/cuda-12.1.1" cuda-toolkit
-pip install deepspeed -U --force-reinstall
-
-# Give up
-export DS_SKIP_CUDA_CHECK=1
-```
-
+* https://www.deepspeed.ai/tutorials/advanced-install/
+* You might be able to `export DS_SKIP_CUDA_CHECK=1` but to force things, but who knows.
 ## TPU
+TODO!
+
+12/25-1/25 TPU Research
+
+Manage TPUS
+https://cloud.google.com/tpu/docs/managing-tpus-tpu-vm
+
+TPUs in Collab
+https://colab.research.google.com/notebooks/tpu.ipynb#scrollTo=clSFHJkFNylD
+
+Example Collab
+https://colab.research.google.com/notebooks/tpu.ipynb?authuser=2#scrollTo=FpvUOuC3j27n
+
+Predict Shakespeare w/ Keras
+https://colab.research.google.com/github/tensorflow/tpu/blob/master/tools/colab/shakespeare_with_tpu_and_keras.ipynb
+
+Accelerate
+https://huggingface.co/docs/accelerate/concept_guides/training_tpu
+https://github.com/huggingface/accelerate/issues/471
+https://github.com/huggingface/accelerate
+https://github.com/huggingface/accelerate/releases
+https://github.com/christianversloot/machine-learning-articles/blob/main/quick-and-easy-gpu-tpu-acceleration-for-pytorch-with-huggingface-accelerate.md
+https://github.com/huggingface/accelerate/issues/29
+
 * Using PyTorch XLA
 	* https://github.com/ssbuild/qwen_finetuning
 	* https://github.com/hiyouga/LLaMA-Factory
