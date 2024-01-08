@@ -261,10 +261,17 @@ mamba install -c conda-forge libgcc-ng
 python3 -m pip install --pre -U -f https://mlc.ai/wheels mlc-chat-nightly-rocm57 mlc-ai-nightly-rocm57
 
 export PATH=/opt/rocm/llvm/bin:$PATH
+
+# Missing dependencies
+pip install tqdm
+pip install safetensors
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm5.7
 ```
 * https://llm.mlc.ai/docs/install/mlc_llm.html#install-mlc-packages
 * https://github.com/mlc-ai/mlc-llm/issues/1216
+* https://llm.mlc.ai/docs/install/tvm.html#option-1-prebuilt-package
 
+Make a model: https://llm.mlc.ai/docs/compilation/compile_models.html
 ```shell
 mkdir dist
 
