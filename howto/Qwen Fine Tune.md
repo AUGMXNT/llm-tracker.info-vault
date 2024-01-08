@@ -79,7 +79,7 @@ However, I noticed that when training, loss almost immediately goes to 0, so... 
 
 This time, we'll try a QLoRA w/ https://github.com/hiyouga/LLaMA-Factory that has just integrated https://github.com/unslothai/unsloth support for improved performance.
 
-We sill be doing a tune on the new https://huggingface.co/rinna/nekomata-14b continued pre-train (+66B JA/EN tokens).
+We will be doing a tune on the new https://huggingface.co/rinna/nekomata-14b continued pre-train (+66B JA/EN tokens).
 
 ```
 # Base
@@ -103,6 +103,103 @@ pip install csrc/layer_norm
 pip install xformers
 pip install "unsloth[kaggle] @ git+https://github.com/unslothai/unsloth.git"
 ```
+
+Basic config that worked:
+```
+CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
+    --stage sft \
+    --do_train True \
+    --model_name_or_path /models/llm/hf/rinna_nekomata-14b \
+    --finetuning_type lora \
+    --quantization_bit 4 \
+    --template llama2 \
+    --flash_attn False \
+    --shift_attn False \
+    --use_unsloth True \
+    --dataset_dir data \
+    --dataset sharegpt-clean-ja \
+    --cutoff_len 2048 \
+    --learning_rate 5e-05 \
+    --num_train_epochs 3.0 \
+    --max_samples 100 \
+    --per_device_train_batch_size 1 \
+    --gradient_accumulation_steps 4 \
+    --lr_scheduler_type cosine \
+    --max_grad_norm 1.0 \
+    --logging_steps 5 \
+    --save_steps 200000 \
+    --warmup_steps 0 \
+    --neftune_noise_alpha 5 \
+    --upcast_layernorm True \
+    --lora_rank 8 \
+    --lora_dropout 0.1 \
+    --lora_target c_attn \
+    --output_dir saves/Qwen-14B/lora/train_2023-12-23-19-04-13 \
+    --bf16 True \
+    --report_to wandb True
+```
+### More QLoRA
+Settings + DeepSpeed 3 from [XVERSE-65B repo](https://github.com/xverse-ai/XVERSE-65B#%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83):
+
+```
+deepspeed --num_gpus 8 src/train_bash.py \
+    --deepspeed deepspeed.json \
+    --stage sft \
+    --model_name_or_path /  \
+    --do_train \
+    --dataset alpaca_gpt4_zh \
+    --template default \
+    --finetuning_type lora \
+    --lora_target q_proj,v_proj \
+    --output_dir  output_model_path \
+    --overwrite_cache \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 4 \
+    --lr_scheduler_type cosine \
+    --logging_steps 1 \
+    --save_steps 1000 \
+    --learning_rate 5e-5 \
+    --num_train_epochs 3.0 \
+    --plot_loss \
+    --bf16
+```
+
+`deepspeed.json`
+```json
+{
+    "train_micro_batch_size_per_gpu":"auto",
+    "gradient_accumulation_steps":"auto",
+    "gradient_clipping":"auto",
+    "zero_allow_untested_optimizer":true,
+    "fp16":{
+        "enabled":false
+    },
+    "bfloat16":{
+        "enabled":true
+    },
+    "zero_optimization":{
+        "stage":3,
+        "allgather_partitions":true,
+        "reduce_scatter":true,
+        "overlap_comm":false,
+        "contiguous_gradients":true
+    }
+}
+```
+
+### ShareGPT Formt
+It doesn't work with our dataset:
+```
+^^^^^^^^^^^^^
+  File "/home/local/shisa/train/nekomata/LLaMA-Factory/src/llmtuner/data/loader.py", line 122, in convert_format
+    raise ValueError("Only accepts conversation in u/a/u/a/u/a order.")
+ValueError: Only accepts conversation in u/a/u/a/u/a order.
+```
+
+But you can use the (smaller, so better for testing anyway) [chatntq sharegpt dataset](https://huggingface.co/datasets/NTQAI/sharegpt-clean-ja) as a sharegpt formatted example.
+
+### unsloth
+**STATUS:** Uh, I couldn't get this working...
 
 To take advantage of unsloth, first we need to llamafy Qwen models with https://github.com/hiyouga/LLaMA-Factory/blob/main/tests/llamafy_qwen.py:
 ```
@@ -173,100 +270,6 @@ CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
 * unsloth fast patching only works with `--lora_dropout 0`
 * for llamafied qwen, you may need to edit your `~/.conda/envs/llama-factory/lib/python3.11/site-packages/unsloth/models/llama.py` and add `trust_remote_code=True,` to the `tokenizer` loading.
 * unsloth gets an `assert` error looking at the llamafied modules :(
-
-Let's try without:
-```
-CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
-    --stage sft \
-    --do_train True \
-    --model_name_or_path /models/llm/hf/rinna_nekomata-14b \
-    --finetuning_type lora \
-    --quantization_bit 4 \
-    --template llama2 \
-    --flash_attn False \
-    --shift_attn False \
-    --use_unsloth True \
-    --dataset_dir data \
-    --dataset ultra-orca-boros-en-ja-v1 \
-    --cutoff_len 2048 \
-    --learning_rate 5e-05 \
-    --num_train_epochs 3.0 \
-    --max_samples 100 \
-    --per_device_train_batch_size 4 \
-    --gradient_accumulation_steps 4 \
-    --lr_scheduler_type cosine \
-    --max_grad_norm 1.0 \
-    --logging_steps 5 \
-    --save_steps 200000 \
-    --warmup_steps 0 \
-    --neftune_noise_alpha 5 \
-    --upcast_layernorm True \
-    --lora_rank 8 \
-    --lora_dropout 0.1 \
-    --lora_target c_attn \
-    --output_dir saves/Qwen-14B/lora/train_2023-12-23-19-04-13 \
-    --bf16 True \
-    --report_to wandb True
-```
-
-### QLoRA
-Settings + DeepSpeed 3 from [XVERSE-65B repo](https://github.com/xverse-ai/XVERSE-65B#%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83):
-
-```
-deepspeed --num_gpus 8 src/train_bash.py \
-    --deepspeed deepspeed.json \
-    --stage sft \
-    --model_name_or_path /  \
-    --do_train \
-    --dataset alpaca_gpt4_zh \
-    --template default \
-    --finetuning_type lora \
-    --lora_target q_proj,v_proj \
-    --output_dir  output_model_path \
-    --overwrite_cache \
-    --per_device_train_batch_size 4 \
-    --gradient_accumulation_steps 4 \
-    --lr_scheduler_type cosine \
-    --logging_steps 1 \
-    --save_steps 1000 \
-    --learning_rate 5e-5 \
-    --num_train_epochs 3.0 \
-    --plot_loss \
-    --bf16
-```
-
-`deepspeed.json`
-```json
-{
-    "train_micro_batch_size_per_gpu":"auto",
-    "gradient_accumulation_steps":"auto",
-    "gradient_clipping":"auto",
-    "zero_allow_untested_optimizer":true,
-    "fp16":{
-        "enabled":false
-    },
-    "bfloat16":{
-        "enabled":true
-    },
-    "zero_optimization":{
-        "stage":3,
-        "allgather_partitions":true,
-        "reduce_scatter":true,
-        "overlap_comm":false,
-        "contiguous_gradients":true
-    }
-}
-```
-
-It doesn't work with our dataset:
-```
-^^^^^^^^^^^^^
-  File "/home/local/shisa/train/nekomata/LLaMA-Factory/src/llmtuner/data/loader.py", line 122, in convert_format
-    raise ValueError("Only accepts conversation in u/a/u/a/u/a order.")
-ValueError: Only accepts conversation in u/a/u/a/u/a order.
-```
-
-But you can use the (smaller, so better for testing anyway) [chatntq sharegpt dataset](https://huggingface.co/datasets/NTQAI/sharegpt-clean-ja) as a sharegpt formatted example.
 
 ## Axolotl
 To get Axolotl with Qwen working we need to be *very* careful and specific about our libraries:
