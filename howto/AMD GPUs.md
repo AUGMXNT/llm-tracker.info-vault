@@ -264,6 +264,45 @@ export PATH=/opt/rocm/llvm/bin:$PATH
 ```
 * https://llm.mlc.ai/docs/install/mlc_llm.html#install-mlc-packages
 * https://github.com/mlc-ai/mlc-llm/issues/1216
+
+```shell
+mkdir dist
+
+mlc_chat convert_weight  /data/models/hf/augmxnt_shisa-7b-v1 -o dist/shisa-7b-v1-q4f16_1 --quantization q4f16_1
+
+mlc_chat gen_config /data/models/hf/augmxnt_shisa-7b-v1 --conv-template llama-2 -o dist/shisa-7b-v1-q4f16_1 --quantization q4f16_1
+
+$ mlc_chat compile dist/shisa-7b-v1-q4f16_1/mlc-chat-config.json --device rocm -o dist/libs/shisa-7b-v1-q4f16_1-rocm.so
+
+[2024-01-08 23:19:58] INFO auto_config.py:69: Found model configuration: dist/shisa-7b-v1-q4f16_1/mlc-chat-config.json
+[2024-01-08 23:19:58] INFO auto_device.py:76: Found device: rocm:0
+[2024-01-08 23:19:58] INFO auto_device.py:76: Found device: rocm:1
+[2024-01-08 23:19:58] INFO auto_target.py:62: Found configuration of target device "rocm:0": {"thread_warp_size": 32, "mtriple": "amdgcn-amd-amdhsa-hcc", "max_threads_per_block": 1024, "max_num_threads": 256, "kind": "rocm", "max_shared_memory_per_block": 65536, "tag": "", "mcpu": "gfx1100", "keys": ["rocm", "gpu"]}
+[2024-01-08 23:19:58] INFO auto_target.py:94: Found host LLVM triple: x86_64-unknown-linux-gnu
+[2024-01-08 23:19:58] INFO auto_target.py:95: Found host LLVM CPU: znver3
+[2024-01-08 23:19:58] INFO auto_config.py:151: Found model type: mistral. Use `--model-type` to override.
+Compiling with arguments:
+  --config          MistralConfig(hidden_size=4096, intermediate_size=14336, num_attention_heads=32, num_hidden_layers=32, rms_norm_eps=1e-05, vocab_size=120128, position_embedding_base=10000.0, num_key_value_heads=8, head_dim=128, sliding_window_size=4096, prefill_chunk_size=4096, attention_sink_size=4, tensor_parallel_shards=1, kwargs={})
+  --quantization    GroupQuantize(name='q4f16_1', kind='group-quant', group_size=32, quantize_dtype='int4', storage_dtype='uint32', model_dtype='float16', num_elem_per_storage=8, num_storage_per_group=4, max_int_value=7)
+  --model-type      mistral
+  --target          {"thread_warp_size": 32, "host": {"mtriple": "x86_64-unknown-linux-gnu", "tag": "", "kind": "llvm", "mcpu": "znver3", "keys": ["cpu"]}, "mtriple": "amdgcn-amd-amdhsa-hcc", "max_threads_per_block": 1024, "max_num_threads": 256, "kind": "rocm", "max_shared_memory_per_block": 65536, "tag": "", "mcpu": "gfx1100", "keys": ["rocm", "gpu"]}
+  --opt             flashinfer=0;cublas_gemm=0;cudagraph=0
+  --system-lib-prefix ""
+  --output          dist/libs/shisa-7b-v1-q4f16_1-rocm.so
+  --overrides       context_window_size=None;sliding_window_size=None;prefill_chunk_size=None;attention_sink_size=None;max_batch_size=None;tensor_parallel_shards=None
+[2024-01-08 23:19:58] INFO compile.py:131: Creating model from: MistralConfig(hidden_size=4096, intermediate_size=14336, num_attention_heads=32, num_hidden_layers=32, rms_norm_eps=1e-05, vocab_size=120128, position_embedding_base=10000.0, num_key_value_heads=8, head_dim=128, sliding_window_size=4096, prefill_chunk_size=4096, attention_sink_size=4, tensor_parallel_shards=1, kwargs={})
+[2024-01-08 23:19:58] INFO compile.py:141: Exporting the model to TVM Unity compiler
+[2024-01-08 23:19:59] INFO compile.py:147: Running optimizations using TVM Unity
+[2024-01-08 23:19:59] INFO compile.py:160: Registering metadata: {'model_type': 'mistral', 'quantization': 'q4f16_1', 'context_window_size': -1, 'sliding_window_size': 4096, 'attention_sink_size': 4, 'prefill_chunk_size': 4096, 'tensor_parallel_shards': 1, 'kv_cache_bytes': 536870912}
+[2024-01-08 23:19:59] INFO pipeline.py:35: Running TVM Relax graph-level optimizations
+[2024-01-08 23:20:00] INFO pipeline.py:35: Lowering to TVM TIR kernels
+[2024-01-08 23:20:01] INFO pipeline.py:35: Running TVM TIR-level optimizations
+[2024-01-08 23:20:03] INFO pipeline.py:35: Running TVM Dlight low-level optimizations
+[2024-01-08 23:20:04] INFO pipeline.py:35: Lowering to VM bytecode
+Segmentation fault (core dumped)
+
+```
+
 ## vLLM
 vLLM supports ROCm starting w/ v0.2.4, but only on MI200 cards...
 https://docs.vllm.ai/en/latest/getting_started/amd-installation.html#build-from-source-rocm
