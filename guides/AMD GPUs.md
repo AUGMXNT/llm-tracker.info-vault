@@ -247,7 +247,7 @@ pip install tensorflow-rocm
 python3 -c 'import tensorflow' 2> /dev/null && echo 'Success' || echo 'Failure'
 ```
 * Try out: https://cprimozic.net/notes/posts/machine-learning-benchmarks-on-the-7900-xtx/
-* Can run script but runs on CPU???
+* Can run script, says it's using ROCm Fusion, but runs on CPU?
 # Windows
 
 ## llama.cpp
