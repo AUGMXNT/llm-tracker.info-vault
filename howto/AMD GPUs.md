@@ -236,12 +236,26 @@ $ python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -s -gs 
  ** Position  3968 + 128 tokens:   65.2594 t/s 
 ```
 
-The ROCm kernel is very un-optimized vs the CUDA version. Inferencing runs at 116 tok/s on 3090, 137 tok/s on 4090, and prompt processing is even faster (5862 tok/s on 3090, 13955 tok/s on 4090). Fast prompt processing is one of ExLlama's biggest strengths. This becomes especially important with large-context/long multi-turn conversations.
+The ROCm kernel is very un-optimized vs the CUDA version, but you can see while inference performance is much lower than llama.cpp, the prompt processing remains ExLlama's strength (this is especially important for long context scenarios like long, multi-turn conversations or RAG).
+
+|  | [7900 XT](https://www.techpowerup.com/gpu-specs/radeon-rx-7900-xt.c3912) | [7900 XTX](https://www.techpowerup.com/gpu-specs/radeon-rx-7900-xtx.c3941) | [RTX 3090](https://www.techpowerup.com/gpu-specs/geforce-rtx-3090.c3622) | [RTX 4090](https://www.techpowerup.com/gpu-specs/geforce-rtx-4090.c3889) |
+| ---- | ---- | ---- | ---- | ---- |
+| Memory GB | 20 | 24 | 24 | 24 |
+| Memory BW GB/s | 800 | 960 | 936.2 | 1008 |
+| FP32 TFLOPS | 51.48 | 61.42 | 35.58 | 82.58 |
+| FP16 TFLOPS | 103.0 | 122.8 | 35.58 | 82.58 |
+| Prompt tok/s | 3457 | 3928 | 5863 | 13955 |
+| Prompt % | -12.0% | 0% | +49.3% | +255.3% |
+| Inference tok/s | 57.9 | 61.2 | 116.5 | 137.6 |
+| Inference % | -5.4% | 0% | +90.4% | +124.8% |
+* Tested 2024-01-08 with ExLlamaV2 `3b0f523` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.6.7-arch1-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
 ## vLLM
 vLLM supports ROCm starting w/ v0.2.4, but only on MI200 cards...
 https://docs.vllm.ai/en/latest/getting_started/amd-installation.html#build-from-source-rocm
 
-Let's see if we can force it to work, however. First, it looks like there is a Navi3 Flash Attention branch now: https://github.com/ROCmSoftwarePlatform/flash-attention/issues/27
+CURRENT STATUS: failed to get it working on RDNA3...
+
+It looks like there is a Navi3 Flash Attention branch now: https://github.com/ROCmSoftwarePlatform/flash-attention/issues/27
 ```
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention
 git branch -a
@@ -263,7 +277,7 @@ pip install -U -r requirements-rocm.txt
 export GPU_ARCHS=gfx1100
 python setup.py install # This may take 5-10 minutes. Currently, `pip install .`` does not work for ROCm installation
 
-# Error - just remove the quantization from setup.py!
+# Error - to work around, we just remove the quantization plugins from `setup.py`
 /home/lhl/vllm/vllm/csrc/quantization/gptq/q_gemm.hip:530:20: error: no viable overloaded '='                                                                
             res2.x = __half_as_ushort(__float2half(0));                       
             ~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                                                                                       
@@ -271,6 +285,23 @@ python setup.py install # This may take 5-10 minutes. Currently, `pip install .`
 ' for 1st argument                                                                                                                                           
             __half& operator=(const __half&) = default;                                                                                                      
                     ^                                    
+
+# Compile finishes and installs but when we try to run...
+(vllm) lhl@rocm:~/vllm$ python -m vllm.entrypoints.api_server
+/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+Traceback (most recent call last):
+  File "<frozen runpy>", line 189, in _run_module_as_main
+  File "<frozen runpy>", line 112, in _get_module_details
+  File "/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/__init__.py", line 3, in <module>
+    from vllm.engine.arg_utils import AsyncEngineArgs, EngineArgs
+  File "/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/engine/arg_utils.py", line 6, in <module>
+    from vllm.config import (CacheConfig, ModelConfig, ParallelConfig,
+  File "/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/config.py", line 9, in <module>
+    from vllm.utils import get_cpu_memory, is_hip
+  File "/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/utils.py", line 11, in <module>
+    from vllm._C import cuda_utils
+ImportError: /home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/_C.cpython-311-x86_64-linux-gnu.so: undefined symbol: _Z9gptq_gemmN2at6TensorES0_S0_S0_S0_b
 ```
 
 ## TensorFlow
@@ -294,7 +325,7 @@ python bench.py
 
 024-01-08 08:53:52.438031: I tensorflow/core/common_runtime/gpu/gpu_device.cc:2015] Ignoring visible gpu device (device: 0, name: Radeon RX 7900 XTX, pci bus id: 0000:0c:00.0) with AMDGPU version : gfx1100. The supported AMDGPU versions are gfx1030, gfx900, gfx906, gfx908, gfx90a, gfx940, gfx941, gfx942.
 ```
-Apparently you need to build your own TF...
+Apparently you need to build your own TF for `gfx1100` support...
 * https://gist.github.com/briansp2020/1e8c3e5735087398ebfd9514f26a0007
 * https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/
 * https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63
