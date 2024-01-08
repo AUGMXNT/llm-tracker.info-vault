@@ -237,6 +237,19 @@ $ python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -s -gs 
 ```
 
 The ROCm kernel is very un-optimized vs the CUDA version. Inferencing runs at 116 tok/s on 3090, 137 tok/s on 4090, and prompt processing is even faster (5862 tok/s on 3090, 13955 tok/s on 4090). Fast prompt processing is one of ExLlama's biggest strengths. This becomes especially important with large-context/long multi-turn conversations.
+## vLLM
+vLLM supports ROCm starting w/ v0.2.4, but only on MI200 cards...
+https://docs.vllm.ai/en/latest/getting_started/amd-installation.html#build-from-source-rocm
+
+Let's see if we can force it to work, however. First, it looks like there is a Navi3 Flash Attention branch now: https://github.com/ROCmSoftwarePlatform/flash-attention/issues/27
+```
+git clone https://github.com/ROCmSoftwarePlatform/flash-attention
+git branch -a
+git switch howiejay/navi_support
+export GPU_ARCHS=gfx1100
+pip install .
+```
+* https://github.com/ROCm/composable_kernel/discussions/1032
 ## TensorFlow
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
 ```
@@ -248,6 +261,21 @@ python3 -c 'import tensorflow' 2> /dev/null && echo 'Success' || echo 'Failure'
 ```
 * Try out: https://cprimozic.net/notes/posts/machine-learning-benchmarks-on-the-7900-xtx/
 * Can run script, says it's using ROCm Fusion, but runs on CPU?
+```
+# get device list
+rocminfo
+
+# try hip devices
+export HIP_VISIBLE_DEVICES=1
+python bench.py
+
+024-01-08 08:53:52.438031: I tensorflow/core/common_runtime/gpu/gpu_device.cc:2015] Ignoring visible gpu device (device: 0, name: Radeon RX 7900 XTX, pci bus id: 0000:0c:00.0) with AMDGPU version : gfx1100. The supported AMDGPU versions are gfx1030, gfx900, gfx906, gfx908, gfx90a, gfx940, gfx941, gfx942.
+```
+Apparently you need to build your own TF...
+* https://gist.github.com/briansp2020/1e8c3e5735087398ebfd9514f26a0007
+* https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/
+* https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63
+
 # Windows
 
 ## llama.cpp
