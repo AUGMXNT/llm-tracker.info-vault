@@ -259,7 +259,18 @@ pip install xformers==0.0.23 --no-deps
 bash patch_xformers.rocm.sh
 
 pip install -U -r requirements-rocm.txt
+
+export GPU_ARCHS=gfx1100
 python setup.py install # This may take 5-10 minutes. Currently, `pip install .`` does not work for ROCm installation
+
+# Error - just remove the quantization from setup.py!
+/home/lhl/vllm/vllm/csrc/quantization/gptq/q_gemm.hip:530:20: error: no viable overloaded '='                                                                
+            res2.x = __half_as_ushort(__float2half(0));                       
+            ~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                                                                                       
+/opt/rocm-6.0.0/include/hip/amd_detail/amd_hip_fp16.h:122:21: note: candidate function not viable: no known conversion from 'unsigned short' to 'const __half
+' for 1st argument                                                                                                                                           
+            __half& operator=(const __half&) = default;                                                                                                      
+                    ^                                    
 ```
 
 ## TensorFlow
