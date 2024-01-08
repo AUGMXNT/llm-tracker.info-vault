@@ -131,6 +131,8 @@ make LLAMA_HIPBLAS=1
 * https://github.com/ggerganov/llama.cpp/#hipblas
 * You can use `LLAMA_HIP_UMA=1` for unified memory for APUs
 
+Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
+
 7900 XT + 7900 XTX used together segfaults :(
 ```
 $ ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
@@ -189,6 +191,8 @@ While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and co
 * Tested 2024-01-08 with llama.cpp `b737982 (1787)` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.6.7-arch1-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
 
 ## ExLlamaV2
+We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
+
 Install is straightforward:
 ```bash
 mamba create -n exllamav2 python=3.11
