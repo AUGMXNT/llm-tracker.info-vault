@@ -15,3 +15,6 @@ DeepSeek 67B vs Mixtral 8x7B - chatntq qlora
 KTO
 https://contextual.ai/better-cheaper-faster-llm-alignment-with-kto/
 https://github.com/ContextualAI/HALOs/blob/main/assets/report.pdf
+
+MergeKit
+https://github.com/cg123/mergekit/blob/mixtral/moe.md
