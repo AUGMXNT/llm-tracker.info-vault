@@ -25,7 +25,7 @@ Vulkan drivers can use GTT memory dynamically, but w/ MLC LLM, Vulkan version is
 * A writeup of someone playing around w/ ROCm and SD on an older APU: [https://www.gabriel.urdhr.fr/2022/08/28/trying-to-run-stable-diffusion-on-amd-ryzen-5-5600g/](https://www.gabriel.urdhr.fr/2022/08/28/trying-to-run-stable-diffusion-on-amd-ryzen-5-5600g/)
 ## Radeon VII
 We have some previous known good memory timings for an old Radeon VII card:
-```
+```shell
 sudo sh -c 'echo manual > /sys/class/drm/card0/device/power_dpm_force_performance_level'
 sudo sh -c 'echo 8 > /sys/class/drm/card0/device/pp_dpm_sclk'
 sudo amdmemorytweak --gpu 0 --ref 7500 --rtp 6 --rrds 3 --faw 12 --ras 19 --rc 30 --rcdrd 11 --rp 11
@@ -36,7 +36,7 @@ sudo amdmemorytweak --gpu 0 --ref 7500 --rtp 6 --rrds 3 --faw 12 --ras 19 --rc 3
 Arch Linux setup is fairly straightforward (can be easier than the official install!) but is community supported by [rocm-arch](https://github.com/rocm-arch/rocm-arch). If you're running an Arch system already, this should be fine, but if you're running a system dedicated to ML, then you should prefer Ubuntu.
 
 Install ROCm:
-```
+```shell
 # all the amd gpu compute stuff
 yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
 
@@ -44,12 +44,12 @@ yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
 yay -S amdgpu_top radeontop
 ```
 Install conda (mamba)
-```
+```shell
 yay -S mambaforge
 /opt/mambaforge/bin/mamba init fish
 ```
 Create Environment
-```
+```shell
 mamba create -n llm
 mamba activate llm
 ```
@@ -115,7 +115,7 @@ reboot
 
 ## cmath
 You may run into some compile errors. You will need `libstdc++-12-dev` in Ubuntu:
-```
+```shell
 /opt/rocm-6.0.0/lib/llvm/lib/clang/17.0.0/include/cuda_wrappers/cmath:27:15: fatal error: 'cmath' file not found
 #include_next <cmath>
 
@@ -123,7 +123,7 @@ sudo apt install libstdc++-12-dev
 ```
 ## llama.cpp
 llama.cpp has  ROCm support built-in now:
-```
+```shell
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
 make LLAMA_HIPBLAS=1
@@ -134,7 +134,7 @@ make LLAMA_HIPBLAS=1
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
 7900 XT + 7900 XTX used together segfaults :(
-```
+```shell
 $ ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
 ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
 ggml_init_cublas: CUDA_USE_TENSOR_CORES: yes
@@ -147,7 +147,7 @@ Segmentation fault (core dumped)
 ```
 
 7900 XT:
-```
+```shell
 $ CUDA_VISIBLE_DEVICES=0 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
 ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
 ggml_init_cublas: CUDA_USE_TENSOR_CORES: yes
@@ -162,7 +162,7 @@ build: b7e7982 (1787)
 ```
 
 7900 XTX:
-```
+```shell
 $ CUDA_VISIBLE_DEVICES=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
 ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
 ggml_init_cublas: CUDA_USE_TENSOR_CORES: yes
@@ -194,7 +194,7 @@ While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and co
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
 
 Install is straightforward:
-```bash
+```shell
 mamba create -n exllamav2 python=3.11
 mamba activate exllamav2
 
@@ -208,7 +208,7 @@ pip install -r requirements.txt
 ```
 
 7900 XT
-```bash
+```shell
 $ CUDA_VISIBLE_DEVICES=0 python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -ps
 ...
  ** Length  4096 tokens:   3457.0153 t/s
@@ -219,7 +219,7 @@ $ CUDA_VISIBLE_DEVICES=0 python test_inference.py -m /data/models/gptq/TheBloke_
 ```
 
 7900 XTX
-```bash
+```shell
 $ CUDA_VISIBLE_DEVICES=1 python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -ps
 ...
  ** Length  4096 tokens:   3927.6424 t/s
@@ -230,7 +230,7 @@ $ CUDA_VISIBLE_DEVICES=1 python test_inference.py -m /data/models/gptq/TheBloke_
 ```
 
 Running with both GPUs work, although it defaults to loading everything onto one. If you force the VRAM, interestingly, you can get batch=1 inference to perform slightly better:
-```
+```shell
 $ python test_inference.py -m /data/models/gptq/TheBloke_Llama-2-7B-GPTQ -ps -gs 4,4
 ...
  ** Length  4096 tokens:   3458.9969 t/s
@@ -255,7 +255,7 @@ The ROCm kernel is very un-optimized vs the CUDA version, but you can see while 
 * Tested 2024-01-08 with ExLlamaV2 `3b0f523` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.6.7-arch1-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
 ## MLC
 ### Setup
-```
+```shell
 mamba create -n mlc python=3.11
 mamba install -c conda-forge libgcc-ng
 python3 -m pip install --pre -U -f https://mlc.ai/wheels mlc-chat-nightly-rocm57 mlc-ai-nightly-rocm57
@@ -317,7 +317,7 @@ https://docs.vllm.ai/en/latest/getting_started/amd-installation.html#build-from-
 CURRENT STATUS: failed to get it working on RDNA3...
 
 It looks like there is a Navi3 Flash Attention branch now: https://github.com/ROCmSoftwarePlatform/flash-attention/issues/27
-```
+```shell
 git clone https://github.com/ROCmSoftwarePlatform/flash-attention
 git branch -a
 git switch howiejay/navi_support
@@ -371,7 +371,7 @@ The most current working fork (related to the that PR):
 - https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6/tree/rocm
 ## TensorFlow
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
-```
+```shell
 mamba create -n tf python=3.10
 sudo apt install rocm-libs rccl
 pip install protobuf=3.19.0
@@ -380,7 +380,7 @@ python3 -c 'import tensorflow' 2> /dev/null && echo 'Success' || echo 'Failure'
 ```
 * Try out: https://cprimozic.net/notes/posts/machine-learning-benchmarks-on-the-7900-xtx/
 * Can run script, says it's using ROCm Fusion, but runs on CPU?
-```
+```shell
 # get device list
 rocminfo
 
@@ -403,7 +403,7 @@ For an easy time, go to [llama.cpp's release page](https://github.com/ggerganov/
 
 In the Windows terminal, run it with `-ngl 99` to load all the layers into memory.
 
-```
+```shell
 .\main.exe -m model.bin -ngl 99
 ```
 
@@ -416,7 +416,7 @@ This was last update 2023-09-03 so things might change, but here's how I was abl
 * You'll need `git` if you want to pull the latest from the repo (you can either get the [official Windows installer](https://git-scm.com/download/win) or use a package manager like [Chocolatey](https://chocolatey.org/) to `choco install git`) - note, as an alternative, you could just download the Source code.zip from the [https://github.com/ggerganov/llama.cpp/releases/](https://github.com/ggerganov/llama.cpp/releases/)
 #### Instructions
 First, launch "x64 Native Tools Command Prompt" from the Windows Menu (you can hit the Windows key and just start typing x64 and it should pop up).
-```
+```shell
 # You should probably change to a folder you want first for grabbing the source
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
@@ -435,7 +435,7 @@ cmake.exe --build .
 That's it, now you have compiled executables in `build/bin`.
 
 Start a new terminal to run llama.CPP
-```
+```shell
 # You can do this in the GUI search for "environment variable" as well
 setx /M PATH "C:\Program Files\AMD\ROCm\5.5\bin;%PATH%"
 
@@ -448,7 +448,7 @@ If you set just the global you may need to start a new shell before running this
 NOTE: If your PATH is wonky for some reason you may get missing .dll errors. You can either fix that, or if all else fails, copy the missing files from `"C:\Program Files\AMD\ROCm\5.5\bin` into the `build/bin` folder since life is too short.
 #### Results
 Here's my `llama-bench` results running a llama2-7b q4_0 and q4_K_M:
-```
+```shell
 C:\Users\lhl\Desktop\llama.cpp\build\bin>llama-bench.exe -m ..\..\meta-llama-2-7b-q4_0.gguf -p 3968 -n 128 -ngl 99
 ggml_init_cublas: found 1 ROCm devices:
   Device 0: AMD Radeon RX 7900 XT, compute capability 11.0
@@ -473,4 +473,9 @@ build: 69fdbb9 (1148)
 On Windows, it may not be possible to apply an `HSA_OVERRIDE_GFX_VERSION` override. In that case, these instructions for compiling custom kernels may help: [https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/](https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/)
 
 ## Resources
-Here's a ROCm fork of DeepSpeed: https://github.com/ascent-tek/rocm_containers/blob/main/README_DeepSpeed.md
+Here's a ROCm fork of DeepSpeed (2023-09):
+- https://github.com/ascent-tek/rocm_containers/blob/main/README_DeepSpeed.md
+
+2023-07 [Casey Primozic](https://cprimozic.net/) did some testing/benchmarking of the 7900 XTX (TensorFlow, TinyGrad):
+- https://cprimozic.net/notes/posts/machine-learning-benchmarks-on-the-7900-xtx/
+- 
