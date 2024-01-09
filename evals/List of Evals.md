@@ -22,6 +22,9 @@
     - [Winogrande](https://paperswithcode.com/sota/common-sense-reasoning-on-winogrande)
     - [BoolQ](https://paperswithcode.com/sota/question-answering-on-boolq)
     - [HumanEval](https://paperswithcode.com/sota/code-generation-on-humaneval)
+- YALL
+	- 
+	- https://github.com/mlabonne/llm-autoeval
 
 See also:
 
