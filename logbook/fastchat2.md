@@ -21,6 +21,8 @@ yt-dlp -f 'bestaudio' -x 'https://www.youtube.com/watch?v=pT-Lm4DEqaw' -o 'en-sa
 ```
 
 # 4090
+
+## insanely-fast-whisper (v3-large)
 ```
 ❯ time insanely-fast-whisper --file-name ja-sample.opus 
 /home/local/.local/lib/python3.10/site-packages/pyannote/audio/core/io.py:43: UserWarning: torchaudio._backend.set_audio_backend has been deprecated. With dispatcher enabled, this function is no-op. You can remove the function call.
@@ -53,6 +55,14 @@ sys     0m53.873s
 ```
 - 10539 MB
 
+## WhisperX
+Install
+```
+pip install git+https://github.com/m-bain/whisperx.git
+```
+
+
+
 # 7840HS
 ROCm
 ```
@@ -61,3 +71,11 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 # Put this in your .bashrc ideally
 export HSA_OVERRIDE_GFX_VERSION=11.0.0
 ```
+
+## ROCm Support
+insanely-fast-whisper - 
+WhisperX: no https://github.com/OpenNMT/CTranslate2/issues/1072
+
+
+# MLX
+https://owehrens.com/whisper-nvidia-rtx-4090-vs-m1pro-with-mlx/
