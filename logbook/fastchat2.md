@@ -134,3 +134,16 @@ distil:
 # MLX
 https://owehrens.com/whisper-nvidia-rtx-4090-vs-m1pro-with-mlx/
 https://news.ycombinator.com/item?id=38628184
+https://www.markhneedham.com/blog/2023/12/23/insanely-fast-whisper-experiments/
+
+# Distil-Whisper
+English only
+https://github.com/huggingface/distil-whisper
+- large-v2 = 1550
+- distil-large-v2 = 756
+- distil-medium.en = 394
+- distil-small.en = 166
+
+JA Training: https://github.com/huggingface/distil-whisper/tree/main/training
+
+Speculative decoding: https://twitter.com/reach_vb/status/1744324782802264156
