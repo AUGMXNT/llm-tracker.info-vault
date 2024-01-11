@@ -18,3 +18,8 @@ https://github.com/ContextualAI/HALOs/blob/main/assets/report.pdf
 
 MergeKit
 https://github.com/cg123/mergekit/blob/mixtral/moe.md
+
+Test
+https://huggingface.co/openchat/openchat-3.5-1210
+https://github.com/imoneoi/openchat
+https://openchat.team/

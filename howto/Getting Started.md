@@ -44,7 +44,8 @@ You can also run LLMs locally on most modern computers (although larger models r
 The easiest (virtually one-click, no command line futzing) way to test out some models is with [LM Studio](https://lmstudio.ai/) (Linux, Mac, Windows). Other alternatives include:
 
 - [Nomic's GPT4All](https://gpt4all.io/) ([Github](https://github.com/nomic-ai/gpt4all)) - Windows, Mac, Linux
-- [Ollama](https://ollama.ai/) ([Github](https://github.com/jmorganca/ollama)) - Mac
+- [Ollama](https://ollama.ai/) ([Github](https://github.com/jmorganca/ollama)) - Mac, Linux
+- https://jan.ai/
 
 If you are more technical:
 
@@ -68,3 +69,8 @@ Global Recommendations:
 
 - [LocalLLaMA Wiki](https://www.reddit.com/r/LocalLLaMA/wiki/index/)
 - [https://github.com/underlines/awesome-marketing-datascience/blob/master/README.md](https://github.com/underlines/awesome-marketing-datascience/blob/master/README.md)
+
+
+
+https://github.com/LykosAI/StabilityMatrix
+https://github.com/comfyanonymous/ComfyUI

@@ -64,6 +64,8 @@ See also:
 * 
 
 # New
+* https://www.reddit.com/r/LocalLLaMA/comments/1945tfv/challenge_llms_to_reason_about_reasoning_a/
+	* DiagGSM8K
 * EvalPlus 0.2 - https://github.com/evalplus/evalplus/releases/tag/v0.2.0
 * MMMU
   * https://huggingface.co/papers/2311.16502
