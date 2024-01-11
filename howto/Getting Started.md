@@ -25,8 +25,7 @@ All of these have free access, although many may require user registration, and 
 
 
 - Comparisons 
-    - 
-
+    - https://app.composo.ai/playground
     - [Anyscale Aviary Explorer](https://aviary.anyscale.com/)
     - [h2oGPT](https://gpt.h2o.ai/)
 
