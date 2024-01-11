@@ -2,32 +2,46 @@
 
 You can try many of these for free if you've never tried one (although most of this site is aimed at those with more familiarity with these types of systems).
 
-All of these have free access, although many may require user registration, and remember, all data is being sent online to third parties so don't say anything you'd want to keep very private:
+All of these have free access, although many may require user registration, and remember, all data is being sent online to third parties so don't say anything you'd want to keep very private.
 
-- Chat Services 
-    - [OpenAI ChatGPT](https://chat.openai.com/) - the free version uses 3.5, and is not as smart, but good for dipping your toe in. 
-        - [chat.getgpt.world](https://chat.getgpt.world/) - HK (Alibaba Cloud) based server w/ gpt-3.5-turbo access
-    - [Anthropic Claude](https://claude.ai/) - this is an interesting alternative, has super long context window (short-term memory) so can interact w/ very long files for summarization, etc.
-    - [HuggingFace Chat](https://huggingface.co/chat/) - chat for free w/ some of the best open models
-    - [ChatNBX](https://chat.nbox.ai/) - talk to some of the best open models and compare
-    - [Perplexity.ai](https://www.perplexity.ai/) - the best free service w/ web search capabilities 
-        - [Perplexity Labs](https://labs.perplexity.ai/) - hosts some open models to try as well
-- More 
-    - [Bing Chat](https://www.bing.com/chat) (requires Microsoft Edge lol) - also has web capabilities 
-        - [Bing Chat History extension](https://chrome.google.com/webstore/detail/bing-chat-history/hjhpahdglfjddhhecnjlhckicdpcdhpg) ([Github](https://github.com/benf2004/Bing-Chat-History))
-    - [Google Bard](https://bard.google.com/)
-    - [You.com](https://you.com/) - 100 free AI chat searches
-    - [DeepAI Chat](https://deepai.org/chat)
-    - [Hugging Face Spaces](https://huggingface.co/spaces)
+# Hosted Services
+## Proprietary Model Chat
+- [OpenAI ChatGPT](https://chat.openai.com/) - the free version uses 3.5, and is not as smart, but good for dipping your toe in. 
+- [Anthropic Claude](https://claude.ai/) - this is an interesting alternative, has super long context window (short-term memory) so can interact w/ very long files for summarization, etc.
+- [Google Bard](https://bard.google.com/) - now running Gemini Pro, which is about ChatGPT 3.5 level
+- [Perplexity.ai](https://www.perplexity.ai/) - the best free service w/ web search capabilities 
+- [You.com](https://you.com/) - another search and chat provider
+- [Phind](https://www.phind.com/) - Proprietary coding model ([fine-tuned off of Code Llama 34B](https://news.ycombinator.com/item?id=38088538))
+
+## Open Model Chat
+- [HuggingFace Chat](https://huggingface.co/chat/) - chat for free w/ some of the best open models
+- [ChatNBX](https://chat.nbox.ai/) - talk to some of the best open models and compare
+- [Perplexity Labs](https://labs.perplexity.ai/) - hosts some open models to try as well
+- [DeepSeek Coder](https://chat.deepseek.com/coder) - an Open Source coding model developed by a Chinese company, https://deepseekcoder.github.io/ - currently one of the strongest coding models
+## Open Model Testing
+- [Hugging Face Spaces](https://huggingface.co/spaces) - there's a huge amount of "spaces" with hosted models for testing. These are typically running on small/slow instances with queues so mainly good for the most simple testing
+- [Vercel SDK Playground](https://sdk.vercel.ai/) - lets you easily A/B test a small selection of models
+- [nat.dev Playground](https://nat.dev/) - a better selection of models
+
+
 - Comparisons 
-    - [Vercel SDK Playground](https://sdk.vercel.ai/)
-    - [nat.dev Playground](https://nat.dev/)
+    - 
+
     - [Anyscale Aviary Explorer](https://aviary.anyscale.com/)
     - [h2oGPT](https://gpt.h2o.ai/)
 
+
+## Open API
+https://openrouter.ai/
+https://www.anyscale.com/endpoints
+https://replicate.com/
+https://www.together.ai/
+https://www.fireworks.ai/
+
+
 You can also run LLMs locally on most modern computers (although larger models require strong GPUs).
 
-The easiest (virtually one-click, no command line futzing) way to test out some models is with [LM Studio](https://lmstudio.ai/) (Windows, Mac). Other alternatives include:
+The easiest (virtually one-click, no command line futzing) way to test out some models is with [LM Studio](https://lmstudio.ai/) (Linux, Mac, Windows). Other alternatives include:
 
 - [Nomic's GPT4All](https://gpt4all.io/) ([Github](https://github.com/nomic-ai/gpt4all)) - Windows, Mac, Linux
 - [Ollama](https://ollama.ai/) ([Github](https://github.com/jmorganca/ollama)) - Mac
