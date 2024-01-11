@@ -61,8 +61,53 @@ Install
 pip install git+https://github.com/m-bain/whisperx.git
 ```
 
+```
+❯ time whisperx --model large-v3 --language ja ja-sample.opus 
+/home/local/.conda/envs/fastchat2/lib/python3.11/site-packages/pyannote/audio/core/io.py:43: UserWarning: torchaudio._backend.set_audio_backend has been deprecated. With dispatcher enabled, this function is no-op. You can remove the function call.
+  torchaudio.set_audio_backend("soundfile")
+/home/local/.conda/envs/fastchat2/lib/python3.11/site-packages/torch_audiomentations/utils/io.py:27: UserWarning: torchaudio._backend.set_audio_backend has been deprecated. With dispatcher enabled, this function is no-op. You can remove the function call.
+  torchaudio.set_audio_backend("soundfile")
+torchvision is not available - cannot save figures
+Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.1.3. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint ../.cache/torch/whisperx-vad-segmentation.bin`
+Model was trained with pyannote.audio 0.0.1, yours is 3.1.1. Bad things might happen unless you revert pyannote.audio to 0.x.
+Model was trained with torch 1.10.0+cu102, yours is 2.1.2+cu121. Bad things might happen unless you revert torch to 1.x.
+>>Performing transcription...
+Ignored unknown kwarg option normalize
+Ignored unknown kwarg option normalize
+Ignored unknown kwarg option normalize
+Ignored unknown kwarg option normalize
+Some weights of the model checkpoint at jonatasgrosman/wav2vec2-large-xlsr-53-japanese were not used when initializing Wav2Vec2ForCTC: ['wav2vec2.encoder.pos_conv_embed.conv.weight_g', 'wav2vec2.encoder.pos_conv_embed.conv.weight_v']
+- This IS expected if you are initializing Wav2Vec2ForCTC from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing Wav2Vec2ForCTC from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of Wav2Vec2ForCTC were not initialized from the model checkpoint at jonatasgrosman/wav2vec2-large-xlsr-53-japanese and are newly initialized: ['wav2vec2.encoder.pos_conv_embed.conv.parametrizations.weight.original1', 'wav2vec2.encoder.pos_conv_embed.conv.parametrizations.weight.original0']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+>>Performing alignment...
 
+real    0m19.488s
+user    0m22.797s
+sys     0m8.183s
+```
+- 6625 MB
 
+```
+❯ time whisperx --model large-v3 --language en en-sample.opus 
+/home/local/.conda/envs/fastchat2/lib/python3.11/site-packages/pyannote/audio/core/io.py:43: UserWarning: torchaudio._backend.set_audio_backend has been deprecated. With dispatcher enabled, this function is no-op. You can remove the function call.
+  torchaudio.set_audio_backend("soundfile")
+/home/local/.conda/envs/fastchat2/lib/python3.11/site-packages/torch_audiomentations/utils/io.py:27: UserWarning: torchaudio._backend.set_audio_backend has been deprecated. With dispatcher enabled, this function is no-op. You can remove the function call.
+  torchaudio.set_audio_backend("soundfile")
+torchvision is not available - cannot save figures
+Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.1.3. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint ../.cache/torch/whisperx-vad-segmentation.bin`
+Model was trained with pyannote.audio 0.0.1, yours is 3.1.1. Bad things might happen unless you revert pyannote.audio to 0.x.
+Model was trained with torch 1.10.0+cu102, yours is 2.1.2+cu121. Bad things might happen unless you revert torch to 1.x.
+>>Performing transcription...
+>>Performing alignment...
+
+real    0m13.672s
+user    0m14.951s
+sys     0m7.084s
+
+```
+- 6273
 # 7840HS
 ROCm
 ```
@@ -74,8 +119,14 @@ export HSA_OVERRIDE_GFX_VERSION=11.0.0
 
 ## ROCm Support
 insanely-fast-whisper - 
+
 WhisperX: no https://github.com/OpenNMT/CTranslate2/issues/1072
 
+distil:
+- https://github.com/m-bain/whisperX/issues/558
+- https://github.com/SYSTRAN/faster-whisper/issues/533
+- https://github.com/SYSTRAN/faster-whisper/pull/557
 
 # MLX
 https://owehrens.com/whisper-nvidia-rtx-4090-vs-m1pro-with-mlx/
+https://news.ycombinator.com/item?id=38628184
