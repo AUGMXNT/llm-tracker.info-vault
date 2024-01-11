@@ -1,3 +1,8 @@
+* 2023-01-07 [MK1 Flywheel Unlocks the Full Potential of AMD Instinct for LLM Inference](https://mkone.ai/blog/mk1-flywheel-amd)
+	* Closed source, but interesting analysis of MI210 optimization
+	* Discussion
+		* https://news.ycombinator.com/item?id=38906208
+		* https://news.ycombinator.com/item?id=37016413
 * 2023-11 - llama.cpp Mac performance 
   - [https://github.com/ggerganov/llama.cpp/discussions/4167](https://github.com/ggerganov/llama.cpp/discussions/4167)
 - [2023-08-14 Aman Sanger (cursor.so) comparing high batch throughput](https://twitter.com/amanrsanger/status/1690828453233463297)
