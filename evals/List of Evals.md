@@ -1,3 +1,8 @@
+2024-01: Towards the end of 2023, the [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard) has driven a trend of benchmark gaming that makes it (and other synthetic benchmarks) largely unuseful for testing model capabilities.
+
+The current consensus is that [LMSys Chatbot Arena](https://chat.lmsys.org/?leaderboard) which allows users to compare responses and choose a winner (and does ELO style ranking) is the current gold standard for ranking general model performance. Obviously, this is has its own weaknesses (biased by audience and use case, colored by refusals or other considerations), but it's seems to be the best we've got atm.
+* LMSys is also [collecting datasets from this chat data](https://huggingface.co/lmsys) which is incredibly useful.
+
 # General
 - [MosaicML Model Gauntlet](https://www.mosaicml.com/llm-evaluation) - 34 benchmarks in 6 categories
 - [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)

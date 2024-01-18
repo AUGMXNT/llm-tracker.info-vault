@@ -13,6 +13,9 @@ https://github.com/AUGMXNT/gpt4-autoeval
 
 
 
+https://github.com/UnderstandLingBV/LLaMa2lang
+* Automatic Translation
+
 
 There has been a stream of open Japanese LLMs being trained but they are on average far behind their English counterparts. The current most promising open model for conversation and instruction are the ELYZA Llama2-based models.
 
