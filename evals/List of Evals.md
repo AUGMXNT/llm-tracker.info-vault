@@ -1,8 +1,9 @@
 2024-01: Towards the end of 2023, the [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard) has driven a trend of benchmark gaming that makes it (and other synthetic benchmarks) largely unuseful for testing model capabilities.
 
 The current consensus is that [LMSys Chatbot Arena](https://chat.lmsys.org/?leaderboard) which allows users to compare responses and choose a winner (and does ELO style ranking) is the current gold standard for ranking general model performance. Obviously, this is has its own weaknesses (biased by audience and use case, colored by refusals or other considerations), but it's seems to be the best we've got atm.
-* LMSys is also [collecting datasets from this chat data](https://huggingface.co/lmsys) which is incredibly useful.
-
+* LMSys is also [collecting datasets from this chat data](https://huggingface.co/lmsys) which could be extremely useful for training
+* u/DontPlanToEnd posted a [benchmark correlation analysis](https://www.reddit.com/r/LocalLLaMA/comments/18u0tu3/benchmarking_the_benchmarks_correlation_with/) on 2023-12-30 which showed MT-Bench (GPT-4 judged benchmark) had 0.89 correlation with Chatbot Arena, making it probably the 2nd best score. (MMLU has 0.85 correlation)
+* u/WolframRavenwolf has been posting his own [LLM Comparison/Tests](https://www.reddit.com/user/WolframRavenwolf/submitted/) of new models which is pretty interesting - it tests in German (almost assuredly out of distribution) and focuses on instruction following, but is a good sanity check
 # General
 - [MosaicML Model Gauntlet](https://www.mosaicml.com/llm-evaluation) - 34 benchmarks in 6 categories
 - [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)
@@ -89,6 +90,8 @@ See also:
   * https://arxiv.org/abs/2310.17567
 * Flash HELM
   * https://arxiv.org/abs/2308.11696
+* ARB: Advanced Reasoning Benchmark for Large Language Models
+	* https://arxiv.org/abs/2307.13692
 * FLASK
   * https://twitter.com/SeonghyeonYe/status/1682209670302408705
   * https://arxiv.org/abs/2307.10928
