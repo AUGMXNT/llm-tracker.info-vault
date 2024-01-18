@@ -37,3 +37,11 @@ https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai-
 - https://openai.com/research/gpts-are-gpts
 - https://arxiv.org/abs/2303.10130
 
+
+# Japan
+## 2023-06 The Economic Impact of Generative AI: The Future of Work in Japan 
+https://accesspartnership.com/the-economic-impact-of-generative-ai-the-future-of-work-in-japan/
+## 2023-05-12 Japan takes step toward setting generative AI guidelines
+https://asia.nikkei.com/Business/Technology/Japan-takes-step-toward-setting-generative-AI-guidelines
+## 2023-02-14 CSIS: Japan’s Approach to AI Regulation and Its Impact on the 2023 G7 Presidency 
+https://www.csis.org/analysis/japans-approach-ai-regulation-and-its-impact-2023-g7-presidency
