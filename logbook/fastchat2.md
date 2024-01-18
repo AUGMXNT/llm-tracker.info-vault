@@ -147,3 +147,28 @@ https://github.com/huggingface/distil-whisper
 JA Training: https://github.com/huggingface/distil-whisper/tree/main/training
 
 Speculative decoding: https://twitter.com/reach_vb/status/1744324782802264156
+
+
+
+# SRT
+https://github.com/m-bain/whisperX
+- https://github.com/m-bain/whisperX/issues/558
+- https://github.com/SYSTRAN/faster-whisper/issues/533
+- https://github.com/SYSTRAN/faster-whisper/pull/557
+# TTS
+https://github.com/collabora/WhisperSpeech
+
+
+# See also
+https://github.com/collabora/WhisperLive
+https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/README.en.md
+https://github.com/Sharrnah/whispering
+https://github.com/semperai/amica
+
+https://github.com/KoljaB/RealtimeSTT
+- https://github.com/KoljaB/RealtimeTTS
+https://github.com/KoljaB/RealtimeTTS
+
+https://github.com/KoljaB/RealtimeSTT/blob/master/tests/translator.py
+* Translate each chunk
+* Run again on sentence
