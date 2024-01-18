@@ -11,6 +11,7 @@ As of ROCm 5.7, Radeon RX 7900 XTX, XT, and PRO W7900 are officially supported a
 - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/compatibility.html
 - https://are-we-gfx1100-yet.github.io/
 * [https://news.ycombinator.com/item?id=36574179](https://news.ycombinator.com/item?id=36574179)
+* I posted my 7900XT/XTX results on Reddit, some conversation here: https://www.reddit.com/r/LocalLLaMA/comments/191srof/amd_radeon_7900_xtxtx_inference_performance/
 
 ## AMD APU
 Performance 65W 7940HS w/ 64GB of DDR5-5600 (83GB/s theoretical memory bandwidth): [https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1041125589](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1041125589)

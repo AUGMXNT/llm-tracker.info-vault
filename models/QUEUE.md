@@ -3,6 +3,10 @@
 * https://huggingface.co/jondurbin/bagel-dpo-34b-v0.2
 * Yi-34B-based
 * Multi-dataset, multi-prompt format
+* One of the best models out
+	* 
+
+
 # Beyonder-4x7b
 - https://huggingface.co/mlabonne/Beyonder-4x7b
 - MergeKit MoE
