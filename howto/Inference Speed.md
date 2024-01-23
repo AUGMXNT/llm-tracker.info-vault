@@ -1,3 +1,5 @@
+See: https://huggingface.co/collections/leonardlin/speed-6583d7a3b02f38ef348139ef
+
 * 2023-01-07 [MK1 Flywheel Unlocks the Full Potential of AMD Instinct for LLM Inference](https://mkone.ai/blog/mk1-flywheel-amd)
 	* Closed source, but interesting analysis of MI210 optimization
 	* Discussion
@@ -43,3 +45,5 @@ For batch=1 performance, you can roughly estimate performance:
   - You can divide memory bandwidth by memory used for a model to get a ballpark estimate of batch=1 perf
   - For a q4 quant, you can also ballpark w/ # of parameters.
   - As an example, a 4090 w/ 1,008 GB/s of memory bandwidth would be expected to get around 150 or 144 t/s depending on the which estimate and pretty close to benchmark results
+
+https://github.com/apoorvumang/prompt-lookup-decoding
