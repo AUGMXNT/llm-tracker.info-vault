@@ -30,12 +30,21 @@ All of these have free access, although many may require user registration, and 
     - [h2oGPT](https://gpt.h2o.ai/)
 
 
-## Open API
+## Paid Open Models
+This site tracks quality, throughput, price of various API hosting providers: https://artificialanalysis.ai/
+
 https://openrouter.ai/
 https://www.anyscale.com/endpoints
 https://replicate.com/
 https://www.together.ai/
 https://www.fireworks.ai/
+
+
+# GPU Pricing
+- https://computewatch.llm-utils.org/
+- https://gpus.llm-utils.org/alternative-gpu-clouds/
+- H100s: https://gpus.llm-utils.org/h100-gpu-cloud-availability-and-pricing/
+	- https://gpus.llm-utils.org/nvidia-h100-gpus-supply-and-demand/
 
 
 You can also run LLMs locally on most modern computers (although larger models require strong GPUs).
