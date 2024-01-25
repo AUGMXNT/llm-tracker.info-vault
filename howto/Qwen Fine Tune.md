@@ -6,8 +6,13 @@ I've done some raw Qwen tuning before with the included scripts:
 ## ASIDE: Qwen Notes
 - Qwen2 is coming out soon
 	- https://huggingface.co/docs/transformers/main/model_doc/qwen2
+	- https://github.com/vllm-project/vllm/pull/2495
+- Qwen is the only one of the Chinese models that restricts downstream training from output
+	- "You can not use the Materials or any output therefrom to improve any other large language model (excluding Tongyi Qianwen or derivative works thereof)."
+- Qwen models have well documented contamination while other Chinese models like Yi, InternLM, Orion do not
+	- https://opencompass.readthedocs.io/en/latest/advanced_guides/contamination_eval.html
+	- https://arxiv.org/pdf/2401.12246.pdf (Section 5.3)
 	- 
-- Qwen is the only one of the Chinese Lawful+
 
 ---
 

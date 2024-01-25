@@ -168,3 +168,9 @@ sudo nvidia-smi -i 0 -pl 360
 ```
 * You can get your GPU IDs with `nvidia-smi -L`
 * For inferencing, I can lower my 4090 from 450W to 360W and only lose about 1-2% performance but everyone should test for themselves what works best for their setup.
+
+# Mobile Power Limits
+Mostly locked by VBIOS, but you might be able to run `nvidia-powerd` and get +10W
+- https://forums.developer.nvidia.com/t/power-limit-on-3000-mobile-series/193443/3
+- https://github.com/NVIDIA/open-gpu-kernel-modules/issues/483
+- https://www.reddit.com/r/razer/comments/oqnjbl/11_performance_with_135w_vbios_on_my_razer_blade/
