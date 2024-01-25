@@ -2,6 +2,15 @@ I've done some raw Qwen tuning before with the included scripts:
 * https://github.com/AUGMXNT/shisa/tree/main/train/qwen
 * https://github.com/QwenLM/Qwen/#finetuning
 
+---
+## ASIDE: Qwen Notes
+- Qwen2 is coming out soon
+	- https://huggingface.co/docs/transformers/main/model_doc/qwen2
+	- 
+- Qwen is the only one of the Chinese Lawful+
+
+---
+
 Qwen is pretty tricky to work with.  Some things to watch out for:
 ## Compatibility
 
