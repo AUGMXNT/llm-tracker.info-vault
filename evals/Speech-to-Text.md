@@ -1,3 +1,7 @@
+See also:
+- https://huggingface.co/spaces/hf-audio/open_asr_leaderboard
+- https://github.com/Vaibhavs10/open-tts-tracker
+
 # WhisperX
 [WhisperX](https://github.com/m-bain/whisperX) is the current best version of Whisper.
 ```
