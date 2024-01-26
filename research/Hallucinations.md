@@ -15,3 +15,7 @@ SelfCheckGPT: Zero-Resource Black-Box Hallucination Detection for Generative Lar
 
 Embers of Autoregression: Understanding Large Language Models Through the Problem They are Trained to Solve
 - https://arxiv.org/abs/2309.13638
+
+Tree of Thoughts: Deliberate Problem Solving with Large Language Models
+- https://arxiv.org/abs/2305.10601
+- https://github.com/princeton-nlp/tree-of-thought-llm
