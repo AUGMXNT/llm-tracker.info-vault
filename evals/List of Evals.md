@@ -96,3 +96,11 @@ See also:
   * https://twitter.com/SeonghyeonYe/status/1682209670302408705
   * https://arxiv.org/abs/2307.10928
   * https://kaistai.github.io/FLASK/
+
+## Contamination
+- [Rethinking Benchmark and Contamination for Language Models with Rephrased Samples](https://arxiv.org/abs/2311.04850)
+- https://huggingface.co/blog/rishiraj/merge-models-without-contamination
+- https://opencompass.readthedocs.io/en/latest/advanced_guides/contamination_eval.html
+# Eval the Evals
+- [Benchmarking the Benchmarks - Correlation with Human Preference](https://www.reddit.com/r/LocalLLaMA/comments/18u0tu3/benchmarking_the_benchmarks_correlation_with/)
+- [LLMs as a judge models are bad at giving scores in relevant numerical intervals](https://www.reddit.com/r/LocalLLaMA/comments/19dl947/llms_as_a_judge_models_are_bad_at_giving_scores/)
