@@ -9,3 +9,16 @@
 More:
 
 - [A guide to running lora/qlora models on Llama.cpp](https://ragntune.com/blog/A-guide-to-running-Llama-2-qlora-loras-on-Llama.cpp)
+
+# GUI
+
+## chatbot-ui
+https://github.com/mckaywrigley/chatbot-ui
+```
+```
+
+```
+paru -S supabase-bin
+sudo supabase start
+```
+- https://github.com/supabase/cli
