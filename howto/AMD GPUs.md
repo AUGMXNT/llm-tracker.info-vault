@@ -131,10 +131,11 @@ make LLAMA_HIPBLAS=1
 ```
 * https://github.com/ggerganov/llama.cpp/#hipblas
 * You can use `LLAMA_HIP_UMA=1` for unified memory for APUs
+* `uname -a` , `dkms status` and `apt list | grep rocm | grep '\[installed\]'` to get version numbers of kernel and libs
 
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
-7900 XT + 7900 XTX used together segfaults :(
+7900 XT + 7900 XTX used together segfaulted on `b7e7982 (1787)` (tested 2024-01-08) but ran with `6db2b41a (1988)` (tested 2024-01-28)
 ```shell
 $ ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
 ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
@@ -144,8 +145,12 @@ ggml_init_cublas: found 2 ROCm devices:
   Device 1: Radeon RX 7900 XTX, compute capability 11.0, VMM: no
 | model                          |       size |     params | backend    | ngl | test       |              t/s |
 | ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
-Segmentation fault (core dumped)
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |   2408.34 ± 1.55 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |    107.15 ± 0.04 |
+
+build: 6db2b41a (1988)
 ```
+- last tested: 2024-01-28
 
 7900 XT:
 ```shell
@@ -156,11 +161,12 @@ ggml_init_cublas: found 1 ROCm devices:
   Device 0: Radeon RX 7900 XT, compute capability 11.0, VMM: no
 | model                          |       size |     params | backend    | ngl | test       |              t/s |
 | ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
-| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |   2065.04 ± 4.61 |
-| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |     96.58 ± 0.02 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |   2366.44 ± 4.39 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |     97.17 ± 0.02 |
 
-build: b7e7982 (1787)
+build: 6db2b41a (1988)
 ```
+- last tested: 2024-01-28 
 
 7900 XTX:
 ```shell
@@ -171,10 +177,10 @@ ggml_init_cublas: found 1 ROCm devices:
   Device 0: Radeon RX 7900 XTX, compute capability 11.0, VMM: no
 | model                          |       size |     params | backend    | ngl | test       |              t/s |
 | ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
-| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |   2424.44 ± 1.23 |
-| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |    118.93 ± 0.04 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |   2575.87 ± 9.76 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |    119.09 ± 0.06 |
 
-build: b7e7982 (1787)
+build: 6db2b41a (1988)
 ```
 
 While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and compute, in practice, with ROCm 6.0, hipBLAS still falls behind cuBLAS in llama.cpp:
@@ -183,13 +189,16 @@ While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and co
 | ---- | ---- | ---- | ---- | ---- |
 | Memory GB | 20 | 24 | 24 | 24 |
 | Memory BW GB/s | 800 | 960 | 936.2 | 1008 |
+| Memory BW % | -16.7% | 0% | -2.5% | +5.0% |
 | FP32 TFLOPS | 51.48 | 61.42 | 35.58 | 82.58 |
-| FP16 TFLOPS | 103.0 | 122.8 | 35.58 | 82.58 |
-| Prompt tok/s | 2065 | 2424 | 2764 | 4650 |
-| Prompt % | -14.8% | 0% | +14.0% | +91.8% |
-| Inference tok/s | 96.6 | 118.9 | 136.1 | 162.1 |
-| Inference % | -18.8% | 0% | +14.5% | +36.3% |
-* Tested 2024-01-08 with llama.cpp `b737982 (1787)` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.6.7-arch1-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
+| FP16 TFLOPS | 103.0 | 122.8 | 71/142* | 165.2/330.3* |
+| FP16 TFLOPS % | -16.1% | 0% | +15.6%* | +169.0%* |
+| Prompt tok/s | 2366 | 2576 | 3251 | 5415 |
+| Prompt % | -8.2% | 0% | +26.2% | +110.2% |
+| Inference tok/s | 97.2 | 119.1 | 134.5 | 158.4 |
+| Inference % | -18.4% | 0% | +12.9% | +33.0% |
+* Tested 2024-01-28 with llama.cpp `6db2b41a (1988)` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.7.0-arch3-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
+* RTX cards have much better FP16/BF16 Tensor FLOPS performance that the inferencing engines are taking advantage of. FP16 FLOPS (32-bit/16-bit accumulation numbers) sourced from Nvidia docs ([3090](https://images.nvidia.com/aem-dam/en-zz/Solutions/geforce/ampere/pdf/NVIDIA-ampere-GA102-GPU-Architecture-Whitepaper-V1.pdf), [4090](https://images.nvidia.com/aem-dam/Solutions/geforce/ada/nvidia-ada-gpu-architecture.pdf)_)
 
 ## ExLlamaV2
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
