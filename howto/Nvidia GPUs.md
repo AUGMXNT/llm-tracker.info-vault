@@ -237,4 +237,5 @@ sudo apt install nvtop -y
 nvidia-smi
 nvcc -V
 ```
-- 
+- https://twitter.com/Yampeleg/status/1751823896800583924
+- https://github.com/mhasan49/ubuntu-setup/tree/c69c1ed5b6bf6564e2ce588e39ca0222028bef22
