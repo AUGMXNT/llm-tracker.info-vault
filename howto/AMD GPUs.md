@@ -201,7 +201,27 @@ While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and co
 | Inference % | -18.4% | 0% | +12.9% | +33.0% |
 * Tested 2024-01-28 with llama.cpp `6db2b41a (1988)` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.7.0-arch3-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
 * RTX cards have much better FP16/BF16 Tensor FLOPS performance that the inferencing engines are taking advantage of. FP16 FLOPS (32-bit/16-bit accumulation numbers) sourced from Nvidia docs ([3090](https://images.nvidia.com/aem-dam/en-zz/Solutions/geforce/ampere/pdf/NVIDIA-ampere-GA102-GPU-Architecture-Whitepaper-V1.pdf), [4090](https://images.nvidia.com/aem-dam/Solutions/geforce/ada/nvidia-ada-gpu-architecture.pdf)_)
+### Vulkan and CLBlast
+```bash
+### CLBlast
+# actually we don't have to build CLBlast...
+# sudo apt install cmake pkg-config opencl-headers ocl-icd-opencl-dev
+sudo apt install libclblast-dev pkg-config
+make clean && make LLAMA_CLBLAST=1
+GGML_OPENCL_DEVICE=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
 
+### Vulkan
+# You could install amdvlk but there's no PPA? https://github.com/GPUOpen-Drivers/AMDVLK#install-with-pre-built-driver
+sudo apt install libvulkan-dev vulkan-tools
+make clean && make LLAMA_VULKAN=1
+
+```
+
+|  | 7900 XT CLBlast* | 7900 XTX Vulkan | 7900 XTX ROCm |
+| ---- | ---- | ---- | ---- |
+| Prompt tok/s |  | 758 | 2576 |
+| Inference tok/s |  | 52.3 | 119.1 |
+* Tested 2024-01-29 with llama.cpp `d2f650cb (1999)` and latest on a 5800X3D system with CLBlast `libclblast-dev 1.5.2-2`, Vulkan  `mesa-vulkan-drivers 23.0.4-0ubuntu1~22.04.1`, and ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04`) 
 ## ExLlamaV2
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
 
