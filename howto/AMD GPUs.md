@@ -132,8 +132,8 @@ make LLAMA_HIPBLAS=1
 * https://github.com/ggerganov/llama.cpp/#hipblas
 * You can use `LLAMA_HIP_UMA=1` for unified memory for APUs
 * `uname -a` , `dkms status` and `apt list | grep rocm | grep '\[installed\]'` to get version numbers of kernel and libs
-* OpenCL via CLBlast is a universal/easy option, but gains vs CPU are less impressive (2X?)
-* As of 2023-01, Vulkan support is 
+* OpenCL via CLBlast is a universal/easy option, but gains and should still give decent gains over CPU inference
+* As of 2023-01, Vulkan support is merged. See below for testing/comparison
 
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
@@ -203,6 +203,10 @@ While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and co
 * RTX cards have much better FP16/BF16 Tensor FLOPS performance that the inferencing engines are taking advantage of. FP16 FLOPS (32-bit/16-bit accumulation numbers) sourced from Nvidia docs ([3090](https://images.nvidia.com/aem-dam/en-zz/Solutions/geforce/ampere/pdf/NVIDIA-ampere-GA102-GPU-Architecture-Whitepaper-V1.pdf), [4090](https://images.nvidia.com/aem-dam/Solutions/geforce/ada/nvidia-ada-gpu-architecture.pdf)_)
 ### Vulkan and CLBlast
 ```bash
+### CPU
+make clean && make LLAMA_CLBLAST=1
+./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
+
 ### CLBlast
 # actually we don't have to build CLBlast...
 # sudo apt install cmake pkg-config opencl-headers ocl-icd-opencl-dev
@@ -215,12 +219,16 @@ GGML_OPENCL_DEVICE=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 
 sudo apt install libvulkan-dev vulkan-tools
 make clean && make LLAMA_VULKAN=1
 
+### ROCm
+# See above for requirements
+make clean && make LLAMA_HIPBLAS=1
+CUDA_VISIBLE_DEVICES=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
 ```
 
-|  | 5800X3D CPU | 7900 XT CLBlast* | 7900 XTX Vulkan | 7900 XTX ROCm |
+|  | 5800X3D CPU | 7900 XTX CLBlast | 7900 XTX Vulkan | 7900 XTX ROCm |
 | ---- | ---- | ---- | ---- | ---- |
-| Prompt tok/s |  | 219 | 758 | 2576 |
-| Inference tok/s |  | 35.36 | 52.3 | 119.1 |
+| Prompt tok/s | 24.5 | 219 | 758 | 2550 |
+| Inference tok/s | 10.7 | 35.4 | 52.3 | 119.0 |
 * Tested 2024-01-29 with llama.cpp `d2f650cb (1999)` and latest on a 5800X3D w/ DDR4-3600 system with CLBlast `libclblast-dev 1.5.2-2`, Vulkan  `mesa-vulkan-drivers 23.0.4-0ubuntu1~22.04.1`, and ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04`) 
 ## ExLlamaV2
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
