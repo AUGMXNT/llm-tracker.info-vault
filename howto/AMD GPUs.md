@@ -217,11 +217,11 @@ make clean && make LLAMA_VULKAN=1
 
 ```
 
-|  | 7900 XT CLBlast* | 7900 XTX Vulkan | 7900 XTX ROCm |
-| ---- | ---- | ---- | ---- |
-| Prompt tok/s |  | 758 | 2576 |
-| Inference tok/s |  | 52.3 | 119.1 |
-* Tested 2024-01-29 with llama.cpp `d2f650cb (1999)` and latest on a 5800X3D system with CLBlast `libclblast-dev 1.5.2-2`, Vulkan  `mesa-vulkan-drivers 23.0.4-0ubuntu1~22.04.1`, and ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04`) 
+|  | 5800X3D CPU | 7900 XT CLBlast* | 7900 XTX Vulkan | 7900 XTX ROCm |
+| ---- | ---- | ---- | ---- | ---- |
+| Prompt tok/s |  | 219 | 758 | 2576 |
+| Inference tok/s |  | 35.36 | 52.3 | 119.1 |
+* Tested 2024-01-29 with llama.cpp `d2f650cb (1999)` and latest on a 5800X3D w/ DDR4-3600 system with CLBlast `libclblast-dev 1.5.2-2`, Vulkan  `mesa-vulkan-drivers 23.0.4-0ubuntu1~22.04.1`, and ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04`) 
 ## ExLlamaV2
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
 
