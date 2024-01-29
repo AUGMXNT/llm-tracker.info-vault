@@ -123,7 +123,7 @@ You may run into some compile errors. You will need `libstdc++-12-dev` in Ubuntu
 sudo apt install libstdc++-12-dev
 ```
 ## llama.cpp
-llama.cpp has  ROCm support built-in now:
+llama.cpp has ROCm support built-in now (2023-08):
 ```shell
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
@@ -132,6 +132,8 @@ make LLAMA_HIPBLAS=1
 * https://github.com/ggerganov/llama.cpp/#hipblas
 * You can use `LLAMA_HIP_UMA=1` for unified memory for APUs
 * `uname -a` , `dkms status` and `apt list | grep rocm | grep '\[installed\]'` to get version numbers of kernel and libs
+* OpenCL via CLBlast is a universal/easy option, but gains vs CPU are less impressive (2X?)
+* As of 2023-01, Vulkan support is 
 
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
