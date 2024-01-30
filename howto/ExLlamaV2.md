@@ -21,7 +21,9 @@ pip install flash-attn --no-build-isolation
 # ExLLamaV2
 git clone https://github.com/turboderp/exllamav2
 pip install -r requirements.txt
-python setup.py install
+python setup.py build
+
+# python setup.py install
 ```
 
 If you have `exllamav2_ext` issues try:
