@@ -34,3 +34,6 @@ Info:
 - https://huggingface.co/ise-uiuc/Magicoder-S-DS-6.7B
 	- https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K
 	- https://huggingface.co/datasets/ise-uiuc/Magicoder-Evol-Instruct-110K
+
+Search w/ Lepton
+https://github.com/leptonai/search_with_lepton
