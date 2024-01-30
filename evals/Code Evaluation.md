@@ -1,5 +1,9 @@
-Running human-eval:
+- [EvalPlus Leaderboard](https://evalplus.github.io/leaderboard.html)
+	- https://github.com/evalplus/evalplus
+- [CanAiCode Leaderboard](https://huggingface.co/spaces/mike-ravkine/can-ai-code-results)
+	- https://github.com/the-crypt-keeper/can-ai-code
 
+Running human-eval:
 [https://github.com/abacaj/code-eval](https://github.com/abacaj/code-eval)
 
 
