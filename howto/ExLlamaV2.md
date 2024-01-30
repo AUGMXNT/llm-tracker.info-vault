@@ -1,14 +1,15 @@
 ```
 # Environment
 mamba env remove --name exllamav2
-mamba create -n exllamav2 python=3.11
+mamba create -n exllamav2 python=3.11 -y
 mamba activate exllamav2
 
 # CUDA
-mamba install -c "nvidia/label/cuda-12.1.1" cuda-toolkit
+mamba install -c "nvidia/label/cuda-12.1.1" cuda-toolkit -y
+mamba install gxx=12.2 ninja cmake -y
 conda env config vars set CUDA_PATH="$CONDA_PREFIX"
 conda env config vars set CUDA_HOME="$CONDA_PREFIX"
-mamba install gxx=12.2 ninja cmake
+
 mamba activate exllamav2
 
 # PyTorch
