@@ -230,6 +230,35 @@ CUDA_VISIBLE_DEVICES=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -
 | Prompt tok/s | 24.5 | 219 | 758 | 2550 |
 | Inference tok/s | 10.7 | 35.4 | 52.3 | 119.0 |
 * Tested 2024-01-29 with llama.cpp `d2f650cb (1999)` and latest on a 5800X3D w/ DDR4-3600 system with CLBlast `libclblast-dev 1.5.2-2`, Vulkan  `mesa-vulkan-drivers 23.0.4-0ubuntu1~22.04.1`, and ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04`) 
+### Radeon Vega VII
+
+Radeon Vega VII
+```shell
+CUDA_VISIBLE_DEVICES=0 ./llama-bench -m llama2-7b-q4_0.gguf -p 3968
+ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
+ggml_init_cublas: CUDA_USE_TENSOR_CORES: yes
+ggml_init_cublas: found 1 ROCm devices:
+  Device 0: AMD Radeon VII, compute capability 9.0, VMM: no
+| model                          |       size |     params | backend    | ngl | test       |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |    432.28 ± 0.93 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |     54.42 ± 0.55 |
+
+build: fea4fd4b (2023)
+```
+
+Radeon Vega 56
+```
+```
+
+System Info
+```shell
+CPU: quad core AMD Ryzen 5 2400G with Radeon Vega Graphics (-MT MCP-)
+speed/min/max: 1687/1600/3600 MHz Kernel: 6.4.12-arch1-1 x86_64 Up: 43d 23h 44m
+Mem: 1.35/15.56 GiB (8.7%) Storage: 465.76 GiB (53.1% used) Procs: 373 Shell: fish inxi: 3.3.31
+```
+
+
 ## ExLlamaV2
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
 
