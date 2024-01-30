@@ -1,4 +1,4 @@
-Trainers:
+# Trainers
 * LLaMA-Factory
 * XTuner
 
@@ -23,3 +23,14 @@ Test
 https://huggingface.co/openchat/openchat-3.5-1210
 https://github.com/imoneoi/openchat
 https://openchat.team/
+
+
+# Magicoder on DeepSeek-Coder 33B, CodeLlama 70B
+Base Models
+- https://huggingface.co/deepseek-ai/deepseek-coder-33b-instruct
+- https://huggingface.co/codellama/CodeLlama-70b-hf
+Info:
+- https://github.com/ise-uiuc/magicoder/
+- https://huggingface.co/ise-uiuc/Magicoder-S-DS-6.7B
+	- https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K
+	- https://huggingface.co/datasets/ise-uiuc/Magicoder-Evol-Instruct-110K
