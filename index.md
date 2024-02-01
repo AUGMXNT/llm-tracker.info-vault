@@ -2,7 +2,7 @@
 title: Home
 ---
 Welcome to `llm-tracker.info`. This site aims keep notes focused around Large Language Models and Generative AI.
-- If you are looking for a pure list of open LLMs, check out [Extractum's LLM Explorer](https://llm.extractum.io/) (it's sortable/filterable! Here's a view of the [current top of the (heavily gamed) HuggingFace LLM Leaderboard](https://llm.extractum.io/list/lm.extractum.io/list/tum.io/list//list/) for example)
+- If you are looking for a pure list of open LLMs, check out [Extractum's LLM Explorer](https://llm.extractum.io/) (it's sortable/filterable! Here's a view of the [current top of the (heavily gamed) HuggingFace LLM Leaderboard](https://llm.extractum.io/list/?lbonly) for example - for better leaderboards, see [[List of Evals]])
 - Eugene Yan and other maintain a list of [Open LLMs](https://github.com/eugeneyan/open-llms) (restricted to commercial use licensed models).
 - I also keep an LLM Worksheet that includes a [less-maintained list of Foundational models](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=741531996), but includes a bunch of raw [inferencing benchmarks](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1788227831) and other information hidden in there...
 ## Popular Content
