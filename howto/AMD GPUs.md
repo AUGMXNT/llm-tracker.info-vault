@@ -230,14 +230,15 @@ CUDA_VISIBLE_DEVICES=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -
 | Prompt tok/s | 24.5 | 219 | 758 | 2550 |
 | Inference tok/s | 10.7 | 35.4 | 52.3 | 119.0 |
 * Tested 2024-01-29 with llama.cpp `d2f650cb (1999)` and latest on a 5800X3D w/ DDR4-3600 system with CLBlast `libclblast-dev 1.5.2-2`, Vulkan  `mesa-vulkan-drivers 23.0.4-0ubuntu1~22.04.1`, and ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04`) 
-### Radeon Vega VII
+### Radeon VII
+The Radeon VII was a Vega 20 XT (GCN 5.1) card that was released in February 2019 at $700. It has 16GB of HDM2 memory with a 1024GB/s of memory bandwidth and 26.88 TFLOPS of FP16. Honestly, while the prefill probably doesn't have much more that could be squeezed from it, I would expect with optimization, you would be able to double inference performance (if you could use all its memory bandwidth). 
 
 Radeon Vega VII
 ```shell
 CUDA_VISIBLE_DEVICES=0 ./llama-bench -m llama2-7b-q4_0.gguf -p 3968
 ggml_init_cublas: GGML_CUDA_FORCE_MMQ:   no
 ggml_init_cublas: CUDA_USE_TENSOR_CORES: yes
-ggml_init_cublas: found 1 ROCm devices:
+​￼ggml_init_cublas: found 1 ROCm devices:
   Device 0: AMD Radeon VII, compute capability 9.0, VMM: no
 | model                          |       size |     params | backend    | ngl | test       |              t/s |
 | ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
@@ -246,18 +247,15 @@ ggml_init_cublas: found 1 ROCm devices:
 
 build: fea4fd4b (2023)
 ```
-
-Radeon Vega 56
-```
-```
+- Tested 2024-02-02 on a Ryzen 5 2400G system with `rocm-core 5.7.1-1`
 
 System Info
 ```shell
+> inxi
 CPU: quad core AMD Ryzen 5 2400G with Radeon Vega Graphics (-MT MCP-)
-speed/min/max: 1687/1600/3600 MHz Kernel: 6.4.12-arch1-1 x86_64 Up: 43d 23h 44m
-Mem: 1.35/15.56 GiB (8.7%) Storage: 465.76 GiB (53.1% used) Procs: 373 Shell: fish inxi: 3.3.31
+speed/min/max: 1827/1600/3600 MHz Kernel: 6.7.2-arch1-1 x86_64 Up: 1d 11h 40m
+Mem: 1.41/15.56 GiB (9.1%) Storage: 465.76 GiB (52.8% used) Procs: 260 Shell: fish inxi: 3.3.31
 ```
-
 
 ## ExLlamaV2
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
