@@ -253,8 +253,7 @@ System Info
 ```shell
 > inxi
 CPU: quad core AMD Ryzen 5 2400G with Radeon Vega Graphics (-MT MCP-)
-speed/min/max: 1827/1600/3600 MHz Kernel: 6.7.2-arch1-1 x86_64 Up: 1d 11h 40m
-Mem: 1.41/15.56 GiB (9.1%) Storage: 465.76 GiB (52.8% used) Procs: 260 Shell: fish inxi: 3.3.31
+speed/min/max: 1827/1600/3600 MHz Kernel: 6.7.2-arch1-1 x86_64
 ```
 
 ## ExLlamaV2
