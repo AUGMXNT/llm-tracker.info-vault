@@ -10,6 +10,11 @@ More:
 
 - [A guide to running lora/qlora models on Llama.cpp](https://ragntune.com/blog/A-guide-to-running-Llama-2-qlora-loras-on-Llama.cpp)
 
+# Mac Performance
+- https://github.com/ggerganov/llama.cpp/discussions/4167
+
+## Summary
+
 # GUI
 
 ## chatbot-ui
