@@ -1,7 +1,13 @@
 - [EvalPlus Leaderboard](https://evalplus.github.io/leaderboard.html)
 	- https://github.com/evalplus/evalplus
+- [CRUXEval Leaderboard](https://crux-eval.github.io/leaderboard.html)
+	- https://github.com/facebookresearch/cruxeval
 - [CanAiCode Leaderboard](https://huggingface.co/spaces/mike-ravkine/can-ai-code-results)
 	- https://github.com/the-crypt-keeper/can-ai-code
+- [Big Code Models Leaderboard](https://huggingface.co/spaces/bigcode/bigcode-models-leaderboard)
+- InfiCoder-Eval
+	- https://infi-coder.github.io/inficoder-eval/
+- [TabbyML Coding LLMs Leaderboard](https://leaderboard.tabbyml.com/)
 
 Running human-eval:
 [https://github.com/abacaj/code-eval](https://github.com/abacaj/code-eval)
