@@ -32,6 +32,9 @@ The current consensus is that [LMSys Chatbot Arena](https://chat.lmsys.org/?lead
 	- 
 	- https://github.com/mlabonne/llm-autoeval
 
+Do your own Chat Arena!
+https://github.com/Contextualist/lone-arena
+
 See also:
 
 - [OpenAI Evals](https://github.com/openai/evals)
