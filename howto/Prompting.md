@@ -26,8 +26,11 @@ Most instruct/chat fine tunes use their own formatting (which can wildly differ)
 
 ## Chat Templates
 If using HF, see also the documentation on [chat templating](https://huggingface.co/docs/transformers/main/chat_templating)
-- Most complete list: https://github.com/chujiezheng/chat_templates
-- List of some templates: https://huggingface.co/spaces/huggingchat/chat-ui/blob/main/PROMPTS.md
+- Some templates: https://github.com/chujiezheng/chat_templates
+- Some templates: https://huggingface.co/spaces/huggingchat/chat-ui/blob/main/PROMPTS.md
+- Preview tools
+	- https://huggingface.co/spaces/EmbeddedLLM/chat-template-generation
+	- https://huggingface.co/spaces/Rocketknight1/chat_template_creator
 
 ## Jailbreaks
 Most of these will probably work on open models: https://www.jailbreakchat.com/
