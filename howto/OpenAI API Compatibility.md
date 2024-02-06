@@ -7,8 +7,13 @@ Recent:
 * https://github.com/1b5d/llm-api
 * https://github.com/janhq/nitro
 * https://github.com/BerriAI/litellm
+* https://github.com/bentoml/OpenLLM
+
+TabbyAPI
+https://github.com/theroyallab/tabbyAPI/
 
 [https://github.com/abetlen/llama-cpp-python](https://github.com/abetlen/llama-cpp-python)
+https://github.com/abetlen/llama-cpp-python?tab=readme-ov-file#openai-compatible-web-server
 
 - General llama.cpp Python wrapper
 - Has a good enough OpenAI API server as well

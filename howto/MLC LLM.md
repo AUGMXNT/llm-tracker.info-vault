@@ -51,13 +51,34 @@ mkdir -p dist/libs
 # Convert model (quantize as well) - need to d/l path
 mlc_chat convert_weight /models/shisa-7b-v1 -o dist/shisa-7b-v1-q4f16_1 --quantization q4f16_1
 
+# gen_config: generate mlc-chat-config.json and process tokenizers
+# Note you need to pick one of their prebuilt of a "custom" conv-template
+# doesn't seem to support chat_template?
+mlc_chat gen_config /models/shisa-7b-v1 -o dist/shisa-7b-v1-q4f16_1 --quantization q4f16_1 --conv-template llama-2
 
-# 1. gen_config: generate mlc-chat-config.json and process tokenizers
-mlc_chat gen_config ./dist/models/RedPajama-INCITE-Chat-3B-v1/ \
-    --quantization q4f16_1 --conv-template redpajama_chat \
-    -o dist/RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC/
 # 2. compile: compile model library with specification in mlc-chat-config.json
-mlc_chat compile ./dist/RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC/mlc-chat-config.json \
-    --device cuda -o dist/libs/RedPajama-INCITE-Chat-3B-v1-q4f16_1-cuda.so
+mlc_chat compile  dist/shisa-7b-v1-q4f16_1/mlc-chat-config.json --device cuda -o dist/libs/shisa-7b-v1-q4f16_1-cuda.so
+```
 
+# Run Model
+In Python
+```
+from mlc_chat import ChatModule
+cm = ChatModule(model="dist/shisa-7b-v1-q4f16_1", model_lib_path="dist/libs/shisa-7b-v1-q4f16_1-cuda.so")
+cm.generate("hi")
+```
+
+Note, if you run without the library path, it will not JIT compile the module!:
+```
+cm = ChatModule(model="dist/shisa-7b-v1-q4f16_1")
+```
+
+Or you can run with `mlc_chat`
+```
+mlc_chat chat dist/shisa-7b-v1-q4f16_1 --model-lib-path dist/libs/shisa-7b-v1-q4f16_1-cuda.so
+```
+# Benchmark
+MLC's benchmarking is a bit unfortunate. It doesn't support specifying a length for the prefill/prompt generation and for generation length separately...
+```
+mlc_chat bench dist/shisa-7b-v1-q4f16_1 --model-lib-path dist/libs/shisa-7b-v1-q4f16_1-cuda.so --prompt "Hello" --generate-length 3968
 ```

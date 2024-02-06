@@ -23,14 +23,20 @@ Do not search the web (this function very slow and unreliable) unless explicitly
 ## Prompt Format
 Most instruct/chat fine tunes use their own formatting (which can wildly differ). These can usually be dug out of model card/repos/localllama discussion/discords, but the best single reference I've found is oobabooga's Instruction Templates: 
 * [https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates](https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates)
-
 ## Chat Templates
 If using HF, see also the documentation on [chat templating](https://huggingface.co/docs/transformers/main/chat_templating)
 - Some templates: https://github.com/chujiezheng/chat_templates
 - Some templates: https://huggingface.co/spaces/huggingchat/chat-ui/blob/main/PROMPTS.md
 - Preview tools
 	- https://huggingface.co/spaces/EmbeddedLLM/chat-template-generation
+		- This one is I think better
 	- https://huggingface.co/spaces/Rocketknight1/chat_template_creator
+
+## Discussion of Llama2 Prompt Format
+- https://gpus.llm-utils.org/llama-2-prompt-template/
+- https://github.com/samrawal/llama2_chat_templater
+- vs Mistral https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1/commit/6d7932ef94e2b5409c007b855fbb34229b6d2dc5
+
 
 ## Jailbreaks
 Most of these will probably work on open models: https://www.jailbreakchat.com/

@@ -29,49 +29,34 @@ The current consensus is that [LMSys Chatbot Arena](https://chat.lmsys.org/?lead
     - [BoolQ](https://paperswithcode.com/sota/question-answering-on-boolq)
     - [HumanEval](https://paperswithcode.com/sota/code-generation-on-humaneval)
 - YALL
-	- 
+	- https://huggingface.co/spaces/mlabonne/Yet_Another_LLM_Leaderboard
 	- https://github.com/mlabonne/llm-autoeval
 
+# Running Your Own
 Do your own Chat Arena!
 https://github.com/Contextualist/lone-arena
 
-See also:
+promptfoo: https://www.promptfoo.dev/docs/intro/
 
+See also:
 - [OpenAI Evals](https://github.com/openai/evals)
 - [Papers and resources for LLMs evaluation](https://github.com/mlgroupjlu/llm-eval-survey)
 - [2023-08-17 HN Discussion on evals](https://news.ycombinator.com/item?id=37157323)
-
 # Hallucination
 [Vectara Hallucination Leaderboard
 ](https://huggingface.co/spaces/vectara/Hallucination-evaluation-leaderboard)
-
 # Code
-
-- [Big Code Models Leaderboard](https://huggingface.co/spaces/bigcode/bigcode-models-leaderboard) - HF style leaderboard
-- [Zero-Shot Replication Framework](https://github.com/emrgnt-cmplxty/zero-shot-replication) - replicate HumanEval, LeetCodeSparks, LeetCode100
-- [code-eval](https://github.com/abacaj/code-eval) - scripts for running/reproducing human-eval scores on models
-- [llm-humaneval-benchmarks](https://github.com/my-other-github-account/llm-humaneval-benchmarks) - HuggingFace models evald vs HumanEval+
-- Multilingual Code Models Evaluation - base multilingual code generation models
-- [CanAiCode Leaderboard](https://huggingface.co/spaces/mike-ravkine/can-ai-code-results) - using [Can AI Code? eval](https://github.com/the-crypt-keeper/can-ai-code)
-- [airate](https://github.com/catid/supercharger/tree/main/airate) - C++ bug catching test
-- [phi-1 prompt tests](https://twitter.com/khandelia1000/status/1675939866389934097)
-    - [https://colab.research.google.com/drive/1mSb2t8NDz0o\_Cc8VgTMbhOg8kIh-cRIu?usp=sharing](https://colab.research.google.com/drive/1mSb2t8NDz0o_Cc8VgTMbhOg8kIh-cRIu?usp=sharing)
-
+See [[Code Evaluation]] for code evals.
 # Roleplay  
-
-
 - [Another LLM Roleplay Rankings](https://rentry.co/ALLMRR)
 - [The 'Ayumi' Inofficial LLM ERP Model Rating](https://rentry.org/ayumi_erp_rating)
-
 # Context
 ## InfiniteBench
 * https://github.com/OpenBMB/InfiniteBench 
 * https://huggingface.co/datasets/xinrongzhang2022/InfiniteBench 
 * https://www.reddit.com/r/LocalLLaMA/comments/18ct9xh/infinitebench_100k_longcontext_benchmark/
-
 # Japanese
-* 
-
+* See https://github.com/AUGMXNT/shisa/wiki/Evals
 # New
 * https://www.reddit.com/r/LocalLLaMA/comments/1945tfv/challenge_llms_to_reason_about_reasoning_a/
 	* DiagGSM8K
