@@ -24,7 +24,9 @@ Do not search the web (this function very slow and unreliable) unless explicitly
 Most instruct/chat fine tunes use their own formatting (which can wildly differ). These can usually be dug out of model card/repos/localllama discussion/discords, but the best single reference I've found is oobabooga's Instruction Templates: 
 * [https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates](https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates)
 
+## Chat Templates
 If using HF, see also the documentation on [chat templating](https://huggingface.co/docs/transformers/main/chat_templating)
+- List of some templates: https://huggingface.co/spaces/huggingchat/chat-ui/blob/main/PROMPTS.md
 
 ## Jailbreaks
 Most of these will probably work on open models: https://www.jailbreakchat.com/
