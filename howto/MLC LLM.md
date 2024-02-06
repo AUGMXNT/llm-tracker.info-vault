@@ -44,3 +44,20 @@ This is a two ste process:
 	- https://llm.mlc.ai/docs/compilation/convert_weights.html
 - Compile the model so inference can be run
 	- https://llm.mlc.ai/docs/compilation/compile_models.html
+
+```
+mkdir -p dist/libs
+
+# Convert model (quantize as well) - need to d/l path
+mlc_chat convert_weight /models/shisa-7b-v1 -o dist/shisa-7b-v1-q4f16_1 --quantization q4f16_1
+
+
+# 1. gen_config: generate mlc-chat-config.json and process tokenizers
+mlc_chat gen_config ./dist/models/RedPajama-INCITE-Chat-3B-v1/ \
+    --quantization q4f16_1 --conv-template redpajama_chat \
+    -o dist/RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC/
+# 2. compile: compile model library with specification in mlc-chat-config.json
+mlc_chat compile ./dist/RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC/mlc-chat-config.json \
+    --device cuda -o dist/libs/RedPajama-INCITE-Chat-3B-v1-q4f16_1-cuda.so
+
+```
