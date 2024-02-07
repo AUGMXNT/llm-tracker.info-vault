@@ -25,6 +25,12 @@ git clone https://github.com/lm-sys/FastChat.git
 cd FastChat
 pip install -e ".[model_worker,llm_judge]"
 
+time python3 gen_model_answer.py --model-path /workspace/ShinojiResearch_Senku-70B-Full --model-id Senku-70B-Full --num-gpus-per-model 4 --num-gpus-total 4
+
+mt-bench) root@6f01a12c4b6b:/workspace/FastChat/fastchat/llm_judge# time python3 gen_model_answer.py --model-path /workspace/ShinojiResearch_Senku-70B-Full --model-id Senku-70B-Full --num-gpus-per-model 4 --num-gpus-total 4
+Output to data/mt_bench/model_answer/Senku-70B-Full.jsonl
+
+
 
 # Use VLLM
 python3 -m fastchat.serve.controller --host 0.0.0.0
