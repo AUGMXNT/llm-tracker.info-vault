@@ -27,7 +27,10 @@ pip install -e ".[model_worker,llm_judge]"
 
 
 # Use VLLM
-python3 -m fastchat.serve.controller
-python3 -m fastchat.serve.vllm_worker --model-path [MODEL-PATH]
-python3 -m fastchat.serve.openai_api_server --host localhost --port 8000
+python3 -m fastchat.serve.controller --host 0.0.0.0
+python3 -m fastchat.serve.vllm_worker --model TinyLlama/TinyLlama-1.1B-Chat-v1.0
+pip install pydantic-settings
+# vi /workspace/FastChat/fastchat/serve/openai_api_server.py
+# from pydantic_settings import BaseSettings
+python3 -m fastchat.serve.openai_api_server --host 127.0.0.1 --port 8000
 ```
