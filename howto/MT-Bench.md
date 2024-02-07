@@ -20,6 +20,9 @@ mamba create -n mt-bench
 mamba activate mt-bench
 
 pip install vllm
+# multiGPU
+pip install ray
+pip install pandas
 
 git clone https://github.com/lm-sys/FastChat.git
 cd FastChat
@@ -39,4 +42,70 @@ pip install pydantic-settings
 # vi /workspace/FastChat/fastchat/serve/openai_api_server.py
 # from pydantic_settings import BaseSettings
 python3 -m fastchat.serve.openai_api_server --host 127.0.0.1 --port 8000
+```
+
+
+```
+from vllm import SamplingParams
+import time
+from vllm import LLM
+llm = LLM(model="/workspace/ShinojiResearch_Senku-70B-Full", trust_remote_code=True, tensor_parallel_size=4)
+
+def make_chat_prompt(user_input, sys_msg = None):
+    messages = [{"role": "user", "content": user_input}]
+    if sys_msg is not None:
+        messages = [{"role": "system", "content": sys_msg}] + messages
+    prompt = llm.llm_engine.tokenizer.apply_chat_template(conversation=messages, add_generation_prompt=True, tokenize=False)
+    return prompt
+
+import json
+import pandas as pd
+
+prompt_path = "data/mt_bench/question.jsonl"
+with open(prompt_path, "r") as f:
+    prompts = [json.loads(x) for x in f.readlines()]
+
+prompt_df = pd.DataFrame(prompts)
+
+sys_msg = "You are a helpful assistant."
+prompt_df["first_prompts"] = [make_chat_prompt(x["turns"][0], sys_msg) for x in prompts]
+
+# Default parameters from original repo
+temperature_config = {
+    "writing": 0.5,
+    "roleplay": 0.5,
+    "extraction": 0.2,
+    "math": 0.1,
+    "coding": 0.1,
+    "reasoning": 0.1,
+    "stem": 0.2,
+    "humanities": 0.2,
+}
+
+output_dfs = []
+
+for category, cat_df in prompt_df.groupby("category"):
+    print(category)
+    temp = temperature_config[category]
+    top_p = 0.9
+    repetition_penalty = 1.1
+    do_sample = temp > 0
+    max_new_token = 1024
+    stops = ["<|im_start|>", "<|im_end|>", "<s>", "</s>"]
+    sampling_params = SamplingParams(max_tokens=max_new_token, temperature=temp, top_p=top_p, repetition_penalty=repetition_penalty, stop=stops)
+
+    input_prompts = cat_df["first_prompts"].tolist()
+    outputs = llm.generate(input_prompts, sampling_params)
+    output_texts = [o.outputs[0].text for o in outputs]
+    cat_df["first_output"] = output_texts
+    cat_df["tstamp"] = time.time()
+    cat_df["generate_params"] = [{"do_sample": do_sample, "max_new_token": max_new_token, "temperature": temp, "top_p": top_p, "repetition_penalty": repetition_penalty}] * cat_df.shape[0]
+    output_dfs.append(cat_df)
+
+    print("\n\n\n\n".join([i + "\n\n" + o for i, o in zip(input_prompts, output_texts)]))
+```
+
+Output
+```
+time python vllm-gen.py > out.jsonl
 ```
