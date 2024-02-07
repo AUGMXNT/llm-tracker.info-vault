@@ -47,6 +47,7 @@ python3 -m fastchat.serve.openai_api_server --host 127.0.0.1 --port 8000
 
 ```
 from vllm import SamplingParams
+from vllm.transformers_utils.tokenizer import get_tokenizer
 import time
 from vllm import LLM
 llm = LLM(model="/workspace/ShinojiResearch_Senku-70B-Full", trust_remote_code=True, tensor_parallel_size=4)
@@ -55,7 +56,9 @@ def make_chat_prompt(user_input, sys_msg = None):
     messages = [{"role": "user", "content": user_input}]
     if sys_msg is not None:
         messages = [{"role": "system", "content": sys_msg}] + messages
-    prompt = llm.llm_engine.tokenizer.apply_chat_template(conversation=messages, add_generation_prompt=True, tokenize=False)
+    # prompt = llm.llm_engine.tokenizer.apply_chat_template(conversation=messages, add_generation_prompt=True, tokenize=False)
+    tokenizer = get_tokenizer(tokenizer_name="/workspace/ShinojiResearch_Senku-70B-Full")
+    prompt = tokenizer.apply_chat_template(conversation=messages, add_generation_prompt=True, tokenize=False)
     return prompt
 
 import json
