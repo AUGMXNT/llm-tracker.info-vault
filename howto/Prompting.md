@@ -31,6 +31,8 @@ If using HF, see also the documentation on [chat templating](https://huggingface
 	- https://huggingface.co/spaces/EmbeddedLLM/chat-template-generation
 		- This one is I think better
 	- https://huggingface.co/spaces/Rocketknight1/chat_template_creator
+	- https://j2live.ttl255.com/
+		- general Jinja2 live editing
 
 ## Discussion of Llama2 Prompt Format
 - https://gpus.llm-utils.org/llama-2-prompt-template/
