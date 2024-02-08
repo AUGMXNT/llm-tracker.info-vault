@@ -1,8 +1,8 @@
 Runpod w/ 
 ```
 apt update
-apt install byobu
-apt install nvtop
+apt install byobu -y
+apt install nvtop -y
 
 
 # hfdownloader
@@ -13,7 +13,9 @@ bash <(curl -sSL https://g.bodaay.io/hfd) -h
 # Install mamba
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 bash Miniforge3-$(uname)-$(uname -m).sh
-mamba init
+/root/miniforge/bin/mamba init
+
+byobu
 
 # mt-bench
 mamba create -n mt-bench
@@ -28,9 +30,10 @@ git clone https://github.com/lm-sys/FastChat.git
 cd FastChat
 pip install -e ".[model_worker,llm_judge]"
 
+cd fastchat/llm_judge
 time python3 gen_model_answer.py --model-path /workspace/ShinojiResearch_Senku-70B-Full --model-id Senku-70B-Full --num-gpus-per-model 4 --num-gpus-total 4
 
-mt-bench) root@6f01a12c4b6b:/workspace/FastChat/fastchat/llm_judge# time python3 gen_model_answer.py --model-path /workspace/ShinojiResearch_Senku-70B-Full --model-id Senku-70B-Full --num-gpus-per-model 4 --num-gpus-total 4
+# (mt-bench) root@6f01a12c4b6b:/workspace/FastChat/fastchat/llm_judge# time python3 gen_model_answer.py --model-path /workspace/ShinojiResearch_Senku-70B-Full --model-id Senku-70B-Full --num-gpus-per-model 4 --num-gpus-total 4
 Output to data/mt_bench/model_answer/Senku-70B-Full.jsonl
 
 
