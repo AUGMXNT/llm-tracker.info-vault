@@ -42,3 +42,5 @@ https://github.com/leptonai/search_with_lepton
 Voice Clone Grimlock
 LLM to Toy
 
+
+Brave Search
