@@ -15,8 +15,12 @@ https://github.com/facebookresearch/segment-anything
 https://github.com/ByungKwanLee/Full-Segment-Anything
 https://github.com/Hedlen/awesome-segment-anything
 
+https://github.com/LiheYoung/Depth-Anything
+https://huggingface.co/spaces/LiheYoung/Depth-Anything
+
 https://www.remove.bg/
 
+https://github.com/jonbarron/camp_zipnerf
 
 MGIE - Multimodal LLM-Guided Image Editing
 https://github.com/tsujuifu/pytorch_mgie
