@@ -119,4 +119,10 @@ time python vllm-gen.py > out.jsonl
 
 ```
 /workspace/FastChat/fastchat/llm_judge# time python3 gen_model_answer.py --model-path /workspace/ShinojiResearch_Senku-70B-Full --model-id Senku-70B-Full --num-gpus-per-model 4 --num-gpus-total 4
+
+
+real    183m4.565s
+user    196m51.088s
+sys     17m8.519s
+
 ```
