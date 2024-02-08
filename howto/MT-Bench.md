@@ -26,6 +26,8 @@ pip install vllm
 pip install ray
 pip install pandas
 
+pip install flash_attn
+
 git clone https://github.com/lm-sys/FastChat.git
 cd FastChat
 pip install -e ".[model_worker,llm_judge]"
@@ -124,5 +126,10 @@ time python vllm-gen.py > out.jsonl
 real    183m4.565s
 user    196m51.088s
 sys     17m8.519s
+```
 
+
+llm-judge
+```
+(mt-bench) root@42f4054429b8:/workspace/llm-judge# python gen_model_answer.py --model-path /workspace/ShinojiResearch_Senku-70B-Full --model-id Senku-70B-Full --num-gpus-per-model 4 --num-gpus-total 4
 ```
