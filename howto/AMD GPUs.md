@@ -404,14 +404,16 @@ pip install -U -r requirements-rocm.txt
 export GPU_ARCHS=gfx1100
 python setup.py install # This may take 5-10 minutes. Currently, `pip install .`` does not work for ROCm installation
 
-# Error - to work around, we just remove the quantization plugins from `setup.py`
-/home/lhl/vllm/vllm/csrc/quantization/gptq/q_gemm.hip:530:20: error: no viable overloaded '='                                                                
-            res2.x = __half_as_ushort(__float2half(0));                       
-            ~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                                                                                       
-/opt/rocm-6.0.0/include/hip/amd_detail/amd_hip_fp16.h:122:21: note: candidate function not viable: no known conversion from 'unsigned short' to 'const __half
-' for 1st argument                                                                                                                                           
-            __half& operator=(const __half&) = default;                                                                                                      
-                    ^                                    
+# 2024-02-10
+git clone https://github.com/hongxiayang/vllm.git vllm.navi3x_rocm6
+cd vllm.navi3x_rocm6
+export GPU_ARCHS=gfx1100
+git fetch
+git checkout navi3x_rocm6
+pip install -e .
+# See: https://github.com/vllm-project/vllm/pull/2768
+
+
 
 # Compile finishes and installs but when we try to run...
 (vllm) lhl@rocm:~/vllm$ python -m vllm.entrypoints.api_server
