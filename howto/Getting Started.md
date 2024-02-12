@@ -46,6 +46,11 @@ https://www.fireworks.ai/
 - H100s: https://gpus.llm-utils.org/h100-gpu-cloud-availability-and-pricing/
 	- https://gpus.llm-utils.org/nvidia-h100-gpus-supply-and-demand/
 
+H100's
+- https://www.coreweave.com/products/hgx-h100
+- 
+
+
 
 You can also run LLMs locally on most modern computers (although larger models require strong GPUs).
 
