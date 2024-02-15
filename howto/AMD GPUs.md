@@ -481,12 +481,19 @@ git clone https://github.com/ROCm/triton
 cd triton/python
 pip install ninja cmake
 pip install -e .
-pytest
+python -c "import triton; print(triton.__version__)"
 ```
 ## Flash Attention 2
 - https://github.com/ROCm/flash-attention
 	- howiejayz/navi_support
 - https://github.com/ROCm/flash-attention/issues/27
+```
+git clone https://github.com/ROCm/flash-attention
+git fetch
+git branch -a
+git checkout howiejay/navi_support
+python setup.py install
+```
 ## unsloth
 ```
 pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
