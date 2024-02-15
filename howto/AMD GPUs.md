@@ -434,9 +434,40 @@ ImportError: /home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.
 ```
 ## bitsandbytes
 For current status, see:
+- https://github.com/TimDettmers/bitsandbytes/issues/107
 - https://github.com/TimDettmers/bitsandbytes/pull/756
+- https://github.com/TimDettmers/bitsandbytes/discussions/990
 The most current working fork (related to the that PR):
 - https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6/tree/rocm
+
+I was able to successfully build and install this on 2024-02-15:
+```
+mamba create -n bnb python=3.11 -y
+mamba activate bnb
+
+# https://pytorch.org/get-started/locally/
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+python -c "import torch; print('PyTorch version:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('CUDA device count:', torch.cuda.device_count()); print('Current CUDA device:', torch.cuda.current_device() if torch.cuda.is_available() else 'None')"
+
+git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
+cd bitsandbytes-rocm-5.6
+git fetch
+git branch -a
+git checkout rocm
+
+# you can use rocminfo to get your ROCM_TARGET
+# you might need to modify the Makefile to set ROCM_HOME:=/opt/rocm
+make hip ROCM_TARGET=gfx1100
+pip install .
+python -m bitsandbytes
+python -c "import bitsandbytes; print(bitsandbytes.__version__)"
+
+# You probably want these if you're testing inference
+pip install transformers
+pip install accelerate
+```
+
+
 ## TensorFlow
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
 ```shell
