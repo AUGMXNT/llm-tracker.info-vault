@@ -395,7 +395,9 @@ pip install .
 RDNA3 support should be merged in: https://github.com/vllm-project/vllm/pull/2768
 Now let's continue:
 ```bash
-# see xformers
+#needs it's own xformers
+pip install xformers==0.0.23 --no-deps
+bash patch_xformers.rocm.sh
 
 pip install -r requirements-rocm.txt
 
