@@ -482,11 +482,15 @@ cd triton/python
 pip install ninja cmake
 pip install -e .
 pytest
-
-# unsloth
+```
+## Flash Attention 2
+- https://github.com/ROCm/flash-attention
+	- howiejayz/navi_support
+- https://github.com/ROCm/flash-attention/issues/27
+## unsloth
+```
 pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
 ```
-
 
 ## TensorFlow
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
