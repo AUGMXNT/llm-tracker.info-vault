@@ -465,6 +465,16 @@ python -c "import bitsandbytes; print(bitsandbytes.__version__)"
 # You probably want these if you're testing inference
 pip install transformers
 pip install accelerate
+
+# xformers
+git clone https://github.com/ROCm/xformers
+cd xformers
+git submodule update --init --recursive
+python setup.py install
+python -c 'import xformers; print(xformers.__version__)'
+
+# unsloth
+pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
 ```
 
 
