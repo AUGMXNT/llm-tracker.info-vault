@@ -392,14 +392,12 @@ pip install .
 ```
 * https://github.com/ROCm/composable_kernel/discussions/1032
 
+RDNA3 support should be merged in: https://github.com/vllm-project/vllm/pull/2768
 Now let's continue:
 ```bash
-git clone https://github.com/vllm-project/vllm 
-cd vllm
-pip install xformers==0.0.23 --no-deps
-bash patch_xformers.rocm.sh
+# see xformers
 
-pip install -U -r requirements-rocm.txt
+pip install -r requirements-rocm.txt
 
 export GPU_ARCHS=gfx1100
 python setup.py install # This may take 5-10 minutes. Currently, `pip install .`` does not work for ROCm installation
@@ -467,6 +465,7 @@ pip install transformers
 pip install accelerate
 ```
 ## xformers
+This seems to work
 ```
 # xformers
 git clone https://github.com/ROCm/xformers
@@ -476,6 +475,7 @@ python setup.py install
 python -c 'import xformers; print(xformers.__version__)'
 ```
 ## triton
+This seems to work (2.1.0)
 ```
 git clone https://github.com/ROCm/triton
 cd triton/python
@@ -484,6 +484,7 @@ pip install -e .
 python -c "import triton; print(triton.__version__)"
 ```
 ## Flash Attention 2
+This seems to work
 - https://github.com/ROCm/flash-attention
 	- howiejayz/navi_support
 - https://github.com/ROCm/flash-attention/issues/27
@@ -495,8 +496,13 @@ git checkout howiejay/navi_support
 python setup.py install
 ```
 ## unsloth
+Right now we can import 
 ```
 pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
+
+# You'll need to manually edit site-packages/unsloth/__init__.py
+# comment out
+# libcuda_dirs()
 ```
 
 ## TensorFlow
