@@ -462,6 +462,9 @@ This seems to work (0.0.25) - note, vLLM uses 0.0.23 with a patch to install, bu
 # xformers
 git clone https://github.com/ROCm/xformers
 cd xformers
+git fetch
+git branch -a
+git checkout develop
 git submodule update --init --recursive
 python setup.py install
 python -c 'import xformers; print(xformers.__version__)'
