@@ -40,7 +40,8 @@ If you are benchmarking vs other inference engines, I recommend using these stan
 * Metal uses `-ngl 1` (or any really) since it's unified memory, but for CUDA systems you'd want something like `-ngl 99` to get all layers in memory
 * Default prompt context is 512 - this is probably fine to leave as is? Most testing I've seen online doesn't change this
 * `-n` should be the max context you want to test to and `--ignore-eos` is required so it doesn't end prematurely (as context gets longer, speed tends to slow down
-
+Here is a discussion that tracks the performance of various Apple Silicon chips:
+- https://github.com/ggerganov/llama.cpp/discussions/4167
 ## MLC LLM
 [MLC LLM](https://mlc.ai/mlc-llm/) is an implementation that runs not just on Windows, Linux, and Mac, but also iOS, Android, and even in web browsers w/ WebGPU support. Assuming you have `conda` setup already, the [instructions for installing](https://mlc.ai/mlc-llm/docs/get_started/try_out.html) are up to date and work without hitches.
 

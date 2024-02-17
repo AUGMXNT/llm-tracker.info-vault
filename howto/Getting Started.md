@@ -38,7 +38,7 @@ https://www.anyscale.com/endpoints
 https://replicate.com/
 https://www.together.ai/
 https://www.fireworks.ai/
-
+https://octo.ai/pricing/
 
 # GPU Pricing
 - https://computewatch.llm-utils.org/
