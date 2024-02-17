@@ -380,17 +380,7 @@ Segmentation fault (core dumped)
 vLLM supports ROCm starting w/ v0.2.4, but only on MI200 cards...
 https://docs.vllm.ai/en/latest/getting_started/amd-installation.html#build-from-source-rocm
 
-CURRENT STATUS: failed to get it working on RDNA3...
-
-It looks like there is a Navi3 Flash Attention branch now: https://github.com/ROCmSoftwarePlatform/flash-attention/issues/27
-```shell
-git clone https://github.com/ROCmSoftwarePlatform/flash-attention
-git branch -a
-git switch howiejay/navi_support
-export GPU_ARCHS=gfx1100
-pip install .
-```
-* https://github.com/ROCm/composable_kernel/discussions/1032
+CURRENT STATUS: failed to get it working on RDNA3, dumps out matrix errors
 
 RDNA3 support should be merged in: https://github.com/vllm-project/vllm/pull/2768
 Now let's continue:
@@ -467,7 +457,7 @@ pip install transformers
 pip install accelerate
 ```
 ## xformers
-This seems to work
+This seems to work (0.0.25) - note, vLLM uses 0.0.23 with a patch to install, but still dies w/ RDNA3
 ```
 # xformers
 git clone https://github.com/ROCm/xformers
@@ -498,7 +488,13 @@ git checkout howiejay/navi_support
 python setup.py install
 ```
 ## unsloth
-Right now we can import 
+Unsloth https://github.com/unslothai/unsloth depends on:
+- PyTorch
+- Triton
+- xformers or flash attention
+- bitsandbytes
+
+In theory we have everything we need, and it will startup, however, even after you comment out the `libcuda_dirs()` calls it will die: 
 ```
 pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
 
