@@ -465,8 +465,10 @@ pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
 # libcuda_dirs()
 ```
 
-## TensorFlow (MIGHT WORK?)
-https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
+## TensorFlow (SHOULD WORK?)
+Untested, but recent reports are that it should work:
+- https://www.reddit.com/r/ROCm/comments/1ahkay9/tensorflow_on_gfx1101_navi32_7800_xt/
+- https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
 ```shell
 mamba create -n tf python=3.10
 sudo apt install rocm-libs rccl
