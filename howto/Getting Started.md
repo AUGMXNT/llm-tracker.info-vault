@@ -31,7 +31,10 @@ All of these have free access, although many may require user registration, and 
 
 
 ## Paid Open Models
-This site tracks quality, throughput, price of various API hosting providers: https://artificialanalysis.ai/
+This site tracks quality, throughput, price of various API hosting providers:
+- https://artificialanalysis.ai/
+- https://leaderboard.withmartian.com/
+	- https://twitter.com/withmartian/status/1750618191800488418
 
 https://openrouter.ai/
 https://www.anyscale.com/endpoints
