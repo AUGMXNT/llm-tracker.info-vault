@@ -1,5 +1,21 @@
 We should have a tool to be able to track Github project activity...
 
+Papers collection:
+- https://huggingface.co/collections/leonardlin/prompt-injection-65dd93985012ec503f2a735a
+
+Techniques:
+- Input
+	- heuristics
+	- fine-tuned models
+		- chunked detection of inputs?
+	- prompt rewriting
+- Output filtering
+	- heuristics
+	- canary tokens
+	- fine-tuned models
+- Logging
+	- embeddings/vector db storage of attacks
+
 # [rebuff](https://github.com/protectai/rebuff)
 - Apache 2.0
 - Heuristics: Filter out potentially malicious input before it reaches the LLM.
