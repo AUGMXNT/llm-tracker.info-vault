@@ -122,7 +122,6 @@ For defenses, specifying the following key words when creating the app:
 10. Proactive detection: "proactive"
 
 Clients are recommended to navigate to ./configs/model_configs/ to check the supported LLMs. Clients should also enter their own PaLM2 API keys in the corresponding areas in the model config. Supports for other models will be added later.
-# 🛡️ [Prompt-adversarial collections
-](https://github.com/yunwei37/prompt-hacker-collections)
+# [Prompt-adversarial collections](https://github.com/yunwei37/prompt-hacker-collections)
 - MIT
 This repository serves as a comprehensive resource on the study and practice of prompt-injection attacks, defenses, and interesting examples. It contains a collection of examples, case studies, and detailed notes aimed at researchers, students, and security professionals interested in this topic.
