@@ -71,6 +71,8 @@ If you are more technical:
 - [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [exllama](https://github.com/turboderp/exllama)
 
+Other chat clients: https://news.ycombinator.com/item?id=39532367
+
 Most of the guides in this HOWTO section will assume:
 
 - On a UNIXy platform (Linux, macOS, WSL)
