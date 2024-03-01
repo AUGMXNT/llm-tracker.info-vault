@@ -43,15 +43,22 @@ https://www.together.ai/
 https://www.fireworks.ai/
 https://octo.ai/pricing/
 
-# GPU Pricing
+# GPU Rental Pricing
 - https://computewatch.llm-utils.org/
+
+
+- https://www.runpod.io/gpu-instance/pricing
+- https://www.latitude.sh/pricing
+- https://massedcompute.com/
+- 
+
+
 - https://gpus.llm-utils.org/alternative-gpu-clouds/
 - H100s: https://gpus.llm-utils.org/h100-gpu-cloud-availability-and-pricing/
 	- https://gpus.llm-utils.org/nvidia-h100-gpus-supply-and-demand/
 
 H100's
 - https://www.coreweave.com/products/hgx-h100
-- 
 
 
 
