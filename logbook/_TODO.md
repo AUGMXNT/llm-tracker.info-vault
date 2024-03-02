@@ -35,6 +35,12 @@ Info:
 	- https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K
 	- https://huggingface.co/datasets/ise-uiuc/Magicoder-Evol-Instruct-110K
 
+https://github.com/bigcode-project/starcoder2
+https://huggingface.co/blog/starcoder2
+https://huggingface.co/m-a-p/OpenCodeInterpreter-DS-33B
+https://huggingface.co/m-a-p/OpenCodeInterpreter-SC2-7B
+
+
 Search w/ Lepton
 https://github.com/leptonai/search_with_lepton
 
