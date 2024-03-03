@@ -43,15 +43,17 @@ https://www.together.ai/
 https://www.fireworks.ai/
 https://octo.ai/pricing/
 
-# GPU Rental Pricing
+# GPU Rental
+For good primers to hardware:
+- https://timdettmers.com/2023/01/30/which-gpu-for-deep-learning/
+- https://github.com/stas00/ml-engineering/tree/master/compute/accelerator
+
 - https://computewatch.llm-utils.org/
 
 
 - https://www.runpod.io/gpu-instance/pricing
 - https://www.latitude.sh/pricing
 - https://massedcompute.com/
-- 
-
 
 - https://gpus.llm-utils.org/alternative-gpu-clouds/
 - H100s: https://gpus.llm-utils.org/h100-gpu-cloud-availability-and-pricing/
