@@ -16,6 +16,18 @@ GPT-4 backed VSCode-like editor
 * [No model training on your data](https://about.sourcegraph.com/terms/cody-notice)
 * Uses Anthropic Claude 2
 
+Phind
+https://marketplace.visualstudio.com/items?itemName=phind.phind
+https://news.ycombinator.com/item?id=39471388
+https://github.com/Lomusire/gpt4-unlimited-phin
+
+
+https://continue.dev/
+https://github.com/continuedev/continue
+
+https://github.com/huggingface/llm-vscode
+
+
 ## [bloop](https://bloop.ai/)
 bloop is a developer assistant that uses GPT-4 to answer questions about your codebase. The agent searches both your local and remote repositories with natural language, regex and filtered queries.
 * YC Startup
