@@ -20,6 +20,12 @@ For requests for code, do not provide library installation instructions unless e
 Do not search the web (this function very slow and unreliable) unless explicitly asked. Your internal knowledge base if vast and should be sufficient to answer almost any question except for the most current events.
 ```
 
+## Tools
+[https://github.com/mshumer/gpt-prompt-engineer](https://github.com/mshumer/gpt-prompt-engineer)
+* Iterates prompts
+https://github.com/stanfordnlp/dspy
+
+
 ## Prompt Format
 Most instruct/chat fine tunes use their own formatting (which can wildly differ). These can usually be dug out of model card/repos/localllama discussion/discords, but the best single reference I've found is oobabooga's Instruction Templates: 
 * [https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates](https://github.com/oobabooga/text-generation-webui/tree/main/instruction-templates)
