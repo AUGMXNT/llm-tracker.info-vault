@@ -45,6 +45,9 @@ Supposedly will let you talk to your code base, create tests, review PRs, refact
 
 # OpenAI API
 
+## Code Interpreter
+https://github.com/haseeb-heaven/code-interpreter
+
 ## [Instrukt](https://github.com/blob42/Instrukt)
 Coding AI: A coding assistant. Create indexes over any code base and attach it to the agent to do RAG (Retrieval Augmented Generation)
 
