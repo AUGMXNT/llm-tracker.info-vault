@@ -5,6 +5,8 @@
 * https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api
 * https://oneusefulthing.substack.com/p/power-and-weirdness-how-to-use-bing
 * [Prompt Engineering for 7b LLMs](https://www.reddit.com/r/LocalLLaMA/comments/18e929k/prompt_engineering_for_7b_llms/)
+* https://github.com/openai/openai-cookbook/blob/main/articles/related_resources.md
+	* Summary: https://threadreaderapp.com/thread/1771922467134583287.html
 
 https://arxiv.org/abs/2312.16171v1
 
