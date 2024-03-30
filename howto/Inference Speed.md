@@ -1,5 +1,7 @@
 See: https://huggingface.co/collections/leonardlin/speed-6583d7a3b02f38ef348139ef
 
+* 2024-03-19 [Exploring LLMs Speed Benchmarks: Independent Analysis](https://www.inferless.com/learn/exploring-llms-speed-benchmarks-independent-analysis)
+	* Simple vLLM, TGI, TensorRT, DeepSpeed Mii, CTranslate2 comparison
 * 2023-01-07 [MK1 Flywheel Unlocks the Full Potential of AMD Instinct for LLM Inference](https://mkone.ai/blog/mk1-flywheel-amd)
 	* Closed source, but interesting analysis of MI210 optimization
 	* Discussion
