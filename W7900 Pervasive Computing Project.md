@@ -34,3 +34,13 @@ pip wheel -v --no-build-isolation git+https://github.com/ROCm/xformers.git@main#
 # Double check
 python -m xformers.info
 ```
+
+## vllm
+```
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
+
+git clone https://github.com/vllm-project/vllm.git
+cd vllm
+pip install -r requirements-rocm.txt
+VLLM_TARGET_DEVICE=rocm pip install -e .
+```
