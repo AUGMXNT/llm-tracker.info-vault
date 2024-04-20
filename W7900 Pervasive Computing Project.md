@@ -41,6 +41,8 @@ pip install --pre torch torchvision torchaudio --index-url https://download.pyto
 
 git clone https://github.com/vllm-project/vllm.git
 cd vllm
-pip install -r requirements-rocm.txt
-VLLM_TARGET_DEVICE=rocm pip install -e .
+sudo docker build --build-arg BASE_IMAGE="rocm/pytorch:rocm6.0_ubuntu20.04_py3.9_pytorch_2.1.1" --build-arg FX_GFX_ARCHS="gfx1100" --build-arg BUILD_FA=0 -f Dockerfile.rocm -t vllm-rocm .
+
+# pip install -r requirements-rocm.txt
+# VLLM_TARGET_DEVICE=rocm pip install -e .
 ```
