@@ -1,5 +1,9 @@
 As of August 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is available for Linux or [Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html). It's best to check the latest docs for information:
 * https://rocm.docs.amd.com/en/latest/
+
+See also (2024 April):
+* [[W7900 Pervasive Computing Project]]
+
 # Hardware
 These are the latest officially supported cards:
 * https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html
