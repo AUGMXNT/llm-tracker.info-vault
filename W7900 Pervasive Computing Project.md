@@ -12,7 +12,10 @@ I will be keeping a log here for now...
 Last update 2024-04-08 - FA 2.5.5 being worked on internally
 - https://github.com/ROCm/flash-attention/issues/35#issuecomment-2042391285
 
-## xformers
+## xformers - Not Working
+Neither the upstream or AMD's ROCm fork compile:
+See: https://github.com/facebookresearch/xformers/issues/1026
+
 We need to compile from code
 ```
 # Make sure we have the ROCm version of PyTorch
@@ -23,11 +26,11 @@ python -c "import torch; print(torch.version.hip)"
 
 # Install from source - on a Ryzen 5600G takes ~
 pip install ninja
-pip install -v -U git+https://github.com/facebookresearch/xformers.git@main#egg=xformers
+# pip install -v -U git+https://github.com/facebookresearch/xformers.git@main#egg=xformers
+
+pip wheel -v --no-build-isolation git+https://github.com/ROCm/xformers.git@main#egg=xformers
+
 
 # Double check
 python -m xformers.info
-
-
 ```
-* 
