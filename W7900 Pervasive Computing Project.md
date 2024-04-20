@@ -7,4 +7,7 @@ I will be keeping a log here for now...
 
 
 # 2024-04-20
+
+## Flash Attention - Not Working
+Last update 2024-04-08 - FA 2.5.5 being worked on internally
 - https://github.com/ROCm/flash-attention/issues/35#issuecomment-2042391285
