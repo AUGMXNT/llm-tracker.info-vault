@@ -220,9 +220,12 @@ total time: 11.979 s
 - llama.cpp has about the same inference speed, 2.5X prompt processing
 - exllama has 50% slower inference speed, but 4X prompt processing
 
-## StyleTTS2
+## Whisper
+
+
+## StyleTTS2 - works
 ```
 python -c "import nltk; nltk.download('punkt')"
 
-
+RTF = 0.306594
 ```
