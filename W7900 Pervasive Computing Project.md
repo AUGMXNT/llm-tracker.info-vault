@@ -146,3 +146,39 @@ build: b8109bc0 (2701)
 - https://github.com/ggerganov/llama.cpp/pull/6745
 - https://github.com/ggerganov/llama.cpp/pull/6751
 ## MLC
+Install:
+```
+# Env
+mamba create -n mlc python=3.11
+
+# Pytorch
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
+
+# Install
+# https://llm.mlc.ai/docs/install/mlc_llm.html#install-mlc-packages
+python3 -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-rocm57 mlc-ai-nightly-rocm57
+python -c "import mlc_llm; print(mlc_llm)"
+
+# Required otherwise errors
+mamba install conda-forge::lld
+
+mlc_llm chat HF://mlc-ai/Llama-3-8B-Instruct-q4f16_1-MLC
+```
+- https://github.com/mlc-ai/relax/issues/316
+- https://github.com/mlc-ai/mlc-llm/issues/2144
+- see also: https://github.com/mlc-ai/mlc-llm/issues/2160
+
+Convert model
+See: https://llm.mlc.ai/docs/compilation/convert_weights.html
+```
+mkdir dist
+
+# Convert - takes about 10min for 70B
+mlc_llm convert_weight /models/hf/NousResearch_Meta-Llama-3-70B/ --quantization q4f16_1 -o dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC
+
+mlc_llm gen_config /models/hf/NousResearch_Meta-Llama-3-70B/ --quantization q4f16_1 --conv-template llama-3 -o dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC/
+
+mlc_llm chat dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC/
+
+mlc_llm chat dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC/ --evaluate --eval-prompt-len 3968 --eval-gen-len 128
+```
