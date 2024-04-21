@@ -180,5 +180,14 @@ mlc_llm gen_config /models/hf/NousResearch_Meta-Llama-3-70B/ --quantization q4f1
 
 mlc_llm chat dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC/
 
-mlc_llm chat dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC/ --evaluate --eval-prompt-len 3968 --eval-gen-len 128
+
+
+mlc_llm bench dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC/ --generate-length 4096
+
+[2024-04-21 13:19:32] INFO model_metadata.py:96: Total memory usage: 40345.77 MB (Parameters: 37849.77 MB. KVCache: 0.00 MB. Temporary buffer: 2496.00 MB)
+[2024-04-21 13:19:32] INFO model_metadata.py:105: To reduce memory usage, tweak `prefill_chunk_size`, `context_window_size` and `sliding_window_size`
+
+
 ```
+- 42.8GiB memory usage
+- 
