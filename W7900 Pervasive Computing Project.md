@@ -46,3 +46,20 @@ sudo docker build --build-arg BASE_IMAGE="rocm/pytorch:rocm6.0_ubuntu20.04_py3.9
 # pip install -r requirements-rocm.txt
 # VLLM_TARGET_DEVICE=rocm pip install -e .
 ```
+
+## ExLlamaV2
+```
+$ GPU_MAX_HW_QUEUES=1 python test_inference.py -m /data/models/exl2/LoneStriker_Meta-Llama-3-70B-Instruct-4.0bpw-h6-exl2/ -s
+ -- Model: /data/models/exl2/LoneStriker_Meta-Llama-3-70B-Instruct-4.0bpw-h6-exl2/
+ -- Options: []
+ -- Loading model...
+ -- Loaded model in 2802.5172 seconds
+ -- Loading tokenizer...
+ -- Measuring token speed...
+...
+
+ ** Position  3968 + 128 tokens:    7.0301 t/s
+
+```
+* 39GiB VRAM usages at 4096 tokens
+* Insanely long (46min lol) load times on machines w/ 16GiB RAM
