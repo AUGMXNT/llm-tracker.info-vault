@@ -7,7 +7,15 @@ I will be keeping a log here for now...
 
 
 # 2024-04-20
+All tests on an Ubuntu 22.04 LTS HWE box w/ ROCm native install:
+https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/ubuntu.html
 
+## PyTorch - Works
+https://pytorch.org/get-started/locally/
+```
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
+```
+- ROCm 6.0 requires nightly
 ## Flash Attention - Latest Not Working
 Last update 2024-04-08 - FA 2.5.5 being worked on internally
 - https://github.com/ROCm/flash-attention/issues/35#issuecomment-2042391285
@@ -145,7 +153,7 @@ build: b8109bc0 (2701)
 - llama3 template/stop tokens still in progress: https://github.com/ggerganov/llama.cpp/issues/6747
 - https://github.com/ggerganov/llama.cpp/pull/6745
 - https://github.com/ggerganov/llama.cpp/pull/6751
-## MLC
+## MLC - works
 Install:
 ```
 # Env
@@ -181,13 +189,33 @@ mlc_llm gen_config /models/hf/NousResearch_Meta-Llama-3-70B/ --quantization q4f1
 mlc_llm chat dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC/
 
 
-
 mlc_llm bench dist/NousResearch_Meta-Llama-3-70B-q4f16_1-MLC/ --generate-length 4096
 
 [2024-04-21 13:19:32] INFO model_metadata.py:96: Total memory usage: 40345.77 MB (Parameters: 37849.77 MB. KVCache: 0.00 MB. Temporary buffer: 2496.00 MB)
 [2024-04-21 13:19:32] INFO model_metadata.py:105: To reduce memory usage, tweak `prefill_chunk_size`, `context_window_size` and `sliding_window_size`
 
+Statistics:
+----------- prefill -----------
+throughput: 36.910 tok/s
+total tokens: 7 tok
+total time: 0.190 s
+------------ decode ------------
+throughput: 12.041 tok/s
+total tokens: 4096 tok
+total time: 340.169 s
 
+# --prompt "000...."
+
+Statistics:
+----------- prefill -----------
+throughput: 95.501 tok/s
+total tokens: 3376 tok
+total time: 35.351 s
+------------ decode ------------
+throughput: 10.686 tok/s
+total tokens: 128 tok
+total time: 11.979 s
 ```
 - 42.8GiB memory usage
-- 
+- llama.cpp has about the same inference speed, 2.5X prompt processing
+- exllama has 50% slower inference speed, but 4X prompt processing
