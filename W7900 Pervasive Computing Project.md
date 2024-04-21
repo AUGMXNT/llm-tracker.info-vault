@@ -48,6 +48,8 @@ sudo docker build --build-arg BASE_IMAGE="rocm/pytorch:rocm6.0_ubuntu20.04_py3.9
 ```
 
 ## ExLlamaV2
+
+Inference Speed:
 ```
 $ GPU_MAX_HW_QUEUES=1 python test_inference.py -m /data/models/exl2/LoneStriker_Meta-Llama-3-70B-Instruct-4.0bpw-h6-exl2/ -s
  -- Model: /data/models/exl2/LoneStriker_Meta-Llama-3-70B-Instruct-4.0bpw-h6-exl2/
@@ -66,3 +68,28 @@ $ GPU_MAX_HW_QUEUES=1 python test_inference.py -m /data/models/exl2/LoneStriker_
 ```
 * 39GiB VRAM usages at 4096 tokens
 * Insanely long (46min lol) load times on machines w/ 16GiB RAM
+
+Prompt Processing Speed:
+```
+$ GPU_MAX_HW_QUEUES=1 python test_inference.py -m /data/models/exl2/LoneStriker_Meta-Llama-3-70B-Instruct-4.0bpw-h6-exl2/ -ps
+Successfully preprocessed all matching files.
+ -- Model: /data/models/exl2/LoneStriker_Meta-Llama-3-70B-Instruct-4.0bpw-h6-exl2/
+ -- Options: []
+ -- Loading model...
+ -- Loaded model in 3402.6222 seconds
+ -- Loading tokenizer...
+ -- Warmup...
+ -- Measuring prompt speed...
+ ** Length   128 tokens:    154.0550 t/s
+ ** Length   256 tokens:    269.5589 t/s
+ ** Length   384 tokens:    358.5119 t/s
+ ** Length   512 tokens:    359.8361 t/s
+ ** Length   640 tokens:    365.1964 t/s
+ ** Length   768 tokens:    429.5664 t/s
+ ** Length   896 tokens:    426.6023 t/s
+ ** Length  1024 tokens:    430.6259 t/s
+ ** Length  2048 tokens:    416.8521 t/s
+ ** Length  3072 tokens:    394.7572 t/s
+ ** Length  4096 tokens:    363.3365 t/s
+ ** Length  8192 tokens:    283.3092 t/s
+```
