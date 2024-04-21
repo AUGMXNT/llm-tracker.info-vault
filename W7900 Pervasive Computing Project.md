@@ -60,6 +60,9 @@ $ GPU_MAX_HW_QUEUES=1 python test_inference.py -m /data/models/exl2/LoneStriker_
 
  ** Position  3968 + 128 tokens:    7.0301 t/s
 
+...
+
+ ** Position  8064 + 128 tokens:    4.5124 t/s
 ```
 * 39GiB VRAM usages at 4096 tokens
 * Insanely long (46min lol) load times on machines w/ 16GiB RAM
