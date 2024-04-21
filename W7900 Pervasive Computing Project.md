@@ -16,6 +16,7 @@ Last update 2024-04-08 - FA 2.5.5 being worked on internally
 2.0.4 Forward Pass only
 ```
 git clone https://github.com/ROCm/flash-attention
+cd flash-attention
 git fetch
 git branch -a
 git checkout howiejay/navi_support
@@ -44,6 +45,20 @@ pip wheel -v --no-build-isolation git+https://github.com/ROCm/xformers.git@main#
 
 # Double check
 python -m xformers.info
+```
+
+## bitsandbytes - Works
+ROCM fork works (0.44.0.dev0)
+```
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
+
+git clone --recurse https://github.com/ROCm/bitsandbytes
+cd bitsandbytes
+git checkout rocm_enabled
+pip install -r requirements-dev.txt
+cmake -DCOMPUTE_BACKEND=hip -DBNB_ROCM_ARCH="gfx1100" -S .
+make
+pip install .
 ```
 
 ## vllm - Not Working
@@ -111,19 +126,6 @@ Successfully preprocessed all matching files.
  ** Length  8192 tokens:    283.3092 t/s
 ```
 
-## bitsandbytes - Works
-ROCM fork works (0.44.0.dev0)
-```
-pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
-
-git clone --recurse https://github.com/ROCm/bitsandbytes
-cd bitsandbytes
-git checkout rocm_enabled
-pip install -r requirements-dev.txt
-cmake -DCOMPUTE_BACKEND=hip -DBNB_ROCM_ARCH="gfx1100" -S .
-make
-pip install .
-```
 
 ## llama.cpp - works
 ```
@@ -143,3 +145,6 @@ ggml_cuda_init: found 1 ROCm devices:
 
 build: b8109bc0 (2701)
 ```
+- llama3 template/stop tokens still in progress: https://github.com/ggerganov/llama.cpp/issues/6747
+- https://github.com/ggerganov/llama.cpp/pull/6745
+- https://github.com/ggerganov/llama.cpp/pull/6751
