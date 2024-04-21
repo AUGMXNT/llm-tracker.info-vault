@@ -219,3 +219,10 @@ total time: 11.979 s
 - 42.8GiB memory usage
 - llama.cpp has about the same inference speed, 2.5X prompt processing
 - exllama has 50% slower inference speed, but 4X prompt processing
+
+## StyleTTS2
+```
+python -c "import nltk; nltk.download('punkt')"
+
+
+```
