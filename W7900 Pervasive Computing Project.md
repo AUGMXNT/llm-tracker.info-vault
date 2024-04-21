@@ -14,6 +14,11 @@ Last update 2024-04-08 - FA 2.5.5 being worked on internally
 
 2.0.4 Forward Pass
 ```
+git clone https://github.com/ROCm/flash-attention
+git fetch
+git branch -a
+git checkout howiejay/navi_support
+python setup.py install
 ```
 
 ## xformers - Not Working
