@@ -11,16 +11,18 @@ I will be keeping a log here for now...
 ## Flash Attention - Latest Not Working
 Last update 2024-04-08 - FA 2.5.5 being worked on internally
 - https://github.com/ROCm/flash-attention/issues/35#issuecomment-2042391285
+- Currently  gfx1100 not supported
 
-2.0.4 Forward Pass
+2.0.4 Forward Pass only
 ```
 git clone https://github.com/ROCm/flash-attention
 git fetch
 git branch -a
 git checkout howiejay/navi_support
 python setup.py install
+python -c "import flash_attn; print(flash_attn.__version__)"
 ```
-
+- howiejay is no longer working on this project: https://github.com/Dao-AILab/flash-attention/issues/707#issuecomment-2049042957
 ## xformers - Not Working
 Neither the upstream or AMD's ROCm fork compile:
 See: https://github.com/facebookresearch/xformers/issues/1026
