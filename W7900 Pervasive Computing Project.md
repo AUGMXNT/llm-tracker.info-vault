@@ -8,9 +8,13 @@ I will be keeping a log here for now...
 
 # 2024-04-20
 
-## Flash Attention - Not Working
+## Flash Attention - Latest Not Working
 Last update 2024-04-08 - FA 2.5.5 being worked on internally
 - https://github.com/ROCm/flash-attention/issues/35#issuecomment-2042391285
+
+2.0.4 Forward Pass
+```
+```
 
 ## xformers - Not Working
 Neither the upstream or AMD's ROCm fork compile:
@@ -92,4 +96,18 @@ Successfully preprocessed all matching files.
  ** Length  3072 tokens:    394.7572 t/s
  ** Length  4096 tokens:    363.3365 t/s
  ** Length  8192 tokens:    283.3092 t/s
+```
+
+## bitsandbytes - Works
+ROCM fork works (0.44.0.dev0)
+```
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
+
+git clone --recurse https://github.com/ROCm/bitsandbytes
+cd bitsandbytes
+git checkout rocm_enabled
+pip install -r requirements-dev.txt
+cmake -DCOMPUTE_BACKEND=hip -DBNB_ROCM_ARCH="gfx1100" -S .
+make
+pip install .
 ```
