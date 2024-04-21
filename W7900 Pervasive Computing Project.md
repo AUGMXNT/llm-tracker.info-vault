@@ -46,7 +46,6 @@ pip wheel -v --no-build-isolation git+https://github.com/ROCm/xformers.git@main#
 # Double check
 python -m xformers.info
 ```
-
 ## bitsandbytes - Works
 ROCM fork works (0.44.0.dev0)
 ```
@@ -60,7 +59,8 @@ cmake -DCOMPUTE_BACKEND=hip -DBNB_ROCM_ARCH="gfx1100" -S .
 make
 pip install .
 ```
-
+* Only 1% difference w/ FA2 2.0.4-rocm-howiejay
+* About 3min to load 70B model (132GiB), 40GiB memory,  3.3 tok/s bs=1 inference speed
 ## vllm - Not Working
 ```
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
@@ -72,7 +72,6 @@ sudo docker build --build-arg BASE_IMAGE="rocm/pytorch:rocm6.0_ubuntu20.04_py3.9
 # pip install -r requirements-rocm.txt
 # VLLM_TARGET_DEVICE=rocm pip install -e .
 ```
-
 ## ExLlamaV2 - works
 
 Inference Speed:
@@ -125,8 +124,6 @@ Successfully preprocessed all matching files.
  ** Length  4096 tokens:    363.3365 t/s
  ** Length  8192 tokens:    283.3092 t/s
 ```
-
-
 ## llama.cpp - works
 ```
 git clone https://github.com/ggerganov/llama.cpp/
@@ -148,3 +145,4 @@ build: b8109bc0 (2701)
 - llama3 template/stop tokens still in progress: https://github.com/ggerganov/llama.cpp/issues/6747
 - https://github.com/ggerganov/llama.cpp/pull/6745
 - https://github.com/ggerganov/llama.cpp/pull/6751
+## MLC
