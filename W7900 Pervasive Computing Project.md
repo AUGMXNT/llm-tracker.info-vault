@@ -153,6 +153,23 @@ build: b8109bc0 (2701)
 - llama3 template/stop tokens still in progress: https://github.com/ggerganov/llama.cpp/issues/6747
 - https://github.com/ggerganov/llama.cpp/pull/6745
 - https://github.com/ggerganov/llama.cpp/pull/6751
+
+Just for a baseline comparison, the W7900 is about 15% slower in prefill and 20% slower in generation than a 7900 XTX (lower TDP, slower clocks and memory?)
+```
+$ ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -p 3968
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:   no
+ggml_cuda_init: CUDA_USE_TENSOR_CORES: yes
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon PRO W7900, compute capability 11.0, VMM: no
+| model                          |       size |     params | backend    | ngl | test       |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ---------- | ---------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | pp 3968    |   2193.89 ± 3.09 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 | tg 128     |     93.94 ± 0.18 |
+
+build: 784e11de (2725)
+```
+- For comparison numbers, see: https://llm-tracker.info/howto/AMD-GPUs#llamacpp
+
 ## MLC - works
 Install:
 ```
