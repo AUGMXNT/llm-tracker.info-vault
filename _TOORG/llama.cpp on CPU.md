@@ -452,5 +452,15 @@ sys     39m6.294s
 
 llama3-70b q4_k_m
 ```
+$ time llama.cpp$ ./llama-bench -p 3968 -m Meta-Llama-3-70B-Q4_K_M.gguf 
+| model                          |       size |     params | backend    |    threads | test       |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ---------: | ---------- | ---------------: |
+| llama 70B Q4_K - Medium        |  39.59 GiB |    70.55 B | CPU        |         96 | pp 3968    |     21.00 ± 0.29 |
+| llama 70B Q4_K - Medium        |  39.59 GiB |    70.55 B | CPU        |         96 | tg 128     |      2.85 ± 0.00 |
 
+build: 928e0b70 (2749)
+
+real    22m46.328s
+user    1712m25.681s
+sys     459m23.131s
 ```
