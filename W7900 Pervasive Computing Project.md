@@ -71,15 +71,43 @@ pip install .
 * About 3min to load 70B model (132GiB), 40GiB memory,  3.3 tok/s bs=1 inference speed
 ## vllm - Not Working
 ```
+# pytorch
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
 
 git clone https://github.com/vllm-project/vllm.git
 cd vllm
+
+
+```
+```
+
+
+
+
 sudo docker build --build-arg BASE_IMAGE="rocm/pytorch:rocm6.0_ubuntu20.04_py3.9_pytorch_2.1.1" --build-arg FX_GFX_ARCHS="gfx1100" --build-arg BUILD_FA=0 -f Dockerfile.rocm -t vllm-rocm .
 
 # pip install -r requirements-rocm.txt
 # VLLM_TARGET_DEVICE=rocm pip install -e .
 ```
+
+Let's try the docker build...
+```
+# To build vllm on ROCm 6.0 for Radeon RX7900 series (gfx1100), you should specify BUILD_FA as below:
+docker build --build-arg BUILD_FA="0" -f Dockerfile.rocm -t vllm-rocm .
+
+docker run -it \
+   --network=host \
+   --group-add=video \
+   --ipc=host \
+   --cap-add=SYS_PTRACE \
+   --security-opt seccomp=unconfined \
+   --device /dev/kfd \
+   --device /dev/dri \
+   -v /models/hf/NousResearch_Meta-Llama-3-8B:/app/model \
+   vllm-rocm \
+   bash
+```
+
 ## ExLlamaV2 - works
 
 Inference Speed:
