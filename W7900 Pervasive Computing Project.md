@@ -183,8 +183,21 @@ INFO 05-01 16:09:35 model_runner.py:1057] Graph capturing finished in 3 secs.   
 Throughput: 1.72 requests/s, 1759.44 tokens/s 
 
 # 512 - no FA2 (XFormers)
-
-
+❯ CUDA_VISIBLE_DEVICES=0 python benchmark_throughput.py --model /models/hf/NousResearch_Meta-Llama-3-8B --input-len 512 --output-len 512
+Namespace(backend='vllm', dataset=None, input_len=512, output_len=512, model='/models/hf/NousResearch_Meta-Llama-3-8B', tokenizer='/models/hf/NousResearch_Meta-Llama-3-8B', quantization=None, tensor_parallel_size=1, n=1, use_beam_search=False, num_prompts=1000, seed=0, hf_max_batch_size=None, trust_remote_code=False, max_model_len=None, dtype='auto', gpu_memory_utilization=0.9, enforce_eager=False, kv_cache_dtype='auto', quantization_param_path=None, device='cuda', enable_prefix_caching=False, enable_chunked_prefill=False, max_num_batched_tokens=None, download_dir=None)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+INFO 05-01 16:20:12 llm_engine.py:98] Initializing an LLM engine (v0.4.1) with config: model='/models/hf/NousResearch_Meta-Llama-3-8B', speculative_config=None, tokenizer='/models/hf/NousResearch_Meta-Llama-3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, quantization_param_path=None, device_config=cuda, decoding_config=DecodingConfig(guided_decoding_backend='outlines'), seed=0)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+INFO 05-01 16:20:12 utils.py:608] Found nccl from library /home/lhl/.config/vllm/nccl/cu12/libnccl.so.2.18.1
+INFO 05-01 16:20:12 selector.py:77] Cannot use FlashAttention backend because the flash_attn package is not found. Please install it for better performance.
+INFO 05-01 16:20:12 selector.py:33] Using XFormers backend.
+INFO 05-01 16:20:19 model_runner.py:173] Loading model weights took 14.9595 GB
+INFO 05-01 16:20:21 gpu_executor.py:119] # GPU blocks: 2354, # CPU blocks: 2048
+INFO 05-01 16:20:22 model_runner.py:976] Capturing the model for CUDA graphs. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+INFO 05-01 16:20:22 model_runner.py:980] CUDA graphs can take additional 1~3 GiB memory per GPU. If you are running out of memory, consider decreasing `gpu_memory_utilization` or enforcing eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+INFO 05-01 16:20:25 model_runner.py:1057] Graph capturing finished in 4 secs.
+Processed prompts: 100%|█████████████████████████████████████████████| 1000/1000 [09:48<00:00,  1.70it/s]
+Throughput: 1.70 requests/s, 1739.09 tokens/s
 ```
 
 
