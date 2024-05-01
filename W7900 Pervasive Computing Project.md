@@ -69,32 +69,20 @@ pip install .
 ```
 * Only 1% difference w/ FA2 2.0.4-rocm-howiejay
 * About 3min to load 70B model (132GiB), 40GiB memory,  3.3 tok/s bs=1 inference speed
-## vllm - Not Working
-```
-# pytorch
-pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
+## vllm - Working (no FA)
 
-git clone https://github.com/vllm-project/vllm.git
-cd vllm
-
-
-```
-```
-
-
-
-
-sudo docker build --build-arg BASE_IMAGE="rocm/pytorch:rocm6.0_ubuntu20.04_py3.9_pytorch_2.1.1" --build-arg FX_GFX_ARCHS="gfx1100" --build-arg BUILD_FA=0 -f Dockerfile.rocm -t vllm-rocm .
-
-# pip install -r requirements-rocm.txt
-# VLLM_TARGET_DEVICE=rocm pip install -e .
-```
-
-Let's try the docker build...
+I was able to build the latest main:HEAD as of 2024-05-01 (failed a couple weeks prior)
 ```
 # To build vllm on ROCm 6.0 for Radeon RX7900 series (gfx1100), you should specify BUILD_FA as below:
 docker build --build-arg BUILD_FA="0" -f Dockerfile.rocm -t vllm-rocm .
+```
+- This took about 45 minutes to build (Ryzen 5600G CPU)
 
+
+In order to run vllm, you will need to use the `VLLM_USE_TRITON_FLASH_ATTN=0` environment variable
+
+You can run with something like:
+```
 docker run -it \
    --network=host \
    --group-add=video \
@@ -107,6 +95,38 @@ docker run -it \
    vllm-rocm \
    bash
 ```
+
+To connect to the instance you can `docker ps` and
+```
+docker exec -it <container-id> bash
+```
+
+Benchmark
+```
+root@rocm:/app/vllm/benchmarks# VLLM_USE_TRITON_FLASH_ATTN=0 python benchmark_throughput.py --model /app/model --input-len 3968 --output-len 128
+Namespace(backend='vllm', dataset=None, input_len=3968, output_len=128, model='/app/model', tokenizer='/app/model', quantization=None, tensor_parallel_size=1, n=1, use_beam_search=False, num_prompts=1000, seed=0, hf_max_batch_size=None, trust_remote_code=False, max_model_len=None, dtype='auto', gpu_memory_utilization=0.9, enforce_eager=False, kv_cache_dtype='auto', quantization_param_path=None, device='cuda', enable_prefix_caching=False, enable_chunked_prefill=False, max_num_batched_tokens=None, download_dir=None)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+INFO 05-01 05:25:25 llm_engine.py:99] Initializing an LLM engine (v0.4.1) with config: model='/app/model', speculative_config=None, tokenizer='/app/model', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, quantization_param_path=None, device_config=cuda, decoding_config=DecodingConfig(guided_decoding_backend='outlines'), seed=0)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+INFO 05-01 05:25:25 utils.py:620] Found nccl from library /opt/rocm-6.0.0/lib/librccl.so.1
+/opt/conda/envs/py_3.9/lib/python3.9/site-packages/torch/cuda/__init__.py:611: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+INFO 05-01 05:25:26 selector.py:59] flash_atten is not supported on NAVI GPUs.
+INFO 05-01 05:25:26 selector.py:38] Using ROCmFlashAttention backend.
+INFO 05-01 05:25:38 model_runner.py:172] Loading model weights took 14.9595 GB
+INFO 05-01 05:25:41 gpu_executor.py:114] # GPU blocks: 12003, # CPU blocks: 2048
+INFO 05-01 05:25:41 model_runner.py:872] Capturing the model for CUDA graphs. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+INFO 05-01 05:25:41 model_runner.py:876] CUDA graphs can take additional 1~3 GiB memory per GPU. If you are running out of memory, consider decreasing `gpu_memory_utilization` or enforcing eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+INFO 05-01 05:25:46 model_runner.py:953] Graph capturing finished in 5 secs.
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+Processed prompts:  28%|██████████████████████████████████████████████▉                                                                                    Processed prompts:  33%|███████████████████████████████▌                                                                | 329/1000 [18:28<33:42,  3.01s/it]Processed prompts: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [49:23<00:00,  2.96s/it]
+Throughput: 0.34 requests/s, 1380.87 tokens/s
+```
+
+
 
 ## ExLlamaV2 - works
 
