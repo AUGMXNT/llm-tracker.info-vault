@@ -124,10 +124,30 @@ To disable this warning, you can either:
 	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
 Processed prompts:  28%|██████████████████████████████████████████████▉                                                                                    Processed prompts:  33%|███████████████████████████████▌                                                                | 329/1000 [18:28<33:42,  3.01s/it]Processed prompts: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [49:23<00:00,  2.96s/it]
 Throughput: 0.34 requests/s, 1380.87 tokens/s
+
+# 512/512
+root@rocm:/app/vllm/benchmarks# VLLM_USE_TRITON_FLASH_ATTN=0 python benchmark_throughput.py --model /app/model --input-len 512 --output-len 512
+Namespace(backend='vllm', dataset=None, input_len=512, output_len=512, model='/app/model', tokenizer='/app/model', quantization=None, tensor_parallel_size=1, n=1, use_beam_search=False, num_prompts=1000, seed=0, hf_max_batch_size=None, trust_remote_code=False, max_model_len=None, dtype='auto', gpu_memory_utilization=0.9, enforce_eager=False, kv_cache_dtype='auto', quantization_param_path=None, device='cuda', enable_prefix_caching=False, enable_chunked_prefill=False, max_num_batched_tokens=None, download_dir=None)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+INFO 05-01 07:10:44 llm_engine.py:99] Initializing an LLM engine (v0.4.1) with config: model='/app/model', speculative_config=None, tokenizer='/app/model', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, quantization_param_path=None, device_config=cuda, decoding_config=DecodingConfig(guided_decoding_backend='outlines'), seed=0)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+INFO 05-01 07:10:44 utils.py:620] Found nccl from library /opt/rocm-6.0.0/lib/librccl.so.1
+/opt/conda/envs/py_3.9/lib/python3.9/site-packages/torch/cuda/__init__.py:611: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+INFO 05-01 07:10:46 selector.py:59] flash_atten is not supported on NAVI GPUs.
+INFO 05-01 07:10:46 selector.py:38] Using ROCmFlashAttention backend.
+INFO 05-01 07:10:57 model_runner.py:172] Loading model weights took 14.9595 GB
+INFO 05-01 07:11:00 gpu_executor.py:114] # GPU blocks: 12003, # CPU blocks: 2048
+INFO 05-01 07:11:01 model_runner.py:872] Capturing the model for CUDA graphs. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+INFO 05-01 07:11:01 model_runner.py:876] CUDA graphs can take additional 1~3 GiB memory per GPU. If you are running out of memory, consider decreasing `gpu_memory_utilization` or enforcing eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+INFO 05-01 07:11:06 model_runner.py:953] Graph capturing finished in 5 secs.
+Processed prompts: 100%|██████████████████████████| 1000/1000 [12:26<00:00,  1.34it/s]
+Throughput: 1.34 requests/s, 1370.69 tokens/s
 ```
 
 As a reference, here's a 3090
 ```
+# 3968/128
 ❯ CUDA_VISIBLE_DEVICES=0 python benchmark_throughput.py --model /models/hf/NousResearch_Meta-Llama-3-8B --input-len 3968 --output-len 128
 Namespace(backend='vllm', dataset=None, input_len=3968, output_len=128, model='/models/hf/NousResearch_Meta-Llama-3-8B', tokenizer='/models/hf/NousResearch_Meta-Llama-3-8B', quantization=None, tensor_parallel_size=1, n=1, use_beam_search=False, num_prompts=1000, seed=0, hf_max_batch_size=None, trust_remote_code=False, max_model_len=None, dtype='auto', gpu_memory_utilization=0.9, enforce_eager=False, kv_cache_dtype='auto', quantization_param_path=None, device='cuda', enable_prefix_caching=False, enable_chunked_prefill=False, max_num_batched_tokens=None, download_dir=None)
 Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
@@ -142,6 +162,28 @@ INFO 05-01 15:32:05 model_runner.py:980] CUDA graphs can take additional 1~3 GiB
 INFO 05-01 15:32:08 model_runner.py:1057] Graph capturing finished in 3 secs.
 Processed prompts: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [26:25<00:00,  1.59s/it]
 Throughput: 0.63 requests/s, 2580.85 tokens/s
+
+# 512/512
+❯ CUDA_VISIBLE_DEVICES=0 python benchmark_throughput.py --model /models/hf/NousResearch_Meta-Llama-3-8B -
+-input-len 512 --output-len 512             
+Namespace(backend='vllm', dataset=None, input_len=512, output_len=512, model='/models/hf/NousResearch_Met
+a-Llama-3-8B', tokenizer='/models/hf/NousResearch_Meta-Llama-3-8B', quantization=None, tensor_parallel_si
+ze=1, n=1, use_beam_search=False, num_prompts=1000, seed=0, hf_max_batch_size=None, trust_remote_code=Fal
+se, max_model_len=None, dtype='auto', gpu_memory_utilization=0.9, enforce_eager=False, kv_cache_dtype='auto', quantization_param_path=None, device='cuda', enable_prefix_caching=False, enable_chunked_prefill=Fal
+se, max_num_batched_tokens=None, download_dir=None)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned
+ or trained.
+INFO 05-01 16:09:19 llm_engine.py:98] Initializing an LLM engine (v0.4.1) with config: model='/models/hf/
+NousResearch_Meta-Llama-3-8B', speculative_config=None, tokenizer='/models/hf/NousResearch_Meta-Llama-3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_
+code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, quantization_param_path=None, device_config=cuda, decoding_config=DecodingConfig(guided_decoding_backend='outlines'), seed=0)                                                                             Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.                                        
+INFO 05-01 16:09:19 utils.py:608] Found nccl from library /home/lhl/.config/vllm/nccl/cu12/libnccl.so.2.18.1         
+INFO 05-01 16:09:20 selector.py:28] Using FlashAttention backend.                                        INFO 05-01 16:09:29 model_runner.py:173] Loading model weights took 14.9595 GB                           INFO 05-01 16:09:31 gpu_executor.py:119] # GPU blocks: 2354, # CPU blocks: 2048                          INFO 05-01 16:09:32 model_runner.py:976] Capturing the model for CUDA graphs. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.                                                                           INFO 05-01 16:09:32 model_runner.py:980] CUDA graphs can take additional 1~3 GiB memory per GPU. If you a
+re running out of memory, consider decreasing `gpu_memory_utilization` or enforcing eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+INFO 05-01 16:09:35 model_runner.py:1057] Graph capturing finished in 3 secs.                            Processed prompts: 100%|█████████████████████████████████████████████| 1000/1000 [09:41<00:00,  1.72it/s]
+Throughput: 1.72 requests/s, 1759.44 tokens/s 
+
+# 512 - no FA2 (XFormers)
+
 
 ```
 
