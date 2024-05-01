@@ -126,6 +126,24 @@ Processed prompts:  28%|██████████████████�
 Throughput: 0.34 requests/s, 1380.87 tokens/s
 ```
 
+As a reference, here's a 3090
+```
+❯ CUDA_VISIBLE_DEVICES=0 python benchmark_throughput.py --model /models/hf/NousResearch_Meta-Llama-3-8B --input-len 3968 --output-len 128
+Namespace(backend='vllm', dataset=None, input_len=3968, output_len=128, model='/models/hf/NousResearch_Meta-Llama-3-8B', tokenizer='/models/hf/NousResearch_Meta-Llama-3-8B', quantization=None, tensor_parallel_size=1, n=1, use_beam_search=False, num_prompts=1000, seed=0, hf_max_batch_size=None, trust_remote_code=False, max_model_len=None, dtype='auto', gpu_memory_utilization=0.9, enforce_eager=False, kv_cache_dtype='auto', quantization_param_path=None, device='cuda', enable_prefix_caching=False, enable_chunked_prefill=False, max_num_batched_tokens=None, download_dir=None)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+INFO 05-01 15:31:51 llm_engine.py:98] Initializing an LLM engine (v0.4.1) with config: model='/models/hf/NousResearch_Meta-Llama-3-8B', speculative_config=None, tokenizer='/models/hf/NousResearch_Meta-Llama-3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, quantization_param_path=None, device_config=cuda, decoding_config=DecodingConfig(guided_decoding_backend='outlines'), seed=0)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+INFO 05-01 15:31:51 utils.py:608] Found nccl from library /home/lhl/.config/vllm/nccl/cu12/libnccl.so.2.18.1
+INFO 05-01 15:31:51 selector.py:28] Using FlashAttention backend.
+INFO 05-01 15:32:02 model_runner.py:173] Loading model weights took 14.9595 GB
+INFO 05-01 15:32:04 gpu_executor.py:119] # GPU blocks: 2354, # CPU blocks: 2048
+INFO 05-01 15:32:05 model_runner.py:976] Capturing the model for CUDA graphs. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+INFO 05-01 15:32:05 model_runner.py:980] CUDA graphs can take additional 1~3 GiB memory per GPU. If you are running out of memory, consider decreasing `gpu_memory_utilization` or enforcing eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+INFO 05-01 15:32:08 model_runner.py:1057] Graph capturing finished in 3 secs.
+Processed prompts: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [26:25<00:00,  1.59s/it]
+Throughput: 0.63 requests/s, 2580.85 tokens/s
+
+```
 
 
 ## ExLlamaV2 - works
