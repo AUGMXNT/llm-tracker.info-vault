@@ -17,7 +17,7 @@ pip3 install --pre torch torchvision torchaudio --index-url https://download.pyt
 ```
 - ROCm 6.0 requires nightly
 
-# Triton - Works(ish)
+## Triton - Mostly Works
 ```
 # This *doesn't* work for me
 pip install triton
@@ -38,7 +38,7 @@ You can run the some of the basic examples in `tutorials` which seems to work...
 pip install matplotlib pandas pytest tabulate
 ```
 
-
+Running the the python/tutorial scripts, `05-layer-norm.py` and `08-grouped-gemm.py` failed.
 ```
 HIP_VISIBLE_DEVICES=0 python 01-vector-add.py 
 tensor([1.3713, 1.3076, 0.4940,  ..., 0.9584, 0.7074, 1.3011], device='cuda:0')
@@ -185,17 +185,21 @@ tensor([0.4105, 0.5430, 0.0249,  ..., 1.2285, 0.5705, 0.6492], device='cuda:0')
 tensor([0.4105, 0.5430, 0.0249,  ..., 1.2285, 0.5705, 0.6492], device='cuda:0')
 The maximum difference between torch and triton is 0.0
 
-
+HIP_VISIBLE_DEVICES=0 python 08-grouped-gemm.py 
+Traceback (most recent call last):
+  File "/home/lhl/triton/triton/python/tutorials/08-grouped-gemm.py", line 208, in <module>
+    assert torch.allclose(ref_out[i], tri_out[i], atol=1e-2, rtol=0)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
 ```
 
 
-
-## Flash Attention - Latest Not Working
+## Flash Attention -  Sort of Working
 Last update 2024-04-08 - FA 2.5.5 being worked on internally
 - https://github.com/ROCm/flash-attention/issues/35#issuecomment-2042391285
 - Currently  gfx1100 not supported
 
-2.0.4 Forward Pass only
+Thre is a branch of 2.0.4  that works for forward pass only:
 ```
 git clone https://github.com/ROCm/flash-attention
 cd flash-attention
@@ -243,7 +247,7 @@ pip install .
 ```
 * Only 1% difference w/ FA2 2.0.4-rocm-howiejay
 * About 3min to load 70B model (132GiB), 40GiB memory,  3.3 tok/s bs=1 inference speed
-## vllm - Working (no FA)
+## vllm - Working (w/ no FA)
 
 I was able to build the latest main:HEAD as of 2024-05-01 (failed a couple weeks prior)
 ```
@@ -536,8 +540,8 @@ total time: 11.979 s
 
 
 ## StyleTTS2 - works
+(slowly)
 ```
 python -c "import nltk; nltk.download('punkt')"
-
 RTF = 0.306594
 ```
