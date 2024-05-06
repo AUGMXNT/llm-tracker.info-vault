@@ -19,6 +19,16 @@ pip3 install --pre torch torchvision torchaudio --index-url https://download.pyt
 
 # Triton - Works(ish)
 ```
+# Everything probably upstreamed?
+pip install triton
+
+# or build from source
+git clone https://github.com/openai/triton.git
+cd triton
+pip install ninja cmake wheel; # build-time dependencies
+pip install -e python
+
+# ROCm fork
 git clone https://github.com/ROCm/triton
 cd triton/python
 pip install -e .
