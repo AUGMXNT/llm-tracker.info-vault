@@ -28,7 +28,7 @@ cd triton
 pip install ninja cmake wheel; # build-time dependencies
 pip install -e python
 
-# ROCm fork
+# ROCm fork (old, probably don't use)
 git clone https://github.com/ROCm/triton
 cd triton/python
 pip install -e .
