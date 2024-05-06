@@ -16,6 +16,15 @@ https://pytorch.org/get-started/locally/
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
 ```
 - ROCm 6.0 requires nightly
+
+# Triton - Works(ish)
+```
+git clone https://github.com/ROCm/triton
+cd triton/python
+pip install -e .
+```
+You can run the some of the basic examples in `tutorials` which seems to 
+
 ## Flash Attention - Latest Not Working
 Last update 2024-04-08 - FA 2.5.5 being worked on internally
 - https://github.com/ROCm/flash-attention/issues/35#issuecomment-2042391285
