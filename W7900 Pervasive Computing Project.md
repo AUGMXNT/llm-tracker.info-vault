@@ -3,21 +3,18 @@ In January 2024 I applied for the [Hackster.io AMD Pervasive AI Developer Contes
 - Project: https://www.hackster.io/lhl/ultra-low-latency-local-voice-assistant-avatar-4c48f2
 - Repo:
 
-I will be keeping a log here for now...
-
-
-# 2024-04-20
+# 2024-05 Library Status
 All tests on an Ubuntu 22.04 LTS HWE box w/ ROCm native install:
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/ubuntu.html
 
-## PyTorch - Works
+## PyTorch (works)
 https://pytorch.org/get-started/locally/
 ```
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
 ```
 - ROCm 6.0 requires nightly
 
-## Triton - Mostly Works
+## Triton (mostly works)
 ```
 # This *doesn't* work for me
 pip install triton
@@ -194,7 +191,7 @@ AssertionError
 ```
 
 
-## Flash Attention -  Sort of Working
+## Flash Attention (sort of works)
 Last update 2024-04-08 - FA 2.5.5 being worked on internally
 - https://github.com/ROCm/flash-attention/issues/35#issuecomment-2042391285
 - Currently  gfx1100 not supported
@@ -210,7 +207,7 @@ python setup.py install
 python -c "import flash_attn; print(flash_attn.__version__)"
 ```
 - howiejay is no longer working on this project: https://github.com/Dao-AILab/flash-attention/issues/707#issuecomment-2049042957
-## xformers - Not Working
+## xformers (not working)
 Neither the upstream or AMD's ROCm fork compile:
 See: https://github.com/facebookresearch/xformers/issues/1026
 
@@ -232,7 +229,7 @@ pip wheel -v --no-build-isolation git+https://github.com/ROCm/xformers.git@main#
 # Double check
 python -m xformers.info
 ```
-## bitsandbytes - Works
+## bitsandbytes (works)
 ROCM fork works (0.44.0.dev0)
 ```
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
@@ -247,7 +244,7 @@ pip install .
 ```
 * Only 1% difference w/ FA2 2.0.4-rocm-howiejay
 * About 3min to load 70B model (132GiB), 40GiB memory,  3.3 tok/s bs=1 inference speed
-## vllm - Working (w/ no FA)
+## vllm (works w/ no FA)
 
 I was able to build the latest main:HEAD as of 2024-05-01 (failed a couple weeks prior)
 ```
@@ -379,7 +376,7 @@ Throughput: 1.70 requests/s, 1739.09 tokens/s
 ```
 
 
-## ExLlamaV2 - works
+## ExLlamaV2 (works)
 
 Inference Speed:
 ```
@@ -431,7 +428,7 @@ Successfully preprocessed all matching files.
  ** Length  4096 tokens:    363.3365 t/s
  ** Length  8192 tokens:    283.3092 t/s
 ```
-## llama.cpp - works
+## llama.cpp (works)
 ```
 git clone https://github.com/ggerganov/llama.cpp/
 cd llama.cpp
@@ -469,7 +466,7 @@ build: 784e11de (2725)
 ```
 - For comparison numbers, see: https://llm-tracker.info/howto/AMD-GPUs#llamacpp
 
-## MLC - works
+## MLC (works)
 Install:
 ```
 # Env
@@ -536,12 +533,26 @@ total time: 11.979 s
 - llama.cpp has about the same inference speed, 2.5X prompt processing
 - exllama has 50% slower inference speed, but 4X prompt processing
 
-## Whisper
+## Whisper (works)
+You can use the [OpenAI Whisper](https://github.com/openai/whisper) package or Whisper directly via [Huggingface Transformers directly](https://huggingface.co/docs/transformers/en/model_doc/whisper)
 
+[whisper.cpp](https://github.com/ggerganov/whisper.cpp) also works and performs a bit better.
 
-## StyleTTS2 - works
+[faster-whisper](https://github.com/SYSTRAN/faster-whisper) and anything that depends on it like [WhisperX](https://github.com/m-bain/whisperX) don't work as they depend on CTranslate2 that [has no AMD support](https://github.com/OpenNMT/CTranslate2/issues/1072).
+
+## StyleTTS2 (works)
 (slowly)
 ```
 python -c "import nltk; nltk.download('punkt')"
 RTF = 0.306594
 ```
+
+## Unsloth (not working)
+https://github.com/unslothai/unsloth
+At minimum Unsloth requires
+* Triton
+* xformers
+
+## TRL (sort of works)
+Huggingface's TRL / SFTTrainer work on a single GPU, but accelerate and DeepSpeed are currently not happy campers.
+https://github.com/huggingface/trl
