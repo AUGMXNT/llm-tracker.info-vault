@@ -2,7 +2,6 @@ In January 2024 I applied for the [Hackster.io AMD Pervasive AI Developer Contes
 - Application: https://www.hackster.io/contests/amd2023/hardware_applications/16885
 - Project: https://www.hackster.io/lhl/ultra-low-latency-local-voice-assistant-avatar-4c48f2
 - Repo:
-
 # 2024-05 Library Status
 All tests on an Ubuntu 22.04 LTS HWE box w/ ROCm native install:
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/ubuntu.html
