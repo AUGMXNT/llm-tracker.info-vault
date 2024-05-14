@@ -27,6 +27,10 @@ EXL2
 Squeeze
 Omniquant
 QuIP
+SpQR
+HQQ
+
+BitNet
 
 Q3_K_M is 3.91 bpw
 
