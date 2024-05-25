@@ -9,10 +9,11 @@
 	- https://infi-coder.github.io/inficoder-eval/
 - [TabbyML Coding LLMs Leaderboard](https://leaderboard.tabbyml.com/)
 
-
+https://codetlingua.github.io/leaderboard.html
 https://aider.chat/docs/leaderboards/
 https://intercode-benchmark.github.io/
 https://yale-lily.github.io/spider
+https://github.com/THUDM/NaturalCodeBench
 
 https://www.swebench.com/
 
