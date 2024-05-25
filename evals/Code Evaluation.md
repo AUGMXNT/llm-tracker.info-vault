@@ -1,3 +1,6 @@
+https://livecodebench.github.io/leaderboard.html
+* https://arxiv.org/pdf/2403.07974
+
 - [EvalPlus Leaderboard](https://evalplus.github.io/leaderboard.html)
 	- https://github.com/evalplus/evalplus
 - [CRUXEval Leaderboard](https://crux-eval.github.io/leaderboard.html)
