@@ -37,3 +37,10 @@ https://twitter.com/a_karvonen/status/1717168110505955568
 - [airate](https://github.com/catid/supercharger/tree/main/airate) - C++ bug catching test
 - [phi-1 prompt tests](https://twitter.com/khandelia1000/status/1675939866389934097)
     - [https://colab.research.google.com/drive/1mSb2t8NDz0o\_Cc8VgTMbhOg8kIh-cRIu?usp=sharing](https://colab.research.google.com/drive/1mSb2t8NDz0o_Cc8VgTMbhOg8kIh-cRIu?usp=sharing)
+
+Overfitting:
+https://arxiv.org/pdf/2403.07974
+NaturalCodeBench
+https://arxiv.org/pdf/2405.04520
+
+https://huggingface.co/blog/sc2-instruct
