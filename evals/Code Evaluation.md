@@ -9,6 +9,13 @@
 	- https://infi-coder.github.io/inficoder-eval/
 - [TabbyML Coding LLMs Leaderboard](https://leaderboard.tabbyml.com/)
 
+
+https://aider.chat/docs/leaderboards/
+https://intercode-benchmark.github.io/
+https://yale-lily.github.io/spider
+
+https://www.swebench.com/
+
 Running human-eval:
 [https://github.com/abacaj/code-eval](https://github.com/abacaj/code-eval)
 
