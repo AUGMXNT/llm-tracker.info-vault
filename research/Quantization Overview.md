@@ -15,6 +15,24 @@ To test:
 
 ## Formats
 
+vLLM: AQLM, SqueezeLLM, AWQ, GPTQ
+HF: AQLM, HQQ, AWQ, GPTQ
+* Llama3 8B and 70B - test conversion time, memory, efficiency, perplexity
+* Use train data or benchmark testsets for calibration if necessary
+* inference speed testing
+* Autojudge
+https://huggingface.co/docs/transformers/main/quantization/overview#hqq
+### AQLM
+* best performing low-bit rate? better than Quip#?
+* Integrated into vLLM already
+	* https://arxiv.org/pdf/2401.06118
+	* https://github.com/vllm-project/vllm/blob/main/examples/aqlm_example.py
+	* https://docs.vllm.ai/en/latest/getting_started/examples/aqlm_example.html
+	* https://github.com/vllm-project/vllm/pull/3287
+
+### SqueezeLLM
+* https://arxiv.org/pdf/2306.07629
+* Also in vLLM https://github.com/vllm-project/vllm/blob/a377f0bd5e1fa0ca069e3dbf28f4de5af64d0bb1/vllm/model_executor/layers/quantization/squeezellm.py#L14
 ### QuIP#
 
 - [https://cornell-relaxml.github.io/quip-sharp/](https://cornell-relaxml.github.io/quip-sharp/)
