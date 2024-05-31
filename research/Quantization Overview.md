@@ -29,6 +29,8 @@ https://huggingface.co/docs/transformers/main/quantization/overview#hqq
 * iXL
 * EXL2
 
+https://github.com/ggerganov/llama.cpp/discussions/5063
+https://github.com/ggerganov/llama.cpp/discussions/5063#discussioncomment-8383732
 ### AQLM
 * best performing low-bit rate? better than Quip#?
 * Integrated into vLLM already
@@ -37,19 +39,23 @@ https://huggingface.co/docs/transformers/main/quantization/overview#hqq
 	* https://docs.vllm.ai/en/latest/getting_started/examples/aqlm_example.html
 	* https://github.com/vllm-project/vllm/pull/3287
 	* https://www.reddit.com/r/LocalLLaMA/comments/1clbvcj/benchmarks_for_llama_3_70b_aqlm/
+* HF: CUDA Graph hack
 	
+
+vLLM
+https://docs.vllm.ai/en/latest/quantization/fp8_e4m3_kvcache.html
 
 Sparsification
 https://docs.neuralmagic.com/get-started/optimize/
 https://github.com/neuralmagic/sparseml
 https://arxiv.org/pdf/2301.00774
 https://github.com/IST-DASLab/sparsegpt
+https://docs.neuralmagic.com/products/nm-vllm/
 
 ### SqueezeLLM
 * https://arxiv.org/pdf/2306.07629
 * Also in vLLM https://github.com/vllm-project/vllm/blob/a377f0bd5e1fa0ca069e3dbf28f4de5af64d0bb1/vllm/model_executor/layers/quantization/squeezellm.py#L14
 ### QuIP#
-
 - [https://cornell-relaxml.github.io/quip-sharp/](https://cornell-relaxml.github.io/quip-sharp/)
 - https://github.com/turboderp/exllamav2/issues/176
 - https://github.com/ggerganov/llama.cpp/pull/4773
