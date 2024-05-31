@@ -16,6 +16,7 @@ To test:
 ## Formats
 
 vLLM: AQLM, SqueezeLLM, AWQ, GPTQ
+https://colab.research.google.com/drive/1GhV5pntgqbiLoefd8nC3060cbhSoiChz?usp=sharing
 HF: AQLM, HQQ, AWQ, GPTQ
 llama.cpp: iXL, Quip#
 * Llama3 8B and 70B - test conversion time, memory, efficiency, perplexity
@@ -38,6 +39,12 @@ https://huggingface.co/docs/transformers/main/quantization/overview#hqq
 	* https://www.reddit.com/r/LocalLLaMA/comments/1clbvcj/benchmarks_for_llama_3_70b_aqlm/
 	
 
+Sparsification
+https://docs.neuralmagic.com/get-started/optimize/
+https://github.com/neuralmagic/sparseml
+https://arxiv.org/pdf/2301.00774
+https://github.com/IST-DASLab/sparsegpt
+
 ### SqueezeLLM
 * https://arxiv.org/pdf/2306.07629
 * Also in vLLM https://github.com/vllm-project/vllm/blob/a377f0bd5e1fa0ca069e3dbf28f4de5af64d0bb1/vllm/model_executor/layers/quantization/squeezellm.py#L14
@@ -46,6 +53,12 @@ https://huggingface.co/docs/transformers/main/quantization/overview#hqq
 - [https://cornell-relaxml.github.io/quip-sharp/](https://cornell-relaxml.github.io/quip-sharp/)
 - https://github.com/turboderp/exllamav2/issues/176
 - https://github.com/ggerganov/llama.cpp/pull/4773
+
+### HQQ
+https://mobiusml.github.io/hqq_blog/
+https://github.com/mobiusml/hqq
+https://www.reddit.com/r/LocalLLaMA/comments/1b33rj8/better_hqq_quantized_mixtral_models_2bit_and_3bit/
+https://huggingface.co/docs/transformers/main/en/quantization/hqq
 
 ### EXL2 (ExLlamaV2)
 
