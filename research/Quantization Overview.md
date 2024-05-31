@@ -13,6 +13,9 @@ To test:
 * KL Divergence: https://www.reddit.com/r/LocalLLaMA/comments/1816h1x/how_much_does_quantization_actually_impact_models/
 
 
+cuDNN 9: https://developer.nvidia.com/blog/accelerating-transformers-with-nvidia-cudnn-9/
+
+
 ## Formats
 
 vLLM: AQLM, SqueezeLLM, AWQ, GPTQ
@@ -31,6 +34,7 @@ https://huggingface.co/docs/transformers/main/quantization/overview#hqq
 
 https://github.com/ggerganov/llama.cpp/discussions/5063
 https://github.com/ggerganov/llama.cpp/discussions/5063#discussioncomment-8383732
+https://www.reddit.com/r/LocalLLaMA/comments/1clinlb/comment/l2ukxnt/?context=3
 ### AQLM
 * best performing low-bit rate? better than Quip#?
 * Integrated into vLLM already
@@ -40,6 +44,8 @@ https://github.com/ggerganov/llama.cpp/discussions/5063#discussioncomment-838373
 	* https://github.com/vllm-project/vllm/pull/3287
 	* https://www.reddit.com/r/LocalLLaMA/comments/1clbvcj/benchmarks_for_llama_3_70b_aqlm/
 * HF: CUDA Graph hack
+* https://www.reddit.com/r/LocalLLaMA/comments/1clinlb/bringing_2bit_llms_to_production_new_aqlm_models/
+* https://colab.research.google.com/github/Vahe1994/AQLM/blob/main/notebooks/aqlm_cuda_graph.ipynb#scrollTo=p4ON1sMP2c2P
 	
 
 vLLM
