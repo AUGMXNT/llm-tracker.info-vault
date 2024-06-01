@@ -1,5 +1,6 @@
 For more in depth discussions on Japanese LLMs, see:
 * https://github.com/AUGMXNT/shisa/wiki
+* https://github.com/shisa-ai/shisa-v2/wiki
 
 
 ELYZA-100 Testing
