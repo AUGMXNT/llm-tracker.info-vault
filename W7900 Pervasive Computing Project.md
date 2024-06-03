@@ -10,9 +10,9 @@ For more general AMD info, see: https://llm-tracker.info/howto/AMD-GPUs
 ## PyTorch (works)
 https://pytorch.org/get-started/locally/
 ```
-pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.0
 ```
-- ROCm 6.0 requires nightly
+- ROCm 6.0 now available in Stable (6.1 Nightly)
 
 ## Triton (mostly works)
 ```
@@ -265,6 +265,7 @@ I was able to build the latest main:HEAD as of 2024-05-01 (failed a couple weeks
 docker build --build-arg BUILD_FA="0" -f Dockerfile.rocm -t vllm-rocm .
 ```
 - This took about 45 minutes to build (Ryzen 5600G CPU)
+- see additional color in the bug I filed: https://github.com/vllm-project/vllm/issues/4514
 
 
 In order to run vllm, you will need to use the `VLLM_USE_TRITON_FLASH_ATTN=0` environment variable
