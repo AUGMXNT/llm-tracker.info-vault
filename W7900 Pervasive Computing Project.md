@@ -6,6 +6,7 @@ In January 2024 I applied for the [Hackster.io AMD Pervasive AI Developer Contes
 All tests on an Ubuntu 22.04 LTS HWE box w/ ROCm native install:
 https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/ubuntu.html
 
+For more general AMD info, see: https://llm-tracker.info/howto/AMD-GPUs
 ## PyTorch (works)
 https://pytorch.org/get-started/locally/
 ```
@@ -229,6 +230,19 @@ pip wheel -v --no-build-isolation git+https://github.com/ROCm/xformers.git@main#
 python -m xformers.info
 ```
 ## bitsandbytes (works)
+As of late May, the multi-backend-refactor branch works:
+```
+https://github.com/TimDettmers/bitsandbytes/blob/multi-backend-refactor/docs/source/rocm_installation.mdx
+
+git clone https://github.com/TimDettmers/bitsandbytes.git && cd bitsandbytes/
+git checkout multi-backend-refactor
+pip install -r requirements-dev.txt
+#Use -DBNB_ROCM_ARCH="gfx90a;gfx942" to target specific gpu arch
+cmake -DCOMPUTE_BACKEND=hip -S . 
+make
+pip install .
+```
+
 ROCM fork works (0.44.0.dev0)
 ```
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.0
