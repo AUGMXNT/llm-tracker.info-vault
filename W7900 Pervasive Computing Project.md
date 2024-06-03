@@ -190,6 +190,9 @@ Traceback (most recent call last):
 AssertionError
 ```
 
+See also:
+* https://github.com/ROCm/aotriton/issues/16
+* https://github.com/triton-lang/triton/issues/3704
 
 ## Flash Attention (sort of works)
 Last update 2024-04-08 - FA 2.5.5 being worked on internally
