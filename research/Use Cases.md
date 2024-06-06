@@ -1,3 +1,14 @@
+Daily Usage (Reliable)
+* Markdown table formatting
+* Simple shell scripts
+* Common programming documentation lookup
+* Summarization
+
+Unreliable, but good enough
+* Transcription
+
+
+
 Applications and use cases
 
 Discussion on HN Thread: [Ask HN: What have you built with LLMs?](https://news.ycombinator.com/item?id=39263664)
@@ -25,3 +36,6 @@ https://github.com/haseeb-heaven/code-interpreter
 
 Video input:
 https://news.ycombinator.com/item?id=39458264
+
+Game NPCs
+https://www.reddit.com/r/LocalLLaMA/comments/1d7cja1/ai_npcs_in_video_games_what_can_we_really_do_today/
