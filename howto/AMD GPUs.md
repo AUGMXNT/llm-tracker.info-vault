@@ -10,6 +10,7 @@ These are the latest officially supported cards:
 * https://rocm.docs.amd.com/projects/install-on-windows/en/latest/reference/system-requirements.html
 If you have a supported family, you can usually use set `HSA_OVERRIDE_GFX_VERSION` to the closest supported version (eg, `HSA_OVERRIDE_GFX_VERSION=10.3.0`) and get things working.
 
+Here's also an interesting 2024-06 writeup of supporting mixed architecture ROCm overrides: https://adamniederer.com/blog/rocm-cross-arch.html
 ## RDNA3 (eg 7900 XT, XTX)
 As of ROCm 5.7, Radeon RX 7900 XTX, XT, and PRO W7900 are officially supported and many old hacks are no longer necessary:
 - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/compatibility.html

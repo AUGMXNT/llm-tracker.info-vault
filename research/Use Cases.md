@@ -8,6 +8,16 @@ Unreliable, but good enough
 * Transcription
 
 
+Daily use:
+* Code Assistant; track entire projects
+* Smart Windowing - track and group contexts, autosave and resume workspaces
+* Web browsing archiving/search, automatically organizing tabs/research
+* File Organization - dynamic classification, dedupe of data
+* Photo Organization
+* Trip/Travel Organization
+* Calendar/time management
+
+
 
 Applications and use cases
 
