@@ -1,4 +1,4 @@
-RTX 4090
+# RTX 4090
 ```bash
 ❯ CUDA_VISIBLE_DEVICES=0 tune run lora_finetune_single_device --config torchtune/recipes/configs/llama3/8B_lora_single_device.yaml
 
@@ -7,7 +7,7 @@ INFO:torchtune.utils.logging:Model checkpoint of size 16.06 GB saved to /tmp/Met
 INFO:torchtune.utils.logging:Adapter checkpoint of size 0.01 GB saved to /tmp/Meta-Llama-3-8B-Instruct/adapter_0.pt
 ```
 
-RTX 3090
+# RTX 3090
 ```bash
 ❯ CUDA_VISIBLE_DEVICES=1 tune run lora_finetune_single_device --config torchtune/recipes/configs/llama3/8B_lora_single_device.yaml
 
@@ -15,3 +15,7 @@ RTX 3090
 INFO:torchtune.utils.logging:Model checkpoint of size 16.06 GB saved to /tmp/Meta-Llama-3-8B-Instruct/meta_model_0.pt
 INFO:torchtune.utils.logging:Adapter checkpoint of size 0.01 GB saved to /tmp/Meta-Llama-3-8B-Instruct/adapter_0.pt
 ```
+
+# 7900 XTX
+wtf hipblas!
+https://github.com/ROCm/rocBLAS/issues/1339
