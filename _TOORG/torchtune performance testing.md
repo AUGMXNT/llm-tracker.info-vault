@@ -1,3 +1,6 @@
+Trainers
+https://github.com/OpenAccess-AI-Collective/axolotl
+
 # RTX 4090
 ```bash
 ❯ CUDA_VISIBLE_DEVICES=0 tune run lora_finetune_single_device --config torchtune/recipes/configs/llama3/8B_lora_single_device.yaml
