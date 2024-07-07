@@ -11,6 +11,8 @@ https://livecodebench.github.io/leaderboard.html
 - InfiCoder-Eval
 	- https://infi-coder.github.io/inficoder-eval/
 - [TabbyML Coding LLMs Leaderboard](https://leaderboard.tabbyml.com/)
+- [SWE-bench](https://www.swebench.com/)
+- 
 
 https://codetlingua.github.io/leaderboard.html
 https://aider.chat/docs/leaderboards/
