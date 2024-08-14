@@ -5,6 +5,10 @@ The current consensus is that [LMSys Chatbot Arena](https://chat.lmsys.org/?lead
 * u/DontPlanToEnd posted a [benchmark correlation analysis](https://www.reddit.com/r/LocalLLaMA/comments/18u0tu3/benchmarking_the_benchmarks_correlation_with/) on 2023-12-30 which showed MT-Bench (GPT-4 judged benchmark) had 0.89 correlation with Chatbot Arena, making it probably the 2nd best score. (MMLU has 0.85 correlation)
 * u/WolframRavenwolf has been posting his own [LLM Comparison/Tests](https://www.reddit.com/user/WolframRavenwolf/submitted/) of new models which is pretty interesting - it tests in German (almost assuredly out of distribution) and focuses on instruction following, but is a good sanity check
 # General
+- [Livebench](https://livebench.ai/) - refreshed every month (6 month question rotation)
+- [MixEval](https://mixeval.github.io/)
+- [IFEval](https://huggingface.co/spaces/Krisseck/IFEval-Leaderboard)
+- [RULER](https://github.com/hsiehjackson/RULER)
 - [ZeroEval Leaderboard](https://huggingface.co/spaces/allenai/ZeroEval) -[project source](https://github.com/yuchenlin/ZeroEval), description: https://threadreaderapp.com/thread/1814037110577578377.html
 	- [MMLU-redux](https://arxiv.org/abs/2406.04127) (`-d mmlu-redux`) - knowledge
 	- [GSM8K](https://openai.com/index/solving-math-word-problems/) (`-d gsm`) - math
