@@ -9,7 +9,7 @@ The current consensus is that [LMSys Chatbot Arena](https://chat.lmsys.org/?lead
 - [MixEval](https://mixeval.github.io/)
 - [IFEval](https://huggingface.co/spaces/Krisseck/IFEval-Leaderboard)
 - [RULER](https://github.com/hsiehjackson/RULER)
-- [# Berkeley Function-Calling Leaderboard](https://gorilla.cs.berkeley.edu/leaderboard.html)
+- [Berkeley Function-Calling Leaderboard](https://gorilla.cs.berkeley.edu/leaderboard.html)
 - [ZeroEval Leaderboard](https://huggingface.co/spaces/allenai/ZeroEval) -[project source](https://github.com/yuchenlin/ZeroEval), description: https://threadreaderapp.com/thread/1814037110577578377.html
 	- [MMLU-redux](https://arxiv.org/abs/2406.04127) (`-d mmlu-redux`) - knowledge
 	- [GSM8K](https://openai.com/index/solving-math-word-problems/) (`-d gsm`) - math
@@ -41,6 +41,8 @@ The current consensus is that [LMSys Chatbot Arena](https://chat.lmsys.org/?lead
 - YALL
 	- https://huggingface.co/spaces/mlabonne/Yet_Another_LLM_Leaderboard
 	- https://github.com/mlabonne/llm-autoeval
+
+https://huggingface.co/collections/open-llm-leaderboard/the-big-benchmarks-collection-64faca6335a7fc7d4ffe974a
 
 # Price Perf
 - https://artificialanalysis.ai/
