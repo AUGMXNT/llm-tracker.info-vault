@@ -56,9 +56,11 @@ The current ROCm release has limited support for this hardware. Existing feature
 ```
 This is a shame because while it's a bit weak on compute (27 FP16 TFLOPS), it has 16GB HBM2 w/ 1.02 TB/s of MBW, which is not too shabby for inference.
 # RDNA3 (navi3x) on Linux
-The majority of the rest of the guide/docs 
-## Arch Linux Setup
-Arch Linux setup is fairly straightforward (can be easier than the official install!) but is community supported by [rocm-arch](https://github.com/rocm-arch/rocm-arch). If you're running an Arch system already, this should be fine, but if you're running a system dedicated to ML, then you should prefer Ubuntu.
+I have several gfx1100 RDNA3 cards, so this will be the the most detailed section of my guide. Some of this may be applicable to different generation GPUs, likely won't be fully tested.
+
+## Driver and ROCm Setup
+### Arch Linux
+Arch Linux setup is fairly straightforward (can be easier than the official install!) but is community supported by [rocm-arch](https://github.com/rocm-arch/rocm-arch). If you're running an Arch system already, this should be fine, but if you're running a system dedicated to ML, then you should probably prefer Ubuntu LTS for official support.
 
 Install ROCm:
 ```shell
@@ -79,23 +81,23 @@ mamba create -n llm
 mamba activate llm
 ```
 
-## Ubuntu LTS Setup
+### Ubuntu LTS
 Ubuntu is the most well documented of the officially supported distros:
 * https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/index.html
-* I recommend using the latest LTS (22.04.3) with the HWE kernel
+* I recommend using the latest LTS (22.04.4) with the HWE kernel
 	* https://ubuntu.com/kernel/lifecycle
 * The install documents are pretty much complete
 	* https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/ubuntu.html
 * You can now use `apt install rocm` to install "everything" (except the drivers, you'll still need `amdgpu-dkms` first).
 * Be sure also to look at the "post-install instructions"
 	* https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/post-install.html
-### HWE Kernel
+#### HWE Kernel
 ```bash
 sudo apt install --install-recommends linux-generic-hwe-22.04
 reboot
 ```
 * https://ubuntu.com/kernel/lifecycle
-### Prereqs
+#### Prereqs
 ```bash
 # Make the directory if it doesn't exist yet.
 # This location is recommended by the distribution maintainers.
@@ -119,7 +121,7 @@ echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
 
 ```
 * https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/native-install/ubuntu.html
-### Install
+#### Install
 ```bash
 sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
 # See prerequisites. Adding current user to Video and Render groups
@@ -134,7 +136,7 @@ sudo apt install --install-recommends rocm
 
 reboot
 ```
-### cmath
+#### cmath
 You may run into some compile errors. You will need `libstdc++-12-dev` in Ubuntu:
 ```shell
 /opt/rocm-6.0.0/lib/llvm/lib/clang/17.0.0/include/cuda_wrappers/cmath:27:15: fatal error: 'cmath' file not found
@@ -142,18 +144,20 @@ You may run into some compile errors. You will need `libstdc++-12-dev` in Ubuntu
 
 sudo apt install libstdc++-12-dev
 ```
-## llama.cpp
+
+
+## LLM Inferencing
+### llama.cpp
 llama.cpp has ROCm support built-in now (2023-08):
 ```shell
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
-make LLAMA_HIPBLAS=1
+make GGML_HIPBLAS=1
 ```
-* https://github.com/ggerganov/llama.cpp/#hipblas
-* You can use `LLAMA_HIP_UMA=1` for unified memory for APUs
+* https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#hipblas
+* You can use `LLAMA_HIP_UMA=1` for unified memory for APUs but it'll be slower if you don't use it
 * `uname -a` , `dkms status` and `apt list | grep rocm | grep '\[installed\]'` to get version numbers of kernel and libs
-* OpenCL via CLBlast is a universal/easy option, but gains and should still give decent gains over CPU inference
-* As of 2023-01, Vulkan support is merged. See below for testing/comparison
+* If you can't get ROCm working, Vulkan is a universal/easy option, but gains and should still give decent gains over CPU inference
 
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
@@ -221,7 +225,7 @@ While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and co
 | Inference % | -18.4% | 0% | +12.9% | +33.0% |
 * Tested 2024-01-28 with llama.cpp `6db2b41a (1988)` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.7.0-arch3-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
 * RTX cards have much better FP16/BF16 Tensor FLOPS performance that the inferencing engines are taking advantage of. FP16 FLOPS (32-bit/16-bit accumulation numbers) sourced from Nvidia docs ([3090](https://images.nvidia.com/aem-dam/en-zz/Solutions/geforce/ampere/pdf/NVIDIA-ampere-GA102-GPU-Architecture-Whitepaper-V1.pdf), [4090](https://images.nvidia.com/aem-dam/Solutions/geforce/ada/nvidia-ada-gpu-architecture.pdf)_)
-### Vulkan and CLBlast
+#### Vulkan and CLBlast
 ```bash
 ### CPU
 make clean && make LLAMA_CLBLAST=1
@@ -250,7 +254,7 @@ CUDA_VISIBLE_DEVICES=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -
 | Prompt tok/s | 24.5 | 219 | 758 | 2550 |
 | Inference tok/s | 10.7 | 35.4 | 52.3 | 119.0 |
 * Tested 2024-01-29 with llama.cpp `d2f650cb (1999)` and latest on a 5800X3D w/ DDR4-3600 system with CLBlast `libclblast-dev 1.5.2-2`, Vulkan  `mesa-vulkan-drivers 23.0.4-0ubuntu1~22.04.1`, and ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04`) 
-### Radeon VII
+#### Radeon VII
 The Radeon VII was a Vega 20 XT (GCN 5.1) card that was released in February 2019 at $700. It has 16GB of HDM2 memory with a 1024GB/s of memory bandwidth and 26.88 TFLOPS of FP16. Honestly, while the prefill probably doesn't have much more that could be squeezed from it, I would expect with optimization, you would be able to double inference performance (if you could use all its memory bandwidth). 
 
 Radeon Vega VII
@@ -276,7 +280,7 @@ CPU: quad core AMD Ryzen 5 2400G with Radeon Vega Graphics (-MT MCP-)
 speed/min/max: 1827/1600/3600 MHz Kernel: 6.7.2-arch1-1 x86_64
 ```
 
-## ExLlamaV2
+### ExLlamaV2
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
 
 Install is straightforward:
@@ -339,7 +343,7 @@ The ROCm kernel is very un-optimized vs the CUDA version, but you can see while 
 | Inference tok/s | 57.9 | 61.2 | 116.5 | 137.6 |
 | Inference % | -5.4% | 0% | +90.4% | +124.8% |
 * Tested 2024-01-08 with ExLlamaV2 `3b0f523` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.6.7-arch1-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
-## MLC (NOT WORKING)
+### MLC (NOT WORKING)
 ### Setup
 ```shell
 mamba create -n mlc python=3.11
@@ -396,42 +400,54 @@ Segmentation fault (core dumped)
 
 ```
 
+### vLLM
+vLLM has ROCm support and support for specific hardware (which includes gfx1100 now).
+- https://docs.vllm.ai/en/stable/getting_started/amd-installation.html
+Note: there is a Triton/FA bug:
+- https://github.com/vllm-project/vllm/issues/4514
+You may be able to work around this with the latest version of PyTorch and Triton (w/ aotriton support) - TBC
+## Training
+In Feb 2024 I wrote up some notes:
+- https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
+### unsloth (NOT WORKING)
+Unsloth https://github.com/unslothai/unsloth depends on:
+- PyTorch
+- Triton
+- xformers or flash attention
+- bitsandbytes
 
-## bitsandbytes
-For current status, see:
+In theory we have everything we need, and it will startup, however, even after you comment out the `libcuda_dirs()` calls it will die: 
+```
+pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
+
+# You'll need to manually edit site-packages/unsloth/__init__.py
+# comment out
+# libcuda_dirs()
+```
+## Libraries and Frameworks
+These are probably going to be most useful if you are a developer or training
+### PyTorch
+PyTorch supports ROCm natively and without code changes (`torch.cuda` just uses ROCm instead). It just needs to be instealled with the ROCm platform:
+- https://pytorch.org/get-started/locally/
+
+NOTE: if you want aotriton/FA support you will need PyTorch 2.5.0+ so you may need to install the Preview (Nightly) build instead of Stable (2024-09)
+### Triton
+Triton also has native ROCm support and you probably can install it and get everything working.
+- https://github.com/triton-lang/triton
+There is however a ROCm fork where some fixes get upstreamed from:
+- https://github.com/ROCm/triton
+### bitsandbytes
+In 2024-08 and official multi-backend-refactor branch had ROCm support
+- https://github.com/bitsandbytes-foundation/bitsandbytes/tree/multi-backend-refactor
+As of the end of 2024-09 it appears ROCm support has been folded into the main branch:
+- https://github.com/bitsandbytes-foundation/bitsandbytes
+
+You can see some previous discussion here:
 - https://github.com/TimDettmers/bitsandbytes/issues/107
 - https://github.com/TimDettmers/bitsandbytes/pull/756
 - https://github.com/TimDettmers/bitsandbytes/discussions/990
-The most current working fork (related to the that PR):
 - https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6/tree/rocm
-
-I was able to successfully build and install this on 2024-02-15:
-```
-mamba create -n bnb python=3.11 -y
-mamba activate bnb
-
-# https://pytorch.org/get-started/locally/
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
-python -c "import torch; print('PyTorch version:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('CUDA device count:', torch.cuda.device_count()); print('Current CUDA device:', torch.cuda.current_device() if torch.cuda.is_available() else 'None')"
-
-git clone https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6
-cd bitsandbytes-rocm-5.6
-git fetch
-git branch -a
-git checkout rocm
-
-# you can use rocminfo to get your ROCM_TARGET
-# you might need to modify the Makefile to set ROCM_HOME:=/opt/rocm
-make hip ROCM_TARGET=gfx1100
-pip install .
-python -m bitsandbytes
-python -c "import bitsandbytes; print(bitsandbytes.__version__)"
-
-# You probably want these if you're testing inference
-pip install transformers
-pip install accelerate
-```
-## xformers (NOT WORKING)
+### xformers (NOT WORKING)
 2024-02-17: The ROCM/xformers fork defaults to a `main` branch, which compiles, but is basically upstream. All the work is done on branches (`develop` seems to be the main one), which sadly ... doesn't compile due to mismatching header files from Composable Kernels.
 
 Note: vLLM has it's own 0.0.23 with a patch to install, but still dies w/ RDNA3
@@ -446,16 +462,21 @@ git submodule update --init --recursive
 python setup.py install
 python -c 'import xformers; print(xformers.__version__)'
 ```
-## triton
-This seems to work (2.1.0)
-```
-git clone https://github.com/ROCm/triton
-cd triton/python
-pip install ninja cmake
-pip install -e .
-python -c "import triton; print(triton.__version__)"
-```
-## Flash Attention 2 (SORT OF WORKING)
+
+
+CK
+FlashInfer
+Attention-Gym
+Liger
+torchtune
+
+Notes:
+- W7900
+- Discord
+- HN
+- Reddit
+
+### Flash Attention 2 (SORT OF WORKING)
 This seems to work for inference (it only supports batched forward pass, not backward pass) - see the GH issue for more info. You won't be able to train with this.
 
 Also, this is a fork of 2.0.4 so it does not support Mistral's Sliding Window Attention
@@ -473,23 +494,7 @@ git branch -a
 git checkout howiejay/navi_support
 python setup.py install
 ```
-## unsloth (NOT WORKING)
-Unsloth https://github.com/unslothai/unsloth depends on:
-- PyTorch
-- Triton
-- xformers or flash attention
-- bitsandbytes
-
-In theory we have everything we need, and it will startup, however, even after you comment out the `libcuda_dirs()` calls it will die: 
-```
-pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
-
-# You'll need to manually edit site-packages/unsloth/__init__.py
-# comment out
-# libcuda_dirs()
-```
-
-## TensorFlow (SHOULD WORK?)
+### TensorFlow (SHOULD WORK?)
 Untested, but recent reports are that it should work:
 - https://www.reddit.com/r/ROCm/comments/1ahkay9/tensorflow_on_gfx1101_navi32_7800_xt/
 - https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
