@@ -533,7 +533,7 @@ build.env.NVCC_FLAGS:                              -allow-unsupported-compiler
 build.env.XFORMERS_PACKAGE_FROM:                   wheel-v0.0.28.post1
 ```
 
-TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1
+
 
 
 There is a ROCm fork but it does not work w/ RDNA3:
@@ -576,7 +576,13 @@ Notes:
 - HN
 - Reddit
 
-### Flash Attention 2 (SORT OF WORKING)
+### Flash Attention 2
+
+The current best way to use 
+TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1
+
+
+
 This seems to work for inference (it only supports batched forward pass, not backward pass) - see the GH issue for more info. You won't be able to train with this.
 
 Also, this is a fork of 2.0.4 so it does not support Mistral's Sliding Window Attention
