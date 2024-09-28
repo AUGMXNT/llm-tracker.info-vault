@@ -447,7 +447,72 @@ You can see some previous discussion here:
 - https://github.com/TimDettmers/bitsandbytes/pull/756
 - https://github.com/TimDettmers/bitsandbytes/discussions/990
 - https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6/tree/rocm
-### xformers (NOT WORKING)
+### xformers
+The upstream xformers has added experimental ROCm support. Here's how I was able to get it working:
+```
+# install
+pip install -U xformers --index-url https://download.pytorch.org/whl/rocm6.1
+
+# requires https://github.com/ROCm/amdsmi
+# you will get an error if you follow the README instructions
+apt install amd-smi-lib
+
+# you need to copy since you don't have root instructions to write
+cp -r /opt/rocm/share/amd_smi ~/amd_smi
+cd ~/amd_smi
+pip install .
+```
+
+If everything worked, then you should have a working xformers:
+```
+$ python -m xformers.info
+xFormers 0.0.28.post1
+memory_efficient_attention.ckF:                    available
+memory_efficient_attention.ckB:                    available
+memory_efficient_attention.ck_decoderF:            available
+memory_efficient_attention.ck_splitKF:             available
+memory_efficient_attention.cutlassF:               unavailable
+memory_efficient_attention.cutlassB:               unavailable
+memory_efficient_attention.fa2F@0.0.0:             unavailable
+memory_efficient_attention.fa2B@0.0.0:             unavailable
+memory_efficient_attention.fa3F@0.0.0:             unavailable
+memory_efficient_attention.fa3B@0.0.0:             unavailable
+memory_efficient_attention.triton_splitKF:         available
+indexing.scaled_index_addF:                        available
+indexing.scaled_index_addB:                        available
+indexing.index_select:                             available
+sequence_parallel_fused.write_values:              available
+sequence_parallel_fused.wait_values:               available
+sequence_parallel_fused.cuda_memset_32b_async:     available
+sp24.sparse24_sparsify_both_ways:                  available
+sp24.sparse24_apply:                               available
+sp24.sparse24_apply_dense_output:                  available
+sp24._sparse24_gemm:                               available
+sp24._cslt_sparse_mm@0.0.0:                        available
+swiglu.dual_gemm_silu:                             available
+swiglu.gemm_fused_operand_sum:                     available
+swiglu.fused.p.cpp:                                available
+is_triton_available:                               True
+pytorch.version:                                   2.4.1+rocm6.1
+pytorch.cuda:                                      available
+gpu.compute_capability:                            11.0
+gpu.name:                                          AMD Radeon PRO W7900
+dcgm_profiler:                                     unavailable
+build.info:                                        available
+build.cuda_version:                                None
+build.hip_version:                                 6.1.40093-bd86f1708
+build.python_version:                              3.11.10
+build.torch_version:                               2.4.1+rocm6.1
+build.env.TORCH_CUDA_ARCH_LIST:                    
+build.env.PYTORCH_ROCM_ARCH:                       None
+build.env.XFORMERS_BUILD_TYPE:                     Release
+build.env.XFORMERS_ENABLE_DEBUG_ASSERTIONS:        None
+build.env.NVCC_FLAGS:                              -allow-unsupported-compiler
+build.env.XFORMERS_PACKAGE_FROM:                   wheel-v0.0.28.post1
+```
+
+
+
 There is a ROCm fork but it does not work w/ RDNA3:
 - https://github.com/ROCm/xformers/issues/9
 	- Depends on CK which does not have RDNA3 support:
