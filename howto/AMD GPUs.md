@@ -406,6 +406,32 @@ vLLM has ROCm support and support for specific hardware (which includes gfx1100 
 Note: there is a Triton/FA bug:
 - https://github.com/vllm-project/vllm/issues/4514
 You may be able to work around this with the latest version of PyTorch and Triton (w/ aotriton support) - TBC
+
+```
+# We want the nightly PyTorch
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.2
+
+# May need to copy amd_smi folder locally if you have permission issues installing
+pip install /opt/rocm/share/amd_smi
+
+# Dependencies
+pip install --upgrade numba scipy huggingface-hub[cli]
+pip install "numpy<2"
+pip install -r requirements-rocm.txt
+
+# Undocumented
+pip install setuptools_scm
+# requires newer cmake than Ubuntu 24.04 LTS provides
+mamba install cmake -y
+
+# Build vLLM for RDNA3
+PYTORCH_ROCM_ARCH="gfx1100" python setup.py develop
+
+
+# Test
+vllm serve facebook/opt-125m
+```
+- https://docs.vllm.ai/en/stable/getting_started/amd-installation.html
 ## Training
 In Feb 2024 I wrote up some notes:
 - https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
