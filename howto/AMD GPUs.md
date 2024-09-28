@@ -442,6 +442,28 @@ In 2024-08 and official multi-backend-refactor branch had ROCm support
 As of the end of 2024-09 it appears ROCm support has been folded into the main branch:
 - https://github.com/bitsandbytes-foundation/bitsandbytes
 
+Uh, actually not quite... I still had to build my own from the multi-backend branch:
+```
+git clone --depth 1 -b multi-backend-refactor https://github.com/bitsandbytes-foundation/bitsandbytes.git bnb && cd bnb
+pip install -r requirements-dev.txt
+
+# If you don't do this it won't find the version and build will fail!
+git fetch --tags
+
+# We just want gfx1100
+cmake -DCOMPUTE_BACKEND=hip -S . -DBNB_ROCM_ARCH="gfx1100"
+make
+pip install .
+
+# this has to be a bug, tries to use rocm62.so no matter what
+ln -s bitsandbytes/libbitsandbytes_rocm62.so bitsandbytes/libbitsandbytes_rocm61.so
+
+# test
+cd ..
+python -c "import bitsandbytes; print(bitsandbytes.__version__)"
+```
+- https://huggingface.co/docs/bitsandbytes/main/en/installation#multi-backend
+
 You can see some previous discussion here:
 - https://github.com/TimDettmers/bitsandbytes/issues/107
 - https://github.com/TimDettmers/bitsandbytes/pull/756
