@@ -1,14 +1,11 @@
 As of August 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is available for Linux or [Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html). It's best to check the latest docs for information:
 * https://rocm.docs.amd.com/en/latest/
 
-See also (2024 April):
-* [[W7900 Pervasive Computing Project]]
-
 # Hardware
 These are the latest officially supported cards:
 * https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html
 * https://rocm.docs.amd.com/projects/install-on-windows/en/latest/reference/system-requirements.html
-If you have a supported family, you can usually use set `HSA_OVERRIDE_GFX_VERSION` to the closest supported version (eg, `HSA_OVERRIDE_GFX_VERSION=10.3.0`) and get things working.
+If you have a supported family, you can usually use set `HSA_OVERRIDE_GFX_VERSION` to the closest supported version (eg, if you have a gfx1031 card you can try `HSA_OVERRIDE_GFX_VERSION=10.3.0` and get things working).
 
 Here's also an interesting 2024-06 writeup of supporting mixed architecture ROCm overrides: https://adamniederer.com/blog/rocm-cross-arch.html
 ## RDNA3 (eg 7900 XT, XTX)
@@ -29,6 +26,23 @@ Vulkan drivers can use GTT memory dynamically, but w/ MLC LLM, Vulkan version is
 * It may be possible to unlock more UMA/GART memory: [https://winstonhyypia.medium.com/amd-apu-how-to-modify-the-dedicated-gpu-memory-e27b75905056](https://winstonhyypia.medium.com/amd-apu-how-to-modify-the-dedicated-gpu-memory-e27b75905056)
 * There is custom allocator that may allow PyTorch to use GTT memory (only useful for PyTorch inferencing obviously): [https://github.com/pomoke/torch-apu-helper](https://github.com/pomoke/torch-apu-helper)
 * A writeup of someone playing around w/ ROCm and SD on an older APU: [https://www.gabriel.urdhr.fr/2022/08/28/trying-to-run-stable-diffusion-on-amd-ryzen-5-5600g/](https://www.gabriel.urdhr.fr/2022/08/28/trying-to-run-stable-diffusion-on-amd-ryzen-5-5600g/)
+## AMD NPU (RyzenAI)
+The AMD NPU, starting with the 10 TOPS version in the 7X40 (Phoenix Point), 16 TOPS version in the 8X40 (Hawk Point) and 50 TOPS in the Ryzen AI 3XX (Strix Point) are variants of the Xilinx Vitis platform, which AMD has labeled "Ryzen AI." It has it's own drivers and software stack (separate from ROCm). Maybe it'll get folded in one day? Who knows.
+- https://ryzenai.docs.amd.com/en/latest/
+- https://github.com/amd/RyzenAI-SW (includes a list of software projects)
+
+I won't be spending too much time on this since my 7940HS that I have is 10 TOPS, which is pretty useless, but here are some links and resources:
+- [LLMs on RyzenAI with Pytorch](https://github.com/amd/RyzenAI-SW/blob/main/example/transformers/models/llm/docs/README.md)
+- [Optimum-AMD](https://github.com/huggingface/optimum-amd) - a HF package for getting NPU acceleration w/ transformers (and ONNX runtime for ROCm)
+- Two Japanese Linux setup blogs (somehow Japanese devs must have more patience than English-speaking ones?)
+	- https://vengineer.hatenablog.com/entry/2024/06/08/080000
+	- https://zenn.dev/haxibami/articles/archlinux-amd-gpu
+- AMD implemented an SLM model (AMD-135M) recently (2024-09 announcement) that includes a speculative decode implementation tested on a 7940HS for CPU and NPU. The implementation and benchmarks may be of interest
+	- https://community.amd.com/t5/ai/amd-unveils-its-first-small-language-model-amd-135m/ba-p/711368
+	- https://github.com/AMD-AIG-AIMA/AMD-LLM
+	- https://github.com/AMD-AIG-AIMA/AMD-LLM/blob/main/speculative_decoding/codellama_spec.py
+	- https://github.com/AMD-AIG-AIMA/AMD-LLM?tab=readme-ov-file#speculative-decoding
+
 ## Radeon VII
 We have some previous known good memory timings for an old Radeon VII card:
 ```shell
@@ -36,8 +50,13 @@ sudo sh -c 'echo manual > /sys/class/drm/card0/device/power_dpm_force_performanc
 sudo sh -c 'echo 8 > /sys/class/drm/card0/device/pp_dpm_sclk'
 sudo amdmemorytweak --gpu 0 --ref 7500 --rtp 6 --rrds 3 --faw 12 --ras 19 --rc 30 --rcdrd 11 --rp 11
 ```
-
-# RDNA3 (navi3) on Linux
+While launched relatively recently (2019), the Radeon VII (gfx906; Radeon Pro VII, MI50) has been deprecated in ROCm, which according to AMD means:
+```
+The current ROCm release has limited support for this hardware. Existing features and capabilities are maintained, but no new features or optimizations will be added. A future ROCm release will remove support.
+```
+This is a shame because while it's a bit weak on compute (27 FP16 TFLOPS), it has 16GB HBM2 w/ 1.02 TB/s of MBW, which is not too shabby for inference.
+# RDNA3 (navi3x) on Linux
+The majority of the rest of the guide/docs 
 ## Arch Linux Setup
 Arch Linux setup is fairly straightforward (can be easier than the official install!) but is community supported by [rocm-arch](https://github.com/rocm-arch/rocm-arch). If you're running an Arch system already, this should be fine, but if you're running a system dedicated to ML, then you should prefer Ubuntu.
 
@@ -545,20 +564,21 @@ Traceback (most recent call last):
 ImportError: /home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/_C.cpython-311-x86_64-linux-gnu.so: undefined symbol: _Z9gptq_gemmN2at6TensorES0_S0_S0_S0_b
 ```
 # Windows
+I don't use Windows for AI/ML, so this doc is going to be rather sporadically updated (if at all).
 
 ## llama.cpp
 
-For an easy time, go to [llama.cpp's release page](https://github.com/ggerganov/llama.cpp/releases) and download a `bin-win-clblast` version.
+For an easy time, go to [llama.cpp's release page](https://github.com/ggerganov/llama.cpp/releases) and download:
+- "hip" version if your GPU is supported (gfx1100, gfx1101, gfx1030, etc)
+- "vulkan" or "openblas" version as a fallback if not
 
-In the Windows terminal, run it with `-ngl 99` to load all the layers into memory.
+Modern versions of llama.cpp should automatically load layers into GPU memory but you can specify something like `-ngl 99` to force it if necessary.
 
 ```shell
 .\main.exe -m model.bin -ngl 99
 ```
-
-On a Radeon 7900XT, you should get about double the performance of CPU-only execution.
 ### Compile for ROCm
-This was last update 2023-09-03 so things might change, but here's how I was able to get things working in Windows.
+This was last update 2023-09-03 so things might change, but here's how I was able to do my own compile in Windows.
 #### Requirements
 * You'll need [Microsoft Visual Studio](https://visualstudio.microsoft.com/vs/) installed. Install it with the basic C++ environment.
 * Follow AMD's directions and [install the ROCm software for Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/index.html).
@@ -621,10 +641,12 @@ build: 69fdbb9 (1148)
 ### Unsupported Architectures
 On Windows, it may not be possible to apply an `HSA_OVERRIDE_GFX_VERSION` override. In that case, these instructions for compiling custom kernels may help: [https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/](https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/)
 
-## Resources
+# Misc Resources
 Here's a ROCm fork of DeepSpeed (2023-09):
 - https://github.com/ascent-tek/rocm_containers/blob/main/README_DeepSpeed.md
 
 2023-07 [Casey Primozic](https://cprimozic.net/) did some testing/benchmarking of the 7900 XTX (TensorFlow, TinyGrad):
 - https://cprimozic.net/notes/posts/machine-learning-benchmarks-on-the-7900-xtx/
-- 
+
+I have a document that updated from April-June 2024 focused on W7900 (RDNA3 gfx1100 workstation version of the 7900 XTX) but I'm folding all up to date info back to this doc:
+* [[W7900 Pervasive Computing Project]]
