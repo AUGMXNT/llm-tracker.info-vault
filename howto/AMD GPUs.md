@@ -533,6 +533,7 @@ build.env.NVCC_FLAGS:                              -allow-unsupported-compiler
 build.env.XFORMERS_PACKAGE_FROM:                   wheel-v0.0.28.post1
 ```
 
+TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1
 
 
 There is a ROCm fork but it does not work w/ RDNA3:
