@@ -448,6 +448,18 @@ You can see some previous discussion here:
 - https://github.com/TimDettmers/bitsandbytes/discussions/990
 - https://github.com/arlo-phoenix/bitsandbytes-rocm-5.6/tree/rocm
 ### xformers (NOT WORKING)
+There is a ROCm fork but it does not work w/ RDNA3:
+- https://github.com/ROCm/xformers/issues/9
+	- Depends on CK which does not have RDNA3 support:
+		- https://github.com/ROCm/composable_kernel/issues/1171
+		- https://github.com/ROCm/composable_kernel/issues/1434
+
+```
+pip install -U xformers --index-url https://download.pytorch.org/whl/rocm6.1
+pip install amdsmi
+```
+
+
 2024-02-17: The ROCM/xformers fork defaults to a `main` branch, which compiles, but is basically upstream. All the work is done on branches (`develop` seems to be the main one), which sadly ... doesn't compile due to mismatching header files from Composable Kernels.
 
 Note: vLLM has it's own 0.0.23 with a patch to install, but still dies w/ RDNA3
