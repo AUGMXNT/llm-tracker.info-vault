@@ -680,27 +680,15 @@ Greatest absolute difference: nan at index (0, 0, 1088, 0) (up to 0.1 allowed)
 Greatest relative difference: nan at index (0, 0, 1088, 0) (up to 0.01 allowed)
 ```
 
+It looks like Liger has been doing some independent work as well with Triton kernels that seem to provide a big speedup as well, so maybe worth taking a look at this at some point: [https://github.com/linkedin/Liger-Kernel/pull/275](https://github.com/linkedin/Liger-Kernel/pull/275)
 
-
-This seems to work for inference (it only supports batched forward pass, not backward pass) - see the GH issue for more info. You won't be able to train with this.
-
-Also, this is a fork of 2.0.4 so it does not support Mistral's Sliding Window Attention
-
-See:
-- https://github.com/ROCm/flash-attention
-	- howiejayz/navi_support
-- https://github.com/ROCm/flash-attention/issues/27
-
-Install:
-```
-git clone https://github.com/ROCm/flash-attention
-git fetch
-git branch -a
-git checkout howiejay/navi_support
-python setup.py install
-```
+Working Flash Attention is one of the longest running issues for RDNA3. Here are some issues to peruse for more context:
+* [https://github.com/vllm-project/vllm/issues/4514](https://github.com/vllm-project/vllm/issues/4514)
+* [https://github.com/ROCm/flash-attention/issues/27](https://github.com/ROCm/flash-attention/issues/27)
+* [https://github.com/linkedin/Liger-Kernel/issues/126](https://github.com/linkedin/Liger-Kernel/issues/126)
+* [https://github.com/pytorch/pytorch/issues/112997](https://github.com/pytorch/pytorch/issues/112997)
 ### TensorFlow (SHOULD WORK?)
-Untested, but recent reports are that it should work:
+I don't really use TensorFlow, so this is untested, but recent reports are that it should work:
 - https://www.reddit.com/r/ROCm/comments/1ahkay9/tensorflow_on_gfx1101_navi32_7800_xt/
 - https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/3rd-party/tensorflow-install.html
 ```shell
@@ -726,53 +714,36 @@ Apparently you need to build your own TF for `gfx1100` support...
 * https://gist.github.com/briansp2020/1e8c3e5735087398ebfd9514f26a0007
 * https://cprimozic.net/notes/posts/setting-up-tensorflow-with-rocm-on-7900-xtx/
 * https://gist.github.com/BloodBlight/0d36b33d215056395f34db26fb419a63
-Life is short, putting for for later
-## vLLM (NOT WORKING)
-vLLM supports ROCm starting w/ v0.2.4, but only on MI200 cards...
+Life is short, putting for for later...
+## vLLM
+vLLM has official RDNA3 (gfx1100 at least) support
 https://docs.vllm.ai/en/latest/getting_started/amd-installation.html#build-from-source-rocm
 
-2024-02-17: failed to get it working on RDNA3, dumps out matrix errors
 
-RDNA3 support should be merged in: https://github.com/vllm-project/vllm/pull/2768
-Now let's continue:
 ```bash
-#needs it's own xformers
-pip install xformers==0.0.23 --no-deps
-bash patch_xformers.rocm.sh
+# Assume you have the latest PyTorch installed already
+# Also you should install xformers
 
+# You need to have write permissions
+cp -r /opt/rocm/share/amd_smi ~/amd_smi
+cd ~/amd_smi
+pip install .
+
+cd $VLLM
+pip install --upgrade numba scipy huggingface-hub[cli]
+pip install "numpy<2"
 pip install -r requirements-rocm.txt
 
+PYTORCH_ROCM_ARCH="gfx1100" python setup.py develop
 export GPU_ARCHS=gfx1100
-python setup.py install # This may take 5-10 minutes. Currently, `pip install .`` does not work for ROCm installation
-
-# 2024-02-10
-git clone https://github.com/hongxiayang/vllm.git vllm.navi3x_rocm6
-cd vllm.navi3x_rocm6
-export GPU_ARCHS=gfx1100
-git fetch
-git checkout navi3x_rocm6
-pip install -e .
-# See: https://github.com/vllm-project/vllm/pull/2768
-
-
-
-# Compile finishes and installs but when we try to run...
-(vllm) lhl@rocm:~/vllm$ python -m vllm.entrypoints.api_server
-/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
-  _torch_pytree._register_pytree_node(
-Traceback (most recent call last):
-  File "<frozen runpy>", line 189, in _run_module_as_main
-  File "<frozen runpy>", line 112, in _get_module_details
-  File "/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/__init__.py", line 3, in <module>
-    from vllm.engine.arg_utils import AsyncEngineArgs, EngineArgs
-  File "/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/engine/arg_utils.py", line 6, in <module>
-    from vllm.config import (CacheConfig, ModelConfig, ParallelConfig,
-  File "/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/config.py", line 9, in <module>
-    from vllm.utils import get_cpu_memory, is_hip
-  File "/home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/utils.py", line 11, in <module>
-    from vllm._C import cuda_utils
-ImportError: /home/lhl/miniforge3/envs/vllm/lib/python3.11/site-packages/vllm-0.2.7+rocm603-py3.11-linux-x86_64.egg/vllm/_C.cpython-311-x86_64-linux-gnu.so: undefined symbol: _Z9gptq_gemmN2at6TensorES0_S0_S0_S0_b
+python setup.py develop
 ```
+
+This seems to run but with some caveats:
+- Triton flash should be used by default, but you can use `VLLM_USE_TRITON_FLASH_ATTN=0` if you need to work around this
+- Basically no quantization works for AMD. FP8 is only for MI300+
+	- https://docs.vllm.ai/en/latest/quantization/supported_hardware.html
+
 # Windows
 I don't use Windows for AI/ML, so this doc is going to be rather sporadically updated (if at all).
 
