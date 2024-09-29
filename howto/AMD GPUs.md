@@ -279,7 +279,6 @@ System Info
 CPU: quad core AMD Ryzen 5 2400G with Radeon Vega Graphics (-MT MCP-)
 speed/min/max: 1827/1600/3600 MHz Kernel: 6.7.2-arch1-1 x86_64
 ```
-
 ### ExLlamaV2
 We'll use `main` on [TheBloke/Llama-2-7B-GPTQ](https://huggingface.co/TheBloke/Llama-2-7B-GPTQ) for testing (GS128 No Act Order).
 
