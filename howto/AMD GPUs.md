@@ -26,6 +26,34 @@ Vulkan drivers can use GTT memory dynamically, but w/ MLC LLM, Vulkan version is
 * It may be possible to unlock more UMA/GART memory: [https://winstonhyypia.medium.com/amd-apu-how-to-modify-the-dedicated-gpu-memory-e27b75905056](https://winstonhyypia.medium.com/amd-apu-how-to-modify-the-dedicated-gpu-memory-e27b75905056)
 * There is custom allocator that may allow PyTorch to use GTT memory (only useful for PyTorch inferencing obviously): [https://github.com/pomoke/torch-apu-helper](https://github.com/pomoke/torch-apu-helper)
 * A writeup of someone playing around w/ ROCm and SD on an older APU: [https://www.gabriel.urdhr.fr/2022/08/28/trying-to-run-stable-diffusion-on-amd-ryzen-5-5600g/](https://www.gabriel.urdhr.fr/2022/08/28/trying-to-run-stable-diffusion-on-amd-ryzen-5-5600g/)
+I was a bit curious at how performance looks like in 2024-09 - using the same model so you can compare how much a year's difference in development makes:
+```
+# ROCm
+❯ ./llama-bench -m /data/ai/models/llm/gguf/meta-llama-2-7b-q4_0.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon 780M, compute capability 11.0, VMM: no
+| model                          |       size |     params | backend    | ngl |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 |         pp512 |        262.87 ± 1.23 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 |         tg128 |         19.57 ± 0.02 |
+
+build: faac0bae (3841)
+
+# CPU
+❯ ./llama-bench -m /data/ai/models/llm/gguf/meta-llama-2-7b-q4_0.gguf
+| model                          |       size |     params | backend    | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | ------------: | -------------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |       8 |         pp512 |         61.84 ± 0.72 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |       8 |         tg128 |         14.42 ± 0.02 |
+
+build: faac0bae (3841)
+
+# OpenBLAS
+
+```
+
 ## AMD NPU (RyzenAI)
 The AMD NPU, starting with the 10 TOPS version in the 7X40 (Phoenix Point), 16 TOPS version in the 8X40 (Hawk Point) and 50 TOPS in the Ryzen AI 3XX (Strix Point) are variants of the Xilinx Vitis platform, which AMD has labeled "Ryzen AI." It has it's own drivers and software stack (separate from ROCm). Maybe it'll get folded in one day? Who knows.
 - https://ryzenai.docs.amd.com/en/latest/
