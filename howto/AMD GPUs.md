@@ -441,13 +441,9 @@ Unsloth https://github.com/unslothai/unsloth depends on:
 - xformers or flash attention
 - bitsandbytes
 
-In theory we have everything we need, and it will startup, however, even after you comment out the `libcuda_dirs()` calls it will die: 
+As of 2024-09, there is a working upstream xformers library (see below), however it's sadly missing support for this function in the ROCm backend:
 ```
-pip install "unsloth[conda] @ git+https://github.com/unslothai/unsloth.git"
-
-# You'll need to manually edit site-packages/unsloth/__init__.py
-# comment out
-# libcuda_dirs()
+NotImplementedError: Could not run 'xformers::efficient_attention_forward_ck' with arguments from the 'CUDA' backend. This could be because the operator doesn't exist for this backend, or was omitted during the selective/custom build process (if using custom build). If you are a Facebook employee using PyTorch on mobile, please visit https://fburl.com/ptmfixes for possible resolutions. 'xformers::efficient_attention_forward_ck' is only available for these backends: [CPU, PrivateUse3, Meta, BackendSelect, Python, FuncTorchDynamicLayerBackMode, Functionalize, Named, Conjugate, Negative, ZeroTensor, ADInplaceOrView, AutogradOther, AutogradCPU, AutogradCUDA, AutogradXLA, AutogradMPS, AutogradXPU, AutogradHPU, AutogradLazy, AutogradMeta, Tracer, AutocastCPU, AutocastXPU, AutocastMPS, AutocastCUDA, FuncTorchBatched, BatchedNestedTensor, FuncTorchVmapMode, Batched, VmapMode, FuncTorchGradWrapper, PythonTLSSnapshot, FuncTorchDynamicLayerFrontMode, PreDispatch, PythonDispatcher].
 ```
 ## Libraries and Frameworks
 These are probably going to be most useful if you are a developer or training
@@ -602,9 +598,87 @@ Notes:
 - Reddit
 
 ### Flash Attention 2
+This issue in the [ROCm/aotriton](https://github.com/ROCm/aotriton) project: [Memory Efficient Flash Attention for gfx1100 (7900xtx)](https://github.com/ROCm/aotriton/issues/16) is probably the best place to read the story on Flash Attention. As of 2024-09, this support has now been upstreamed to PyTorch 2.5.0+ (you may need to use the nightly if the stable version is not there yet). ([original pull]([https://github.com/pytorch/pytorch/pull/134498](https://github.com/pytorch/pytorch/pull/134498)), [merged pull]([https://github.com/pytorch/pytorch/pull/135869](https://github.com/pytorch/pytorch/pull/135869)))
 
-The current best way to use 
+You might also need to use the environment variable:
+```
 TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1
+```
+
+Using the `examples/benchmark.py` from [pytorch-labs/attention-gym](https://github.com/pytorch-labs/attention-gym) we are able to test this:
+```
+$ TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 python attention-gym/examples/benchmark.py 
+Using the default sparsity block size: 128
+╔═════════════════════════════════════════════════════════════════════════════════════════╗
+║                                       Causal Mask                                       ║
+╚═════════════════════════════════════════════════════════════════════════════════════════╝
+Correctness check passed ✅
++---------------+----------------+-------------------+----------------+-------------------+
+| Operation     |   FW Time (ms) |   FW FLOPS (TF/s) |   BW Time (ms) |   BW FLOPS (TF/s) |
++===============+================+===================+================+===================+
+| causal FA2    |        150.677 |             14.59 |        764.289 |              7.19 |
++---------------+----------------+-------------------+----------------+-------------------+
+| F.sdpa + mask |        363.346 |              6.15 |       1946.23  |              2.87 |
++---------------+----------------+-------------------+----------------+-------------------+
+| flexattention |        245.548 |              9.1  |        428.728 |             13.02 |
++---------------+----------------+-------------------+----------------+-------------------+
+
+Block Mask:
+BlockMask(shape=(1, 1, 8192, 8192), sparsity=49.22%, 
+(0, 0)
+░░                              
+██░░                            
+████░░                          
+██████░░                        
+████████░░                      
+██████████░░                    
+████████████░░                  
+██████████████░░                
+████████████████░░              
+██████████████████░░            
+████████████████████░░          
+██████████████████████░░        
+████████████████████████░░      
+██████████████████████████░░    
+████████████████████████████░░  
+██████████████████████████████░░
+)
+╔═════════════════════════════════════════════════════════════════════════════════════════╗
+║                                        Alibi Mod                                        ║
+╚═════════════════════════════════════════════════════════════════════════════════════════╝
++---------------+----------------+-------------------+----------------+-------------------+
+| Operation     |   FW Time (ms) |   FW FLOPS (TF/s) |   BW Time (ms) |   BW FLOPS (TF/s) |
++===============+================+===================+================+===================+
+| causal FA2    |        155.3   |             14.16 |        798.569 |              6.88 |
++---------------+----------------+-------------------+----------------+-------------------+
+| F.sdpa + mask |        375.784 |             11.7  |       2022.57  |              5.44 |
++---------------+----------------+-------------------+----------------+-------------------+
+| flexattention |        561.904 |              7.83 |        740.779 |             14.84 |
++---------------+----------------+-------------------+----------------+-------------------+
+
+Block Mask:
+None
+╔═════════════════════════════════════════════════════════════════════════════════════════╗
+║                                   Sliding Window 1024                                   ║
+╚═════════════════════════════════════════════════════════════════════════════════════════╝
+Traceback (most recent call last):
+  File "/home/lhl/xformers/attention-gym/examples/benchmark.py", line 256, in <module>
+    main(**vars(args))
+  File "/home/lhl/xformers/attention-gym/examples/benchmark.py", line 234, in main
+    available_examples[ex]()
+  File "/home/lhl/xformers/attention-gym/examples/benchmark.py", line 216, in <lambda>
+    "sliding_window": lambda: test_mask(mask_mod=generate_sliding_window(window_size=1024)),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lhl/xformers/attention-gym/examples/benchmark.py", line 140, in test_mask
+    torch.testing.assert_close(flex, sdpa_mask, atol=1e-1, rtol=1e-2)
+  File "/home/lhl/miniforge3/envs/xformers/lib/python3.11/site-packages/torch/testing/_comparison.py", line 1530, in assert_close
+    raise error_metas[0].to_error(msg)
+AssertionError: Tensor-likes are not close!
+
+Mismatched elements: 116391936 / 134217728 (86.7%)
+Greatest absolute difference: nan at index (0, 0, 1088, 0) (up to 0.1 allowed)
+Greatest relative difference: nan at index (0, 0, 1088, 0) (up to 0.01 allowed)
+```
 
 
 
