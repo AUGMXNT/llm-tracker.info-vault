@@ -368,23 +368,19 @@ The ROCm kernel is very un-optimized vs the CUDA version, but you can see while 
 | Inference tok/s | 57.9 | 61.2 | 116.5 | 137.6 |
 | Inference % | -5.4% | 0% | +90.4% | +124.8% |
 * Tested 2024-01-08 with ExLlamaV2 `3b0f523` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.6.7-arch1-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
-### MLC (NOT WORKING)
+### MLC
 ### Setup
 ```shell
 mamba create -n mlc python=3.11
-mamba install -c conda-forge libgcc-ng
-python3 -m pip install --pre -U -f https://mlc.ai/wheels mlc-chat-nightly-rocm57 mlc-ai-nightly-rocm57
+python -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-rocm62 mlc-ai-nightly-rocm62
+python -c "import mlc_llm; print(mlc_llm.__version__)"
+python -c "import tvm; print(tvm.__file__)"
 
-export PATH=/opt/rocm/llvm/bin:$PATH
-
-# Missing dependencies
-pip install tqdm
-pip install safetensors
-pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm5.7
+# Test
+mlc_llm chat HF://mlc-ai/Llama-3-8B-Instruct-q4f16_1-MLC
 ```
 * https://llm.mlc.ai/docs/install/mlc_llm.html#install-mlc-packages
-* https://github.com/mlc-ai/mlc-llm/issues/1216
-* https://llm.mlc.ai/docs/install/tvm.html#option-1-prebuilt-package
+* https://llm.mlc.ai/docs/get_started/quick_start.html
 
 Make a model: https://llm.mlc.ai/docs/compilation/compile_models.html
 ```shell
