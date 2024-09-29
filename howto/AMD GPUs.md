@@ -49,11 +49,8 @@ build: faac0bae (3841)
 | llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |       8 |         tg128 |         14.42 ± 0.02 |
 
 build: faac0bae (3841)
-
-# OpenBLAS
-
 ```
-
+- On my system, OpenBLAS was slower than the regular CPU version
 ## AMD NPU (RyzenAI)
 The AMD NPU, starting with the 10 TOPS version in the 7X40 (Phoenix Point), 16 TOPS version in the 8X40 (Hawk Point) and 50 TOPS in the Ryzen AI 3XX (Strix Point) are variants of the Xilinx Vitis platform, which AMD has labeled "Ryzen AI." It has it's own drivers and software stack (separate from ROCm). Maybe it'll get folded in one day? Who knows.
 - https://ryzenai.docs.amd.com/en/latest/
@@ -173,7 +170,6 @@ You may run into some compile errors. You will need `libstdc++-12-dev` in Ubuntu
 sudo apt install libstdc++-12-dev
 ```
 
-
 ## LLM Inferencing
 ### llama.cpp
 llama.cpp has ROCm support built-in now (2023-08):
@@ -186,6 +182,8 @@ make GGML_HIPBLAS=1
 * You can use `LLAMA_HIP_UMA=1` for unified memory for APUs but it'll be slower if you don't use it
 * `uname -a` , `dkms status` and `apt list | grep rocm | grep '\[installed\]'` to get version numbers of kernel and libs
 * If you can't get ROCm working, Vulkan is a universal/easy option, but gains and should still give decent gains over CPU inference
+
+(2024-09 Update: llama.cpp ROCm inference speeds basically haven't changed so I haven't gone and done updates. CUDA is a bit faster w/ FA and Graph support, so has an even bigger lead)
 
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
