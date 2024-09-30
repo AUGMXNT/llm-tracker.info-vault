@@ -456,6 +456,12 @@ vllm serve facebook/opt-125m
 ## Training
 In Feb 2024 I wrote up some notes:
 - https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
+
+In June 2024 I did a trainer performance shootoff of torchtune vs axolotl (trl) vs unsloth with a 3090, 4090, and W7900:
+- https://wandb.ai/augmxnt/train-bench/reports/torchtune-vs-axolotl-vs-unsloth-Trainer-Comparison--Vmlldzo4MzU3NTAx
+### torchtune
+There was an issue w/ hipblaslt in PyTorch when I was trying to get it working that required manual futzing w/ compiles and `.so` files, but since PyTorch will auto-fallback now it should run w/o hassle, but here's the related issue:
+- https://github.com/pytorch/torchtune/discussions/1108
 ### unsloth (NOT WORKING)
 Unsloth https://github.com/unslothai/unsloth depends on:
 - PyTorch
