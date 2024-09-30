@@ -459,9 +459,20 @@ In Feb 2024 I wrote up some notes:
 
 In June 2024 I did a trainer performance shootoff of torchtune vs axolotl (trl) vs unsloth with a 3090, 4090, and W7900:
 - https://wandb.ai/augmxnt/train-bench/reports/torchtune-vs-axolotl-vs-unsloth-Trainer-Comparison--Vmlldzo4MzU3NTAx
+
+I noticed that AMD has added some simple tutorials in the ROCm docs:
+- https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/single-gpu-fine-tuning-and-inference.html
+- https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/multi-gpu-fine-tuning-and-inference.html
 ### torchtune
 There was an issue w/ hipblaslt in PyTorch when I was trying to get it working that required manual futzing w/ compiles and `.so` files, but since PyTorch will auto-fallback now it should run w/o hassle, but here's the related issue:
 - https://github.com/pytorch/torchtune/discussions/1108
+
+Simple test run:
+```
+pip install torchao torchtune
+tune download meta-llama/Meta-Llama-3.1-8B-Instruct --output-dir /tmp/Meta-Llama-3.1-8B-Instruct --hf-token $(cat ~/.cache/huggingface/token)
+tune run lora_finetune_single_device --config llama3_1/8B_qlora_single_device
+```
 ### unsloth (NOT WORKING)
 Unsloth https://github.com/unslothai/unsloth depends on:
 - PyTorch
@@ -474,7 +485,10 @@ As of 2024-09, there is a working upstream xformers library (see below), however
 NotImplementedError: Could not run 'xformers::efficient_attention_forward_ck' with arguments from the 'CUDA' backend. This could be because the operator doesn't exist for this backend, or was omitted during the selective/custom build process (if using custom build). If you are a Facebook employee using PyTorch on mobile, please visit https://fburl.com/ptmfixes for possible resolutions. 'xformers::efficient_attention_forward_ck' is only available for these backends: [CPU, PrivateUse3, Meta, BackendSelect, Python, FuncTorchDynamicLayerBackMode, Functionalize, Named, Conjugate, Negative, ZeroTensor, ADInplaceOrView, AutogradOther, AutogradCPU, AutogradCUDA, AutogradXLA, AutogradMPS, AutogradXPU, AutogradHPU, AutogradLazy, AutogradMeta, Tracer, AutocastCPU, AutocastXPU, AutocastMPS, AutocastCUDA, FuncTorchBatched, BatchedNestedTensor, FuncTorchVmapMode, Batched, VmapMode, FuncTorchGradWrapper, PythonTLSSnapshot, FuncTorchDynamicLayerFrontMode, PreDispatch, PythonDispatcher].
 ```
 ## Libraries and Frameworks
-These are probably going to be most useful if you are a developer or training
+These are probably going to be most useful if you are a developer or training.
+
+AMD's ROCm docs has a list as well, however the docs don't necessarily apply to RDNA3 (since it's [AMD CK](https://github.com/ROCm/composable_kernel) focused, which has [no RDNA3 kernels](https://github.com/ROCm/composable_kernel/issues/1171)! *\*sad trombone\**)
+- https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/model-acceleration-libraries.html
 ### PyTorch
 PyTorch supports ROCm natively and without code changes (`torch.cuda` just uses ROCm instead). It just needs to be instealled with the ROCm platform:
 - https://pytorch.org/get-started/locally/
@@ -582,9 +596,6 @@ build.env.NVCC_FLAGS:                              -allow-unsupported-compiler
 build.env.XFORMERS_PACKAGE_FROM:                   wheel-v0.0.28.post1
 ```
 
-
-
-
 There is a ROCm fork but it does not work w/ RDNA3:
 - https://github.com/ROCm/xformers/issues/9
 	- Depends on CK which does not have RDNA3 support:
@@ -595,7 +606,6 @@ There is a ROCm fork but it does not work w/ RDNA3:
 pip install -U xformers --index-url https://download.pytorch.org/whl/rocm6.1
 pip install amdsmi
 ```
-
 
 2024-02-17: The ROCM/xformers fork defaults to a `main` branch, which compiles, but is basically upstream. All the work is done on branches (`develop` seems to be the main one), which sadly ... doesn't compile due to mismatching header files from Composable Kernels.
 
@@ -613,14 +623,7 @@ python -c 'import xformers; print(xformers.__version__)'
 ```
 
 
-CK
-FlashInfer
-Attention-Gym
-Liger
-torchtune
-
 Notes:
-- W7900
 - Discord
 - HN
 - Reddit
