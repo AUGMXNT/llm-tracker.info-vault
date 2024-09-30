@@ -460,9 +460,46 @@ In Feb 2024 I wrote up some notes:
 In June 2024 I did a trainer performance shootoff of torchtune vs axolotl (trl) vs unsloth with a 3090, 4090, and W7900:
 - https://wandb.ai/augmxnt/train-bench/reports/torchtune-vs-axolotl-vs-unsloth-Trainer-Comparison--Vmlldzo4MzU3NTAx
 
-I noticed that AMD has added some simple tutorials in the ROCm docs:
+I noticed that AMD has added a lot of simple tutorials in the ROCm docs:
+- https://rocm.docs.amd.com/en/latest/how-to/rocm-for-ai/index.html
 - https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/single-gpu-fine-tuning-and-inference.html
 - https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/multi-gpu-fine-tuning-and-inference.html
+### axolotl
+This has been my preferred trainer for a while: https://github.com/axolotl-ai-cloud/axolotl
+It leverages [trl](https://github.com/huggingface/trl) and layers a bunch of optimizations, yaml configs, etc.
+### lightning
+I haven't used https://github.com/Lightning-AI/pytorch-lightning but here's the Lightning example from: https://github.com/Lightning-AI/pytorch-lightning?tab=readme-ov-file#pytorch-lightning-example
+
+Here what the W7900 looked like (after 1 epoch):
+```$ CUDA_VISIBLE_DEVICES=0 python test-lightning.py
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+/home/lhl/miniforge3/envs/xformers/lib/python3.11/site-packages/lightning/pytorch/trainer/connectors/logger_connector/logger_connector.py:75: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `lightning.pytorch` package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install lightning[extra]` or one of them to enable TensorBoard support by default
+/home/lhl/miniforge3/envs/xformers/lib/python3.11/site-packages/lightning/pytorch/loops/utilities.py:72: `max_epochs` was not set. Setting it to 1000 epochs. To train without an epoch limit, set `max_epochs=-1`.
+/home/lhl/miniforge3/envs/xformers/lib/python3.11/site-packages/lightning/pytorch/trainer/configuration_validator.py:68: You passed in a `val_dataloader` but have no `validation_step`. Skipping val loop.
+You are using a CUDA device ('AMD Radeon PRO W7900') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name    | Type       | Params | Mode
+-----------------------------------------------
+0 | encoder | Sequential | 100 K  | train
+1 | decoder | Sequential | 101 K  | train
+-----------------------------------------------
+202 K     Trainable params
+0         Non-trainable params
+202 K     Total params
+0.810     Total estimated model params size (MB)
+8         Modules in train mode
+0         Modules in eval mode
+/home/lhl/miniforge3/envs/xformers/lib/python3.11/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:424: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
+Epoch 0:   0%|                                                  | 0/55000 [00:00<?, ?it/s]/home/lhl/miniforge3/envs/xformers/lib/python3.11/site-packages/torch/nn/modules/linear.py:125: UserWarning: Attempting to use hipBLASLt on an unsupported architecture! Overriding blas backend to hipblas (Triggered internally at ../aten/src/ATen/Context.cpp:296.)
+  return F.linear(input, self.weight, self.bias)
+Epoch 1:   6%|█▋                          | 3375/55000 [00:07<01:53, 456.73it/s, v_num=10]
+```
+
+See also: https://lightning.ai/docs/pytorch/stable/starter/introduction.html
+
 ### torchtune
 There was an issue w/ hipblaslt in PyTorch when I was trying to get it working that required manual futzing w/ compiles and `.so` files, but since PyTorch will auto-fallback now it should run w/o hassle, but here's the related issue:
 - https://github.com/pytorch/torchtune/discussions/1108
@@ -470,8 +507,10 @@ There was an issue w/ hipblaslt in PyTorch when I was trying to get it working t
 Simple test run:
 ```
 pip install torchao torchtune
-tune download meta-llama/Meta-Llama-3.1-8B-Instruct --output-dir /tmp/Meta-Llama-3.1-8B-Instruct --hf-token $(cat ~/.cache/huggingface/token)
-tune run lora_finetune_single_device --config llama3_1/8B_qlora_single_device
+tune download meta-llama/Llama-2-7b-chat-hf --output-dir /tmp/Llama-2-7b-hf --hf-token $(cat ~/.cache/huggingface/token)
+TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 tune run lora_finetune_single_device --config llama2/7B_qlora_single_device
+
+# on a W7900 this should take about 6GB of VRAM and about 15h estimated time 
 ```
 ### unsloth (NOT WORKING)
 Unsloth https://github.com/unslothai/unsloth depends on:
