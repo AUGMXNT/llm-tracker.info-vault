@@ -183,7 +183,11 @@ make GGML_HIPBLAS=1
 * `uname -a` , `dkms status` and `apt list | grep rocm | grep '\[installed\]'` to get version numbers of kernel and libs
 * If you can't get ROCm working, Vulkan is a universal/easy option, but gains and should still give decent gains over CPU inference
 
-(2024-09 Update: llama.cpp ROCm inference speeds basically haven't changed so I haven't gone and done updates. CUDA is a bit faster w/ FA and Graph support, so has an even bigger lead)
+2024-09 Update: llama.cpp ROCm inference speeds basically haven't changed all year so I haven't gone and done updates. CUDA is a bit faster w/ FA and Graph support, so has an even bigger lead. There's been some discussion/code with optimizations, but so far those haven't been merged:
+- https://github.com/ggerganov/llama.cpp/pull/7011
+- https://github.com/ggerganov/llama.cpp/pull/8082
+
+I was curious in just how much performance might be available for optimizations, here's an analysis of 4090 vs 3090 vs 7900 XTX as of 2024-10-04: https://chatgpt.com/share/66ff502b-72fc-8012-95b4-902be6738665
 
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
@@ -420,7 +424,6 @@ Compiling with arguments:
 Segmentation fault (core dumped)
 
 ```
-
 ### vLLM
 vLLM has ROCm support and support for specific hardware (which includes gfx1100 now).
 - https://docs.vllm.ai/en/stable/getting_started/amd-installation.html
