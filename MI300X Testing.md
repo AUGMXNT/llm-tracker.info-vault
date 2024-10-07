@@ -96,7 +96,7 @@ export HCC_AMDGPU_TARGET=gfx942
 TORCH_CUDA_ARCH_LIST="8.9" python setup.py install
 ```
 
-Let's
+Let's exactly follow these docs: https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/model-acceleration-libraries.html#installing-flash-attention-2
 
 
 # 
