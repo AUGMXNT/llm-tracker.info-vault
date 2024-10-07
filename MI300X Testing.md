@@ -98,6 +98,32 @@ TORCH_CUDA_ARCH_LIST="8.9" python setup.py install
 
 Let's exactly follow these docs: https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/model-acceleration-libraries.html#installing-flash-attention-2
 
+Looks like our errors relate to the translation of `getCurrentHIPStream` from `getCurrentCUDAStream`?
+```
+FAILED: /home/hotaisle/flash-attention/build/temp.linux-x86_64-cpython-311/csrc/flash_attn_ck/mha_fwd.o 
+/opt/rocm-6.2.2/bin/hipcc  -I/home/hotaisle/flash-attention/csrc/composable_kernel/include -I/home/hotaisle/flash-attention/csrc/composable_kernel/library/include -I/home/hotaisle/flash-attention/csrc/composable_kernel/example/ck_tile/01_fmha -I/home/hotaisle/miniforge3/envs/llm/lib/python3.11/site-packages/torch/include -I/home/hotaisle/miniforge3/envs/llm/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -I/home/hotaisle/miniforge3/envs/llm/lib/python3.11/site-packages/torch/include/TH -I/home/hotaisle/miniforge3/envs/llm/lib/python3.11/site-packages/torch/include/THC -I/home/hotaisle/miniforge3/envs/llm/lib/python3.11/site-packages/torch/include/THH -I/opt/rocm-6.2.2/include -I/home/hotaisle/miniforge3/envs/llm/include/python3.11 -c -c /home/hotaisle/flash-attention/csrc/flash_attn_ck/mha_fwd.hip -o /home/hotaisle/flash-attention/build/temp.linux-x86_64-cpython-311/csrc/flash_attn_ck/mha_fwd.o -fPIC -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -DCUDA_HAS_FP16=1 -D__HIP_NO_HALF_OPERATORS__=1 -D__HIP_NO_HALF_CONVERSIONS__=1 --offload-arch=gfx942 -O3 -std=c++17 -DCK_TILE_FMHA_FWD_FAST_EXP2=1 -fgpu-flush-denormals-to-zero -DCK_ENABLE_BF16 -DCK_ENABLE_BF8 -DCK_ENABLE_FP16 -DCK_ENABLE_FP32 -DCK_ENABLE_FP64 -DCK_ENABLE_FP8 -DCK_ENABLE_INT8 -DCK_USE_XDL -DUSE_PROF_API=1 -D__HIP_PLATFORM_HCC__=1 -DCK_TILE_FLOAT_TO_BFLOAT16_DEFAULT=3 -fno-offload-uniform-block -mllvm -enable-post-misched=0 -mllvm -amdgpu-early-inline-all=true -mllvm -amdgpu-function-calls=false -mllvm -amdgpu-coerce-illegal-types=1 -DTORCH_API_INCLUDE_EXTENSION_H '-DPYBIND11_COMPILER_TYPE="_gcc"' '-DPYBIND11_STDLIB="_libstdcpp"' '-DPYBIND11_BUILD_ABI="_cxxabi1011"' -DTORCH_EXTENSION_NAME=flash_attn_2_cuda -D_GLIBCXX_USE_CXX11_ABI=0 -fno-gpu-rdc
+/home/hotaisle/flash-attention/csrc/flash_attn_ck/mha_fwd.hip:277:33: error: no member named 'getCurrentHIPStream' in namespace 'at::cuda'; did you mean 'getCurrentCUDAStream'?
+  277 |         auto stream = at::cuda::getCurrentHIPStream().stream();
+      |                       ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+      |                                 getCurrentCUDAStream
+/home/hotaisle/miniforge3/envs/llm/lib/python3.11/site-packages/torch/include/c10/hip/HIPStream.h:244:20: note: 'getCurrentCUDAStream' declared here
+  244 | C10_API CUDAStream getCurrentCUDAStream(DeviceIndex device_index = -1);
+      |                    ^
+1 error generated when compiling for gfx942.
+```
+
+This also happens when following the docs trying to install `xformers` https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/model-acceleration-libraries.html#xformers:
+```
+home/hotaisle/xformers/xformers/csrc/attention/hip_fmha/attention_backward_generic_ck_tiled.hip:116:34: error: no member named 'getCurrentHIPStream' in namespace 'at::cuda'; did you mean 'getCurrentCUDAStream'?
+  116 |   hipStream_t stream = at::cuda::getCurrentHIPStream().stream();
+      |                        ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+      |                                  getCurrentCUDAStream
+/home/hotaisle/miniforge3/envs/llm/lib/python3.11/site-packages/torch/include/c10/hip/HIPStream.h:244:20: note: 'getCurrentCUDAStream' declared here
+  244 | C10_API CUDAStream getCurrentCUDAStream(DeviceIndex device_index = -1);
+      |                    ^
+1 error generated when compiling for gfx942.
+```
+
 
 # 
 --distributed-executor-backend ray
