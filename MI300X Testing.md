@@ -96,6 +96,8 @@ export HCC_AMDGPU_TARGET=gfx942
 TORCH_CUDA_ARCH_LIST="8.9" python setup.py install
 ```
 
+Let's
+
 
 # 
 --distributed-executor-backend ray
@@ -494,13 +496,13 @@ Throughput: 4.32 requests/s, 2765.68 tokens/s
 ### Mistral Large
 
 
-|                | Default | float16  |
-| -------------- | ------- | -------- |
-| it/s           | 10.24   | 55.06    |
-| input (tok/s)  | 5253.82 | 28191.54 |
-| output (tok/s) | 1310.89 | 7047.88  |
-| tp (req/s)     | 10.20   | 54.07    |
-| rp (tok/s)     | 6525.23 | 34606.80 |
+|                | Default |
+| -------------- | ------- |
+| it/s           | 10.24   |
+| input (tok/s)  | 5253.82 |
+| output (tok/s) | 1310.89 |
+| tp (req/s)     | 10.20   |
+| rp (tok/s)     | 6525.23 |
 - missing Tens
 
 Processed prompts: 100%|█████████████████████████████████████████████████████████████████████████████| 1000/1000 [01:37<00:00, 10.24it/s, est. speed input: 5253.82 toks/s, output: 1310.89 toks/s]
