@@ -195,7 +195,7 @@ Throughput: 23.10 requests/s, 14787.00 tokens/s
 | input (tok/s)  | 28636.95 | 28191.54 | 26766.27 | 21805.15 |
 | output (tok/s) | 7159.24  | 7047.88  | 6691.57  | 5451.29  |
 | tp (req/s)     | 54.94    | 54.07    | 51.41    | 41.96    |
-| rp (tok/s)     | 35163.95 | 34606.80 | 32902.67 | 26856.43 |
+| tp (tok/s)     | 35163.95 | 34606.80 | 32902.67 | 26856.43 |
 - default = float16
 - ray hangs, but mp is slower so use just use the default (none)
 - hipblaslt doesn't work even when symlinked to the proper one so... not tested
@@ -335,8 +335,10 @@ ln -s /opt/rocm-6.2.2/lib/rocblas
 ```
 Hmm, still complains.  Whevs.
 
+### Big Model Testing
 #### Llama3 405B
-8 x MI300
+With 1.5TB of VRAM, a full, unquantized (FP16) Llama 3 405B fits on single MI300X node:
+
 - 1000 x 512;128
 	- 4.33 it/s
 	- input: 2216.24 tok/s
@@ -522,7 +524,7 @@ Throughput: 4.32 requests/s, 2765.68 tokens/s
 
 
 #### Mistral Large
-
+Sliding Window
 
 |                | Default |
 | -------------- | ------- |
@@ -530,7 +532,7 @@ Throughput: 4.32 requests/s, 2765.68 tokens/s
 | input (tok/s)  | 5253.82 |
 | output (tok/s) | 1310.89 |
 | tp (req/s)     | 10.20   |
-| rp (tok/s)     | 6525.23 |
+| tp (tok/s)     | 6525.23 |
 - missing Tens
 
 Processed prompts: 100%|█████████████████████████████████████████████████████████████████████████████| 1000/1000 [01:37<00:00, 10.24it/s, est. speed input: 5253.82 toks/s, output: 1310.89 toks/s]
@@ -548,7 +550,8 @@ https://github.com/flashinfer-ai/flashinfer/pull/491
 
 # Training
 
-
+## torchtune
+https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/multi-gpu-fine-tuning-and-inference.html
 
 https://wandb.ai/augmxnt/train-bench/reports/torchtune-vs-axolotl-vs-unsloth-Trainer-Comparison--Vmlldzo4MzU3NTAx
 
@@ -558,3 +561,43 @@ PEFT
 https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/multi-gpu-fine-tuning-and-inference.html
 https://github.com/meta-llama/llama-recipes/tree/main/recipes/quickstart/finetuning
 https://rocm.blogs.amd.com/artificial-intelligence/starcoder-fine-tune/README.html
+
+https://rocm.blogs.amd.com/artificial-intelligence/megatron-deepspeed-pretrain/README.html
+
+https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
+# TODO
+
+
+inference
+- existing VLLM numbers, match settings to get baseline?
+
+
+Big Models
+WizardLM 8x22b
+nemotron 340b
+DeepSeek 2.5
+
+Docker:
+
+
+
+
+[ ] torchtune standard
+llama2 qlora - 1 gpu
+llama2 qlora - 8 gpu
+llama3 8b - 1 gpu
+llama3 8b - 8 gpu
+llama3 70b
+
+torchtune
+wandb
+shisa replication
+llama 8b qlora
+
+[ ] axolotl
+shisa-v2 ablation test
+
+shaberi test
+testing
+
+voicechat
