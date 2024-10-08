@@ -38,13 +38,15 @@ Just for fun:
 	- CPU btw is 2 x [Xeon Platinum 8470](https://www.intel.com/content/www/us/en/products/sku/231728/intel-xeon-platinum-8470-processor-105m-cache-2-00-ghz/specifications.html), which is 2 x 52C 104T w/ 2.0GHz base and 3.8GHz boost clock, 105MB of cache per chip, running DDR5-4800
 	- The MT score puts it in the ballpark of a 9554P (64C 128T) 
 
+
+# Inference
 Let's start with inference.
-# vLLM 
+## vLLM 
 We are testing around 2024-10-07 and our source build is `v0.6.3.dev114+g4f95ffee`.
 
 There are a few other vLLM benchmarks published, but they are all done before the latest massive [vLLM 0.6.0 performance enhancements](https://blog.vllm.ai/2024/09/05/perf-update.html) so this may be of interest.
 
-## Install
+### Install
 We are also running with ROCm 6.2.2, and are using the current PyTorch nightly.
 ```
 # Environment
@@ -79,7 +81,7 @@ python setup.py develop
 ```
 - https://pytorch.org/get-started/locally/
 - https://docs.vllm.ai/en/v0.5.5/getting_started/amd-installation.html
-## Flash Attention
+### Flash Attention
 By default, vLLM defaults to the Triton Flash Attention implementation, however, there are some issues:
 ```
 WARNING 10-07 15:49:20 registry.py:198] Model architecture MistralForCausalLM is partially supported by ROCm: Sliding window attention (SWA) is not yet supported in Triton flash attention. For ha
@@ -125,7 +127,7 @@ home/hotaisle/xformers/xformers/csrc/attention/hip_fmha/attention_backward_gener
 ```
 
 
-# 
+### Executors 
 --distributed-executor-backend ray
 ```
 (RayWorkerWrapper pid=769965) INFO 10-07 15:58:23 selector.py:121] Using ROCmFlashAttention backend.
@@ -144,11 +146,11 @@ home/hotaisle/xformers/xformers/csrc/attention/hip_fmha/attention_backward_gener
 (RayWorkerWrapper pid=769965) ERROR 10-07 15:58:23 worker_base.py:464] Device-side assertion tracking was not enabled by user.
 
 ```
-## Performance
+### Performance
 https://blog.vllm.ai/2024/09/05/perf-update.html
 
 
-### Basic Benchmark (1GPU)
+#### Basic Benchmark (1GPU)
 1 x MI300
 - 1000 x 512;128
 	- 23.28 it/s
@@ -178,7 +180,7 @@ Throughput: 23.10 requests/s, 14787.00 tokens/s
 [rank0]:[W1007 09:55:53.400347903 ProcessGroupNCCL.cpp:1253] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
 ```
 
-### Basic Benchmark (TP 8)
+#### Basic Benchmark (TP 8)
 8 x MI300
 - 1000 x 512;128
 	- 55.93 it/s
@@ -333,7 +335,7 @@ ln -s /opt/rocm-6.2.2/lib/rocblas
 ```
 Hmm, still complains.  Whevs.
 
-### Llama3 405B
+#### Llama3 405B
 8 x MI300
 - 1000 x 512;128
 	- 4.33 it/s
@@ -519,7 +521,7 @@ Throughput: 4.32 requests/s, 2765.68 tokens/s
 ```
 
 
-### Mistral Large
+#### Mistral Large
 
 
 |                | Default |
@@ -542,3 +544,17 @@ lf-precision SWA support, please use CK flash attention by setting `VLLM_USE_TRI
 
 Flashinfer
 https://github.com/flashinfer-ai/flashinfer/pull/491
+
+
+# Training
+
+
+
+https://wandb.ai/augmxnt/train-bench/reports/torchtune-vs-axolotl-vs-unsloth-Trainer-Comparison--Vmlldzo4MzU3NTAx
+
+Axolotl
+
+PEFT
+https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/multi-gpu-fine-tuning-and-inference.html
+https://github.com/meta-llama/llama-recipes/tree/main/recipes/quickstart/finetuning
+https://rocm.blogs.amd.com/artificial-intelligence/starcoder-fine-tune/README.html
