@@ -568,14 +568,63 @@ https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_o
 # TODO
 
 
+Reproducible Script, Multirun Average
+Version
+Output logs
+grep and pull
+
+Run through variations automatically
+quant kvcache
+
+
 inference
 - existing VLLM numbers, match settings to get baseline?
+
+https://tensorwave.com/blog/amds-mi300x-outperforms-nvidias-h100-for-llm-inference
+TP1, TP2
+128:128
+BS 1, 2, 4, 8 - 1024
+Mixtral 8x7B
+
+nscale
+https://www.nscale.com/blog/nscale-benchmarks-amd-mi300x-gpus-with-gemm-tuning-improves-throughput-and-latency-by-up-to-7-2x
+https://www.reddit.com/r/AMD_Stock/comments/1dgirzl/benchmarking_brilliance_single_amd_mi300x_vllm/
+Mixtral 8x7B
+
+runpod
+https://blog.runpod.io/amd-mi300x-vs-nvidia-h100-sxm-performance-comparison-on-mixtral-8x7b-inference/
+
+
+https://community.amd.com/t5/instinct-accelerators/engineering-insights-unveiling-mlperf-results-on-amd-instinct/ba-p/705623
+In the offline scenario, we used a max_num_seqs parameter of 2048 to maximize throughput, while 768 was set for the server scenario to meet latency targets—both significantly higher than the default 256 value used in vLLM.
+The vLLM’s support for paged attention enables efficient KV cache management, avoiding memory fragmentation issues because of large memory AMD Instinct MI300X accelerators.
+AMD Instinct MI300X accelerator hardware supports the FP8 numerical format, and we extended this capability across the entire inference software stack. Using Quark, we quantized LLaMA2-70B model weights to FP8, retaining 99.9% accuracy as required by MLPerf. We also added FP8 support to vLLM, upgraded the hipBLASLt library, and implemented FP8 KV cache, significantly boosting performance.
+
+GEMM tuning
+https://www.nscale.com/blog/nscale-benchmarks-amd-mi300x-gpus-with-gemm-tuning-improves-throughput-and-latency-by-up-to-7-2x
+
+BentoML
+https://bentoml.com/blog/benchmarking-llm-inference-backends
+
+
 
 
 Big Models
 WizardLM 8x22b
 nemotron 340b
 DeepSeek 2.5
+
+
+405B
+- quants
+
+
+* batchsize
+* hipblaslt
+* FP8
+* Kvcache
+* Quants
+
 
 Docker:
 
