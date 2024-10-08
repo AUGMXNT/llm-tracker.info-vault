@@ -128,6 +128,9 @@ home/hotaisle/xformers/xformers/csrc/attention/hip_fmha/attention_backward_gener
 
 
 ### Executors 
+https://www.nonbios.ai/post/deploying-large-405b-models-in-full-precision-on-runpod
+- didn't work.
+
 --distributed-executor-backend ray
 ```
 (RayWorkerWrapper pid=769965) INFO 10-07 15:58:23 selector.py:121] Using ROCmFlashAttention backend.
