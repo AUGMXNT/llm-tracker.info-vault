@@ -37,10 +37,76 @@ Just for fun:
 - PassMark seems to be a bit more accurate https://www.passmark.com/baselines/V11/display.php?id=507520112395
 	- CPU btw is 2 x [Xeon Platinum 8470](https://www.intel.com/content/www/us/en/products/sku/231728/intel-xeon-platinum-8470-processor-105m-cache-2-00-ghz/specifications.html), which is 2 x 52C 104T w/ 2.0GHz base and 3.8GHz boost clock, 105MB of cache per chip, running DDR5-4800
 	- The MT score puts it in the ballpark of a 9554P (64C 128T) 
-
-
 # Inference
 Let's start with inference.
+## llama.cpp
+This was done mostly for fun, I didn't expect very high numbers and I wasn't proven wrong.
+
+First, let's give 8 GPUs a try. Prompt pre-processing is slower than a single 7900 XT, and text generation barely beats a single 4090.
+
+Note: a single MI300X has a theoretical 1307.4 FP16 TFLOPS and 5.3 TB/s of MBW.
+
+```
+$ ./llama-bench -m /mnt/nvme0n1p1/llama-2-7b.Q4_0.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 8 ROCm devices:
+  Device 0: AMD Instinct MI300X, compute capability 9.4, VMM: no
+  Device 1: AMD Instinct MI300X, compute capability 9.4, VMM: no
+  Device 2: AMD Instinct MI300X, compute capability 9.4, VMM: no
+  Device 3: AMD Instinct MI300X, compute capability 9.4, VMM: no
+  Device 4: AMD Instinct MI300X, compute capability 9.4, VMM: no
+  Device 5: AMD Instinct MI300X, compute capability 9.4, VMM: no
+  Device 6: AMD Instinct MI300X, compute capability 9.4, VMM: no
+  Device 7: AMD Instinct MI300X, compute capability 9.4, VMM: no
+| model                          |       size |     params | backend    | ngl |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 |         pp512 |       1333.08 ± 4.99 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 |         tg128 |        174.99 ± 2.20 |
+
+build: d5cb8684 (3891)
+```
+
+OK, now lets give a single card a try. A hair faster. So, zero scaling from multiple cards:
+```
+HIP_VISIBLE_DEVICES=0 time ./llama-bench -m /mnt/nvme0n1p1/llama-2-7b.Q4_0.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Instinct MI300X, compute capability 9.4, VMM: no
+| model                          |       size |     params | backend    | ngl |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 |         pp512 |      1334.37 ± 12.73 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 |         tg128 |        183.18 ± 0.77 |
+
+build: d5cb8684 (3891)
+8.51user 1.52system 0:08.57elapsed 117%CPU (0avgtext+0avgdata 5281008maxresident)k
+0inputs+12256outputs (1major+496848minor)pagefaults 0swaps
+```
+
+And finally, for lolz let's enable llama.cpp's Flash Attention implementation. Like for RDNA3, this causes a slowdown, although a bit smaller, percentage-wise:
+```
+$ HIP_VISIBLE_DEVICES=0 time ./llama-bench -m /mnt/nvme0n1p1/llama-2-7b.Q4_0.gguf -fa 1
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Instinct MI300X, compute capability 9.4, VMM: no
+| model                          |       size |     params | backend    | ngl | fa |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | ------------: | -------------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 |  1 |         pp512 |       1272.03 ± 7.97 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | ROCm       |  99 |  1 |         tg128 |        157.84 ± 0.35 |
+
+build: d5cb8684 (3891)
+9.13user 1.43system 0:09.23elapsed 114%CPU (0avgtext+0avgdata 5283472maxresident)k
+0inputs+12256outputs (1major+496366minor)pagefaults 0swaps
+```
+
+Note, there was an unmerged CDNA optimization that increased perfomance by almost 10X, but it wasn't merged due to lack of maintainer. I tried wedging the changes in, but it didn't work:
+- https://github.com/ggerganov/llama.cpp/pull/8082
+- https://github.com/ggerganov/llama.cpp/pull/8082/files
+In the merge, this unmerged FA fix is mentioned which is another 2X performance boost apparently. These files have changed even more, so after the previous unsuccessful edits, I didn't bother to apply this, but maybe I'll give it a try at some point with an AI coding tool:
+- https://github.com/ggerganov/llama.cpp/pull/7011
+	- This is where the discussion on lack of an AMD maintainer for `llama.cpp` - while `llama.cpp` is unlikely to be used with CDNA atm, it's probably the most used inference engine on desktop CPUs and GPUs in the world...
 ## vLLM 
 We are testing around 2024-10-07 and our source build is `v0.6.3.dev114+g4f95ffee`.
 
@@ -650,3 +716,83 @@ shaberi test
 testing
 
 voicechat
+
+## Validate dstack benchmarks
+https://dstack.ai/blog/amd-mi300x-inference-benchmark/#tokensec-per-batch-size
+https://github.com/dstackai/benchmarks/tree/main/amd/inference
+
+TGI 2X vLLM (especially after 0.6? Doesn't seem right...)
+
+My initial validation run seems vLLM and TGI are actually pretty close?
+TPS in same ballpark for bs=64 and bs=128
+
+Neat, glad to see the repo since I'm doing independent testing on the same system. So, I've been focused on vLLM exclusively for the inference (actually been trying to get replicable training numbers first).  Anyway, interestingly, I've gotten some slightly different results from my testing running `vllm 0.6.3.dev114+g4f95ffee` - a day or two old version from source:
+
+```
+# run server
+TORCH_BLAS_PREFER_HIPBLASLT=0 ROCR_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 vllm serve meta-llama/Llama-3.1-405B-Instruct  --tensor-parallel-size=8 --disable-log-requests
+
+# bs=64
+python benchmark_serving.py --backend vllm --model meta-llama/Llama-3.1-405B-Instruct  --dataset-name sonnet  --num-prompt=64 --dataset-path="sonnet.txt"
+WARNING 10-09 20:38:39 rocm.py:13] `fork` method is not supported by ROCm. VLLM_WORKER_MULTIPROC_METHOD is overridden to `spawn` instead.
+Namespace(backend='vllm', base_url=None, host='localhost', port=8000, endpoint='/v1/completions', dataset=None, dataset_name='sonnet', dataset_path='sonnet.txt', model='meta-llama/Llama-3.1-405B-Instruct', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=64, logprobs=None, request_rate=inf, seed=0, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None)
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+
+============ Serving Benchmark Result ============
+Successful requests:                     64        
+Benchmark duration (s):                  35.65     
+Total input tokens:                      32541     
+Total generated tokens:                  9600      
+Request throughput (req/s):              1.80      
+Output token throughput (tok/s):         269.32    
+Total Token throughput (tok/s):          1182.23   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          11498.39  
+Median TTFT (ms):                        11266.60  
+P99 TTFT (ms):                           22434.31  
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          144.45    
+Median TPOT (ms):                        146.29    
+P99 TPOT (ms):                           196.72    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           144.44    
+Median ITL (ms):                         90.40     
+P99 ITL (ms):                            345.39    
+==================================================
+
+# bs=128
+$ python benchmark_serving.py --backend vllm --model meta-llama/Llama-3.1-405B-Instruct  --dataset-name sonnet  --num-prompt=128 --dataset-path="sonnet.txt"
+WARNING 10-09 20:51:59 rocm.py:13] `fork` method is not supported by ROCm. VLLM_WORKER_MULTIPROC_METHOD is overridden to `spawn` instead.
+Namespace(backend='vllm', base_url=None, host='localhost', port=8000, endpoint='/v1/completions', dataset=None, dataset_name='sonnet', dataset_path='sonnet.txt', model='meta-llama/Llama-3.1-405B-Instruct', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=128, logprobs=None, request_rate=inf, seed=0, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None)
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+
+============ Serving Benchmark Result ============
+Successful requests:                     128       
+Benchmark duration (s):                  62.97     
+Total input tokens:                      65027     
+Total generated tokens:                  19200     
+Request throughput (req/s):              2.03      
+Output token throughput (tok/s):         304.91    
+Total Token throughput (tok/s):          1337.58   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          23621.80  
+Median TTFT (ms):                        22912.31  
+P99 TTFT (ms):                           48069.33  
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          219.19    
+Median TPOT (ms):                        225.35    
+P99 TPOT (ms):                           320.04    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           219.18    
+Median ITL (ms):                         316.10    
+P99 ITL (ms):                            348.60    
+==================================================
+```
+
+At both batch sizes, throughput looks a lot closer to what you'd expect (about on part w/ TGI).
+
+Happy to discuss on testing if you want to connect. I'm still trying to get hipblaslt working w/ the latest PyTorch nightlies.
