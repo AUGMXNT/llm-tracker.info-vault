@@ -198,6 +198,9 @@ home/hotaisle/xformers/xformers/csrc/attention/hip_fmha/attention_backward_gener
 ```
 
 ### hipblastlt
+2024-10-10: Bug filed w/ PyTorch https://github.com/pytorch/pytorch/issues/137695
+(maybe file a bug w/ vLLM too?)
+
 Works with 1
 ```
 $ python benchmarks/benchmark_throughput.py --backend vllm --input-len 512 --output-len 128 --model meta-llama/Llama-2-7b-chat-hf
