@@ -234,6 +234,7 @@ Throughput: 24.99 requests/s, 15995.82 tokens/s
 Hmm, no hipblaslt is faster. confirmed w/ tp 2, 4 - tp 8 causes errors (2 threads can't load)?
 need to file bug?
 
+rocblaslt error: Could not load /home/hotaisle/miniforge3/envs/vllm/lib/python3.11/site-packages/torch/lib/hipblaslt/library/TensileLibrary_lazy_gfx942.dat
 
 ### Executors 
 https://www.nonbios.ai/post/deploying-large-405b-models-in-full-precision-on-runpod
