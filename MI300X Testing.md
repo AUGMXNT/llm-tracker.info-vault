@@ -691,7 +691,12 @@ pip install triton
 # Nope
 pip install "sglang[all]"
 
+# compile
+
+# Keep reinstalling updated torch
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.2 -U
+
+# install vllm from source
 ```
 - https://github.com/sgl-project/sglang/pull/1420
 - https://github.com/sgl-project/sglang/pull/1453
@@ -709,8 +714,59 @@ curl http://localhost:30000/generate   -H "Content-Type: application/json"   -d 
       "temperature": 0
     }
   }'
+```
+
+Note: `--dp` is not supported. `--tp` gets weird memory errors.
 
 ```
+(sglang) 130 hotaisle@ENC1-CLS01-SVR09:~/vllm$ python -m sglang.bench_latency --model-path meta-llama/Meta-Llama-3-8B-Instruct --batch 32 --input-len 256 --output-len 32
+WARNING 10-10 22:30:30 rocm.py:13] `fork` method is not supported by ROCm. VLLM_WORKER_MULTIPROC_METHOD is overridden to `spawn` instead.
+[22:30:32 TP0] Init nccl begin.
+[22:30:32 TP0] Load weight begin. avail mem=191.33 GB
+[22:30:44 TP0] FlashInfer is not available on Non-NV platforms. Fallback to other kernel libraries.
+[22:30:44 TP0] FlashInfer is not available on Non-NV platforms. Fallback to other kernel libraries.
+[22:30:44 TP0] Skipping import of cpp extensions
+[22:30:44 TP0] lm_eval is not installed, GPTQ may not be usable
+INFO 10-10 22:30:45 weight_utils.py:242] Using model weights format ['*.safetensors']
+Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:00<00:01,  2.03it/s]
+Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:02<00:02,  1.47s/it]
+Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:05<00:01,  1.90s/it]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:07<00:00,  2.06s/it]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:07<00:00,  1.84s/it]
+
+[22:30:52 TP0] Load weight end. type=LlamaForCausalLM, dtype=torch.bfloat16, avail mem=176.33 GB
+[22:30:53 TP0] Memory pool end. avail mem=22.83 GB
+[22:31:06 TP0] Capture cuda graph begin. This can take up to several minutes.
+max_total_num_tokens=1256440
+Warmup ...
+Prefill. latency: 0.37333 s, throughput:  21943.23 token/s
+Decode.  latency: 0.01433 s, throughput:   2232.98 token/s
+Decode.  latency: 0.00986 s, throughput:   3244.72 token/s
+Decode.  latency: 0.00986 s, throughput:   3245.97 token/s
+Decode.  latency: 0.00975 s, throughput:   3283.05 token/s
+Decode.  latency: 0.00973 s, throughput:   3287.72 token/s
+Decode.  median latency: 0.00976 s, median throughput:   3280.16 token/s
+Total. latency:  0.446 s, throughput:  18928.16 token/s
+Benchmark ...
+Prefill. latency: 0.25074 s, throughput:  32671.13 token/s
+Decode.  latency: 0.01015 s, throughput:   3151.69 token/s
+Decode.  latency: 0.00984 s, throughput:   3252.58 token/s
+Decode.  latency: 0.00978 s, throughput:   3272.09 token/s
+Decode.  latency: 0.00979 s, throughput:   3268.50 token/s
+Decode.  latency: 0.00975 s, throughput:   3283.21 token/s
+Decode.  median latency: 0.00973 s, median throughput:   3289.81 token/s
+Total. latency:  0.553 s, throughput:  16665.96 token/s
+/home/hotaisle/miniforge3/envs/sglang/lib/python3.11/multiprocessing/resource_tracker.py:123: UserWarning: resource_tracker: process died unexpectedly, relaunching.  Some resources might leak.
+  warnings.warn('resource_tracker: process died unexpectedly, '
+Traceback (most recent call last):
+  File "/home/hotaisle/miniforge3/envs/sglang/lib/python3.11/multiprocessing/resource_tracker.py", line 239, in main
+    cache[rtype].remove(name)
+KeyError: '/mp-dv7az532'
+[rank0]:[W1010 22:31:13.301784377 ProcessGroupNCCL.cpp:1304] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+
+```
+
 # Training
 
 ## torchtune
