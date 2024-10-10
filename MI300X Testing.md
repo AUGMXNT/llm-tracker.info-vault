@@ -141,9 +141,14 @@ pip install -r requirements-rocm.txt
 # Undocumented dependencies
 pip install setuptools_scm
 
+mamba install cmake
+
 # Build for MI300
 export PYTORCH_ROCM_ARCH="gfx942"
 python setup.py develop
+
+vllm --help
+python -c "import vllm; print(vllm.__version__)"
 ```
 - https://pytorch.org/get-started/locally/
 - https://docs.vllm.ai/en/v0.5.5/getting_started/amd-installation.html
