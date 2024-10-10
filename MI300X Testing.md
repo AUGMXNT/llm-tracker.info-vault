@@ -685,6 +685,12 @@ https://github.com/flashinfer-ai/flashinfer/pull/491
 ### SGLang
 ```
 mamba create -n sglang python=3.11
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.2
+pip install triton
+
+pip install "sglang[all]"
+
+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.2 -U
 ```
 
 # Training
