@@ -196,6 +196,43 @@ home/hotaisle/xformers/xformers/csrc/attention/hip_fmha/attention_backward_gener
 1 error generated when compiling for gfx942.
 ```
 
+### hipblastlt
+Works with 1
+```
+$ python benchmarks/benchmark_throughput.py --backend vllm --input-len 512 --output-len 128 --model meta-llama/Llama-2-7b-chat-hf
+
+INFO 10-10 05:34:53 gpu_executor.py:122] # GPU blocks: 20186, # CPU blocks: 512
+INFO 10-10 05:34:53 gpu_executor.py:126] Maximum concurrency for 4096 tokens per request: 78.85x
+INFO 10-10 05:34:54 model_runner.py:1385] Capturing the model for CUDA graphs. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+INFO 10-10 05:34:54 model_runner.py:1389] CUDA graphs can take additional 1~3 GiB memory per GPU. If you are running out of memory, consider decreasing `gpu_memory_utilization` or enforcing eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+INFO 10-10 05:35:01 model_runner.py:1513] Graph capturing finished in 7 secs.
+Processed prompts: 100%|█████████████████████████████████████████| 1000/1000 [00:42<00:00, 23.32it/s, est. speed input: 11938.87 toks/s, output: 2984.72 toks/s]
+Throughput: 23.15 requests/s, 14813.60 tokens/s
+
+INFO 10-10 05:40:26 model_runner.py:1062] Loading model weights took 12.5523 GB
+INFO 10-10 05:40:43 gpu_executor.py:122] # GPU blocks: 20186, # CPU blocks: 512
+INFO 10-10 05:40:43 gpu_executor.py:126] Maximum concurrency for 4096 tokens per request: 78.85x
+INFO 10-10 05:40:43 model_runner.py:1385] Capturing the model for CUDA graphs. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+INFO 10-10 05:40:43 model_runner.py:1389] CUDA graphs can take additional 1~3 GiB memory per GPU. If you are running out of memory, consider decreasing `gpu_memory_utilization` or enforcing eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+INFO 10-10 05:40:50 model_runner.py:1513] Graph capturing finished in 7 secs.
+Processed prompts: 100%|█████████████████████████████████████████| 1000/1000 [00:42<00:00, 23.59it/s, est. speed input: 12080.41 toks/s, output: 3020.10 toks/s]
+Throughput: 23.42 requests/s, 14987.04 tokens/s
+```
+
+w/o
+```
+INFO 10-10 05:42:39 model_runner.py:1062] Loading model weights took 12.5523 GB
+INFO 10-10 05:42:43 gpu_executor.py:122] # GPU blocks: 20406, # CPU blocks: 512
+INFO 10-10 05:42:43 gpu_executor.py:126] Maximum concurrency for 4096 tokens per request: 79.71x
+INFO 10-10 05:42:44 model_runner.py:1385] Capturing the model for CUDA graphs. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+INFO 10-10 05:42:44 model_runner.py:1389] CUDA graphs can take additional 1~3 GiB memory per GPU. If you are running out of memory, consider decreasing `gpu_memory_utilization` or enforcing eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+INFO 10-10 05:42:51 model_runner.py:1513] Graph capturing finished in 7 secs.
+Processed prompts: 100%|█████████████████████████████████████████| 1000/1000 [00:39<00:00, 25.20it/s, est. speed input: 12903.22 toks/s, output: 3225.80 toks/s]
+Throughput: 24.99 requests/s, 15995.82 tokens/s
+```
+
+Hmm, no hipblaslt is faster
+
 
 ### Executors 
 https://www.nonbios.ai/post/deploying-large-405b-models-in-full-precision-on-runpod
