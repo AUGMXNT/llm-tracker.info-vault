@@ -682,6 +682,10 @@ lf-precision SWA support, please use CK flash attention by setting `VLLM_USE_TRI
 Flashinfer
 https://github.com/flashinfer-ai/flashinfer/pull/491
 
+### SGLang
+```
+mamba create -n sglang python=3.11
+```
 
 # Training
 
