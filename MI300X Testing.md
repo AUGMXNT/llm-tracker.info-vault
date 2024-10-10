@@ -879,3 +879,5 @@ P99 ITL (ms):                            348.60
 At both batch sizes, throughput looks a lot closer to what you'd expect (about on part w/ TGI).
 
 Happy to discuss on testing if you want to connect. I'm still trying to get hipblaslt working w/ the latest PyTorch nightlies.
+
+Accelerate
