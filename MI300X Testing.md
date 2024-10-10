@@ -147,7 +147,6 @@ mamba install cmake
 export PYTORCH_ROCM_ARCH="gfx942"
 python setup.py develop
 
-vllm --help
 python -c "import vllm; print(vllm.__version__)"
 ```
 - https://pytorch.org/get-started/locally/
