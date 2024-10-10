@@ -322,6 +322,7 @@ Throughput: 23.10 requests/s, 14787.00 tokens/s
 - default = float16
 - ray hangs, but mp is slower so use just use the default (none)
 - hipblaslt doesn't work even when symlinked to the proper one so... not tested
+- https://docs.vllm.ai/en/latest/serving/distributed_serving.html is beta, not supported by benchmark
 
 
 
@@ -807,6 +808,7 @@ https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_o
 		- 1024/1024
 		- 8192/1024
 		- 8192/8192
+	- pp vs tp
 
 Reproducible Script, Multirun Average
 Version
