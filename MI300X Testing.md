@@ -200,8 +200,8 @@ home/hotaisle/xformers/xformers/csrc/attention/hip_fmha/attention_backward_gener
 
 https://chatgpt.com/c/670805a7-bb3c-8012-b84a-ef9926ef9546
 ```
+# We need this otherwise compiles will use distutil and be single threaded
 mamba install ninja
-pip install 
 ```
 
 ### hipblastlt
