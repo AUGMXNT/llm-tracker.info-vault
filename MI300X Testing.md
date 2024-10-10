@@ -197,6 +197,13 @@ home/hotaisle/xformers/xformers/csrc/attention/hip_fmha/attention_backward_gener
 1 error generated when compiling for gfx942.
 ```
 
+
+https://chatgpt.com/c/670805a7-bb3c-8012-b84a-ef9926ef9546
+```
+mamba install ninja
+pip install 
+```
+
 ### hipblastlt
 2024-10-10: Bug filed w/ PyTorch https://github.com/pytorch/pytorch/issues/137695
 (maybe file a bug w/ vLLM too?)
