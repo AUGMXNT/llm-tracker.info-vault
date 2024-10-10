@@ -695,6 +695,28 @@ https://rocm.blogs.amd.com/artificial-intelligence/megatron-deepspeed-pretrain/R
 https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
 # TODO
 
+## Benchmark Script
+- Load Models
+- Set # of Runs
+- Export versions, info via collect script
+- Run variants
+	- label: Name
+	- env: HIPBLAST=0
+	- opsiont:
+- Actual Variants
+	- HIPBLAST
+	- FA2
+	- Q FP8
+	- kvcache FP8
+	- OMP
+	- i/o
+		- 128/128
+		- 512/512
+		- 1024/128
+		- 1024/1024
+		- 8192/1024
+		- 8192/8192
+
 Reproducible Script, Multirun Average
 Version
 Output logs
