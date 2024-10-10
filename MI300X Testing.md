@@ -141,6 +141,7 @@ pip install -r requirements-rocm.txt
 # Undocumented dependencies
 pip install setuptools_scm
 
+# Newer version of cmake needed
 mamba install cmake
 
 # Build for MI300
