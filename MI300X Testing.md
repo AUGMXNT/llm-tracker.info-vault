@@ -881,3 +881,18 @@ At both batch sizes, throughput looks a lot closer to what you'd expect (about o
 Happy to discuss on testing if you want to connect. I'm still trying to get hipblaslt working w/ the latest PyTorch nightlies.
 
 Accelerate
+
+
+https://github.com/vllm-project/vllm/discussions/9251#discussioncomment-10906873
+
+```
+(vllm) hotaisle@ENC1-CLS01-SVR09:~/vllm$ TORCH_BLAS_PREFER_HIPBLASLT=0 python benchmarks/benchmark_throughput.py --backend vllm --input-len 512 --output-len 128 --model meta-llama/Llama-2-7b-chat-hf -tp 4 --quantization fp8
+
+-tp4 Q FP8
+Processed prompts: 100%|█████████████████████████████████████████| 1000/1000 [00:32<00:00, 30.53it/s, est. speed input: 15631.80 toks/s, output: 3907.95 toks/s]
+Throughput: 30.22 requests/s, 19338.72 tokens/s
+
+-tp4
+Processed prompts: 100%|█████████████████████████████████████████| 1000/1000 [00:24<00:00, 41.12it/s, est. speed input: 21054.43 toks/s, output: 5263.61 toks/s]
+Throughput: 40.58 requests/s, 25971.88 tokens/s
+```
