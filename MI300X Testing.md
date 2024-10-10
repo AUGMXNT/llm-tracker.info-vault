@@ -688,11 +688,29 @@ mamba create -n sglang python=3.11
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.2
 pip install triton
 
+# Nope
 pip install "sglang[all]"
 
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.2 -U
 ```
+- https://github.com/sgl-project/sglang/pull/1420
+- https://github.com/sgl-project/sglang/pull/1453
 
+```
+# Server
+python -m sglang.launch_server --model-path meta-llama/Meta-Llama-3-8B-Instruct --port 30000 --attention-backend triton --sampling-backend pytorch --tp-size 8
+--enable-torch-compile=False
+
+# Client
+curl http://localhost:30000/generate   -H "Content-Type: application/json"   -d '{
+    "text": "Once upon a time,",
+    "sampling_params": {
+      "max_new_tokens": 200,
+      "temperature": 0
+    }
+  }'
+
+```
 # Training
 
 ## torchtune
