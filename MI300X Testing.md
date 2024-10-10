@@ -451,6 +451,18 @@ ln -s /opt/rocm-6.2.2/lib/rocblas
 ```
 Hmm, still complains.  Whevs.
 
+### FP8 kvcache
+This will 
+```
+
+Processed prompts: 100%|█████████████████████████████████████████| 1000/1000 [00:19<00:00, 52.39it/s, est. speed input: 26824.25 toks/s, output: 6706.06 toks/s]
+Throughput: 51.52 requests/s, 32973.71 tokens/s
+
+# FP16
+Processed prompts: 100%|█████████████████████████████████████████| 1000/1000 [00:19<00:00, 51.94it/s, est. speed input: 26593.27 toks/s, output: 6648.31 toks/s]
+Throughput: 51.07 requests/s, 32685.36 tokens/s
+```
+
 ### Big Model Testing
 #### Llama3 405B
 With 1.5TB of VRAM, a full, unquantized (FP16) Llama 3 405B fits on single MI300X node:
