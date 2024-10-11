@@ -205,6 +205,8 @@ mamba install ninja
 
 #### Docker
 ```
+sudo apt install docker-buildx
+
 ```
 
 ### hipblastlt
