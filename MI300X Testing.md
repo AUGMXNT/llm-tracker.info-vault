@@ -787,7 +787,7 @@ https://rocm.blogs.amd.com/artificial-intelligence/megatron-deepspeed-pretrain/R
 https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
 
 ## axolotl
-Doesn't work:
+Docker doesn't work:
 ```
 $ sudo docker run --gpus '"all"' --rm -it winglian/axolotl:main-latest
 Unable to find image 'winglian/axolotl:main-latest' locally
