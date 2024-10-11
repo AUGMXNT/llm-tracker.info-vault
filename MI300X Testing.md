@@ -785,6 +785,41 @@ https://rocm.blogs.amd.com/artificial-intelligence/starcoder-fine-tune/README.ht
 https://rocm.blogs.amd.com/artificial-intelligence/megatron-deepspeed-pretrain/README.html
 
 https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
+
+## axolotl
+Doesn't work:
+```
+$ sudo docker run --gpus '"all"' --rm -it winglian/axolotl:main-latest
+Unable to find image 'winglian/axolotl:main-latest' locally
+main-latest: Pulling from winglian/axolotl
+aece8493d397: Pull complete 
+dd4939a04761: Pull complete 
+b0d7cc89b769: Pull complete 
+1532d9024b9c: Pull complete 
+04fc8a31fa53: Pull complete 
+a14a8a8a6ebc: Pull complete 
+7d61afc7a3ac: Pull complete 
+8bd2762ffdd9: Pull complete 
+2a5ee6fadd42: Pull complete 
+22ba0fb08ae2: Pull complete 
+4d37a6bba88f: Pull complete 
+4bc954eb910a: Pull complete 
+bd3d55680e04: Pull complete 
+f797fda66265: Pull complete 
+068d7f887619: Pull complete 
+49a71fa9aaec: Pull complete 
+a35b1ad7a4db: Pull complete 
+4f4fb700ef54: Pull complete 
+0b06795f16c0: Pull complete 
+134f72e94be3: Pull complete 
+d78aa53a1a5a: Pull complete 
+345eab5774ef: Pull complete 
+b8accc3f9ccc: Pull complete 
+bed157eeb6d4: Pull complete 
+Digest: sha256:60a219a5de7893d7f868e33bd59fade0ee1eb0c1d4cc4a78e88db1b810768339
+Status: Downloaded newer image for winglian/axolotl:main-latest
+docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]].
+```
 # TODO
 
 ## Benchmark Script
@@ -989,3 +1024,10 @@ Throughput: 30.22 requests/s, 19338.72 tokens/s
 Processed prompts: 100%|█████████████████████████████████████████| 1000/1000 [00:24<00:00, 41.12it/s, est. speed input: 21054.43 toks/s, output: 5263.61 toks/s]
 Throughput: 40.58 requests/s, 25971.88 tokens/s
 ```
+
+
+# Publishing
+- Move testing and docs into repo
+- Quarto - can all scripting happen in Jupyter for reproducibility?
+- Script to create recently updated from logs
+- CSS for FAIL vs WORKs
