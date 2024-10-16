@@ -89,15 +89,17 @@ Arch Linux setup is fairly straightforward (can be easier than the official inst
 
 Install ROCm:
 ```shell
-# all the amd gpu compute stuff
-yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
+# More up to date - 6.2.1 (when 6.2.2 is out)
+paru -S opencl-amd-dev
+# These are stuck at 6.0.2-1
+# yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
 
 # third party monitoring
-yay -S amdgpu_top radeontop
+paru -S amdgpu_top radeontop
 ```
 Install conda (mamba)
 ```shell
-yay -S mambaforge
+paru -S mambaforge
 /opt/mambaforge/bin/mamba init fish
 ```
 Create Environment
