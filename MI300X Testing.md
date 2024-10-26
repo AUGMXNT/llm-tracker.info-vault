@@ -1,12 +1,12 @@
 For more general info on running AI/ML on AMD GPUS: https://llm-tracker.info/howto/AMD-GPUs
 
-For all new testing, see:
-https://github.com/AUGMXNT/MI300-testing
-
-When finished testing, I will publish the ipynb's via Quarto
+Inference testing is largely done and there is a full legible writeup here:
+- https://shisa.ai/blog/posts/tuning-vllm-mi300x/
+The raw output (mostly in ipynb) is here:
+- https://github.com/AUGMXNT/MI300-testing
 
 ---
-
+**THESE ARE WORKING NOTES AND MAY NOT BE EASY TO READ**
 
 [Hot Aisle](https://hotaisle.xyz/) reached out on if I was still interested in benchmarking/testing out one of their new MI300X systems. Here's some other MI300X benchmarks and analysis: https://hotaisle.xyz/benchmarks-and-analysis/
 
