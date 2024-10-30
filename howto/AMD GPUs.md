@@ -854,7 +854,7 @@ mkdir build
 cd build
 
 # Make sure the HIP stuff gets picked up
-cmake.exe .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DLLAMA_HIPBLAS=on  -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DAMDGPU_TARGETS="gfx1100" -DCMAKE_PREFIX_PATH="C:\Program Files\AMD\ROCm\5.5"
+cmake.exe .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DGGML_HIPBLAS=on  -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DAMDGPU_TARGETS="gfx1100" -DCMAKE_PREFIX_PATH="C:\Program Files\AMD\ROCm\5.5"
 
 # This should build binaries in a bin/ folder
 cmake.exe --build .
