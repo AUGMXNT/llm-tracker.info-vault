@@ -15,8 +15,38 @@ https://community.amd.com/t5/ai/accelerating-llama-cpp-performance-in-consumer-l
 
 https://github.com/intel/intel-npu-acceleration-library
 
+-v 
+--progress
+## CPU
+```
+❯ ./llama-bench -m ~/ai/models/gguf/llama-2-7b.Q4_0.gguf -t 4                                                                      (base) 
+| model                          |       size |     params | backend    | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | ------------: | -------------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |       4 |         pp512 |         25.05 ± 0.04 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | CPU        |       4 |         tg128 |         11.59 ± 0.40 |
+
+build: ba6f62eb (4008)
 
 
+
+
+❯ ./llama-bench -t 4 -m ~/ai/models/gguf/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf                                                      (base) 
+| model                          |       size |     params | backend    | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | ------------: | -------------------: |
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.25 B | CPU        |       4 |         pp512 |         21.90 ± 0.02 |
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.25 B | CPU        |       4 |         tg128 |         12.36 ± 0.43 |
+
+build: ba6f62eb (4008)
+
+❯ ./llama-bench -t 8 -m ~/ai/models/gguf/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf                                                      (base) 
+| model                          |       size |     params | backend    | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | ------------: | -------------------: |
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.25 B | CPU        |       8 |         pp512 |         30.35 ± 0.68 |
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.25 B | CPU        |       8 |         tg128 |         11.76 ± 0.26 |
+
+build: ba6f62eb (4008)
+
+```
 ## Vulkan
 ```
 ❯ ./llama-bench -m ~/ai/models/gguf/llama-2-7b.Q4_0.gguf                                                                           (base) 
