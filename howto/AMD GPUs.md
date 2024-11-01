@@ -58,6 +58,8 @@ The AMD NPU, starting with the 10 TOPS version in the 7X40 (Phoenix Point), 16 T
 
 I won't be spending too much time on this since my 7940HS that I have is 10 TOPS, which is pretty useless, but here are some links and resources:
 - [LLMs on RyzenAI with Pytorch](https://github.com/amd/RyzenAI-SW/blob/main/example/transformers/models/llm/docs/README.md)
+- [RyzenAI-SW llama.cpp fork](https://github.com/amd/RyzenAI-SW/tree/main/example/transformers/ext/llama.cpp)
+	- For upstream, see: https://github.com/ggerganov/llama.cpp/issues/1499
 - [Optimum-AMD](https://github.com/huggingface/optimum-amd) - a HF package for getting NPU acceleration w/ transformers (and ONNX runtime for ROCm)
 - Two Japanese Linux setup blogs (somehow Japanese devs must have more patience than English-speaking ones?)
 	- https://vengineer.hatenablog.com/entry/2024/06/08/080000

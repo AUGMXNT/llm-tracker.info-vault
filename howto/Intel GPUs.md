@@ -2,11 +2,18 @@ I have an [Intel Core Ultra 7 258V](https://www.intel.com/content/www/us/en/prod
 
 The 258V has Vector Engines with 2048-bit XMX units that Intel specs at 64 INT8 TOPS. Each XMX can do INT8 4096 OPS/clock or FP16 2048 OPS/clock, so that would be a max theoretical 32 FP16 TOPS.
 
+https://www.indiekings.com/2024/08/intel-arc-140v-first-taste-of-xe2.html
+
 https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF
 https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf?download=true
 
 
+
 https://github.com/ggerganov/llama.cpp/discussions/4167
+
+https://community.amd.com/t5/ai/accelerating-llama-cpp-performance-in-consumer-llm-applications/ba-p/720311
+
+https://github.com/intel/intel-npu-acceleration-library
 
 # Comparisons
 ## 7900 XTX
