@@ -14,7 +14,7 @@ It turns out there are quite a few ways to run llama.cpp - I skipped the NPU sin
 
 | Backend                                                                                                          | pp512 t/s | tg128 t/s | t/TFLOP | MBW % |
 | ---------------------------------------------------------------------------------------------------------------- | --------: | --------: | ------: | ----: |
-| [CPU](https://github.com/ggerganov/llama.cpp/)                                                                   |     25.05 |     11.59 |    0.78 | 30.23 |
+| [CPU](https://github.com/ggerganov/llama.cpp/)                                                                   |     25.05 |     11.59 |   52.74 | 30.23 |
 | [Vulkan](https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#vulkan)                                |     44.65 |      5.54 |    1.40 | 14.45 |
 | [SYCL FP32](https://github.com/ggerganov/llama.cpp/blob/master/docs/backend/SYCL.md)                             |    180.77 |     14.39 |    5.65 | 37.53 |
 | [SYCL FP16](https://github.com/ggerganov/llama.cpp/blob/master/docs/backend/SYCL.md)                             |    526.38 |     13.51 |   16.45 | 35.23 |
@@ -22,11 +22,18 @@ It turns out there are quite a few ways to run llama.cpp - I skipped the NPU sin
 - pp is prompt processing (also known as prefill, or input) - this is the speed at which any system prompt, context, previous conversation turns, etc are passed in and is compute bound
 - tg is token generation (aka output) - this is the speed at which new tokens are generated and is generally memory bandwidth bound
 - I've included a "t/TFLOP" compute efficiency metric for each Backend and also a MBW % which just calculates the percentage of the tg vs the theoretical max tg (136.5 GB/s / 3.56GB model size)
-- For CPU `-t 4`, which uses all 4 of the (non-hyperthreaded) P-cores is the most efficient setting. This basically doesn't matter for the rest of the GPU methods
+- The CPU backend doesn't have native FP16. TFLOPS is calculated based on the maximum FP32 that AVX2 provides for the 4 P-Cores (486.4 GFLOPS). For those interested on llama.cpp's CPU optimizations, I recommend reading jart's writeup [LLaMA Now Goes Faster on CPUs](https://justine.lol/matmul/)
+- For CPU, I use `-t 4`, which uses all 4 of the (non-hyperthreaded) P-cores, which is the most efficient setting. This basically doesn't matter for the rest of the GPU methods.
 
+For SYCL and IPEX-LLM you will need to install the [Intel oneAPI Base Toolkit](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html). I used version 2025.0.0 for SYCL, but IPEX-LLM's llama.cpp requires 2024.2.1
 
+The IPEX-LLM results are much better than all the other Backends, but it's worth noting that it does not seem to work with k-quants ([related to this error?](https://github.com/intel-analytics/ipex-llm/issues/11080)). Still, at 35% faster pp and 80% faster tg than SYCL FP16, it's probably worth it.
 
-There are quite a few options (build 4008)
+## vs Apple M4
+I haven't seen any M4 inference numbers, yet, but this chart/discussion [Performance of llama.cpp on Apple Silicon M-series #4167](https://github.com/ggerganov/llama.cpp/discussions/4167) is a good reference. The M3 Pro (18 CU) has [12.78 FP16 TFLOPS](https://www.cpu-monkey.com/en/igpu-apple_m3_pro_18_core) and at 341.67 t/s pp, that gives a ~26.73 t/TFLOP for Metal performance. The new M4 Pro (20 CU) has an [expected 17.04 TFLOPS](https://www.cpu-monkey.com/en/igpu-apple_m4_pro_20_core) so at the same efficiency you'd expect ~455 t/s for pp. For MBW, we can again run similar back-calculations. The M3 Pro has 150 GB/s MBW and generates 30.74 t/s tg for a 73% MBW efficiency. at 273 GB/s of MBW, we'd expect the M4 Pro to have a ballpark tg of ~56 t/s.
+
+## vs AMD Ryzen AI
+
 
 
 
