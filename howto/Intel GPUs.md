@@ -1,1 +1,1 @@
-I have an Intel Core
+I have an [Intel Core Ultra 7 258V](https://www.intel.com/content/www/us/en/products/sku/240957/intel-core-ultra-7-processor-258v-12m-cache-up-to-4-80-ghz/specifications.html) laptop
