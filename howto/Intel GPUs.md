@@ -12,6 +12,18 @@ My system is running at PL 28W (BIOS: performance), with the performance governo
 
 It turns out there are quite a few ways to run llama.cpp - I skipped the NPU since it's a PITA to setup, but maybe I'll get bored sometime. Here's my results:
 
+| Backend                                                                                                          | pp512 t/s | tg128 t/s | t/TFLOP | MBW % |
+| ---------------------------------------------------------------------------------------------------------------- | --------: | --------: | ------: | ----: |
+| [CPU](https://github.com/ggerganov/llama.cpp/)                                                                   |     25.05 |     11.59 |    0.78 | 30.23 |
+| [Vulkan](https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#vulkan)                                |     44.65 |      5.54 |    1.40 | 14.45 |
+| [SYCL FP32](https://github.com/ggerganov/llama.cpp/blob/master/docs/backend/SYCL.md)                             |    180.77 |     14.39 |    5.65 | 37.53 |
+| [SYCL FP16](https://github.com/ggerganov/llama.cpp/blob/master/docs/backend/SYCL.md)                             |    526.38 |     13.51 |   16.45 | 35.23 |
+| [IPEX-LLM](https://github.com/intel-analytics/ipex-llm/blob/main/docs/mddocs/Quickstart/llama_cpp_quickstart.md) |    708.15 |     24.35 |   22.13 | 63.51 |
+- pp is prompt processing (also known as prefill, or input) - this is the speed at which any system prompt, context, previous conversation turns, etc are passed in and is compute bound
+- tg is token generation (aka output) - this is the speed at which new tokens are generated and is generally memory bandwidth bound
+- I've included a "t/TFLOP" compute efficiency metric for each Backend and also a MBW % which just calculates the percentage of the tg vs the theoretical max tg (136.5 GB/s / 3.56GB model size)
+- For CPU `-t 4`, which uses all 4 of the (non-hyperthreaded) P-cores is the most efficient setting. This basically doesn't matter for the rest of the GPU methods
+
 
 
 There are quite a few options (build 4008)
