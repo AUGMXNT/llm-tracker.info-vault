@@ -15,6 +15,280 @@ https://community.amd.com/t5/ai/accelerating-llama-cpp-performance-in-consumer-l
 
 https://github.com/intel/intel-npu-acceleration-library
 
+
+
+## Vulkan
+```
+❯ ./llama-bench -m ~/ai/models/gguf/llama-2-7b.Q4_0.gguf                                                                           (base) 
+ggml_vulkan: Found 1 Vulkan devices:
+Vulkan0: Intel(R) Graphics (LNL) (Intel open-source Mesa driver) | uma: 1 | fp16: 1 | warp size: 32
+| model                          |       size |     params | backend    | ngl |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | Vulkan     |  99 |         pp512 |         44.65 ± 0.27 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | Vulkan     |  99 |         tg128 |          5.54 ± 0.01 |
+
+build: ba6f62eb (4008)
+
+
+
+```
+
+
+## SYCL FP16
+```
+source ~/intel/oneapi/setvars.sh
+
+$ rm -rf build
+$ cmake -B build -DGGML_SYCL=ON -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DGGML_SYCL_F16=ON
+$ cmake --build build --config Release -j -v
+
+build/bin/llama-bench -m ~/ai/models/gguf/llama-2-7b.Q4_0.gguf -t 4
+
+$ build/bin/llama-bench -m ~/ai/models/gguf/llama-2-7b.Q4_0.gguf -t 4
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------------: | -------------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: yes
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|   20.4|     64|    1024|   32| 15064M|            1.6.31294|
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | SYCL       |  99 |       4 |         pp512 |        526.38 ± 1.74 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | SYCL       |  99 |       4 |         tg128 |         13.51 ± 0.06 |
+
+$ build/bin/llama-bench -m ~/ai/models/gguf/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf -t 4
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------------: | -------------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: yes
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|   20.4|     64|    1024|   32| 15064M|            1.6.31294|
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.25 B | SYCL       |  99 |       4 |         pp512 |        442.29 ± 1.83 |
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.25 B | SYCL       |  99 |       4 |         tg128 |         12.47 ± 0.21 |
+
+build: ba6f62eb (4008)
+
+$ build/bin/llama-bench -m ~/ai/models/gguf/Mistral-Nemo-Instruct-2407.Q4_K_M.gguf -t 4
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------------: | -------------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: yes
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|   20.4|     64|    1024|   32| 15064M|            1.6.31294|
+| llama 13B Q4_K - Medium        |   6.96 GiB |    12.25 B | SYCL       |  99 |       4 |         pp512 |        253.21 ± 0.75 |
+| llama 13B Q4_K - Medium        |   6.96 GiB |    12.25 B | SYCL       |  99 |       4 |         tg128 |          7.95 ± 0.02 |
+
+build: ba6f62eb (4008)
+```
+
+
+## SYCL FP32
+```
+rm -rf build
+cmake -B build -DGGML_SYCL=ON -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx
+cmake --build build --config Release -j -v
+
+$ build/bin/llama-bench -m ~/ai/models/gguf/llama-2-7b.Q4_0.gguf -t 4
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------------: | -------------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: no
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|   20.4|     64|    1024|   32| 15064M|            1.6.31294|
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | SYCL       |  99 |       4 |         pp512 |        180.77 ± 0.26 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | SYCL       |  99 |       4 |         tg128 |         14.39 ± 0.08 |
+
+$ build/bin/llama-bench -m ~/ai/models/gguf/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf -t 4
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------------: | -------------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: no
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|   20.4|     64|    1024|   32| 15064M|            1.6.31294|
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.25 B | SYCL       |  99 |       4 |         pp512 |        208.20 ± 0.52 |
+
+Broadcast message from gdm@p13 on tty1 (Sat 2024-11-02 00:54:17 JST):
+
+The system will suspend now!
+
+| llama 7B Q4_K - Medium         |   4.07 GiB |     7.25 B | SYCL       |  99 |       4 |         tg128 |         12.40 ± 0.04 |
+
+build: 0a683e80 (3998)
+
+$ build/bin/llama-bench -m ~/ai/models/gguf/Mistral-Nemo-Instruct-2407.Q4_K_M.gguf -t 4
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl | threads |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------------: | -------------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: no
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|   20.4|     64|    1024|   32| 15064M|            1.6.31294|
+| llama 13B Q4_K - Medium        |   6.96 GiB |    12.25 B | SYCL       |  99 |       4 |         pp512 |        129.65 ± 0.17 |
+| llama 13B Q4_K - Medium        |   6.96 GiB |    12.25 B | SYCL       |  99 |       4 |         tg128 |          7.88 ± 0.03 |
+```
+
+
+```
+source ~/intel/oneapi/2024.2/oneapi-vars.sh 
+
+$ ./llama-bench -m ~/ai/models/gguf/llama-2-7b.Q4_0.gguf 
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl |          test |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | ---------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: no
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|    1.6|     64|    1024|   32| 15064M|            1.3.31294|
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | SYCL       |  99 |         pp512 |    630.16 ± 2.45 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | SYCL       |  99 |         tg128 |     19.22 ± 0.03 |
+
+build: 1d5f8dd (1)
+
+
+$ ./llama-bench -m ~/ai/models/gguf/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf 
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl |          test |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | ---------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: no
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|    1.6|     64|    1024|   32| 15064M|            1.3.31294|
+Sub-group size 8 is not supported on the device
+Exception caught at file:/home/runner/_work/llm.cpp/llm.cpp/llama-cpp-bigdl/ggml/src/ggml-sycl.cpp, line:3164, func:operator()
+SYCL error: CHECK_TRY_ERROR(op(ctx, src0, src1, dst, src0_dd_i, src1_ddf_i, src1_ddq_i, dst_dd_i, dev[i].row_low, dev[i].row_high, src1_ncols, src1_padded_col_size, stream)): Meet error in this line code!
+  in function ggml_sycl_op_mul_mat at /home/runner/_work/llm.cpp/llm.cpp/llama-cpp-bigdl/ggml/src/ggml-sycl.cpp:3164
+/home/runner/_work/llm.cpp/llm.cpp/llama-cpp-bigdl/ggml/src/ggml-sycl/common.hpp:103: SYCL error
+libggml.so(+0x79517) [0x7ff60ba79517]
+libggml.so(ggml_abort+0xd8) [0x7ff60ba794a8]
+libggml.so(+0x1f2e98) [0x7ff60bbf2e98]
+libggml.so(+0x229198) [0x7ff60bc29198]
+libggml.so(_Z25ggml_sycl_compute_forwardR25ggml_backend_sycl_contextP11ggml_tensor+0x5ef) [0x7ff60bbf57ef]
+libggml.so(+0x24033f) [0x7ff60bc4033f]
+libggml.so(ggml_backend_sched_graph_compute_async+0x548) [0x7ff60bae60f8]
+libllama.so(llama_decode+0xbc7) [0x7ff60d273d47]
+./llama-bench() [0x41a580]
+./llama-bench() [0x416ccd]
+/usr/lib/libc.so.6(+0x261ce) [0x7ff60d5d81ce]
+/usr/lib/libc.so.6(__libc_start_main+0x8a) [0x7ff60d5d828a]
+./llama-bench() [0x41565e]
+Aborted (core dumped)
+
+$ ./llama-bench -m ~/ai/models/gguf/Mistral-Nemo-Instruct-2407.Q4_K_M.gguf 
+ggml_sycl_init: GGML_SYCL_FORCE_MMQ:   no
+ggml_sycl_init: SYCL_USE_XMX: yes
+ggml_sycl_init: found 1 SYCL devices:
+| model                          |       size |     params | backend    | ngl |          test |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | ---------------: |
+get_memory_info: [warning] ext_intel_free_memory is not supported (export/set ZES_ENABLE_SYSMAN=1 to support), use total memory as free memory
+[SYCL] call ggml_check_sycl
+ggml_check_sycl: GGML_SYCL_DEBUG: 0
+ggml_check_sycl: GGML_SYCL_F16: no
+found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|                Intel Graphics [0x64a0]|    1.6|     64|    1024|   32| 15064M|            1.3.31294|
+Sub-group size 8 is not supported on the device
+Exception caught at file:/home/runner/_work/llm.cpp/llm.cpp/llama-cpp-bigdl/ggml/src/ggml-sycl.cpp, line:3164, func:operator()
+SYCL error: CHECK_TRY_ERROR(op(ctx, src0, src1, dst, src0_dd_i, src1_ddf_i, src1_ddq_i, dst_dd_i, dev[i].row_low, dev[i].row_high, src1_ncols, src1_padded_col_size, stream)): Meet error in this line code!
+  in function ggml_sycl_op_mul_mat at /home/runner/_work/llm.cpp/llm.cpp/llama-cpp-bigdl/ggml/src/ggml-sycl.cpp:3164
+/home/runner/_work/llm.cpp/llm.cpp/llama-cpp-bigdl/ggml/src/ggml-sycl/common.hpp:103: SYCL error
+libggml.so(+0x79517) [0x7f0cfb879517]
+libggml.so(ggml_abort+0xd8) [0x7f0cfb8794a8]
+libggml.so(+0x1f2e98) [0x7f0cfb9f2e98]
+libggml.so(+0x229198) [0x7f0cfba29198]
+libggml.so(_Z25ggml_sycl_compute_forwardR25ggml_backend_sycl_contextP11ggml_tensor+0x5ef) [0x7f0cfb9f57ef]
+libggml.so(+0x24033f) [0x7f0cfba4033f]
+libggml.so(ggml_backend_sched_graph_compute_async+0x548) [0x7f0cfb8e60f8]
+libllama.so(llama_decode+0xbc7) [0x7f0cfd073d47]
+./llama-bench() [0x41a580]
+./llama-bench() [0x416ccd]
+/usr/lib/libc.so.6(+0x261ce) [0x7f0cfce281ce]
+/usr/lib/libc.so.6(__libc_start_main+0x8a) [0x7f0cfce2828a]
+./llama-bench() [0x41565e]
+Aborted (core dumped)
+```
+
 # Comparisons
 ## 7900 XTX
 ```
