@@ -33,7 +33,7 @@ The IPEX-LLM results are much better than all the other Backends, but it's worth
 I haven't seen any M4 inference numbers, yet, but this chart/discussion [Performance of llama.cpp on Apple Silicon M-series #4167](https://github.com/ggerganov/llama.cpp/discussions/4167) is a good reference. The M3 Pro (18 CU) has [12.78 FP16 TFLOPS](https://www.cpu-monkey.com/en/igpu-apple_m3_pro_18_core) and at 341.67 t/s pp, that gives a ~26.73 t/TFLOP for Metal performance. The new M4 Pro (20 CU) has an [expected 17.04 TFLOPS](https://www.cpu-monkey.com/en/igpu-apple_m4_pro_20_core) so at the same efficiency you'd expect ~455 t/s for pp. For MBW, we can again run similar back-calculations. The M3 Pro has 150 GB/s MBW and generates 30.74 t/s tg for a 73% MBW efficiency. at 273 GB/s of MBW, we'd expect the M4 Pro to have a ballpark tg of ~56 t/s.
 
 ## vs AMD Ryzen AI
-The [Radeon 890M](https://www.techpowerup.com/gpu-specs/radeon-890m.c4224) on the top-end Ryzen AI Strix Point chips have 16CUs and a theoretical 
+The [Radeon 890M](https://www.techpowerup.com/gpu-specs/radeon-890m.c4224) on the top-end Ryzen AI Strix Point chips have 16CUs and a theoretical 11.88
 
 
 
