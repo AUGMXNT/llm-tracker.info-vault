@@ -1,8 +1,22 @@
-I have an [Intel Core Ultra 7 258V](https://www.intel.com/content/www/us/en/products/sku/240957/intel-core-ultra-7-processor-258v-12m-cache-up-to-4-80-ghz/specifications.html) laptop (see [in-progress Linux review](https://github.com/lhl/linuxlaptops/wiki/2024-MSI-Prestige-13-AI--Evo-A2VM)) which has an "Intel® Arc™ Graphics 140V" GPU (Xe2 architecture). Chips and Cheese has the [most in-depth analysis of the iGPU](https://chipsandcheese.com/p/lunar-lakes-igpu-debut-of-intels) which includes architectural and real world comparisons w/ the prior-gen Xe-LPG, as well as RDNA 3.5 (in the AMD Ryzen AI 9 HX 370 w/ Radeon 890M).
 
-The 258V has Vector Engines with 2048-bit XMX units that Intel specs at 64 INT8 TOPS. Each XMX can do INT8 4096 OPS/clock or FP16 2048 OPS/clock, so that would be a max theoretical 32 FP16 TOPS.
+# Testing llama.cpp with Intel's Xe2 iGPU (Core Ultra 7 258V w/ Arc Graphics 140V)
 
-https://www.indiekings.com/2024/08/intel-arc-140v-first-taste-of-xe2.html
+I have a Lunar Lake laptop (see my [in-progress Linux review](https://github.com/lhl/linuxlaptops/wiki/2024-MSI-Prestige-13-AI--Evo-A2VM)) and recently sat down and did some testing on how llama.cpp works with it.
+- Chips and Cheese has the [most in-depth analysis of the iGPU](https://chipsandcheese.com/p/lunar-lakes-igpu-debut-of-intels) which includes architectural and real world comparisons w/ the prior-gen Xe-LPG, as well as RDNA 3.5 (in the AMD Ryzen AI 9 HX 370 w/ Radeon 890M).
+- The 258V has 32GB of LPDDR5-8533, which has a theoretical maximum memory bandwidth of  136.5 GB/s. Chips and Chesee did some [preliminary MBW testing](https://chipsandcheese.com/i/149978169/cache-and-memory-bandwidth) and found actual throughput to be around 80 GB/s (lower than Strix Point), but MBW test is hard... 
+- The 140V Xe2 GPU on the 258V has Vector Engines with 2048-bit XMX units that Intel specs at 64 INT8 TOPS. Each XMX can do INT8 4096 OPS/clock or FP16 2048 OPS/clock, so that would be a max theoretical 32 FP16 TOPS.
+
+For my testing, I use Llama 2 7B  (specifically the q4_0 quant from [TheBloke/Llama-2-7B-GGUF]) as my standard benchmark (it is well quantified and has max compatibility). All testing was done with very-up-to-date HEAD compiles (`build: ba6f62eb (4008)`) of llama.cpp. The system itself is running [CachyOS](https://cachyos.org/), a performance focused Arch Linux derivative, and it is running the latest 6.12 kernel `6.12.0-rc5-1-mainline` and `linux-firmware-git` and `mesa-git` for the maximum support for Lunar Lake/Xe2.
+
+My system is running at PL 28W (BIOS: performance), with the performance governor, EPP, and EPB.
+
+It turns out there are quite a few ways to run llama.cpp - I skipped the NPU since it's a PITA to setup, but maybe I'll get bored sometime. Here's my results:
+
+
+
+There are quite a few options (build 4008)
+
+
 
 https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF
 https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf?download=true
@@ -220,7 +234,7 @@ found 1 SYCL devices:
 | llama 13B Q4_K - Medium        |   6.96 GiB |    12.25 B | SYCL       |  99 |       4 |         tg128 |          7.88 ± 0.03 |
 ```
 
-
+IPEX-LLM
 ```
 source ~/intel/oneapi/2024.2/oneapi-vars.sh 
 
