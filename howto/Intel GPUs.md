@@ -33,7 +33,13 @@ The IPEX-LLM results are much better than all the other Backends, but it's worth
 I haven't seen any M4 inference numbers, yet, but this chart/discussion [Performance of llama.cpp on Apple Silicon M-series #4167](https://github.com/ggerganov/llama.cpp/discussions/4167) is a good reference. The M3 Pro (18 CU) has [12.78 FP16 TFLOPS](https://www.cpu-monkey.com/en/igpu-apple_m3_pro_18_core) and at 341.67 t/s pp, that gives a ~26.73 t/TFLOP for Metal performance. The new M4 Pro (20 CU) has an [expected 17.04 TFLOPS](https://www.cpu-monkey.com/en/igpu-apple_m4_pro_20_core) so at the same efficiency you'd expect ~455 t/s for pp. For MBW, we can again run similar back-calculations. The M3 Pro has 150 GB/s MBW and generates 30.74 t/s tg for a 73% MBW efficiency. at 273 GB/s of MBW, we'd expect the M4 Pro to have a ballpark tg of ~56 t/s.
 
 ## vs AMD Ryzen AI
-The [Radeon 890M](https://www.techpowerup.com/gpu-specs/radeon-890m.c4224) on the top-end Ryzen AI Strix Point chips have 16CUs and a theoretical 11.88
+The [Radeon 890M](https://www.techpowerup.com/gpu-specs/radeon-890m.c4224) on the top-end Ryzen AI Strix Point chips have 16CUs and a [theoretical 23.76 TFLOPS](https://gpuspecs.com/theoretical-performance-calculator), and with LPDDR5-7500, 120GB/s of MBW. Recently AMD just published an article [Accelerating Llama.cpp Performance in Consumer LLM Applications with AMD Ryzen™ AI 300 Series](https://community.amd.com/t5/ai/accelerating-llama-cpp-performance-in-consumer-llm-applications/ba-p/720311) testing the performance of a Ryzen AI 9 HX 375 with a Intel Core Ultra 7 258V. It mostly focuses on CPU and they similarly note that llama.cpp's Vulkan backend works awfully on the Intel side, so they claim to compare Mistral 7B 0.3 performance w/ IPEX-LLM, however they don't publish any actual performance numbers, just a percentage difference!
+
+Now, I don't have a Strix Point chip, but I do have a 7940HS with a Radeon 780M (16.59 TFLOPS) and dual channel DDR-5600 (89.6 GB/s MBW) so we can do some ballpark estimates.
+
+
+
+Sadly, 16.59 TFLOPS
 
 
 
