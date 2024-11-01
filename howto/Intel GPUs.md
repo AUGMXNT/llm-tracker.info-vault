@@ -1,3 +1,6 @@
 I have an [Intel Core Ultra 7 258V](https://www.intel.com/content/www/us/en/products/sku/240957/intel-core-ultra-7-processor-258v-12m-cache-up-to-4-80-ghz/specifications.html) laptop (see [in-progress Linux review](https://github.com/lhl/linuxlaptops/wiki/2024-MSI-Prestige-13-AI--Evo-A2VM)) which has an "Intel® Arc™ Graphics 140V" GPU (Xe2 architecture). Chips and Cheese has the [most in-depth analysis of the iGPU](https://chipsandcheese.com/p/lunar-lakes-igpu-debut-of-intels) which includes architectural and real world comparisons w/ the prior-gen Xe-LPG, as well as RDNA 3.5 (in the AMD Ryzen AI 9 HX 370 w/ Radeon 890M).
 
 The 258V has Vector Engines with 2048-bit XMX units that Intel specs at 64 INT8 TOPS. Each XMX can do INT8 4096 OPS/clock or FP16 2048 OPS/clock, so that would be a max theoretical 32 FP16 TOPS.
+
+https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF
+https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf?download=true
