@@ -1,4 +1,24 @@
 
+# llama.cpp Setup
+
+Install the oneAPI Base Toolkit:
+https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html
+- I use Arch Linux on most of my dev systems, and the AUR is out of date, so you should download directly, install (it won't deal with any dependencies so you will need to make sure you have them installed yourself) - it installs into `~/intel/oneapi`
+
+To use SYCL/IPEX-LLM, etc, you will need to load env vars, eg:
+```
+source ~/intel/oneapi/setvars.sh
+```
+- Requires a POSIX compatible shell to run (eg, fish won't work)
+
+If you have multiple oneAPI Base Toolkit versions installed (IPEX-LLM for example requires 2024.2.1, which is not the latest version):
+```
+source ~/intel/oneapi/2024.2/oneapi-vars.sh 
+```
+
+
+
+
 # Testing llama.cpp with Intel's Xe2 iGPU (Core Ultra 7 258V w/ Arc Graphics 140V)
 
 I have a Lunar Lake laptop (see my [in-progress Linux review](https://github.com/lhl/linuxlaptops/wiki/2024-MSI-Prestige-13-AI--Evo-A2VM)) and recently sat down and did some testing on how llama.cpp works with it.
