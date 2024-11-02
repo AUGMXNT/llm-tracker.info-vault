@@ -38,11 +38,13 @@ The [Radeon 890M](https://www.techpowerup.com/gpu-specs/radeon-890m.c4224) on th
 
 Now, I don't have a Strix Point chip, but I do have a 7940HS with a Radeon 780M (16.59 TFLOPS) and dual channel DDR-5600 (89.6 GB/s MBW) so I ran the same benchhmark on a Mistral 7B 0.3 (q4_0) and did do some ballpark estimates:
 
-| Type                | pp512 t/s | tg128 t/s | t/TFLOP | MBW % |
-| ------------------- | --------: | --------: | ------: | ----: |
-| 140V IPEX-LLM       |     656.5 |     22.98 |   20.52 | 64.48 |
-| 780M ROCm           |    240.79 |     18.61 |   14.51 | 79.55 |
-| projected 890M ROCm |  *344.76* |   *24.92* |   14.51 | 79.55 |
+| Hardware         | Backend | TFLOPS | MBW (GB/s) | pp512 t/s | tg128 t/s | t/TFLOP | MBW % |
+|------------------|---------|--------:|-----------:|-----------:|----------:|--------:|------:|
+| Arc 140V         | IPEX-LLM| 32      | 136.5      | 656.5      | 22.98     | 20.52   | 64.48 |
+| Radeon 780M      | ROCm    | 16.59   | 89.6       | 240.79     | 18.61     | 14.51   | 79.55 |
+| Radeon 890M (est)| ROCm    | 23.76   | 120        | 344.76     | 24.92     | 14.51   | 79.55 |
+| Strix Halo (est) | ROCm    | 59.40   | 256        | 861.89     | 53.17     | 14.51   | 79.55 |
+
 
 I just applied the same efficiency from the 780M results onto the 890M specs to get a projected performance number.
 
