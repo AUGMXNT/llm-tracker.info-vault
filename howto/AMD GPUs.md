@@ -16,6 +16,10 @@ As of ROCm 5.7, Radeon RX 7900 XTX, XT, and PRO W7900 are officially supported a
 * I posted my 7900XT/XTX results on Reddit, some conversation here: https://www.reddit.com/r/LocalLLaMA/comments/191srof/amd_radeon_7900_xtxtx_inference_performance/
 
 ## AMD APU
+Compatible iGPUs include the Radeon 780M (gfx1103) on Phoenix and Hawk Point 7X40 and 8X40 APUs and Radeon 890M (gfx1150) on Strix Point (Ryzen AI) APUs. You typically need to apply a `HSA_OVERRIDE_GFX_VERSION=11.0.0` environment variable to make sure that these are using the right kernels. See also:
+- https://github.com/lamikr/rocm_sdk_builder - make a custom ROCm build for your GPU
+- 
+
 Performance 65W 7940HS w/ 64GB of DDR5-5600 (83GB/s theoretical memory bandwidth): [https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1041125589](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1041125589)
 * On small (7B) models that fit within the UMA VRAM, ROCm performance is very similar to my M2 MBA's Metal performance. Inference is barely faster than CLBlast/CPU though (~10% faster).
 * On a big (70B) model that doesn't fit into allocated VRAM, the ROCm inferences slower than CPU w/ -ngl 0 (CLBlast crashes), and CPU perf is about as expected - about 1.3 t/s inferencing a Q4_K_M. Besides being slower, the ROCm version also caused amdgpu exceptions that killed Wayland 2/3 times (I'm running Linux 6.5.4, ROCm 5.6.1, mesa 23.1.8).
