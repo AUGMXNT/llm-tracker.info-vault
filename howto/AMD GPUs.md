@@ -18,7 +18,7 @@ As of ROCm 5.7, Radeon RX 7900 XTX, XT, and PRO W7900 are officially supported a
 ## AMD APU
 Compatible iGPUs include the Radeon 780M (gfx1103) on Phoenix and Hawk Point 7X40 and 8X40 APUs and Radeon 890M (gfx1150) on Strix Point (Ryzen AI) APUs. You typically need to apply a `HSA_OVERRIDE_GFX_VERSION=11.0.0` environment variable to make sure that these are using the right kernels. See also:
 - https://github.com/lamikr/rocm_sdk_builder - make a custom ROCm build for your GPU
-- 
+- https://github.com/likelovewant/ROCmLibs-for-gfx1103-AMD780M-APU - for Windows users, there are pre-built ROCmlibs for many officially unsupported architectures here
 
 Performance 65W 7940HS w/ 64GB of DDR5-5600 (83GB/s theoretical memory bandwidth): [https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1041125589](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1041125589)
 * On small (7B) models that fit within the UMA VRAM, ROCm performance is very similar to my M2 MBA's Metal performance. Inference is barely faster than CLBlast/CPU though (~10% faster).
