@@ -460,6 +460,12 @@ PYTORCH_ROCM_ARCH="gfx1100" python setup.py develop
 vllm serve facebook/opt-125m
 ```
 - https://docs.vllm.ai/en/stable/getting_started/amd-installation.html
+### CTranslate2
+This is most notably required for faster-whisper (and whisperX)
+- [Feature request: AMD GPU support with oneDNN AMD support #1072](https://github.com/OpenNMT/CTranslate2/issues/1072) - the most detailed discussion for AMD support in the CTranslate2 repo
+- https://github.com/arlo-phoenix/CTranslate2-rocm - arlo-phoenix created a [hipified fork](https://github.com/OpenNMT/CTranslate2/issues/1072#issuecomment-2271843277) that can run whisperX. Performance appears about [60% faster than whisper.cpp](https://github.com/OpenNMT/CTranslate2/issues/1072#issuecomment-2267170398)
+- [CTranslate2: Efficient Inference with Transformer Models on AMD GPUs](https://rocm.blogs.amd.com/artificial-intelligence/ctranslate2/README.html) - 2024-10-24 recent ROCm Blogs post on how upstream might work?
+
 ## Training
 In Feb 2024 I wrote up some notes:
 - https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
