@@ -798,6 +798,26 @@ https://rocm.blogs.amd.com/artificial-intelligence/megatron-deepspeed-pretrain/R
 https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
 
 ## axolotl
+
+```
+# PyTorch - https://pytorch.org/get-started/locally/
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.2 -U
+
+# Axolotl - https://axolotl-ai-cloud.github.io/axolotl/#quickstart
+git clone https://github.com/axolotl-ai-cloud/axolotl
+cd axolotl
+
+pip3 install packaging ninja
+pip3 install -e '.[flash-attn,deepspeed]'
+
+# bitsandbytes - https://huggingface.co/docs/bitsandbytes/main/en/installation#multi-backend
+pip install 'https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_multi-backend-refactor/bitsandbytes-0.44.1.dev0-py3-none-manylinux_2_24_x86_64.whl' -U
+python -c 'import bitsandbytes; print(bitsandbytes.__version__)'
+
+# liger
+python -m pip install "git+https://github.com/linkedin/Liger-Kernel.git#egg=liger-kernel[transformers]"
+```
+
 Docker doesn't work:
 ```
 $ sudo docker run --gpus '"all"' --rm -it winglian/axolotl:main-latest
