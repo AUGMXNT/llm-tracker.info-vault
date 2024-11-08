@@ -16,6 +16,10 @@ As of ROCm 5.7, Radeon RX 7900 XTX, XT, and PRO W7900 are officially supported a
 * I posted my 7900XT/XTX results on Reddit, some conversation here: https://www.reddit.com/r/LocalLLaMA/comments/191srof/amd_radeon_7900_xtxtx_inference_performance/
 
 ## AMD APU
+Compatible iGPUs include the Radeon 780M (gfx1103) on Phoenix and Hawk Point 7X40 and 8X40 APUs and Radeon 890M (gfx1150) on Strix Point (Ryzen AI) APUs. You typically need to apply a `HSA_OVERRIDE_GFX_VERSION=11.0.0` environment variable to make sure that these are using the right kernels. See also:
+- https://github.com/lamikr/rocm_sdk_builder - make a custom ROCm build for your GPU
+- https://github.com/likelovewant/ROCmLibs-for-gfx1103-AMD780M-APU - for Windows users, there are pre-built ROCmlibs for many officially unsupported architectures here
+
 Performance 65W 7940HS w/ 64GB of DDR5-5600 (83GB/s theoretical memory bandwidth): [https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1041125589](https://docs.google.com/spreadsheets/d/1kT4or6b0Fedd-W_jMwYpb63e1ZR3aePczz3zlbJW-Y4/edit#gid=1041125589)
 * On small (7B) models that fit within the UMA VRAM, ROCm performance is very similar to my M2 MBA's Metal performance. Inference is barely faster than CLBlast/CPU though (~10% faster).
 * On a big (70B) model that doesn't fit into allocated VRAM, the ROCm inferences slower than CPU w/ -ngl 0 (CLBlast crashes), and CPU perf is about as expected - about 1.3 t/s inferencing a Q4_K_M. Besides being slower, the ROCm version also caused amdgpu exceptions that killed Wayland 2/3 times (I'm running Linux 6.5.4, ROCm 5.6.1, mesa 23.1.8).
@@ -58,6 +62,8 @@ The AMD NPU, starting with the 10 TOPS version in the 7X40 (Phoenix Point), 16 T
 
 I won't be spending too much time on this since my 7940HS that I have is 10 TOPS, which is pretty useless, but here are some links and resources:
 - [LLMs on RyzenAI with Pytorch](https://github.com/amd/RyzenAI-SW/blob/main/example/transformers/models/llm/docs/README.md)
+- [RyzenAI-SW llama.cpp fork](https://github.com/amd/RyzenAI-SW/tree/main/example/transformers/ext/llama.cpp)
+	- For upstream, see: https://github.com/ggerganov/llama.cpp/issues/1499
 - [Optimum-AMD](https://github.com/huggingface/optimum-amd) - a HF package for getting NPU acceleration w/ transformers (and ONNX runtime for ROCm)
 - Two Japanese Linux setup blogs (somehow Japanese devs must have more patience than English-speaking ones?)
 	- https://vengineer.hatenablog.com/entry/2024/06/08/080000
@@ -89,15 +95,17 @@ Arch Linux setup is fairly straightforward (can be easier than the official inst
 
 Install ROCm:
 ```shell
-# all the amd gpu compute stuff
-yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
+# More up to date - 6.2.1 (when 6.2.2 is out)
+paru -S opencl-amd-dev
+# These are stuck at 6.0.2-1
+# yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
 
 # third party monitoring
-yay -S amdgpu_top radeontop
+paru -S amdgpu_top radeontop
 ```
 Install conda (mamba)
 ```shell
-yay -S mambaforge
+paru -S mambaforge
 /opt/mambaforge/bin/mamba init fish
 ```
 Create Environment
@@ -456,6 +464,12 @@ PYTORCH_ROCM_ARCH="gfx1100" python setup.py develop
 vllm serve facebook/opt-125m
 ```
 - https://docs.vllm.ai/en/stable/getting_started/amd-installation.html
+### CTranslate2
+This is most notably required for faster-whisper (and whisperX)
+- [Feature request: AMD GPU support with oneDNN AMD support #1072](https://github.com/OpenNMT/CTranslate2/issues/1072) - the most detailed discussion for AMD support in the CTranslate2 repo
+- https://github.com/arlo-phoenix/CTranslate2-rocm - arlo-phoenix created a [hipified fork](https://github.com/OpenNMT/CTranslate2/issues/1072#issuecomment-2271843277) that can run whisperX. Performance appears about [60% faster than whisper.cpp](https://github.com/OpenNMT/CTranslate2/issues/1072#issuecomment-2267170398)
+- [CTranslate2: Efficient Inference with Transformer Models on AMD GPUs](https://rocm.blogs.amd.com/artificial-intelligence/ctranslate2/README.html) - 2024-10-24 recent ROCm Blogs post on how upstream might work?
+
 ## Training
 In Feb 2024 I wrote up some notes:
 - https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
@@ -852,7 +866,7 @@ mkdir build
 cd build
 
 # Make sure the HIP stuff gets picked up
-cmake.exe .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DLLAMA_HIPBLAS=on  -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DAMDGPU_TARGETS="gfx1100" -DCMAKE_PREFIX_PATH="C:\Program Files\AMD\ROCm\5.5"
+cmake.exe .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DGGML_HIPBLAS=on  -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DAMDGPU_TARGETS="gfx1100" -DCMAKE_PREFIX_PATH="C:\Program Files\AMD\ROCm\5.5"
 
 # This should build binaries in a bin/ folder
 cmake.exe --build .
