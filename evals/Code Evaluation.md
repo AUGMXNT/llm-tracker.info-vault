@@ -1,5 +1,16 @@
+# Leaderboards
+
+## LiveCodeBench
 https://livecodebench.github.io/leaderboard.html
 * https://arxiv.org/pdf/2403.07974
+- Allows changing time-windows for problems to mitigate/test for contamination
+- Has Self Repair, Test Output Prediction, and Code Execution but only Code Generation is updated for the latest models usually
+## Aider
+https://aider.chat/docs/leaderboards/
+- Tests code edits
+- Benchmark is 133 Python Exercism practice items: https://aider.chat/docs/benchmarks.html#the-benchmark with MD instructions, stub python code, Unit tests
+
+
 
 - [EvalPlus Leaderboard](https://evalplus.github.io/leaderboard.html)
 	- https://github.com/evalplus/evalplus
