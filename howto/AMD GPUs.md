@@ -199,7 +199,15 @@ I was curious in just how much performance might be available for optimizations,
 
 Note, there is a maintained/rebased fork here: https://github.com/hjc4869/llama.cpp
 
-Testing on a W7900 with `./llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf -p 0 -n 0 -pg 512,128 -pg 1024,128 -pg 2048,128 -pg 4096,128`  
+Testing on a W7900 with `llama-bench` on a recent build, I found that the hjc4869 fork is significantly faster than upstream, but that it still runs faster without the current (2024-11) Flash Attention implementation in llama.cpp that with. w/o FA, the pp4096+tg128 speed is 945.03 tok/s vs 799.37 tok/s w/ FA, so about 18.2% faster. With FA, you do save some memory. It maxes out at 6.48 GB vs 6.93 GB (~7%), this will increase as context increases so it may be worth the speed tradeoff.  Note, that vs upstream:
+- w/o FA is 945.03 tok/s vs 792.57 tok/s - 19.2% faster
+- w/ FA is 799.37 toks/s vs 574.96 tok/s - 39.0% faster
+- Note: hjc4869 w/ FA is faster than upstream w/o FA
+To replicate, you can run something like:
+```
+./llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf -p 0 -n 0 -pg 512,128 -pg 1024,128 -pg 2048,128 -pg 4096,128 -fa 0
+```
+  - 
 
 
 ### 2024-01-08 Testing
