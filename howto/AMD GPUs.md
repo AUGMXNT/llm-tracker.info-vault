@@ -197,6 +197,12 @@ make GGML_HIPBLAS=1
 
 I was curious in just how much performance might be available for optimizations, here's an analysis of 4090 vs 3090 vs 7900 XTX as of 2024-10-04: https://chatgpt.com/share/66ff502b-72fc-8012-95b4-902be6738665
 
+Note, there is a maintained/rebased fork here: https://github.com/hjc4869/llama.cpp
+
+Testing on a W7900 with `./llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf -p 0 -n 0 -pg 512,128 -pg 1024,128 -pg 2048,128 -pg 4096,128`  
+
+
+### 2024-01-08 Testing
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
 7900 XT + 7900 XTX used together segfaulted on `b7e7982 (1787)` (tested 2024-01-08) but ran with `6db2b41a (1988)` (tested 2024-01-28)
