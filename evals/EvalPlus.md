@@ -33,8 +33,8 @@ Running the OpenAI compatible server:
 	- 44GB @ 61000 (max @ FP16 context)
 - Native context for Qwen2.5 Coder is 32K although you can apply RoPE extension. You can use `-ctk` and `-ctv` to q4 or q8 if you need to save some meory:
 	- https://www.reddit.com/r/LocalLLaMA/comments/1dalkm8/memory_tests_using_llamacpp_kv_cache_quantization/
-- 
-
+- I did some tuning on efficiency with draft parameters, but didn't do a very systematic hyper-parameter sweep...
+# Results
 ```
 time evalplus.evaluate --model "Qwen2.5 Coder 32B Instruct Q8" \
                         --dataset 'humaneval'             \
