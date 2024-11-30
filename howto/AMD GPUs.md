@@ -791,6 +791,8 @@ Working Flash Attention is one of the longest running issues for RDNA3. Here are
 
 **NOTE**: ROCm support was merged into the official FA2 implementation in 2024-08 but does not support RDNA3: https://github.com/Dao-AILab/flash-attention/pull/1010
 
+AMD's CK Flash Attention also arbitrarily keeps dropping MI100 support, but it could work: https://github.com/ROCm/flash-attention/issues/24
+
 ### TensorFlow (SHOULD WORK?)
 I don't really use TensorFlow, so this is untested, but recent reports are that it should work:
 - https://www.reddit.com/r/ROCm/comments/1ahkay9/tensorflow_on_gfx1101_navi32_7800_xt/
