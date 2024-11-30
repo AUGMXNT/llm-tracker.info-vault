@@ -1,9 +1,9 @@
 What's out there?
-
 Claude Projects
 OpenAI 4o Canvas
 
-
+Codeium Windsurf
+https://codeium.com/windsurf
 
 Cursor
 https://www.cursor.com/
@@ -18,6 +18,14 @@ Continue.dev
 
 Aider
 https://aider.chat/
+
+Aider Composer
+https://github.com/lee88688/aider-composer
+
+
+Cline
+https://github.com/cline/cline
+
 
 claude engineer/o1-engineer
 https://github.com/Doriandarko/claude-engineer

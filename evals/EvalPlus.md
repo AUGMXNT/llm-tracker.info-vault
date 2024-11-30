@@ -67,6 +67,13 @@ Qwen2.5-Coder is an incredibly strong coding model family and all sizes except f
 
 Note, the [new Qwen QwQ model](https://qwenlm.github.io/blog/qwq-32b-preview/) (also 32B) may be stronger for hard coding challenges as it scores a 50.0 on LiveCodeBench 2024.08-2024.11 while [Qwen2.5-Coder-32B-Instruct scores a 28.9 on the same test set](https://livecodebench.github.io/leaderboard.html).
 
+See also:
+- https://www.reddit.com/r/LocalLLaMA/comments/1h0w3te/qwen25coder32binstruct_a_review_after_several/
+- https://www.reddit.com/r/LocalLLaMA/comments/1gpwrq1/how_to_use_qwen25coderinstruct_without/
+- https://www.reddit.com/r/LocalLLaMA/comments/1gtiq2r/qwen_25_coder_32b_vs_claude_35_sonnet_am_i_doing/
+- https://www.reddit.com/r/LocalLLaMA/comments/1gr35xp/qwen_32b_coderins_vs_72bins_on_the_latest/
+
 Released a while back now, [DeepSeek-Coder-V2](https://github.com/deepseek-ai/DeepSeek-Coder-V2) has a Lite version that is quite strong (comparable to Codestral 22B) but is a 2.4B Activation 16B Weight MoE model that is only slightly heavier than the *draft model* I'm using, which is pretty insane. Looking forward to when [DeepSeek-R1-Lite](https://api-docs.deepseek.com/news/news1120) is released.
+- https://www.reddit.com/r/LocalLLaMA/comments/1gwcsys/deepseek_r1_lite_is_impressive_so_impressive_it/
 
 [OpenCoder](https://opencoder-llm.github.io/) is a recently-released 8B/1.5B model family that is trained from-scratch and fully reporducible, and is about on par (better even for the Base models) with similar weight class models.
