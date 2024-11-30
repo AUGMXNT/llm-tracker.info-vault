@@ -50,3 +50,14 @@ time evalplus.evaluate --model "Qwen2.5 Coder 32B Instruct Q8" \
                         --backend openai --greedy
 ```
 
+|                       | Q5_K_L | Q8     | EPL   |
+| --------------------- | ------ | ------ | ----- |
+| Humaneval Pass@1      | 0.909  | 0.909  | 0.921 |
+| Humaneval+ Pass@1     | 0.860  | 0.860  | 0.872 |
+| Humaneval Time (mins) | 16.430 | 16.360 |       |
+| MBPP Pass@1           | 0.907  | 0.907  | 0.905 |
+| MBPP+ Pass@1          | 0.772  | 0.770  | 0.770 |
+| MBPP Time (mins)      | 24.230 | 23.530 |       |
+- EPL are the [EvalPlus Leaderboard](https://evalplus.github.io/leaderboard.html) results. Q5_K_L and Q8 has a relatively minor loss to the full FP16 model, and there isn't much difference between the Q8 (33GB) vs the Q5_K_L (23GB)
+- These results corroborate recent testing of HumanEval results at various quants where Qwen2.5-Coder-32B is strong enough to see almost no loss in benchmark performance down to 2.5bpw: https://www.reddit.com/r/LocalLLaMA/comments/1gsyp7q/comment/lxjrw01/
+- Interestingly, on the W7900 w/ the 1.5B draft model, there's almost no performance difference using the Q8. Real world usage may differ I suspect. Sadly, there isn't a great way for me to log the server performance data, but eyeballing it, speed was about 400 t/s for prefill, and about 50 t/s for text generation
