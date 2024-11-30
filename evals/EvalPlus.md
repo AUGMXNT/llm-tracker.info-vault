@@ -60,8 +60,35 @@ time evalplus.evaluate --model "Qwen2.5 Coder 32B Instruct Q8" \
 | MBPP Time (mins)      | 24.230 | 23.530 |      |       |
 - The EPL column is the [EvalPlus Leaderboard](https://evalplus.github.io/leaderboard.html) results. Q5_K_L and Q8 has a relatively minor loss to the full FP16 model, and there isn't much difference between the Q8 (33GB) vs the Q5_K_L (23GB)
 - As you can see by the Delta, the performance loss is pretty negligble/within margin of error on both the Q5 and Q8 quants. This corroborate recent testing of HumanEval results at various quants where Qwen2.5-Coder-32B is strong enough to see almost no loss in benchmark performance down to 2.5bpw: https://www.reddit.com/r/LocalLLaMA/comments/1gsyp7q/comment/lxjrw01/
-- Interestingly, on the W7900 w/ the 1.5B draft model, there's almost no performance difference using the Q8. Real world usage may differ I suspect. Sadly, there isn't a great way for me to log the server performance data, but eyeballing it, speed was about 400 t/s for prefill, and about 50 t/s for text generation
+- Interestingly, on the W7900 w/ the 1.5B draft model, there's almost no speed difference using the Q8. Real world usage may differ I suspect (since the speculative decode speedup depends on how well the draft model does). Sadly, there isn't a great way for me to log the server performance data, but eyeballing it, speed was about 400 t/s for prefill, and about 50 t/s for text generation, which seems to ballpark w/ some random Python code testing I did as well.
 
+For reference, here's what running the 32B model on the W7900 looks like without a draft model:
+
+```
+❯ ~/ai/llama.cpp-hjc4869/build/bin/llama-bench -m /models/gguf/Qwen2.5-Coder-32B-Instruct-Q5_K_L.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Pro W7900, compute capability 11.0, VMM: no
+| model                          |       size |     params | backend    | ngl |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
+| qwen2 ?B Q5_K - Medium         |  22.11 GiB |    32.76 B | ROCm       |  99 |         pp512 |        659.25 ± 0.79 |
+| qwen2 ?B Q5_K - Medium         |  22.11 GiB |    32.76 B | ROCm       |  99 |         tg128 |         21.22 ± 0.07 |
+
+build: 5bf52dc5 (4213)
+
+❯ ~/ai/llama.cpp-hjc4869/build/bin/llama-bench -m /models/gguf/Qwen2.5-Coder-32B-Instruct-Q8_0.gguf 
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Pro W7900, compute capability 11.0, VMM: no
+| model                          |       size |     params | backend    | ngl |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
+| qwen2 ?B Q8_0                  |  32.42 GiB |    32.76 B | ROCm       |  99 |         pp512 |        626.58 ± 1.86 |
+| qwen2 ?B Q8_0                  |  32.42 GiB |    32.76 B | ROCm       |  99 |         tg128 |         16.89 ± 0.03 |
+
+build: 5bf52dc5 (4213)
+```
 # Other Coding Models
 Qwen2.5-Coder is an incredibly strong coding model family and all sizes except for 3B are Apache 2.0: https://qwenlm.github.io/blog/qwen2.5-coder-family/
 
