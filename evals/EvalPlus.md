@@ -35,6 +35,7 @@ Running the OpenAI compatible server:
 	- https://www.reddit.com/r/LocalLLaMA/comments/1dalkm8/memory_tests_using_llamacpp_kv_cache_quantization/
 - I did some tuning on efficiency with draft parameters, but didn't do a very systematic hyper-parameter sweep...
 # Results
+Running the tests:
 ```
 time evalplus.evaluate --model "Qwen2.5 Coder 32B Instruct Q8" \
                         --dataset 'humaneval'             \
@@ -48,3 +49,4 @@ time evalplus.evaluate --model "Qwen2.5 Coder 32B Instruct Q8" \
                         --base-url http://localhost:8080/v1    \
                         --backend openai --greedy
 ```
+
