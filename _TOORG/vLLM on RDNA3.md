@@ -79,6 +79,21 @@ https://huggingface.co/neuralmagic/Meta-Llama-3.1-8B-Instruct-FP8
 
 Serve:
 ```
+root@epyc:/vllm-workspace# vllm serve neuralmagic/Meta-Llama-3.1-8B-Instruct-FP8 --num-scheduler-step 1 --served_model_name llama3.1-8b
+```
+
+Nope:
+```
+RuntimeError: Error in model execution (input dumped to /tmp/err_execute_model_input_20241207-154119.pkl): torch._scaled_mm is only supported on CUDA devices with compute capability >= 9.0 or 8.9, or ROCm MI300+
+```
+
+## INT8 (W8A8)
+Using: https://github.com/vllm-project/llm-compressor
+Took: 55m to convert Llama 3.1 8B on W7900
+
+
+Serve:
+```
 vllm serve Llama-3.1-8B-Instruct-INT8 --num-scheduler-step 1 --served_model_name llama3.1-8b
 ```
 - 8.5GB weights
@@ -90,12 +105,28 @@ python benchmark_serving.py --backend openai-chat --base-url 'http://localhost:8
 
 Results:
 ```
-
+============ Serving Benchmark Result ============
+Successful requests:                     32        
+Benchmark duration (s):                  367.50    
+Total input tokens:                      6449      
+Total generated tokens:                  6552      
+Request throughput (req/s):              0.09      
+Output token throughput (tok/s):         17.83     
+Total Token throughput (tok/s):          35.38     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          232.78    
+Median TTFT (ms):                        162.86    
+P99 TTFT (ms):                           477.17    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          55.95     
+Median TPOT (ms):                        55.21     
+P99 TPOT (ms):                           73.44     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           55.20     
+Median ITL (ms):                         55.20     
+P99 ITL (ms):                            56.56     
+==================================================
 ```
-## INT8 (W8A8)
-Using: https://github.com/vllm-project/llm-compressor
-Took: 55m to convert Llama 3.1 8B on W7900
-
 
 ## Q5_K_M
 Run Server
