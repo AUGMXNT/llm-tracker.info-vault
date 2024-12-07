@@ -77,9 +77,24 @@ ERROR 12-07 14:21:53 engine.py:366] RuntimeError: Error in model execution (inpu
 But let's try some baked ones... https://github.com/vllm-project/vllm/blob/main/docs/source/quantization/fp8.rst
 https://huggingface.co/neuralmagic/Meta-Llama-3.1-8B-Instruct-FP8
 
+Serve:
+```
+vllm serve Llama-3.1-8B-Instruct-INT8 --num-scheduler-step 1 --served_model_name llama3.1-8b
+```
+- 8.5GB weights
 
+Benchmark:
+```
+python benchmark_serving.py --backend openai-chat --base-url 'http://localhost:8000' --host localhost --port 8080 --endpoint='/v1/chat/completions' --model "llama3.1-8b" --dataset-name sharegpt --dataset-path /models/dataset/ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 32 --max-concurrency 1 --tokenizer meta-llama/Llama-3.1-8B-Instruct
+```
+
+Results:
+```
+
+```
 ## INT8 (W8A8)
 Using: https://github.com/vllm-project/llm-compressor
+Took: 55m to convert Llama 3.1 8B on W7900
 
 
 ## Q5_K_M
