@@ -44,7 +44,27 @@ python benchmark_serving.py --backend openai-chat --base-url 'http://localhost:8
 
 Results:
 ```
-
+============ Serving Benchmark Result ============
+Successful requests:                     32        
+Benchmark duration (s):                  311.26    
+Total input tokens:                      6449      
+Total generated tokens:                  6544      
+Request throughput (req/s):              0.10      
+Output token throughput (tok/s):         21.02     
+Total Token throughput (tok/s):          41.74     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          159.58    
+Median TTFT (ms):                        111.76    
+P99 TTFT (ms):                           358.99    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          48.34     
+Median TPOT (ms):                        46.94     
+P99 TPOT (ms):                           78.78     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           46.99     
+Median ITL (ms):                         46.99     
+P99 ITL (ms):                            48.35     
+==================================================
 ```
 
 ## Q5_K_M
@@ -143,3 +163,6 @@ Median ITL (ms):                         14.96
 P99 ITL (ms):                            16.47     
 ==================================================
 ```
+
+# Optimization
+https://github.com/mostlygeek/llama-swap/tree/main/examples/benchmark-snakegame
