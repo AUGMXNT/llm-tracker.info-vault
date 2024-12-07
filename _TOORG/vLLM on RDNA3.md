@@ -1,4 +1,5 @@
-2024-12-7
+# 2024-12-7
+See: https://embeddedllm.com/blog/vllm-now-supports-running-gguf-on-amd-radeon-gpu
 
 Build
 ```
@@ -14,7 +15,7 @@ You can check on the model here:
 sudo docker images
 ```
 
-Run the model (mount your HF and models folder)
+Run the docker instance (mount your HF and models folder)
 ```
 sudo docker run -it \
    --network=host \
@@ -29,3 +30,4 @@ sudo docker run -it \
    docker.io/library/vllm-rocm \
    bash
 ```
+
