@@ -31,6 +31,78 @@ sudo docker run -it \
    bash
 ```
 
+
+# Benchmarks
+
+Testing on an AMD W7900 w/ Docker build: `0.6.4.post2.dev258+gf13cf9ad`
+
+| Metric                          | vLLM FP16  | vLLM INT8 | vLLM Q5_K_M | llama.cpp b4276 Q5_K_M |
+| ------------------------------- | ---------- | --------- | ----------- | ---------------------- |
+| Weights in Memory               | 14.99GB    | 8.49GB    | 5.33GB      | 5.33GB                 |
+| Benchmark duration (s)          | 311.26     | 367.50    | 125.00      | 249.14                 |
+| Total input tokens              | 6449       | 6449      | 6449        | 6449                   |
+| Total generated tokens          | 6544       | 6552      | 6183        | 16365                  |
+| Request throughput (req/s)      | 0.10       | 0.09      | 0.26        | 0.13                   |
+| Output token throughput (tok/s) | 21.02      | 17.83     | 49.46       | **65.69**              |
+| Total Token throughput (tok/s)  | 41.74      | 35.38     | **101.06**  | 91.57                  |
+| Mean TTFT (ms)                  | 159.58     | 232.78    | 327.56      | **114.67**             |
+| Median TTFT (ms)                | 111.76     | 162.86    | 128.24      | **85.94**              |
+| P99 TTFT (ms)                   | **358.99** | 477.17    | 2911.16     | 362.63                 |
+| Mean TPOT (ms)                  | 48.34      | 55.95     | 18.97       | **14.81**              |
+| Median TPOT (ms)                | 46.94      | 55.21     | 18.56       | **14.77**              |
+| P99 TPOT (ms)                   | 78.78      | 73.44     | 28.75       | **15.88**              |
+| Mean ITL (ms)                   | 46.99      | 55.20     | 18.60       | **15.03**              |
+| Median ITL (ms)                 | 46.99      | 55.20     | 18.63       | **14.96**              |
+| P99 ITL (ms)                    | 48.35      | 56.56     | 19.43       | **16.47**              |
+- vLLM FP8 does not run on RDNA3 
+- vLLM bitsandbytes quantization does not run w/ ROCm (multifactor-backend bnb installed) 
+
+More system info:
+```
+PyTorch version: 2.6.0.dev20241113+rocm6.2
+ROCM used to build PyTorch: 6.2.41133-dd7f95766
+
+OS: Ubuntu 20.04.6 LTS (x86_64)
+GCC version: (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+Clang version: 18.0.0git (https://github.com/RadeonOpenCompute/llvm-project roc-6.2.0 24292 26466ce804ac523b398608f17388eb6d605a3f09)
+CMake version: version 3.26.4
+Libc version: glibc-2.31
+
+Python version: 3.9.19 (main, May  6 2024, 19:43:03)  [GCC 11.2.0] (64-bit runtime)
+Python platform: Linux-6.12.1-2-cachyos-x86_64-with-glibc2.31
+GPU models and configuration: AMD Radeon PRO W7900 (gfx1100)
+HIP runtime version: 6.2.41133
+MIOpen runtime version: 3.2.0
+Is XNNPACK available: True
+
+CPU:
+Model name:                           AMD EPYC 9274F 24-Core CPU MHz:                              4299.904
+CPU max MHz:                          4303.1250
+CPU min MHz:                          1500.0000
+
+Versions of relevant libraries:
+[pip3] mypy==1.8.0
+[pip3] mypy-extensions==1.0.0
+[pip3] numpy==1.26.4
+[pip3] optree==0.9.1
+[pip3] pynvml==11.5.3
+[pip3] pytorch-triton-rocm==3.1.0+cf34004b8a
+[pip3] pyzmq==26.2.0
+[pip3] torch==2.6.0.dev20241113+rocm6.2
+[pip3] torchvision==0.20.0.dev20241113+rocm6.2
+[pip3] transformers==4.47.0
+[pip3] triton==3.1.0
+ROCM Version: 6.2.41133-dd7f95766
+vLLM Version: 0.6.4.post2.dev258+gf13cf9ad
+PYTORCH_TESTING_DEVICE_ONLY_FOR=cuda
+PYTORCH_TEST_WITH_ROCM=1
+PYTORCH_ROCM_ARCH=gfx908;gfx90a;gfx942;gfx1100
+MAX_JOBS=32
+LD_LIBRARY_PATH=/opt/conda/envs/py_3.9/lib/python3.9/site-packages/cv2/../../lib64:/opt/ompi/lib:/opt/rocm/lib:/usr/local/lib::/opt/rocm/lib/:/libtorch/lib:
+VLLM_WORKER_MULTIPROC_METHOD=spawn
+CUDA_MODULE_LOADING=LAZY
+```
+
 ## Full
 Run server:
 ```
