@@ -315,5 +315,46 @@ P99 ITL (ms):                            16.47
 ==================================================
 ```
 
+# ExLlamaV2
+
+Tabby Server:
+```
+python start.py --port 8000 --disable-auth 1 --dummy-model-name llama3.1-8b --model-dir /models/exl2 --model-name turboderp_Llama-3.1-8B-Instruct-exl2-5.0bpw
+```
+- `TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1` for better performance
+Benchmark:
+```
+python benchmark_serving.py --backend openai-chat --base-url 'http://localhost:8000' --host localhost --port 8080 --endpoint='/v1/chat/completions' --model "llama3.1-8b" --dataset-name sharegpt --dataset-path /models/dataset/ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 32 --max-concurrency 1 --tokenizer meta-llama/Llama-3.1-8B-Instruct
+```
+
+Results:
+```
+============ Serving Benchmark Result ============
+Successful requests:                     32        
+Benchmark duration (s):                  347.96    
+Total input tokens:                      6449      
+Total generated tokens:                  16216     
+Request throughput (req/s):              0.09      
+Output token throughput (tok/s):         46.60     
+Total Token throughput (tok/s):          65.14     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          160.39    
+Median TTFT (ms):                        148.70    
+P99 TTFT (ms):                           303.35    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          19.31     
+Median TPOT (ms):                        18.47     
+P99 TPOT (ms):                           27.35     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           21.18     
+Median ITL (ms):                         19.80     
+P99 ITL (ms):                            38.79     
+==================================================
+```
+
+Benchmark Results w/ `TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1`:
+```
+
+```
 # Optimization
 https://github.com/mostlygeek/llama-swap/tree/main/examples/benchmark-snakegame
