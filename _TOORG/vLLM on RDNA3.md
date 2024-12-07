@@ -36,27 +36,30 @@ sudo docker run -it \
 
 Testing on an AMD W7900 w/ Docker build: `0.6.4.post2.dev258+gf13cf9ad`
 
-| Metric                          | vLLM FP16  | vLLM INT8 | vLLM Q5_K_M | llama.cpp b4276 Q5_K_M |
-| ------------------------------- | ---------- | --------- | ----------- | ---------------------- |
-| Weights in Memory               | 14.99GB    | 8.49GB    | 5.33GB      | 5.33GB                 |
-| Benchmark duration (s)          | 311.26     | 367.50    | 125.00      | 249.14                 |
-| Total input tokens              | 6449       | 6449      | 6449        | 6449                   |
-| Total generated tokens          | 6544       | 6552      | 6183        | 16365                  |
-| Request throughput (req/s)      | 0.10       | 0.09      | 0.26        | 0.13                   |
-| Output token throughput (tok/s) | 21.02      | 17.83     | 49.46       | **65.69**              |
-| Total Token throughput (tok/s)  | 41.74      | 35.38     | **101.06**  | 91.57                  |
-| Mean TTFT (ms)                  | 159.58     | 232.78    | 327.56      | **114.67**             |
-| Median TTFT (ms)                | 111.76     | 162.86    | 128.24      | **85.94**              |
-| P99 TTFT (ms)                   | **358.99** | 477.17    | 2911.16     | 362.63                 |
-| Mean TPOT (ms)                  | 48.34      | 55.95     | 18.97       | **14.81**              |
-| Median TPOT (ms)                | 46.94      | 55.21     | 18.56       | **14.77**              |
-| P99 TPOT (ms)                   | 78.78      | 73.44     | 28.75       | **15.88**              |
-| Mean ITL (ms)                   | 46.99      | 55.20     | 18.60       | **15.03**              |
-| Median ITL (ms)                 | 46.99      | 55.20     | 18.63       | **14.96**              |
-| P99 ITL (ms)                    | 48.35      | 56.56     | 19.43       | **16.47**              |
+| Metric                          | vLLM FP16  | vLLM INT8 | vLLM Q5_K_M | llama.cpp Q5_K_M | ExLlamaV2 5.0bpw |
+| ------------------------------- | ---------- | --------- | ----------- | ---------------- | ---------------- |
+| Weights in Memory               | 14.99GB    | 8.49GB    | 5.33GB      | 5.33GB           |                  |
+| Benchmark duration (s)          | 311.26     | 367.50    | 125.00      | 249.14           |                  |
+| Total input tokens              | 6449       | 6449      | 6449        | 6449             |                  |
+| Total generated tokens          | 6544       | 6552      | 6183        | 16365            |                  |
+| Request throughput (req/s)      | 0.10       | 0.09      | 0.26        | 0.13             |                  |
+| Output token throughput (tok/s) | 21.02      | 17.83     | 49.46       | **65.69**        |                  |
+| Total Token throughput (tok/s)  | 41.74      | 35.38     | **101.06**  | 91.57            |                  |
+| Mean TTFT (ms)                  | 159.58     | 232.78    | 327.56      | **114.67**       |                  |
+| Median TTFT (ms)                | 111.76     | 162.86    | 128.24      | **85.94**        |                  |
+| P99 TTFT (ms)                   | **358.99** | 477.17    | 2911.16     | 362.63           |                  |
+| Mean TPOT (ms)                  | 48.34      | 55.95     | 18.97       | **14.81**        |                  |
+| Median TPOT (ms)                | 46.94      | 55.21     | 18.56       | **14.77**        |                  |
+| P99 TPOT (ms)                   | 78.78      | 73.44     | 28.75       | **15.88**        |                  |
+| Mean ITL (ms)                   | 46.99      | 55.20     | 18.60       | **15.03**        |                  |
+| Median ITL (ms)                 | 46.99      | 55.20     | 18.63       | **14.96**        |                  |
+| P99 ITL (ms)                    | 48.35      | 56.56     | 19.43       | **16.47**        |                  |
 - vLLM FP8 does not run on RDNA3 
 - vLLM bitsandbytes quantization does not run w/ ROCm (multifactor-backend bnb installed) 
+- llama.cpp ROCm backend b4276 (HEAD)
+- ExLlamaV2 0.2.6 (HEAD)
 
+## System Details
 More system info:
 ```
 PyTorch version: 2.6.0.dev20241113+rocm6.2
@@ -103,7 +106,8 @@ VLLM_WORKER_MULTIPROC_METHOD=spawn
 CUDA_MODULE_LOADING=LAZY
 ```
 
-## Full
+## vLLM
+### Full
 Run server:
 ```
 vllm serve meta-llama/Llama-3.1-8B-Instruct --num-scheduler-step 1 --served_model_name llama3.1-8b
@@ -140,7 +144,7 @@ P99 ITL (ms):                            48.35
 ==================================================
 ```
 
-## FP8
+### FP8
 Dynamic doesn't work, Wah wah...
 ```
 ERROR 12-07 14:21:53 engine.py:366] RuntimeError: Error in model execution (input dumped to /tmp/err_execute_model_input_20241207-142153.pkl): torch._scaled_mm is only supported on CUDA devices with compute capability >= 9.0 or 8.9, or ROCm MI300+
@@ -159,7 +163,7 @@ Nope:
 RuntimeError: Error in model execution (input dumped to /tmp/err_execute_model_input_20241207-154119.pkl): torch._scaled_mm is only supported on CUDA devices with compute capability >= 9.0 or 8.9, or ROCm MI300+
 ```
 
-## INT8 (W8A8)
+### INT8 (W8A8)
 Using: https://github.com/vllm-project/llm-compressor
 Took: 55m to convert Llama 3.1 8B on W7900
 
@@ -200,7 +204,7 @@ P99 ITL (ms):                            56.56
 ==================================================
 ```
 
-## bitsandbytes
+### bitsandbytes
 Install:
 ```
 # triton.ops needs 3.1.0 not 3.0.0
@@ -217,7 +221,7 @@ ERROR 12-07 15:51:19 engine.py:366] ValueError: bitsandbytes quantization is cur
 ```
 
 
-## Q5_K_M
+### Q5_K_M
 Run Server
 ```
 vllm serve /app/model/gguf/Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf --num-scheduler-step 1 --served_model_name llama3.1-8b
@@ -254,8 +258,8 @@ P99 ITL (ms):                            19.43
 ==================================================
 ```
 
-# llama.cpp Comparion
-## llama-bench
+## llama.cpp Comparion
+### llama-bench
 ```
 ~/ai/llama.cpp/build/bin/llama-bench -m /models/gguf/Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf 
 ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
@@ -269,7 +273,7 @@ ggml_cuda_init: found 1 ROCm devices:
 
 build: f162d45a (4276)
 ```
-## benchmark_serving.py
+### benchmark_serving.py
 
 Run server:
 ```
@@ -315,7 +319,7 @@ P99 ITL (ms):                            16.47
 ==================================================
 ```
 
-# ExLlamaV2
+## ExLlamaV2
 
 Tabby Server:
 ```
@@ -356,5 +360,7 @@ Benchmark Results w/ `TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1`:
 ```
 
 ```
-# Optimization
+
+See also: https://github.com/bjj/exllamav2-openai-server
+# Future Optimization
 https://github.com/mostlygeek/llama-swap/tree/main/examples/benchmark-snakegame
