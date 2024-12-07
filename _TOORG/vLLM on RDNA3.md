@@ -36,6 +36,7 @@ Run server:
 ```
 vllm serve meta-llama/Llama-3.1-8B-Instruct --num-scheduler-step 1 --served_model_name llama3.1-8b
 ```
+- 15GB of weights
 
 Run benchmark:
 ```
@@ -67,11 +68,22 @@ P99 ITL (ms):                            48.35
 ==================================================
 ```
 
+## FP8
+Wah wah...
+```
+ERROR 12-07 14:21:53 engine.py:366] RuntimeError: Error in model execution (input dumped to /tmp/err_execute_model_input_20241207-142153.pkl): torch._scaled_mm is only supported on CUDA devices with compute capability >= 9.0 or 8.9, or ROCm MI300+
+```
+
+## INT8 (W8A8)
+Using: https://github.com/vllm-project/llm-compressor
+
+
 ## Q5_K_M
 Run Server
 ```
 vllm serve /app/model/gguf/Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf --num-scheduler-step 1 --served_model_name llama3.1-8b
 ```
+- 5GB of weights
 
 Run benchmark:
 ```
