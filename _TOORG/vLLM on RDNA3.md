@@ -31,29 +31,50 @@ sudo docker run -it \
    bash
 ```
 
+Note: this docker image does not support hipBLASLt for `gfx1100` and falls back to hipBLAS
 
 # Benchmarks
 
 Testing on an AMD W7900 w/ Docker build: `0.6.4.post2.dev258+gf13cf9ad`
 
-| Metric                          | vLLM FP16  | vLLM INT8 | vLLM Q5_K_M | llama.cpp Q5_K_M | ExLlamaV2 5.0bpw |
-| ------------------------------- | ---------- | --------- | ----------- | ---------------- | ---------------- |
-| Weights in Memory               | 14.99GB    | 8.49GB    | 5.33GB      | 5.33GB           |                  |
-| Benchmark duration (s)          | 311.26     | 367.50    | 125.00      | 249.14           |                  |
-| Total input tokens              | 6449       | 6449      | 6449        | 6449             |                  |
-| Total generated tokens          | 6544       | 6552      | 6183        | 16365            |                  |
-| Request throughput (req/s)      | 0.10       | 0.09      | 0.26        | 0.13             |                  |
-| Output token throughput (tok/s) | 21.02      | 17.83     | 49.46       | **65.69**        |                  |
-| Total Token throughput (tok/s)  | 41.74      | 35.38     | **101.06**  | 91.57            |                  |
-| Mean TTFT (ms)                  | 159.58     | 232.78    | 327.56      | **114.67**       |                  |
-| Median TTFT (ms)                | 111.76     | 162.86    | 128.24      | **85.94**        |                  |
-| P99 TTFT (ms)                   | **358.99** | 477.17    | 2911.16     | 362.63           |                  |
-| Mean TPOT (ms)                  | 48.34      | 55.95     | 18.97       | **14.81**        |                  |
-| Median TPOT (ms)                | 46.94      | 55.21     | 18.56       | **14.77**        |                  |
-| P99 TPOT (ms)                   | 78.78      | 73.44     | 28.75       | **15.88**        |                  |
-| Mean ITL (ms)                   | 46.99      | 55.20     | 18.60       | **15.03**        |                  |
-| Median ITL (ms)                 | 46.99      | 55.20     | 18.63       | **14.96**        |                  |
-| P99 ITL (ms)                    | 48.35      | 56.56     | 19.43       | **16.47**        |                  |
+Successful requests:                     32        
+Benchmark duration (s):                  347.96    
+Total input tokens:                      6449      
+Total generated tokens:                  16216     
+Request throughput (req/s):              0.09      
+Output token throughput (tok/s):         46.60     
+Total Token throughput (tok/s):          65.14     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          160.39    
+Median TTFT (ms):                        148.70    
+P99 TTFT (ms):                           303.35    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          19.31     
+Median TPOT (ms):                        18.47     
+P99 TPOT (ms):                           27.35     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           21.18     
+Median ITL (ms):                         19.80     
+P99 ITL (ms):                            38.79  
+
+| Metric                          | vLLM FP16 | vLLM INT8 | vLLM Q5_K_M | llama.cpp Q5_K_M | ExLlamaV2 5.0bpw |
+| ------------------------------- | --------- | --------- | ----------- | ---------------- | ---------------- |
+| Weights in Memory               | 14.99GB   | 8.49GB    | 5.33GB      | 5.33GB           | 5.5GB?           |
+| Benchmark duration (s)          | 311.26    | 367.50    | 125.00      | 249.14           | 347.96           |
+| Total input tokens              | 6449      | 6449      | 6449        | 6449             | 6449             |
+| Total generated tokens          | 6544      | 6552      | 6183        | 16365            | 16216            |
+| Request throughput (req/s)      | 0.10      | 0.09      | 0.26        | 0.13             | 0.09             |
+| Output token throughput (tok/s) | 21.02     | 17.83     | 49.46       | **65.69**        | 46.60            |
+| Total Token throughput (tok/s)  | 41.74     | 35.38     | **101.06**  | 91.57            | 65.14            |
+| Mean TTFT (ms)                  | 159.58    | 232.78    | 327.56      | **114.67**       | 160.39           |
+| Median TTFT (ms)                | 111.76    | 162.86    | 128.24      | **85.94**        | 148.70           |
+| P99 TTFT (ms)                   | 358.99    | 477.17    | 2911.16     | 362.63           | **303.35**       |
+| Mean TPOT (ms)                  | 48.34     | 55.95     | 18.97       | **14.81**        | 19.31            |
+| Median TPOT (ms)                | 46.94     | 55.21     | 18.56       | **14.77**        | 18.47            |
+| P99 TPOT (ms)                   | 78.78     | 73.44     | 28.75       | **15.88**        | 27.35            |
+| Mean ITL (ms)                   | 46.99     | 55.20     | 18.60       | **15.03**        | 21.18            |
+| Median ITL (ms)                 | 46.99     | 55.20     | 18.63       | **14.96**        | 19.80            |
+| P99 ITL (ms)                    | 48.35     | 56.56     | 19.43       | **16.47**        | 38.79            |
 - vLLM FP8 does not run on RDNA3 
 - vLLM bitsandbytes quantization does not run w/ ROCm (multifactor-backend bnb installed) 
 - llama.cpp ROCm backend b4276 (HEAD)
@@ -113,6 +134,9 @@ Run server:
 vllm serve meta-llama/Llama-3.1-8B-Instruct --num-scheduler-step 1 --served_model_name llama3.1-8b
 ```
 - 15GB of weights
+- `INFO 12-07 17:39:09 worker.py:237] Memory profiling results: duration=39.11 seconds, total_gpu_memory=44.98GiB, initial_memory_usage=15.23GiB, peak_torch_memory=16.20GiB, memory_usage_post_profile=15.46GiB, non_torch_memory=0.44GiB, kv_cache_size=23.84GiB, gpu_memory_utilization=0.90.`
+- `INFO 12-07 17:38:16 config.py:1066] Disabled the custom all-reduce kernel because it is not supported on AMD GPUs.`
+- no speed difference w/ `TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1` vs not
 
 Run benchmark:
 ```
@@ -364,6 +388,28 @@ P99 ITL (ms):                            38.79
 	- https://github.com/ROCm/aotriton/pull/39
 	- https://github.com/ROCm/flash-attention/issues/79
 
+Use nightly PyTorch:
+```
+pip install -U --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.2
+```
+Grab AOTriton 0.8 Beta https://github.com/ROCm/aotriton/releases/tag/0.8b
+```
+cd ~/Downloads
+wget https://github.com/ROCm/aotriton/releases/download/0.8b/aotriton-0.8b-manylinux_2_28_x86_64-rocm6.2-shared.tar.gz
+tar xvfz aotriton-0.8b-manylinux_2_28_x86_64-rocm6.2-shared.tar.gz
+```
+Replace AOTriton so
+```
+cd ~/mambaforge/envs/exllamav2/lib/python3.12/site-packages/torch/lib
+mv libaotriton_v2.so libaotriton_v2.so.torch
+cp ~/Downloads/aotriton/aotriton/lib/libaotriton_v2.so* ./ 
+```
+Try running TabbyAPI:
+```
+TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 python start.py --port 8000 --disable-auth 1 --dummy-model-name llama3.1-8b --model-dir /models/exl2 --model-name turboderp_Llama-3.1-8B-Instruct-exl2-5.0bpw
+
+python benchmark_serving.py --backend openai-chat --base-url 'http://localhost:8000' --host localhost --port 8080 --endpoint='/v1/chat/completions' --model "llama3.1-8b" --dataset-name sharegpt --dataset-path /models/dataset/ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 32 --max-concurrency 1 --tokenizer meta-llama/Llama-3.1-8B-Instruct
+```
 
 See also: https://github.com/bjj/exllamav2-openai-server
 # Future Optimization
