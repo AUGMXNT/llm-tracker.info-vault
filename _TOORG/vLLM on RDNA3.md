@@ -356,10 +356,14 @@ P99 ITL (ms):                            38.79
 ==================================================
 ```
 
-Benchmark Results w/ `TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1`:
-```
+`TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1` throws error:
+- `ERROR:    RuntimeError: [_efficient_attention_forward] Unsupported mask type on ROCM, for now`
+- See:
+	- https://github.com/pytorch/pytorch/issues/138300
+	- https://github.com/pytorch/pytorch/pull/134498
+	- https://github.com/ROCm/aotriton/pull/39
+	- https://github.com/ROCm/flash-attention/issues/79
 
-```
 
 See also: https://github.com/bjj/exllamav2-openai-server
 # Future Optimization
