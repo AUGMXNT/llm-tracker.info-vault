@@ -69,10 +69,14 @@ P99 ITL (ms):                            48.35
 ```
 
 ## FP8
-Wah wah...
+Dynamic doesn't work, Wah wah...
 ```
 ERROR 12-07 14:21:53 engine.py:366] RuntimeError: Error in model execution (input dumped to /tmp/err_execute_model_input_20241207-142153.pkl): torch._scaled_mm is only supported on CUDA devices with compute capability >= 9.0 or 8.9, or ROCm MI300+
 ```
+
+But let's try some baked ones... https://github.com/vllm-project/vllm/blob/main/docs/source/quantization/fp8.rst
+https://huggingface.co/neuralmagic/Meta-Llama-3.1-8B-Instruct-FP8
+
 
 ## INT8 (W8A8)
 Using: https://github.com/vllm-project/llm-compressor
