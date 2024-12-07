@@ -128,6 +128,23 @@ P99 ITL (ms):                            56.56
 ==================================================
 ```
 
+## bitsandbytes
+Install:
+```
+# triton.ops needs 3.1.0 not 3.0.0
+pip install -U triton
+pip install --force-reinstall 'https://github.com/bitsandbytes-foundation/bitsandbytes/releases/download/continuous-release_multi-backend-refactor/bitsandbytes-0.44.1.dev0-py3-none-manylinux_2_24_x86_64.whl' --no-deps
+```
+Serve:
+```
+vllm serve meta-llama/Llama-3.1-8B-Instruct --num-scheduler-step 1 --served_model_name llama3.1-8b -q bitsandbytes --load_format bitsandbytes
+```
+
+```
+ERROR 12-07 15:51:19 engine.py:366] ValueError: bitsandbytes quantization is currently not supported in rocm.
+```
+
+
 ## Q5_K_M
 Run Server
 ```
