@@ -276,6 +276,42 @@ Testing with b4277 on a W7900:
 - Although sometimes a slightly higher ITL, on average it's lower and gets +25% boost (depends heavily on how closely the draft model predicts the output)
 - 3B draft model runs slower than w/o speculative decoding, so not worth it
 
+How well does this work with a larger model (Llama 3.1 70B Q4_K_M)?
+
+| Metric                          | 70B Q4_K_M | 70B + 1B Q8_0 DM |
+| ------------------------------- | ---------- | ---------------- |
+| Weights in Memory (GB)          | 39.59      | 39.59+1.22       |
+| Benchmark duration (s)          | 1512.45    | 949.35           |
+| Total input tokens              | 6449       | 6449             |
+| Total generated tokens          | 16417      | 16355            |
+| Request throughput (req/s)      | 0.02       | **0.03**         |
+| Output token throughput (tok/s) | 10.85      | **17.23**        |
+| Total Token throughput (tok/s)  | 15.12      | **24.02**        |
+| Mean TTFT (ms)                  | 946.74     | 944.03           |
+| Median TTFT (ms)                | 521.19     | 524.84           |
+| P99 TTFT (ms)                   | 3021.41    | 3011.51          |
+| Mean TPOT (ms)                  | 89.51      | **63.83**        |
+| Median TPOT (ms)                | 89.14      | **59.99**        |
+| P99 TPOT (ms)                   | **94.38**  | 130.05           |
+| Mean ITL (ms)                   | 90.46      | **56.31**        |
+| Median ITL (ms)                 | 90.58      | **0.15**         |
+| P99 ITL (ms)                    | **97.32**  | 322.35           |
+- 3B draft model is slower than 1B (Using [bartowski/Llama-3.2-1B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-1B-Instruct-GGUF))
+- For 48GB w/ FA, 8-bit kvcache, can get up to 20K context before OOM (w/o the draft model you can get to 32K) `~/ai/llama.cpp-hjc4869/build/bin/llama-server -m /models/gguf/Meta-Llama-3.1-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 20000 -sp -ctk q8_0 -ctv q8_0 -fa`
+
+```
+~/ai/llama.cpp-hjc4869/build/bin/llama-bench -m /models/gguf/Meta-Llama-3.1-70B-Instruct-Q4_K_M.gguf -fa 1
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Pro W7900, compute capability 11.0, VMM: no
+| model                          |       size |     params | backend    | ngl | fa |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | ------------: | -------------------: |
+| llama 70B Q4_K - Medium        |  39.59 GiB |    70.55 B | ROCm       |  99 |  1 |         pp512 |        297.53 ± 0.11 |
+| llama 70B Q4_K - Medium        |  39.59 GiB |    70.55 B | ROCm       |  99 |  1 |         tg128 |         11.35 ± 0.05 |
+
+build: b6af36a5 (4277)
+```
 
 ### 2024-01-08 Testing
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
