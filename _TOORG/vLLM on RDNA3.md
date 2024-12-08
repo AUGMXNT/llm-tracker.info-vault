@@ -343,6 +343,63 @@ P99 ITL (ms):                            16.47
 ==================================================
 ```
 
+### Qwen2.5
+Qwen2.5 does not have Flash Attention support in vLLM:
+```
+WARNING 12-07 18:09:13 registry.py:308] Model architecture 'Qwen2ForCausalLM' is partially supported by ROCm: Sliding window attention (SWA) is not yet supported in Triton flash attention. For half-precision SWA support, please use CK flash attention by setting `VLLM_USE_TRITON_FLASH_ATTN=0`
+```
+
+ Qwen2.5-Coder-0.5B-Instruct-Q8_0 runs significantly slower vs llama.cpp.  vLLM:
+```
+============ Serving Benchmark Result ============
+Successful requests:                     16        
+Benchmark duration (s):                  41.62     
+Total input tokens:                      3211      
+Total generated tokens:                  3074      
+Request throughput (req/s):              0.38      
+Output token throughput (tok/s):         73.86     
+Total Token throughput (tok/s):          151.00    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          1796.72   
+Median TTFT (ms):                        1899.05   
+P99 TTFT (ms):                           2002.22   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          4.24      
+Median TPOT (ms):                        4.26      
+P99 TPOT (ms):                           4.49      
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           4.19      
+Median ITL (ms):                         4.20      
+P99 ITL (ms):                            4.77      
+==================================================
+```
+- look at that TTFT, yikes
+
+llama.cpp:
+```
+============ Serving Benchmark Result ============
+Successful requests:                     16        
+Benchmark duration (s):                  38.04     
+Total input tokens:                      3211      
+Total generated tokens:                  7472      
+Request throughput (req/s):              0.42      
+Output token throughput (tok/s):         196.41    
+Total Token throughput (tok/s):          280.82    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          18.65     
+Median TTFT (ms):                        16.21     
+P99 TTFT (ms):                           45.31     
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          4.97      
+Median TPOT (ms):                        4.92      
+P99 TPOT (ms):                           5.24      
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           5.06      
+Median ITL (ms):                         5.07      
+P99 ITL (ms):                            5.42      
+==================================================
+```
+
 ## ExLlamaV2
 
 Tabby Server:
