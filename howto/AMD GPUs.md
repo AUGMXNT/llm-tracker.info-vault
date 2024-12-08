@@ -257,7 +257,7 @@ Testing with b4277 on a W7900:
 
 | Metric                          | llama.cpp Q4_K_M | llama.cpp w/ +1B DM |
 | ------------------------------- | ---------------- | ------------------- |
-| Weights in Memory (GB)          | 4.30             | 4.30+1.78           |
+| Weights (GB)                    | 4.30             | 4.30+1.78           |
 | Benchmark duration (s)          | 221.96           | 189.27              |
 | Total input tokens              | 6449             | 6449                |
 | Total generated tokens          | 15215            | 16319               |
@@ -280,7 +280,7 @@ How well does this work with a larger model (Llama 3.1 70B Q4_K_M)?
 
 | Metric                          | 70B Q4_K_M | 70B + 1B Q8_0 DM |
 | ------------------------------- | ---------- | ---------------- |
-| Weights in Memory (GB)          | 39.59      | 39.59+1.22       |
+| Weights (GB)                    | 39.59      | 39.59+1.22       |
 | Benchmark duration (s)          | 1512.45    | 949.35           |
 | Total input tokens              | 6449       | 6449             |
 | Total generated tokens          | 16417      | 16355            |
