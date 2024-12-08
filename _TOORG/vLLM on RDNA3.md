@@ -1,3 +1,4 @@
+For my main AMD GPU docs, see: [[AMD GPUs]]
 # vLLM 2024-12-7
 See: https://embeddedllm.com/blog/vllm-now-supports-running-gguf-on-amd-radeon-gpu
 
@@ -32,7 +33,6 @@ sudo docker run -it \
 ```
 
 Note: this docker image does not support hipBLASLt for `gfx1100` and falls back to hipBLAS
-
 # Benchmarks
 
 Testing on an AMD W7900 w/ Docker build: `0.6.4.post2.dev258+gf13cf9ad`
