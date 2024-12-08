@@ -180,7 +180,7 @@ sudo apt install libstdc++-12-dev
 
 ## LLM Inferencing
 
-As of 2024-12, on RDNA3, for `bs=1` (single user interactive) inferencing, your best option is probably either llama.cpp for the most compatibility and good speed, or for maximum speed, mlc-llm (but it has limited quantization options and may require quantizing your own models). I ran some speed tests using vLLM's `benchmark_serving.py` for "real world" testing. You can see all the repro details on this page [[vLLM on RDNA3]] but here's the results table w/ Llama 3.1 8B:
+As of 2024-12, on RDNA3, for `bs=1` (single user interactive) inferencing, your best option is probably either llama.cpp for the most compatibility and good speed, or for maximum speed, mlc-llm (but it has limited quantization options and may require quantizing your own models). I ran some speed tests using vLLM's `benchmark_serving.py` for "real world" testing. You can see all the repro details on this page [[vLLM on RDNA3]] but here's the results table w/ Llama 3.1 8B on a W7900:
 
 | Metric                          | vLLM FP16 | vLLM INT8 | vLLM Q5_K_M | llama.cpp Q5_K_M | ExLlamaV2 5.0bpw | MLC q4f16_1 | llama.cpp Q4_K_M |
 | ------------------------------- | --------- | --------- | ----------- | ---------------- | ---------------- | ----------- | ---------------- |
@@ -238,7 +238,7 @@ To replicate, you can run something like:
 ```
 
 #### Speculative Decode Testing
-llama.cpp now has speculative decoding built in the openai-compatible api server:
+llama.cpp now has speculative decoding built in the openai-compatible api server.
 
 Running the server:
 ```
@@ -252,6 +252,8 @@ vLLM Benchmark:
 python benchmark_serving.py --backend openai-chat --base-url 'http://localhost:8080' --host localhost --port
  8080 --endpoint='/v1/chat/completions' --model "llama3.1" --dataset-name sharegpt --dataset-path /models/dataset/ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 32 --max-concurrency 1 --tokenizer meta-llama/Llama-3.1-8B-Instruct
 ```
+
+Testing with b4277 on a W7900:
 
 | Metric                          | llama.cpp Q4_K_M | llama.cpp w/ +1B DM |
 | ------------------------------- | ---------------- | ------------------- |
@@ -271,7 +273,8 @@ python benchmark_serving.py --backend openai-chat --base-url 'http://localhost:8
 | Mean ITL (ms)                   | 14.38            | **11.40**           |
 | Median ITL (ms)                 | 14.43            | **0.04**            |
 | P99 ITL (ms)                    | **15.75**        | 155.27              |
-- 3B draft model runs slower than w/o a speculative decoding
+- Although sometimes a slightly higher ITL, on average it's lower and gets +25% boost (depends heavily on how closely the draft model predicts the output)
+- 3B draft model runs slower than w/o speculative decoding, so not worth it
 
 
 ### 2024-01-08 Testing
