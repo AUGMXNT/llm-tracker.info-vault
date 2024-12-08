@@ -179,25 +179,54 @@ sudo apt install libstdc++-12-dev
 ```
 
 ## LLM Inferencing
+
+As of 2024-12, on RDNA3, for `bs=1` (single user interactive) inferencing, your best option is probably either llama.cpp for the most compatibility and good speed, or for maximum speed, mlc-llm (but it has limited quantization options and may require quantizing your own models). I ran some speed tests using vLLM's `benchmark_serving.py` for "real world" testing. You can see all the repro details on this page [[vLLM on RDNA3]] but here's the results table w/ Llama 3.1 8B:
+
+| Metric                          | vLLM FP16 | vLLM INT8 | vLLM Q5_K_M | llama.cpp Q5_K_M | ExLlamaV2 5.0bpw | MLC q4f16_1 | llama.cpp Q4_K_M |
+| ------------------------------- | --------- | --------- | ----------- | ---------------- | ---------------- | ----------- | ---------------- |
+| Weights in Memory (GB)          | 14.99     | 8.49      | 5.33        | 5.33             | 5.5              | 4.21        | 4.30             |
+| Benchmark duration (s)          | 311.26    | 367.50    | 125.00      | 249.14           | 347.96           | 145.30      | 221.96           |
+| Total input tokens              | 6449      | 6449      | 6449        | 6449             | 6449             | 6449        | 6449             |
+| Total generated tokens          | 6544      | 6552      | 6183        | 16365            | 16216            | 13484       | 15215            |
+| Request throughput (req/s)      | 0.10      | 0.09      | 0.26        | 0.13             | 0.09             | 0.22        | 0.14             |
+| Output token throughput (tok/s) | 21.02     | 17.83     | 49.46       | 65.69            | 46.60            | **92.80**   | 68.55            |
+| Total Token throughput (tok/s)  | 41.74     | 35.38     | 101.06      | 91.57            | 65.14            | **137.19**  | 97.60            |
+| Mean TTFT (ms)                  | 159.58    | 232.78    | 327.56      | **114.67**       | 160.39           | 301.46      | **110.42**       |
+| Median TTFT (ms)                | 111.76    | 162.86    | 128.24      | **85.94**        | 148.70           | 176.25      | **74.94**        |
+| P99 TTFT (ms)                   | 358.99    | 477.17    | 2911.16     | 362.63           | **303.35**       | 821.72      | 353.58           |
+| Mean TPOT (ms)                  | 48.34     | 55.95     | 18.97       | **14.81**        | 19.31            | 10.05       | 14.14            |
+| Median TPOT (ms)                | 46.94     | 55.21     | 18.56       | **14.77**        | 18.47            | 9.62        | 14.02            |
+| P99 TPOT (ms)                   | 78.78     | 73.44     | 28.75       | **15.88**        | 27.35            | **15.46**   | **15.27**        |
+| Mean ITL (ms)                   | 46.99     | 55.20     | 18.60       | 15.03            | 21.18            | **10.10**   | 14.38            |
+| Median ITL (ms)                 | 46.99     | 55.20     | 18.63       | 14.96            | 19.80            | **9.91**    | 14.43            |
+| P99 ITL (ms)                    | 48.35     | 56.56     | 19.43       | 16.47            | 38.79            | **12.68**   | 15.75            |
+- vLLM FP8 does not run on RDNA3 
+- vLLM bitsandbytes quantization does not run w/ ROCm (multifactor-backend bnb installed) 
+- llama.cpp ROCm backend b4276 (HEAD)
+- ExLlamaV2 0.2.6 (HEAD)
+- MLC nightly 0.18.dev249
+
+For 
 ### llama.cpp
 llama.cpp has ROCm support built-in now (2023-08):
 ```shell
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
-make GGML_HIPBLAS=1
+cmake -B build -DGGML_HIP=ON
+cmake --build build --config Release -j
 ```
 * https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#hipblas
 * You can use `LLAMA_HIP_UMA=1` for unified memory for APUs but it'll be slower if you don't use it
-* `uname -a` , `dkms status` and `apt list | grep rocm | grep '\[installed\]'` to get version numbers of kernel and libs
+* `uname -a` , `dkms status` and `apt list | grep rocm | grep '\[installed\]'` to get version numbers of kernel and libs.
+* Be sure to set `-j` and make sure you are using all your threads when compiling. You might want `ccache` as well to speed up recompiles
 * If you can't get ROCm working, Vulkan is a universal/easy option, but gains and should still give decent gains over CPU inference
+* There is a maintained/rebased fork here that may be faster than upstream for RDNA3 and longer context: https://github.com/hjc4869/llama.cpp
 
 2024-09 Update: llama.cpp ROCm inference speeds basically haven't changed all year so I haven't gone and done updates. CUDA is a bit faster w/ FA and Graph support, so has an even bigger lead. There's been some discussion/code with optimizations, but so far those haven't been merged:
 - https://github.com/ggerganov/llama.cpp/pull/7011
 - https://github.com/ggerganov/llama.cpp/pull/8082
 
 I was curious in just how much performance might be available for optimizations, here's an analysis of 4090 vs 3090 vs 7900 XTX as of 2024-10-04: https://chatgpt.com/share/66ff502b-72fc-8012-95b4-902be6738665
-
-Note, there is a maintained/rebased fork here: https://github.com/hjc4869/llama.cpp
 
 Testing on a W7900 with `llama-bench` on a recent build, I found that the hjc4869 fork is significantly faster than upstream, but that it still runs faster without the current (2024-11) Flash Attention implementation in llama.cpp that with. w/o FA, the pp4096+tg128 speed is 945.03 tok/s vs 799.37 tok/s w/ FA, so about 18.2% faster. With FA, you do save some memory. It maxes out at 6.48 GB vs 6.93 GB (~7%), this will increase as context increases so it may be worth the speed tradeoff.  Note, that vs upstream:
 - w/o FA is 945.03 tok/s vs 792.57 tok/s - 19.2% faster
@@ -207,8 +236,6 @@ To replicate, you can run something like:
 ```
 ./llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf -p 0 -n 0 -pg 512,128 -pg 1024,128 -pg 2048,128 -pg 4096,128 -fa 0
 ```
-  - 
-
 
 ### 2024-01-08 Testing
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
@@ -453,6 +480,36 @@ Note: there is a Triton/FA bug:
 - https://github.com/vllm-project/vllm/issues/4514
 You may be able to work around this with the latest version of PyTorch and Triton (w/ aotriton support) - TBC
 
+The easiest and most reliable way to run vLLM w/ RDNA3 is building the docker image:
+```
+# dependencies
+paru -S docker docker-compose docker-buildx
+
+# build
+git clone https://github.com/vllm-project/vllm.git
+cd vllm
+DOCKER_BUILDKIT=1 sudo docker build --build-arg BUILD_FA="0" -f Dockerfile.rocm -t vllm-rocm .
+
+# check image
+sudo docker images
+
+# run (mount your model nad hf folders)
+sudo docker run -it \
+   --network=host \
+   --group-add=video \
+   --ipc=host \
+   --cap-add=SYS_PTRACE \
+   --security-opt seccomp=unconfined \
+   --device /dev/kfd \
+   --device /dev/dri \
+   -v /models:/app/model \
+   -v /home/lhl/.cache/huggingface:/root/.cache/huggingface \
+   docker.io/library/vllm-rocm \
+   bash
+```
+- Note: this docker image does not support hipBLASLt for `gfx1100` and falls back to hipBLAS
+
+If you want to install from source:
 ```
 # We want the nightly PyTorch
 pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.2
@@ -473,11 +530,12 @@ mamba install cmake -y
 # Build vLLM for RDNA3
 PYTORCH_ROCM_ARCH="gfx1100" python setup.py develop
 
-
 # Test
 vllm serve facebook/opt-125m
 ```
 - https://docs.vllm.ai/en/stable/getting_started/amd-installation.html
+- There are often faster AOTriton releases that you can link into the torch libs: https://github.com/ROCm/aotriton/releases/
+- You can also build your own https://github.com/ROCm/hipBLASLt for your architecture and link in the torch libs as well
 ### CTranslate2
 This is most notably required for faster-whisper (and whisperX)
 - [Feature request: AMD GPU support with oneDNN AMD support #1072](https://github.com/OpenNMT/CTranslate2/issues/1072) - the most detailed discussion for AMD support in the CTranslate2 repo
