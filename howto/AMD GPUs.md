@@ -253,25 +253,25 @@ python benchmark_serving.py --backend openai-chat --base-url 'http://localhost:8
  8080 --endpoint='/v1/chat/completions' --model "llama3.1" --dataset-name sharegpt --dataset-path /models/dataset/ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 32 --max-concurrency 1 --tokenizer meta-llama/Llama-3.1-8B-Instruct
 ```
 
-| Metric                          | llama.cpp Q4_K_M | llama.cpp w/ +1B SD | llama.cpp w/ +3B SD |
-| ------------------------------- | ---------------- | ------------------- | ------------------- |
-| Weights in Memory (GB)          | 4.30             | 4.30+1.78           | 4.30+3.18           |
-| Benchmark duration (s)          | 221.96           | 189.27              | 189.27              |
-| Total input tokens              | 6449             | 6449                | 6449                |
-| Total generated tokens          | 15215            | 16319               | 16319               |
-| Request throughput (req/s)      | 0.14             | **0.17**            | **0.17**            |
-| Output token throughput (tok/s) | 68.55            | **86.22**           | **86.22**           |
-| Total Token throughput (tok/s)  | 97.60            | **120.30**          | **120.30**          |
-| Mean TTFT (ms)                  | 110.42           | 110.12              | 110.12              |
-| Median TTFT (ms)                | 74.94            | 74.16               | 74.16               |
-| P99 TTFT (ms)                   | 353.58           | 352.52              | 352.52              |
-| Mean TPOT (ms)                  | 14.14            | **12.99**           | **12.99**           |
-| Median TPOT (ms)                | 14.02            | **11.87**           | **11.87**           |
-| P99 TPOT (ms)                   | **15.27**        | 32.88               | 32.88               |
-| Mean ITL (ms)                   | 14.38            | **11.40**           | **11.40**           |
-| Median ITL (ms)                 | 14.43            | **0.04**            | **0.04**            |
-| P99 ITL (ms)                    | **15.75**        | 155.27              | 155.27              |
-- vLLM FP8 does not run on RDNA3 
+| Metric                          | llama.cpp Q4_K_M | llama.cpp w/ +1B DM |
+| ------------------------------- | ---------------- | ------------------- |
+| Weights in Memory (GB)          | 4.30             | 4.30+1.78           |
+| Benchmark duration (s)          | 221.96           | 189.27              |
+| Total input tokens              | 6449             | 6449                |
+| Total generated tokens          | 15215            | 16319               |
+| Request throughput (req/s)      | 0.14             | **0.17**            |
+| Output token throughput (tok/s) | 68.55            | **86.22**           |
+| Total Token throughput (tok/s)  | 97.60            | **120.30**          |
+| Mean TTFT (ms)                  | 110.42           | 110.12              |
+| Median TTFT (ms)                | 74.94            | 74.16               |
+| P99 TTFT (ms)                   | 353.58           | 352.52              |
+| Mean TPOT (ms)                  | 14.14            | **12.99**           |
+| Median TPOT (ms)                | 14.02            | **11.87**           |
+| P99 TPOT (ms)                   | **15.27**        | 32.88               |
+| Mean ITL (ms)                   | 14.38            | **11.40**           |
+| Median ITL (ms)                 | 14.43            | **0.04**            |
+| P99 ITL (ms)                    | **15.75**        | 155.27              |
+- 3B draft model runs slower than w/o a speculative decoding
 
 
 ### 2024-01-08 Testing
