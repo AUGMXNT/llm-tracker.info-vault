@@ -275,14 +275,13 @@ Testing with b4277 on a W7900:
 - 3B draft model runs slower than w/o speculative decoding, so not worth it
 
 How well does this work with a larger model (Llama 3.1 70B Q4_K_M)?
-P99 ITL (ms):                            141.87    
-==================================================
 
 | Metric                          | 70B Q4_K_M | 70B + 1B Q8_0 DM | vLLM      |
 | ------------------------------- | ---------- | ---------------- | --------- |
 | Weights (GB)                    | 39.59      | 39.59+1.22       | 39.59     |
-| Memory Usage (MB)               |            |                  | 45034     |
+| Memory Usage (MB)               | 46032      | 45345            | 45034     |
 | Context                         | 32768      | 20000            | 8000      |
+| Load Time                       | 7s         | 8s               | 42m       |
 | Benchmark duration (s)          | 1512.45    | 949.35           | 2093.97   |
 | Total input tokens              | 6449       | 6449             | 6449      |
 | Total generated tokens          | 16417      | 16355            | 6494      |
