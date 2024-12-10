@@ -299,7 +299,7 @@ How well does this work with a larger model (Llama 3.1 70B Q4_K_M)?
 | P99 ITL (ms)                    | **97.32**  | 322.35           | 141.87    |
 - 3B draft model is slower than 1B (Using [bartowski/Llama-3.2-1B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-1B-Instruct-GGUF))
 - For 48GB w/ FA, 8-bit kvcache, can get up to 20K context before OOM (w/o the draft model you can get to 32K) `~/ai/llama.cpp-hjc4869/build/bin/llama-server -m /models/gguf/Meta-Llama-3.1-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 20000 -sp -ctk q8_0 -ctv q8_0 -fa`
-- vLLM 0.6.4.post2.dev258+gf13cf9ad included as a comparison. Note, that `-gpu_memory_utilization=0.99 --max_model_len 8192` will be close to your max there, also, it will take almost 45 minutes to load (including 1443s and 0.17GB for graph capture, 2449s for engine init) 
+- vLLM 0.6.4.post2.dev258+gf13cf9ad included as a comparison. Note, that `--gpu_memory_utilization=0.99 --max_model_len 8192` will be close to your max there, also, it will take almost 45 minutes to load (including 1443s and 0.17GB for graph capture, 2449s for engine init) 
 
 ```
 ~/ai/llama.cpp-hjc4869/build/bin/llama-bench -m /models/gguf/Meta-Llama-3.1-70B-Instruct-Q4_K_M.gguf -fa 1
