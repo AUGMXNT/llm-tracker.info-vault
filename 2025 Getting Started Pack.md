@@ -2,6 +2,14 @@ https://darioamodei.com/machines-of-loving-grace
 
 https://www.youtube.com/watch?v=1yvBqasHLZs
 
+https://unlocked.microsoft.com/ai-anthology/
+
+https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/
+
+https://ai.meta.com/blog/meta-fair-updates-agents-robustness-safety-architecture/
+
+
+
 # Resources
 https://www.oneusefulthing.org/
 
