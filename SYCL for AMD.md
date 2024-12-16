@@ -85,30 +85,9 @@ Exception caught at file:/home/lhl/github/lhl/llama.cpp-sycl-amd/ggml/src/ggml-s
 SYCL error: CHECK_TRY_ERROR(dpct::gemm_batch( *main_stream, oneapi::mkl::transpose::trans, oneapi::mkl::transpose::nontrans, ne01, ne11, ne10, alpha, (const char *)src0_as_f16, dpct::library_data_t::real_half, nb01 / nb00, nb02 / nb00, (const char *)src1_f16, dpct::library_data_t::real_half, nb11 / nb10, nb12 / nb10, beta, (char *)dst_t, cu_data_type, ne01, nb2 / nb0, ne12 * ne13, cu_compute_type)): Meet error in this line code!
 ```
 
-## Vulkan
-```
-# For AMD:
-VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json ~/ai/llama.cpp-vulkan/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
 
-# For NVIDIA:
-VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json ~/ai/llama.cpp-vulkan/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
-```
-
-Results
-```
-🐟 ❯ VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json ~/ai/llama.cpp-vulkan/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
-ggml_vulkan: Found 1 Vulkan devices:
-ggml_vulkan: 0 = AMD Radeon Pro W7900 (RADV NAVI31) (radv) | uma: 0 | fp16: 1 | warp size: 64 | matrix cores: KHR_coopmat
-| model                          |       size |     params | backend    | ngl |          test |                  t/s |
-| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
-ggml_vulkan: Compiling shaders..........................Done!
-| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | Vulkan     |  99 |         pp512 |       1813.49 ± 7.09 |
-| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | Vulkan     |  99 |         tg128 |        112.75 ± 0.81 |
-
-build: ba1cb19c (4327)
-```
-
-ROCm
+## ROCm
+### llama-bench - llama2-7b-q4_0
 ```
 🐟 ❯ ~/ai/llama.cpp/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
 ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
@@ -123,20 +102,22 @@ ggml_cuda_init: found 1 ROCm devices:
 build: ba1cb19c (4327)
 ```
 
-"Real world" testing
+
+### Llama 3 70B Q4_K_M
+
+#### w/ draft model
 
 Server:
 ```
 build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 8000 -cd 8000 -ctk q8_0 -ctv q8_0 -fa
 ```
 
-Benchmark
-
+Benchmark:
 ```
 python benchmark_serving.py --backend openai-chat --host localhost --port 8080 --endpoint='/v1/chat/completions' --model "llama3.3" --dataset-name sharegpt --dataset-path /models/dataset/ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 64 --max-concurrency 1 --tokenizer meta-llama/Llama-3.3-70B-Instruct
 ```
 
-ROCm
+Results:
 ```
 ============ Serving Benchmark Result ============
 Successful requests:                     64        
@@ -161,14 +142,61 @@ P99 ITL (ms):                            355.21
 ==================================================
 ```
 
+## Vulkan
 
+How to run:
+```
+# For AMD:
+VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json ~/ai/llama.cpp-vulkan/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
+
+# For NVIDIA:
+VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json ~/ai/llama.cpp-vulkan/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
+```
+### llama-bench - llama2-7b-q4_0
+```
+🐟 ❯ VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json ~/ai/llama.cpp-vulkan/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Pro W7900 (RADV NAVI31) (radv) | uma: 0 | fp16: 1 | warp size: 64 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
+ggml_vulkan: Compiling shaders..........................Done!
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | Vulkan     |  99 |         pp512 |       1813.49 ± 7.09 |
+| llama 7B Q4_0                  |   3.56 GiB |     6.74 B | Vulkan     |  99 |         tg128 |        112.75 ± 0.81 |
+
+build: ba1cb19c (4327)
+```
+
+### Llama 3 70B Q4_K_M
+
+#### w/ draft model
 Server
 ```
 VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 8000 -cd 8000 -fa
 ```
 - 8b kvcache doesn't work
-- 
 
 Vulkan
 ```
+============ Serving Benchmark Result ============
+Successful requests:                     64        
+Benchmark duration (s):                  5638.62   
+Total input tokens:                      14688     
+Total generated tokens:                  36721     
+Request throughput (req/s):              0.01      
+Output token throughput (tok/s):         6.51      
+Total Token throughput (tok/s):          9.12      
+---------------Time to First Token----------------
+Mean TTFT (ms):                          4335.36   
+Median TTFT (ms):                        1830.94   
+P99 TTFT (ms):                           14857.58  
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          157.80    
+Median TPOT (ms):                        147.69    
+P99 TPOT (ms):                           460.64    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           145.59    
+Median ITL (ms):                         0.03      
+P99 ITL (ms):                            1264.12   
+==================================================
 ```
+#### w/ draft model (no FA)
