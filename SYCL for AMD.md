@@ -154,7 +154,7 @@ VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json ~/ai/llama.cpp-vulkan/b
 ```
 ### llama-bench - llama2-7b-q4_0
 ```
-🐟 ❯ VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json ~/ai/llama.cpp-vulkan/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
+VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json ~/ai/llama.cpp-vulkan/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf
 ggml_vulkan: Found 1 Vulkan devices:
 ggml_vulkan: 0 = AMD Radeon Pro W7900 (RADV NAVI31) (radv) | uma: 0 | fp16: 1 | warp size: 64 | matrix cores: KHR_coopmat
 | model                          |       size |     params | backend    | ngl |          test |                  t/s |
@@ -175,7 +175,7 @@ VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json build/bin/llama-
 ```
 - 8b kvcache doesn't work
 
-Vulkan
+Results
 ```
 ============ Serving Benchmark Result ============
 Successful requests:                     64        
@@ -200,3 +200,5 @@ P99 ITL (ms):                            1264.12
 ==================================================
 ```
 #### w/ draft model (no FA)
+```
+```
