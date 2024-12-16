@@ -27,65 +27,24 @@ export HIPTARGET=gfx1100
 git clone https://github.com/oneapi-src/oneMKL
 cd oneMKL
 # Find your HIPTARGET with rocminfo, under the key 'Name:'
-cmake -B buildWithrocBLAS -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DENABLE_MKLGPU_BACKEND=OFF -DENABLE_MKLCPU_BACKEND=OFF -DENABLE_ROCBLAS_BACKEND=ON -DHIPTARGETS=${HIPTARGET} -DTARGET_DOMAINS=blas
+cmake -B buildWithrocBLAS -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DENABLE_MKLGPU_BACKEND=OFF -DENABLE_MKLCPU_BACKEND=OFF -DENABLE_ROCBLAS_BACKEND=ON -DHIP_TARGETS=${HIPTARGET} -DTARGET_DOMAINS=blas
 cmake --build buildWithrocBLAS --config Release
 ```
 - https://github.com/ggerganov/llama.cpp/blob/master/docs/backend/SYCL.md#linux
+- Note: there is a typo in the llama.cpp docs and you need `-DHIP_TARGETS` not `-DHIPTARGETS`
 
+If it works you should see something like:
 ```
-ℤ ❯ cmake -B buildWithrocBLAS -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DENABLE_MKLGPU_BACKEND=OFF -DENABLE_MKLCPU_BACKEND=OFF -DENABLE_ROCBLAS_BACKEND=ON -DHIPTARGETS=${HIPTARGET} -DTARGET_DOMAINS=blas
--- CMAKE_BUILD_TYPE: None, set to Release by default
--- The CXX compiler identification is IntelLLVM 2025.0.0
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /opt/intel/oneapi/compiler/2025.0/bin/icpx - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- TARGET_DOMAINS: blas
--- Looking for dpc++
--- Performing Test is_dpcpp
--- Performing Test is_dpcpp - Success
--- Performing Test dpcpp_supports_nvptx64
--- Performing Test dpcpp_supports_nvptx64 - Success
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE
--- The C compiler identification is IntelLLVM 2025.0.0
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: /opt/intel/oneapi/compiler/2025.0/bin/icx - skipped
--- Detecting C compile features
--- Detecting C compile features - done
-CMake Deprecation Warning at deps/googletest/CMakeLists.txt:53 (cmake_minimum_required):
-  Compatibility with CMake < 3.10 will be removed from a future version of
-  CMake.
+source /opt/intel/oneapi/setvars.sh
+sycl-ls
 
-  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-  to tell CMake that the project requires at least <min> but has been updated
-  to work with policies introduced by <max> or earlier.
+[opencl:cpu][opencl:0] Intel(R) OpenCL, AMD EPYC 9274F 24-Core Processor                OpenCL 3.0 (Build 0) [2024.18.10.0.08_160000]
+[hip:gpu][hip:0] AMD HIP BACKEND, AMD Radeon Pro W7900 gfx1100 [HIP 60342.13]
+```
 
+## llama.cpp
+```
+git clone https://github.com/ggerganov/llama.cpp llama.cpp-sycl
+cd llama.cpp-sycl
 
-CMake Warning (dev) at deps/googletest/cmake/internal_utils.cmake:245 (find_package):
-  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
-  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
-  the cmake_policy command to set the policy and suppress this warning.
-
-Call Stack (most recent call first):
-  deps/googletest/CMakeLists.txt:88 (include)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Found PythonInterp: /home/lhl/mambaforge/bin/python (found version "3.11.10")
--- Found CBLAS: /usr/lib/libcblas.so
--- Found CBLAS: /usr/lib/libblas.so
--- Found CBLAS: /usr/include
--- ONEAPI_DEVICE_SELECTOR will be set to the following value(s): [hip:gpu] for run-time dispatching examples
--- Configuring done (1.7s)
--- Generating done (0.1s)
-CMake Warning:
-  Manually-specified variables were not used by the project:
-
-    HIPTARGETS
-
-
--- Build files have been written to: /home/lhl/ai/oneMKL/buildWithrocBLAS
 ```
