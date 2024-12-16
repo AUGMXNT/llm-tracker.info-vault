@@ -73,6 +73,8 @@ Fixes for building successfully:
 https://github.com/lhl/llama.cpp-sycl-amd/commit/5cb6209de5379411a28d94ebea3fe1abaac3d26b
 https://github.com/ggerganov/llama.cpp/pull/10851
 
+Potentially can build with `-DBUILD_SHARED_LIBS=OFF` so that loading up oneAPI envs isn't necessary? (might still need device env vars though)
+
 # Benchmarks
 
 ## SYCL
