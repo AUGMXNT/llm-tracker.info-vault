@@ -301,16 +301,17 @@ sudo docker run -it \
 - If you don't want to build your own you can use the image from the EmbeddedLM article: `ghcr.io/embeddedllm/vllm-rocm:navi-gguf-690c57c`
 
 ```
-vllm serve /app/model/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf --served_model_name llama3.3
+vllm serve /app/model/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf --served_model_name llama3.3 --gpu-memory-utilization 0.98 --max-model-len 8192
+
 ```
 
 Note, loading times are a bit crazy:
 ```
 # start
-WARNING 12-16 13:38:02 rocm.py:31] `fork` method is not supported by ROCm. VLLM_WORKER_MULTIPROC_METHOD is overridden to `spawn` instead.
+INFO 12-16 15:40:18 api_server.py:625] vLLM API server version 0.6.4.post2.dev258+gf13cf9ad
 
 # loaded model - 1m 21s
-INFO 12-16 13:39:23 model_runner.py:1094] Loading model weights took 39.6686 GB
+
 
 # 
 ```
