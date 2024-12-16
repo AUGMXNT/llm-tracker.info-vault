@@ -173,7 +173,7 @@ P99 ITL (ms):                            312.86
 ```
 #### hjc4869 w/ draft model, q8 kvcache
 ```
-build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 16000 -cd 16000 -ctk q8_0 -ctv q8_0 -fa
+build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 12000 -cd 12000 -ctk q8_0 -ctv q8_0 -fa
 ```
 - seems to be able to fit a lot more context than upstream
 ## Vulkan
