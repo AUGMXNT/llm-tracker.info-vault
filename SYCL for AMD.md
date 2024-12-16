@@ -344,3 +344,28 @@ INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 ```
+
+Tough results:
+```
+============ Serving Benchmark Result ============
+Successful requests:                     64        
+Benchmark duration (s):                  4349.64   
+Total input tokens:                      14688     
+Total generated tokens:                  12426     
+Request throughput (req/s):              0.01      
+Output token throughput (tok/s):         2.86      
+Total Token throughput (tok/s):          6.23      
+---------------Time to First Token----------------
+Mean TTFT (ms):                          41185.18  
+Median TTFT (ms):                        19905.55  
+P99 TTFT (ms):                           120130.56 
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          141.39    
+Median TPOT (ms):                        138.64    
+P99 TPOT (ms):                           216.53    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           138.51    
+Median ITL (ms):                         138.80    
+P99 ITL (ms):                            141.77    
+==================================================
+```
