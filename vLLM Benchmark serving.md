@@ -176,5 +176,29 @@ P99 ITL (ms):                            1050.55
 # sd 8B
 VLLM_USE_TRITON_FLASH_ATTN=0 vllm serve -tp 8 meta-llama/Llama-3.1-70B-Instruct --gpu_memory_utilization=0.96 --max-num-seqs 2048 --speculative_model meta-llama/Llama-3.1-8B-Instruct --num_speculative_tokens 5
 
+# num_speculative_tokens 5
+INFO 12-16 17:15:43 spec_decode_worker.py:961] SpecDecodeWorker stage times: average_time_per_proposal_tok_ms=7.98 scoring_time_ms=36.46 verification_time_ms=1.61
+INFO 12-16 17:15:47 metrics.py:482] Speculative metrics: Draft acceptance rate: 0.871, System efficiency: 0.741, Number of speculative tokens: 5, Number of accepted tokens: 186291, Number of draft tokens: 213925, Number of emitted tokens: 190301.
 
+============ Serving Benchmark Result ============
+Successful requests:                     1024      
+Benchmark duration (s):                  117.36    
+Total input tokens:                      220902    
+Total generated tokens:                  191582    
+Request throughput (req/s):              8.73      
+Output token throughput (tok/s):         1632.46   
+Total Token throughput (tok/s):          3514.76   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          591.40    
+Median TTFT (ms):                        259.36    
+P99 TTFT (ms):                           2951.28   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          81.17     
+Median TPOT (ms):                        76.20     
+P99 TPOT (ms):                           195.45    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           306.46    
+Median ITL (ms):                         220.89    
+P99 ITL (ms):                            774.41    
+==================================================
 ```
