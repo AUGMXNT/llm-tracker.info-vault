@@ -123,7 +123,16 @@ ggml_cuda_init: found 1 ROCm devices:
 build: ba1cb19c (4327)
 ```
 
-SYCL
+"Real world" testing
+
+Server:
+```
+build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 8000 -cd 8000 -ctk q8_0 -ctv q8_0 -fa
 ```
 
+Benchmark
+
+ROCm
+```
+python benchmark_serving.py --backend openai-chat --host localhost --port 8080 --endpoint='/v1/chat/completions' --model "llama3.3" --dataset-name sharegpt --dataset-path /models/dataset/ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 64 --max-concurrency 1 --tokenizer meta-llama/Llama-3.3-70B-Instruct
 ```
