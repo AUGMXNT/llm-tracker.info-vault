@@ -161,6 +161,14 @@ P99 ITL (ms):                            355.21
 ==================================================
 ```
 
+
+Server
+```
+VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.x86_64.json build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 8000 -cd 8000 -fa
+```
+- 8b kvcache doesn't work
+- 
+
 Vulkan
 ```
 ```
