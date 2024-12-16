@@ -284,3 +284,33 @@ P99 ITL (ms):                            689.22
 ```
 
 ## vLLM
+```
+sudo docker run -it \
+   --network=host \
+   --group-add=video \
+   --ipc=host \
+   --cap-add=SYS_PTRACE \
+   --security-opt seccomp=unconfined \
+   --device /dev/kfd \
+   --device /dev/dri \
+   -v /models:/app/model \
+   -v /home/lhl/.cache/huggingface:/root/.cache/huggingface \
+   docker.io/library/vllm-rocm \
+   bash
+```
+- If you don't want to build your own you can use the image from the EmbeddedLM article: `ghcr.io/embeddedllm/vllm-rocm:navi-gguf-690c57c`
+
+```
+vllm serve /app/model/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf --served_model_name llama3.3
+```
+
+Note, loading times are a bit crazy:
+```
+# start
+WARNING 12-16 13:38:02 rocm.py:31] `fork` method is not supported by ROCm. VLLM_WORKER_MULTIPROC_METHOD is overridden to `spawn` instead.
+
+# loaded model - 1m 21s
+INFO 12-16 13:39:23 model_runner.py:1094] Loading model weights took 39.6686 GB
+
+# 
+```
