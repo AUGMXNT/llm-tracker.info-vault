@@ -132,7 +132,35 @@ build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /m
 
 Benchmark
 
-ROCm
 ```
 python benchmark_serving.py --backend openai-chat --host localhost --port 8080 --endpoint='/v1/chat/completions' --model "llama3.3" --dataset-name sharegpt --dataset-path /models/dataset/ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 64 --max-concurrency 1 --tokenizer meta-llama/Llama-3.3-70B-Instruct
+```
+
+ROCm
+```
+============ Serving Benchmark Result ============
+Successful requests:                     64        
+Benchmark duration (s):                  2163.94   
+Total input tokens:                      14688     
+Total generated tokens:                  35891     
+Request throughput (req/s):              0.03      
+Output token throughput (tok/s):         16.59     
+Total Token throughput (tok/s):          23.37     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          1202.44   
+Median TTFT (ms):                        967.68    
+P99 TTFT (ms):                           3677.83   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          66.68     
+Median TPOT (ms):                        63.17     
+P99 TPOT (ms):                           190.02    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           58.10     
+Median ITL (ms):                         0.07      
+P99 ITL (ms):                            355.21    
+==================================================
+```
+
+Vulkan
+```
 ```
