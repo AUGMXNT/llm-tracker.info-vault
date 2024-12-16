@@ -302,7 +302,6 @@ sudo docker run -it \
 
 ```
 vllm serve /app/model/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf --served_model_name llama3.3 --gpu-memory-utilization 0.98 --max-model-len 8192
-
 ```
 
 Note, loading times are a bit crazy:
@@ -310,8 +309,8 @@ Note, loading times are a bit crazy:
 # start
 INFO 12-16 15:40:18 api_server.py:625] vLLM API server version 0.6.4.post2.dev258+gf13cf9ad
 
-# loaded model - 1m 21s
-
+# loaded model - 1m 19s (43.727/44.984 GB)
+INFO 12-16 15:41:37 model_runner.py:1094] Loading model weights took 39.6686 GB
 
 # 
 ```
