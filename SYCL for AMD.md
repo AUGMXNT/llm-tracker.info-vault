@@ -141,14 +141,41 @@ Median ITL (ms):                         0.07
 P99 ITL (ms):                            355.21    
 ==================================================
 ```
-## w/ draft model (no FA)
+#### w/ draft model (no FA)
 ```
 build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 6000 -cd 6000
 ```
 - 8000 OOMs
-```
+- q8 kvcache OOMs forever
 
 ```
+============ Serving Benchmark Result ============
+Successful requests:                     64        
+Benchmark duration (s):                  2009.77   
+Total input tokens:                      14688     
+Total generated tokens:                  35455     
+Request throughput (req/s):              0.03      
+Output token throughput (tok/s):         17.64     
+Total Token throughput (tok/s):          24.95     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          1080.25   
+Median TTFT (ms):                        962.51    
+P99 TTFT (ms):                           3103.85   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          63.17     
+Median TPOT (ms):                        61.55     
+P99 TPOT (ms):                           181.66    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           54.67     
+Median ITL (ms):                         0.17      
+P99 ITL (ms):                            312.86    
+==================================================
+```
+#### hjc4869 w/ draft model, q8 kvcache
+```
+build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 16000 -cd 16000 -ctk q8_0 -ctv q8_0 -fa
+```
+- seems to be able to fit a lot more context than upstream
 ## Vulkan
 
 How to run:
