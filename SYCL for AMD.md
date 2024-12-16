@@ -31,7 +31,7 @@ cmake -B buildWithrocBLAS -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DENA
 cmake --build buildWithrocBLAS --config Release
 ```
 - https://github.com/ggerganov/llama.cpp/blob/master/docs/backend/SYCL.md#linux
-- Note: there is a typo in the llama.cpp docs and you need `-DHIP_TARGETS` not `-DHIPTARGETS`
+- Note: there is a typo in the llama.cpp docs and you need `-DHIP_TARGETS` not `-DHIPTARGETS` (fPR submitted)
 
 If it works you should see something like:
 ```
@@ -48,25 +48,42 @@ git clone https://github.com/ggerganov/llama.cpp llama.cpp-sycl
 cd llama.cpp-sycl
 
 # Export relevant ENV variables
-export LD_LIBRARY_PATH=~/ai/oneMKL/buildWithrocBLAS/lib:$LD_LIBRARY_PATH
-export LIBRARY_PATH=~/ai/oneMKL/buildWithrocBLAS/lib:$LIBRARY_PATH
-export CPLUS_INCLUDE_DIR=~/ai/oneMKL/buildWithrocBLAS/include:$CPLUS_INCLUDE_DIR
+export 
+export MKL_ROCBLAS=~ai/oneMKL/buildWithrocmBLAS/lib
+export LD_LIBRARY_PATH=$MKL_ROCBLAS:$LD_LIBRARY_PATH
+export LIBRARY_PATH=$MKL_ROCBLAS:$LIBRARY_PATH
+export CPLUS_INCLUDE_DIR=$MKL_ROCBLAS:$CPLUS_INCLUDE_DIR
 
 # Build LLAMA with rocBLAS acceleration through SYCL
 
 ## AMD
 # Use FP32, FP16 is not supported
 # Find your GGML_SYCL_DEVICE_ARCH with rocminfo, under the key 'Name:'
-cmake -B build -DGGML_SYCL=ON -DGGML_SYCL_TARGET=AMD -DGGML_SYCL_DEVICE_ARCH=gfx1100 -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx
+export GGML_SYCL_DEVICE_ARCH=gfx1100 # Example architecture
+cmake -B build -DGGML_SYCL=ON -DGGML_SYCL_TARGET=AMD -DGGML_SYCL_DEVICE_ARCH=${GGML_SYCL_DEVICE_ARCH} -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_SHARED_LINKER_FLAGS="-L$MKL_ROCBLAS -L/opt/intel/oneapi/mkl/latest/lib/intel64 -lonemath_blas_rocblas -Wl,--no-as-needed -lmkl_sycl -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core"
 
 # build all binary
 cmake --build build --config Release -j -v
 
 ```
+- CMake modification required for AMD (PR submitted)
+- `-DCMAKE_SHARED_LINKER_FLAGS` required (PR submitted)
 
-
+Fixes for building successfully:
+https://github.com/lhl/llama.cpp-sycl-amd/commit/5cb6209de5379411a28d94ebea3fe1abaac3d26b
+https://github.com/ggerganov/llama.cpp/pull/10851
 
 # Benchmarks
+
+## SYCL
+- `llama-cli` runs ok!
+- `llama-bench` segfaults! https://github.com/ggerganov/llama.cpp/issues/10850
+- `llama-server` fails w/ memory allocation error with `--ngl`?
+```
+oneapi::mkl::oneapi::mkl::blas::gemm: cannot allocate memory on host
+Exception caught at file:/home/lhl/github/lhl/llama.cpp-sycl-amd/ggml/src/ggml-sycl/ggml-sycl.cpp, line:3356, func:operator()
+SYCL error: CHECK_TRY_ERROR(dpct::gemm_batch( *main_stream, oneapi::mkl::transpose::trans, oneapi::mkl::transpose::nontrans, ne01, ne11, ne10, alpha, (const char *)src0_as_f16, dpct::library_data_t::real_half, nb01 / nb00, nb02 / nb00, (const char *)src1_f16, dpct::library_data_t::real_half, nb11 / nb10, nb12 / nb10, beta, (char *)dst_t, cu_data_type, ne01, nb2 / nb0, ne12 * ne13, cu_compute_type)): Meet error in this line code!
+```
 
 ## Vulkan
 ```
