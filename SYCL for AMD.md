@@ -49,7 +49,7 @@ cd llama.cpp-sycl
 
 # Export relevant ENV variables
 export 
-export MKL_ROCBLAS=~ai/oneMKL/buildWithrocmBLAS/lib
+export MKL_ROCBLAS=~/ai/oneMKL/buildWithrocmBLAS/lib
 export LD_LIBRARY_PATH=$MKL_ROCBLAS:$LD_LIBRARY_PATH
 export LIBRARY_PATH=$MKL_ROCBLAS:$LIBRARY_PATH
 export CPLUS_INCLUDE_DIR=$MKL_ROCBLAS:$CPLUS_INCLUDE_DIR
@@ -201,4 +201,25 @@ P99 ITL (ms):                            1264.12
 ```
 #### w/ draft model (no FA)
 ```
+============ Serving Benchmark Result ============
+Successful requests:                     64        
+Benchmark duration (s):                  3830.46   
+Total input tokens:                      14688     
+Total generated tokens:                  36303     
+Request throughput (req/s):              0.02      
+Output token throughput (tok/s):         9.48      
+Total Token throughput (tok/s):          13.31     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          2212.03   
+Median TTFT (ms):                        1218.89   
+P99 TTFT (ms):                           6633.29   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          118.94    
+Median TPOT (ms):                        113.34    
+P99 TPOT (ms):                           369.24    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           101.43    
+Median ITL (ms):                         0.07      
+P99 ITL (ms):                            689.22    
+==================================================
 ```
