@@ -82,18 +82,99 @@ P99 ITL (ms):                            4034.65
 VLLM_USE_TRITON_FLASH_ATTN=0 vllm serve -tp 2 meta-llama/Llama-3.1-70B-Instruct --num-scheduler-steps 12 --gpu_memory_utilization=0.96 --max-num-seqs 2048
 
 # --max-concurrency = 32 (then multiply throughput x 4)
+============ Serving Benchmark Result ============
+Successful requests:                     1024      
+Benchmark duration (s):                  286.06    
+Total input tokens:                      220902    
+Total generated tokens:                  192103    
+Request throughput (req/s):              3.58      
+Output token throughput (tok/s):         671.54    
+Total Token throughput (tok/s):          1443.76   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          420.74    
+Median TTFT (ms):                        383.36    
+P99 TTFT (ms):                           1625.62   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          42.82     
+Median TPOT (ms):                        43.05     
+P99 TPOT (ms):                           58.85     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           43.94     
+Median ITL (ms):                         33.32     
+P99 ITL (ms):                            256.37    
+==================================================
+
+
+286.06/4 = 71.515
+14.32
+2686.16
+5775.04
 ```
 
-sd 1b
+## sd 1b
 ```
 # sd 1B
-VLLM_USE_TRITON_FLASH_ATTN=0 vllm serve -tp 8 meta-llama/Llama-3.1-70B-Instruct --num-scheduler-steps 12 --gpu_memory_utilization=0.96 --max-num-seqs 2048 --speculative_model meta-llama/Llama-3.2-1B-Instruct
+VLLM_USE_TRITON_FLASH_ATTN=0 vllm serve -tp 8 meta-llama/Llama-3.1-70B-Instruct --gpu_memory_utilization=0.96 --max-num-seqs 2048 --speculative_model meta-llama/Llama-3.2-1B-Instruct --num_speculative_tokens 5
+
+# num_speculative_tokens 5
+INFO 12-16 16:46:04 metrics.py:482] Speculative metrics: Draft acceptance rate: 0.797, System efficiency: 0.640, Number of speculative tokens: 5, Number of accepted tokens: 197711, Number of draft tokens: 248165, Number of emitted tokens: 190541.
+
+============ Serving Benchmark Result ============
+Successful requests:                     1024      
+Benchmark duration (s):                  116.32    
+Total input tokens:                      220902    
+Total generated tokens:                  192104    
+Request throughput (req/s):              8.80      
+Output token throughput (tok/s):         1651.57   
+Total Token throughput (tok/s):          3550.73   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          447.49    
+Median TTFT (ms):                        229.31    
+P99 TTFT (ms):                           2581.31   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          84.12     
+Median TPOT (ms):                        77.14     
+P99 TPOT (ms):                           227.50    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           263.58    
+Median ITL (ms):                         188.09    
+P99 ITL (ms):                            929.71    
+==================================================
 
 
+# num_speculative_tokens 10
+
+INFO 12-16 17:05:51 spec_decode_worker.py:961] SpecDecodeWorker stage times: average_time_per_proposal_tok_ms=4.51 scoring_time_ms=32.27 verification_time_ms=1.58
+INFO 12-16 17:05:54 metrics.py:482] Speculative metrics: Draft acceptance rate: 0.786, System efficiency: 0.443, Number of speculative tokens: 10, Number of accepted tokens: 311498, Number of draft tokens: 396390, Number of emitted tokens: 193355.
+
+============ Serving Benchmark Result ============
+Successful requests:                     1024      
+Benchmark duration (s):                  141.94    
+Total input tokens:                      220902    
+Total generated tokens:                  191876    
+Request throughput (req/s):              7.21      
+Output token throughput (tok/s):         1351.84   
+Total Token throughput (tok/s):          2908.18   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          507.09    
+Median TTFT (ms):                        349.68    
+P99 TTFT (ms):                           2440.07   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          107.29    
+Median TPOT (ms):                        95.27     
+P99 TPOT (ms):                           307.86    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           401.02    
+Median ITL (ms):                         336.03    
+P99 ITL (ms):                            1050.55   
+==================================================
 ```
-sd 8b
+- note, scheduler_steps > 1 not supported w/ speculative decoding
+## sd 8b
 
 ```
 # sd 8B
-VLLM_USE_TRITON_FLASH_ATTN=0 vllm serve -tp 8 meta-llama/Llama-3.1-70B-Instruct --num-scheduler-steps 12 --gpu_memory_utilization=0.96 --max-num-seqs 2048 --speculative_model meta-llama/Llama-3.1-8B-Instruct
+VLLM_USE_TRITON_FLASH_ATTN=0 vllm serve -tp 8 meta-llama/Llama-3.1-70B-Instruct --gpu_memory_utilization=0.96 --max-num-seqs 2048 --speculative_model meta-llama/Llama-3.1-8B-Instruct --num_speculative_tokens 5
+
+
 ```

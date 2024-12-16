@@ -313,6 +313,34 @@ INFO 12-16 16:11:46 api_server.py:625] vLLM API server version 0.6.4.post2.dev25
 # loaded model - 1m 20s (43.727/44.984 GB)
 INFO 12-16 16:13:06 model_runner.py:1094] Loading model weights took 39.6686 GB
 
+# 12m 44s for memory profiling
+INFO 12-16 16:25:51 worker.py:237] Memory profiling results: duration=764.60 seconds, total_gpu_memory=44.98GiB, initial_memory_usage=39.91GiB, peak_torch_memory=41.23GiB, memory_usage_post_profile=40.01GiB, non_torch_memory=0.34GiB, kv_cache_size=2.52GiB, gpu_memory_utilization=0.98.
+INFO 12-16 16:25:51 gpu_executor.py:76] # GPU blocks: 516, # CPU blocks: 819
+INFO 12-16 16:25:51 gpu_executor.py:80] Maximum concurrency for 6000 tokens per request: 1.38x
 
-# 
+# 24m 12s graph capture ; 36m 56s total
+INFO 12-16 16:50:04 model_runner.py:1523] Graph capturing finished in 1452 secs, took 0.17 GiB
+INFO 12-16 16:50:04 llm_engine.py:493] init engine (profile, create kv cache, warmup model) took 2217.68 seconds
+
+# Took 38m 18s for this to load...
+INFO 12-16 16:50:04 api_server.py:560] Using supplied chat template:
+INFO 12-16 16:50:04 api_server.py:560] None
+INFO 12-16 16:50:04 launcher.py:19] Available routes are:
+INFO 12-16 16:50:04 launcher.py:27] Route: /openapi.json, Methods: GET, HEAD
+INFO 12-16 16:50:04 launcher.py:27] Route: /docs, Methods: GET, HEAD
+INFO 12-16 16:50:04 launcher.py:27] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+INFO 12-16 16:50:04 launcher.py:27] Route: /redoc, Methods: GET, HEAD
+INFO 12-16 16:50:04 launcher.py:27] Route: /health, Methods: GET
+INFO 12-16 16:50:04 launcher.py:27] Route: /tokenize, Methods: POST
+INFO 12-16 16:50:04 launcher.py:27] Route: /detokenize, Methods: POST
+INFO 12-16 16:50:04 launcher.py:27] Route: /v1/models, Methods: GET
+INFO 12-16 16:50:04 launcher.py:27] Route: /version, Methods: GET
+INFO 12-16 16:50:04 launcher.py:27] Route: /v1/chat/completions, Methods: POST
+INFO 12-16 16:50:04 launcher.py:27] Route: /v1/completions, Methods: POST
+INFO 12-16 16:50:04 launcher.py:27] Route: /v1/embeddings, Methods: POST
+INFO 12-16 16:50:04 launcher.py:27] Route: /v1/score, Methods: POST
+INFO:     Started server process [2224]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 ```
