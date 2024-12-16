@@ -178,6 +178,29 @@ P99 ITL (ms):                            312.86
 build/bin/llama-server -m /models/gguf/Llama-3.3-70B-Instruct-Q4_K_M.gguf -md /models/gguf/Llama-3.2-1B-Instruct-Q8_0.gguf --draft-max 16 --draft-min 1 --draft-p-min 0.8 -ngl 99 -ngld 99 -c 12000 -cd 12000 -ctk q8_0 -ctv q8_0 -fa
 ```
 - seems to be able to fit a lot more context than upstream
+```
+============ Serving Benchmark Result ============
+Successful requests:                     64        
+Benchmark duration (s):                  2095.09   
+Total input tokens:                      14688     
+Total generated tokens:                  35749     
+Request throughput (req/s):              0.03      
+Output token throughput (tok/s):         17.06     
+Total Token throughput (tok/s):          24.07     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          1085.26   
+Median TTFT (ms):                        963.65    
+P99 TTFT (ms):                           3112.18   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          65.42     
+Median TPOT (ms):                        63.96     
+P99 TPOT (ms):                           189.01    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           56.63     
+Median ITL (ms):                         0.14      
+P99 ITL (ms):                            332.08    
+==================================================
+```
 ## Vulkan
 
 How to run:
@@ -259,3 +282,5 @@ Median ITL (ms):                         0.07
 P99 ITL (ms):                            689.22    
 ==================================================
 ```
+
+## vLLM
