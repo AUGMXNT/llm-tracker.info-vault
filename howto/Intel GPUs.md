@@ -16,8 +16,34 @@ If you have multiple oneAPI Base Toolkit versions installed (IPEX-LLM for exampl
 source ~/intel/oneapi/2024.2/oneapi-vars.sh 
 ```
 
+# PyTorch Setup
 
+## Install the Intel Support Packages
+```
+wget https://registrationcenter-download.intel.com/akdlm/IRC_NAS/884eaa22-d56f-45dc-9a65-901f1c625f9e/l_intel-for-pytorch-gpu-dev_p_0.5.3.36_offline.sh
+sh ./l_intel-for-pytorch-gpu-dev_p_0.5.3.36_offline.sh
+```
+- https://www.intel.com/content/www/us/en/developer/articles/tool/pytorch-prerequisites-for-intel-gpu/2-5.html#inpage-nav-2
+- [Option 2D: Install Using Offline Installation Scripts](https://www.intel.com/content/www/us/en/developer/articles/tool/pytorch-prerequisites-for-intel-gpu/2-5.html#collapseCollapsible1730140914547)
 
+## Setup env vars:
+```
+# if installed as root
+source /opt/intel/oneapi/pytorch-gpu-dev-0.5/oneapi-vars.sh
+
+# else
+source ~/intel/oneapi/pytorch-gpu-dev-0.5/oneapi-vars.sh
+```
+
+## Install PyTorch XPU
+```
+mamba create -n pytorch python=3.12
+mamba activate pytorch
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/test/xpu
+```
+- https://pytorch.org/docs/stable/notes/get_start_xpu.html
+
+OK, that should be it. See also: https://www.reddit.com/r/LocalLLaMA/comments/1hfrdos/comment/m2e9nd5/
 
 # Testing llama.cpp with Intel's Xe2 iGPU (Core Ultra 7 258V w/ Arc Graphics 140V)
 
