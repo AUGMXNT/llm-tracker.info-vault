@@ -39,12 +39,34 @@ source ~/intel/oneapi/pytorch-gpu-dev-0.5/oneapi-vars.sh
 ```
 mamba create -n pytorch python=3.12
 mamba activate pytorch
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/test/xpu
+
+# Make sure we install 2.5.x to be compatible w/ the pytorch-prereqs (otherwise it moves up to 2.6 and will cause problems)
+pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/test/xpu
+
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/test/xpu
 ```
 - https://pytorch.org/docs/stable/notes/get_start_xpu.html
 
 OK, that should be it. See also: https://www.reddit.com/r/LocalLLaMA/comments/1hfrdos/comment/m2e9nd5/
 
+# vLLM Setup
+If we already have PyTorch setup...
+```
+# env
+mamba create --name vllm --clone pytorch
+mamba activate vllm
+
+# don't mess w/ our pytorch
+python use_existing_torch.py
+pip install -r requirements-common.txt
+pip install -r requirements-build.txt
+pip install -v -r requirements-xpu.txt
+
+VLLM_TARGET_DEVICE=xpu python setup.py install
+
+# hmm
+pip install --no-cache-dir aiohttp
+```
 # Testing llama.cpp with Intel's Xe2 iGPU (Core Ultra 7 258V w/ Arc Graphics 140V)
 
 I have a Lunar Lake laptop (see my [in-progress Linux review](https://github.com/lhl/linuxlaptops/wiki/2024-MSI-Prestige-13-AI--Evo-A2VM)) and recently sat down and did some testing on how llama.cpp works with it.

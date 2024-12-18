@@ -2,6 +2,7 @@ venv: vllm
 ```
 python benchmark_serving.py --backend openai-chat --base-url 'http://ip-10-1-1-135:8000/' --endpoint='/v1/chat/completions' --model "meta-llama/Llama-3.3-70B-Instruct" --dataset-name sharegpt --num-prompts 32 --max-concurrency 1
 ```
+- https://docs.vllm.ai/en/latest/getting_started/xpu-installation.html
 
 Concurrency 1, 4, 8, 16, 32
 
