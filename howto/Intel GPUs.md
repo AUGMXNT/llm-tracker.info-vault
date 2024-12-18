@@ -51,6 +51,9 @@ OK, that should be it. See also: https://www.reddit.com/r/LocalLLaMA/comments/1h
 
 # vLLM Setup
 If we already have PyTorch setup...
+
+
+Build from source (BUILDS OK, but then throws weird errors when trying to run `vllm serve`)
 ```
 # env
 mamba create --name vllm --clone pytorch
