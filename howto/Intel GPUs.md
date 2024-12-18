@@ -46,22 +46,59 @@ pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https
 # pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/test/xpu
 ```
 - https://pytorch.org/docs/stable/notes/get_start_xpu.html
+- https://www.intel.com/content/www/us/en/developer/articles/tool/pytorch-prerequisites-for-intel-gpu/2-5.html
 
 OK, that should be it. See also: https://www.reddit.com/r/LocalLLaMA/comments/1hfrdos/comment/m2e9nd5/
 
 # vLLM Setup
 If we already have PyTorch setup...
 
-Docker
+## Docker (FAILS)
 ```
 # paru -S docker docker-compose docker-buildx
 # systemctl enable --now docker
 
+❯ sudo docker build -f Dockerfile.xpu -t vllm-xpu-env --shm-size=4g .                                                       (vllm) 
 
+[+] Building 273.0s (14/17)                                                                                            docker:default
+ => [internal] load build definition from Dockerfile.xpu                                                                         0.0s
+ => => transferring dockerfile: 2.69kB                                                                                           0.0s
+ => WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 65)                0.0s
+ => [internal] load metadata for docker.io/intel/oneapi-basekit:2024.2.1-0-devel-ubuntu22.04                                     0.0s
+ => [internal] load .dockerignore                                                                                                0.0s
+ => => transferring context: 387B                                                                                                0.0s
+ => [vllm-base  1/11] FROM docker.io/intel/oneapi-basekit:2024.2.1-0-devel-ubuntu22.04                                           0.2s
+ => [internal] load build context                                                                                                0.5s
+ => => transferring context: 48.03MB                                                                                             0.4s
+ => [vllm-base  2/11] RUN wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | gpg --dearmor  2.4s
+ => [vllm-base  3/11] RUN apt-get update -y &&     apt-get install -y --no-install-recommends --fix-missing     curl     ffmpe  51.9s
+ => [vllm-base  4/11] WORKDIR /workspace/vllm                                                                                    0.0s 
+ => [vllm-base  5/11] COPY requirements-xpu.txt /workspace/vllm/requirements-xpu.txt                                             0.0s 
+ => [vllm-base  6/11] COPY requirements-common.txt /workspace/vllm/requirements-common.txt                                       0.0s 
+ => [vllm-base  7/11] RUN --mount=type=cache,target=/root/.cache/pip     pip install --no-cache-dir     -r requirements-xpu.t  173.5s 
+ => [vllm-base  8/11] RUN git clone https://github.com/intel/pti-gpu &&     cd pti-gpu/sdk &&     git checkout 6c491f07a777ed8  44.2s 
+ => [vllm-base  9/11] COPY . .                                                                                                   0.3s 
+ => ERROR [vllm-base 10/11] RUN --mount=type=bind,source=.git,target=.git     if [ "$GIT_REPO_CHECK" != 0 ]; then bash tools/ch  0.3s 
+------                                                                                                                                
+ > [vllm-base 10/11] RUN --mount=type=bind,source=.git,target=.git     if [ "$GIT_REPO_CHECK" != 0 ]; then bash tools/check_repo.sh; fi:                                                                                                                                    
+0.286 Repo is dirty                                                                                                                   
+------
+
+ 1 warning found (use docker --debug to expand):
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 65)
+Dockerfile.xpu:48
+--------------------
+  47 |     ARG GIT_REPO_CHECK
+  48 | >>> RUN --mount=type=bind,source=.git,target=.git \
+  49 | >>>     if [ "$GIT_REPO_CHECK" != 0 ]; then bash tools/check_repo.sh; fi
+  50 |     
+--------------------
+ERROR: failed to solve: process "/bin/sh -c if [ \"$GIT_REPO_CHECK\" != 0 ]; then bash tools/check_repo.sh; fi" did not complete successfully: exit code: 1
 ```
 - https://docs.vllm.ai/en/latest/getting_started/xpu-installation.html#quick-start-using-dockerfile
 
-Build from source (BUILDS OK, but then throws weird errors when trying to run `vllm serve`)
+## Source (FAILS)
+Build from source with some coaxing but fails running
 ```
 # env
 mamba create --name vllm --clone pytorch
