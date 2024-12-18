@@ -52,6 +52,14 @@ OK, that should be it. See also: https://www.reddit.com/r/LocalLLaMA/comments/1h
 # vLLM Setup
 If we already have PyTorch setup...
 
+Docker
+```
+# paru -S docker docker-compose docker-buildx
+# systemctl enable --now docker
+
+
+```
+- https://docs.vllm.ai/en/latest/getting_started/xpu-installation.html#quick-start-using-dockerfile
 
 Build from source (BUILDS OK, but then throws weird errors when trying to run `vllm serve`)
 ```
