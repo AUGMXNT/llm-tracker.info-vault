@@ -1,6 +1,22 @@
 As of August 2023, AMD's [ROCm](https://github.com/RadeonOpenCompute/ROCm) GPU compute software stack is available for Linux or [Windows](https://rocm.docs.amd.com/en/latest/deploy/windows/quick_start.html). It's best to check the latest docs for information:
 * https://rocm.docs.amd.com/en/latest/
 
+
+General [Mamba](https://github.com/conda-forge/miniforge) workflow tip:
+```
+# Create a baseml so you don't have to keep reinstalling stuff!
+mamba create -n baseml python=3.12
+mamba activate baseml
+# I mostly just use latest stable ROCm pytorch:
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.2
+# you can add uv, transformers, huggingface_hub, cmake, ninja, anything else you use everywhere
+
+# From now on you can easily clone your env:
+mamba create -n comfyui --clone baseml
+mamba activate comfyui
+```
+
+
 # Hardware
 These are the latest officially supported cards:
 * https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html
@@ -989,6 +1005,19 @@ This seems to run but with some caveats:
 - Basically no quantization works for AMD. FP8 is only for MI300+
 	- https://docs.vllm.ai/en/latest/quantization/supported_hardware.html
 
+## ComfyUI
+
+I didn't have any problems installing ComfyUI from the source instructions, seemed like a pretty well behaved app and I was able to just run python main.py. I did do a bit of tuning and this seemed to work fastes for me (after an initial slower first-run):
+
+```
+DISABLE_ADDMM_CUDA_LT=1 PYTORCH_TUNABLEOP_ENABLED=1 TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 python main.py
+```
+
+(Also there is a recent regression w/ pytorch/hipblaslt: https://github.com/ROCm/hipBLASLt/issues/1243 ; I'm using the latest PyTorch nightly atm to see if it actually fixes things, but ... questionable)
+
+I'm not an SD expert by any means, but on my W7900 (gfx1100, similar to 7900 XTX) when `--use-split-cross-attention` it ends up being about 10% slower than without (and doesn't change memory usage for me ~ 12GB).
+
+I don't know how standard benchmarks are done, but with an SDXL-based checkpoint, I get about 3.14 it/s - it takes ~ 10.0-10.1s to generate a 1024x1024 image w/ 30 steps and uni_pc_bh2 sampler (dpmpp samplers render splotchy/wonky for me) which seems OK? (I'll be seeing how Flux does soon, last time I did much image generation poking around was about 1y agao). In any case it runs about 2X faster than a similar setup on a 7900 XTX on Windows w/ the latest Adrenalin 24.12 + WSL2.
 # Windows
 I don't use Windows for AI/ML, so this doc is going to be rather sporadically updated (if at all).
 
