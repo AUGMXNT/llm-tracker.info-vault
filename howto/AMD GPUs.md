@@ -992,6 +992,117 @@ This seems to run but with some caveats:
 # Windows
 I don't use Windows for AI/ML, so this doc is going to be rather sporadically updated (if at all).
 
+## WSL
+The Adrenalin Edition 24.12.1 (2024-12) drivers add official support for WSL
+- https://www.amd.com/en/resources/support-articles/release-notes/RN-RAD-WIN-24-12-1.html
+- Previously: https://www.amd.com/en/resources/support-articles/release-notes/RN-RAD-WIN-24-10-21-01-WSL-2.html
+The best place to track compatibility will be the official docs:
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/compatibility/wsl/wsl_compatibility.html
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/limitations.html#wsl-specific-issues
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/limitations.html#windows-subsystem-for-linux-wsl
+Be sure to follow the docs carefully as there are limitations:
+- As of 2024-12 Ubuntu 22.04 (not 24.04) is required and will install ROCm 6.2.3
+- `rocm-smi` does not work (but you can confirm if your GPU shows up with `rocminfo`)
+- "Microsoft does not currently support mGPU setup in WSL."
+	- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/native_linux/mgpu.html#windows-subsystem-for-linux-wsl-support
+## PyTorch
+```
+# Install latest Stable PyTorch
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.2
+
+# Replace w/ WSL compatible runtime
+location=`pip show torch | grep Location | awk -F ": " '{print $2}'`
+cd ${location}/torch/lib/
+mv libhsa-runtime64.so libhsa-runtime64.so.torch
+ln -s /opt/rocm/lib/libhsa-runtime64.so
+
+# Confirm
+python -c "import torch; print(f'PyTorch version: {torch.__version__}, CUDA available: {torch.cuda.is_available()}, CUDA device count: {torch.cuda.device_count()}, Device name: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"N/A\"}')"
+PyTorch version: 2.5.1+rocm6.2, CUDA available: True, CUDA device count: 1, Device name: AMD Radeon RX 7900 XTX
+
+python -m torch.utils.collect_env
+<frozen runpy>:128: RuntimeWarning: 'torch.utils.collect_env' found in sys.modules after import of package 'torch.utils', but prior to execution of 'torch.utils.collect_env'; this may result in unpredictable behaviour
+Collecting environment information...
+PyTorch version: 2.5.1+rocm6.2
+Is debug build: False
+CUDA used to build PyTorch: N/A
+ROCM used to build PyTorch: 6.2.41133-dd7f95766
+
+OS: Ubuntu 22.04.5 LTS (x86_64)
+GCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+Clang version: Could not collect
+CMake version: version 3.31.2
+Libc version: glibc-2.35
+
+Python version: 3.12.8 | packaged by conda-forge | (main, Dec  5 2024, 14:24:40) [GCC 13.3.0] (64-bit runtime)
+Python platform: Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.35
+Is CUDA available: True
+CUDA runtime version: Could not collect
+CUDA_MODULE_LOADING set to: LAZY
+GPU models and configuration: AMD Radeon RX 7900 XTX (gfx1100)
+Nvidia driver version: Could not collect
+cuDNN version: Could not collect
+HIP runtime version: 6.2.41133
+MIOpen runtime version: 3.2.0
+Is XNNPACK available: True
+
+CPU:
+Architecture:                         x86_64
+CPU op-mode(s):                       32-bit, 64-bit
+Address sizes:                        48 bits physical, 48 bits virtual
+Byte Order:                           Little Endian
+CPU(s):                               16
+On-line CPU(s) list:                  0-15
+Vendor ID:                            AuthenticAMD
+Model name:                           AMD Ryzen 7 5800X3D 8-Core Processor
+CPU family:                           25
+Model:                                33
+Thread(s) per core:                   2
+Core(s) per socket:                   8
+Socket(s):                            1
+Stepping:                             2
+BogoMIPS:                             6787.22
+Flags:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves clzero xsaveerptr arat umip vaes vpclmulqdq rdpid
+Hypervisor vendor:                    Microsoft
+Virtualization type:                  full
+L1d cache:                            256 KiB (8 instances)
+L1i cache:                            256 KiB (8 instances)
+L2 cache:                             4 MiB (8 instances)
+L3 cache:                             96 MiB (1 instance)
+Vulnerability Gather data sampling:   Not affected
+Vulnerability Itlb multihit:          Not affected
+Vulnerability L1tf:                   Not affected
+Vulnerability Mds:                    Not affected
+Vulnerability Meltdown:               Not affected
+Vulnerability Mmio stale data:        Not affected
+Vulnerability Reg file data sampling: Not affected
+Vulnerability Retbleed:               Not affected
+Vulnerability Spec rstack overflow:   Mitigation; safe RET, no microcode
+Vulnerability Spec store bypass:      Vulnerable
+Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:             Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                  Not affected
+Vulnerability Tsx async abort:        Not affected
+
+Versions of relevant libraries:
+[pip3] numpy==1.26.4
+[pip3] pytorch-triton-rocm==3.1.0
+[pip3] torch==2.5.1+rocm6.2
+[pip3] torchaudio==2.5.1+rocm6.2
+[pip3] torchsde==0.2.6
+[pip3] torchvision==0.20.1+rocm6.2
+[conda] numpy                     1.26.4                   pypi_0    pypi
+[conda] pytorch-triton-rocm       3.1.0                    pypi_0    pypi
+[conda] torch                     2.5.1+rocm6.2            pypi_0    pypi
+[conda] torchaudio                2.5.1+rocm6.2            pypi_0    pypi
+[conda] torchsde                  0.2.6                    pypi_0    pypi
+[conda] torchvision               0.20.1+rocm6.2           pypi_0    pypi
+```
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/limitations.html#running-pytorch-in-virtual-environments
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/compatibility/wsl/wsl_compatibility.html#pytorch-rocm-support-matrix
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/wsl/install-pytorch.html
+- https://github.com/ROCm/ROCm/issues/3571#issuecomment-2332183716
+
 ## llama.cpp
 
 For an easy time, go to [llama.cpp's release page](https://github.com/ggerganov/llama.cpp/releases) and download:
