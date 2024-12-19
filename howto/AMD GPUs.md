@@ -1005,6 +1005,11 @@ Be sure to follow the docs carefully as there are limitations:
 - `rocm-smi` does not work (but you can confirm if your GPU shows up with `rocminfo`)
 - "Microsoft does not currently support mGPU setup in WSL."
 	- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/native_linux/mgpu.html#windows-subsystem-for-linux-wsl-support
+
+```
+# Install just about everything you might need for compute
+amdgpu-install -y --usecase=wsl,rocm,rocmdevtools,openclsdk,hiplibsdk --no-dkms
+```
 ## PyTorch
 ```
 # Install latest Stable PyTorch
@@ -1102,7 +1107,25 @@ Versions of relevant libraries:
 - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/compatibility/wsl/wsl_compatibility.html#pytorch-rocm-support-matrix
 - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/wsl/install-pytorch.html
 - https://github.com/ROCm/ROCm/issues/3571#issuecomment-2332183716
+### Docker
+There's a Docker image you can use as well that seems to work OOTB (but uses a hella-old PyTorch)
+```
+apt install docker.io
 
+docker pull rocm/pytorch:rocm6.1.3_ubuntu22.04_py3.10_pytorch_release-2.1.2
+
+sudo docker run -it \
+--cap-add=SYS_PTRACE  \
+--security-opt seccomp=unconfined \
+--ipc=host \
+--shm-size 8G \
+--device=/dev/dxg -v /usr/lib/wsl/lib/libdxcore.so:/usr/lib/libdxcore.so -v /opt/rocm/lib/libhsa-runtime64.so.1:/opt/rocm/lib/libhsa-runtime64.so.1  \
+rocm/pytorch:rocm6.1.3_ubuntu22.04_py3.10_pytorch_release-2.1.2
+
+root@3c4a2ad600ac:/var/lib/jenkins# python -c "import torch; print(f'PyTorch version: {torch.__version__}, CUDA available: {torch.cuda.is_available()}, CUDA device count: {torch.cuda.device_count()}, Device name: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"N/A\"}')"
+PyTorch version: 2.1.2+git53da8f8, CUDA available: True, CUDA device count: 1, Device name: AMD Radeon RX 7900 XTX
+```
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/wsl/install-pytorch.html#install-methods
 ## llama.cpp
 
 For an easy time, go to [llama.cpp's release page](https://github.com/ggerganov/llama.cpp/releases) and download:
