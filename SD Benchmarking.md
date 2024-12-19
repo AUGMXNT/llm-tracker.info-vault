@@ -9,3 +9,7 @@ https://chimolog-co.translate.goog/bto-gpu-stable-diffusion-specs/?_x_tr_sl=auto
 # Tuning
 https://www.reddit.com/r/StableDiffusion/comments/1en7ys0/gpu_benchmark_with_flux1/
 https://www.reddit.com/r/comfyui/comments/1en2bcu/boosting_generation_speed_by_using_libtcmalloc/
+
+
+https://github.com/ROCm/hipBLASLt/issues/1243
+https://github.com/pytorch/pytorch/issues/138067
