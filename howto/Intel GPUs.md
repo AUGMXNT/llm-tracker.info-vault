@@ -35,6 +35,7 @@ source /opt/intel/oneapi/pytorch-gpu-dev-0.5/oneapi-vars.sh
 source ~/intel/oneapi/pytorch-gpu-dev-0.5/oneapi-vars.sh
 ```
 
+Note: If you load the latest [oneAPI Base Toolkit](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html) (2025.0.1 in Dec 2024), the basic PyTorch inference and training example work *except* for those using `torch.compile`, which fail. I have to assum that the separate PyTorch specific support package gets folded into the base toolkit eventually, but who knows.
 ## Install PyTorch XPU
 ```
 mamba create -n pytorch python=3.12
@@ -115,7 +116,10 @@ VLLM_TARGET_DEVICE=xpu python setup.py install
 # hmm
 pip install --no-cache-dir aiohttp
 ```
-# Testing llama.cpp with Intel's Xe2 iGPU (Core Ultra 7 258V w/ Arc Graphics 140V)
+
+# Writeups
+## Testing llama.cpp with Intel's Xe2 iGPU (Core Ultra 7 258V w/ Arc Graphics 140V)
+https://www.reddit.com/r/LocalLLaMA/comments/1gheslj/testing_llamacpp_with_intels_xe2_igpu_core_ultra/
 
 I have a Lunar Lake laptop (see my [in-progress Linux review](https://github.com/lhl/linuxlaptops/wiki/2024-MSI-Prestige-13-AI--Evo-A2VM)) and recently sat down and did some testing on how llama.cpp works with it.
 - Chips and Cheese has the [most in-depth analysis of the iGPU](https://chipsandcheese.com/p/lunar-lakes-igpu-debut-of-intels) which includes architectural and real world comparisons w/ the prior-gen Xe-LPG, as well as RDNA 3.5 (in the AMD Ryzen AI 9 HX 370 w/ Radeon 890M).
@@ -164,14 +168,8 @@ Now, I don't have a Strix Point chip, but I do have a 7940HS with a Radeon 780M 
 
 I just applied the same efficiency from the 780M results onto the 890M specs to get a projected performance number.
 
-
-
-
-
 ## Efficiency Numbers
-The t/TFLOP and MBW % numbers were interesting enough that I figured I' 
-
-
+Writeup here: https://www.reddit.com/r/LocalLLaMA/comments/1ghvwsj/llamacpp_compute_and_memory_bandwidth_efficiency/
 
 https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF
 https://huggingface.co/lmstudio-community/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf?download=true
