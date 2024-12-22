@@ -111,9 +111,9 @@ Arch Linux setup is fairly straightforward (can be easier than the official inst
 
 Install ROCm:
 ```shell
-# More up to date - 6.2.1 (when 6.2.2 is out)
+# More up to date - 6.3.0
 paru -S opencl-amd-dev
-# These are stuck at 6.0.2-1
+# These are  at 6.2.2
 # yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
 
 # third party monitoring
