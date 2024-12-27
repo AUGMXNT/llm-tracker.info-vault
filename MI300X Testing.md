@@ -1062,3 +1062,138 @@ Throughput: 40.58 requests/s, 25971.88 tokens/s
 - Quarto - can all scripting happen in Jupyter for reproducibility?
 - Script to create recently updated from logs
 - CSS for FAIL vs WORKs
+
+
+# Qwen Coder
+
+```
+VLLM_USE_TRITON_FLASH_ATTN=0 vllm serve nisten/tqwendo-36b --gpu_memory_utilization=0.98 --num-scheduler-steps 1 -tp 4 --max-model-len 32768
+```
+
+```
+Maximum request concurrency: 1
+100%|████████████████████████████████████████████████████████████████████████████| 16/16 [00:43<00:00,  2.74s/it]
+============ Serving Benchmark Result ============
+Successful requests:                     16
+Benchmark duration (s):                  43.84
+Total input tokens:                      3211
+Total generated tokens:                  3653
+Request throughput (req/s):              0.36
+Output token throughput (tok/s):         83.32
+Total Token throughput (tok/s):          156.55
+---------------Time to First Token----------------
+Mean TTFT (ms):                          59.66
+Median TTFT (ms):                        56.26
+P99 TTFT (ms):                           94.36
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          11.77
+Median TPOT (ms):                        11.77
+P99 TPOT (ms):                           11.95
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           11.78
+Median ITL (ms):                         11.72
+P99 ITL (ms):                            14.87
+==================================================
+```
+
+```
+============ Serving Benchmark Result ============
+Successful requests:                     1024      
+Benchmark duration (s):                  79.94     
+Total input tokens:                      225502    
+Total generated tokens:                  201675    
+Request throughput (req/s):              12.81     
+Output token throughput (tok/s):         2522.71   
+Total Token throughput (tok/s):          5343.46   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          371.88    
+Median TTFT (ms):                        148.96    
+P99 TTFT (ms):                           2194.45   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          45.95     
+Median TPOT (ms):                        45.30     
+P99 TPOT (ms):                           70.92     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           43.72     
+Median ITL (ms):                         25.84     
+P99 ITL (ms):                            236.84    
+==================================================
+```
+
+```
+VLLM_USE_TRITON_FLASH_ATTN=0 vllm serve nisten/tqwendo-36b --gpu_memory_utilization=0.98 --num-scheduler-steps 8 -tp 4 --max-model-len 32768
+```
+
+```
+100%|████████████████████████████████████████████████████████████████████████████| 16/16 [00:41<00:00,  2.60s/it]
+============ Serving Benchmark Result ============
+Successful requests:                     16
+Benchmark duration (s):                  41.62
+Total input tokens:                      3211
+Total generated tokens:                  3653
+Request throughput (req/s):              0.38
+Output token throughput (tok/s):         87.77
+Total Token throughput (tok/s):          164.92
+---------------Time to First Token----------------
+Mean TTFT (ms):                          89.99
+Median TTFT (ms):                        84.87
+P99 TTFT (ms):                           153.71
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          10.98
+Median TPOT (ms):                        11.01
+P99 TPOT (ms):                           11.18
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           11.04
+Median ITL (ms):                         10.91
+P99 ITL (ms):                            14.02
+==================================================
+
+Maximum request concurrency: 64
+100%|████████████████████████████████████████████████████████████████████████| 1024/1024 [01:28<00:00, 11.51it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1024
+Benchmark duration (s):                  88.99
+Total input tokens:                      225502
+Total generated tokens:                  201795
+Request throughput (req/s):              11.51
+Output token throughput (tok/s):         2267.70
+Total Token throughput (tok/s):          4801.81
+---------------Time to First Token----------------
+Mean TTFT (ms):                          211.17
+Median TTFT (ms):                        154.76
+P99 TTFT (ms):                           1238.52
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          25.46
+Median TPOT (ms):                        25.03
+P99 TPOT (ms):                           39.94
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           25.17
+Median ITL (ms):                         16.27
+P99 ITL (ms):                            160.92
+==================================================
+
+aximum request concurrency: 128
+100%|████████████████████████████████████████████████████████████████████████| 1024/1024 [01:05<00:00, 15.74it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1024      
+Benchmark duration (s):                  65.05     
+Total input tokens:                      225502    
+Total generated tokens:                  201956    
+Request throughput (req/s):              15.74     
+Output token throughput (tok/s):         3104.41   
+Total Token throughput (tok/s):          6570.77   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          443.22    
+Median TTFT (ms):                        223.23    
+P99 TTFT (ms):                           2296.39   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          36.08     
+Median TPOT (ms):                        35.48     
+P99 TPOT (ms):                           61.70     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           34.35     
+Median ITL (ms):                         19.27     
+P99 ITL (ms):                            246.67    
+==================================================
+```
+
