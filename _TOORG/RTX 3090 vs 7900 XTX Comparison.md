@@ -16,8 +16,13 @@
 
 Architecture
 https://chipsandcheese.com/p/amds-cdna-3-compute-architecture
+https://chipsandcheese.com/p/amd-rdna-3-5s-llvm-changes
+https://chipsandcheese.com/p/microbenchmarking-amds-rdna-3-graphics-architecture
 
 https://espadrine.github.io/blog/posts/recomputing-gpu-performance.html
+
+https://gpuopen.com/learn/wmma_on_rdna3/
+
 
 # Prior
 https://www.reddit.com/r/LocalLLaMA/comments/191srof/amd_radeon_7900_xtxtx_inference_performance/
