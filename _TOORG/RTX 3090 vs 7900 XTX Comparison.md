@@ -10,7 +10,13 @@
 
 ![[radeon-pro-w7900-datasheet.pdf]]
 
-![[7900-specs.gif]]
+![[7900-specs.webp]]
+
+![[7900-specs 1.jpg]]
+
+Architecture
+https://chipsandcheese.com/p/amds-cdna-3-compute-architecture
+
 # Prior
 https://www.reddit.com/r/LocalLLaMA/comments/191srof/amd_radeon_7900_xtxtx_inference_performance/
 https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
