@@ -32,3 +32,15 @@ https://www.reddit.com/r/LocalLLaMA/comments/1fssvbm/september_2024_update_amd_g
 
 
 https://cprimozic.net/notes/posts/machine-learning-benchmarks-on-the-7900-xtx/
+
+
+# Convos
+GPU Specs Table:
+https://claude.ai/chat/ec80af9d-40e8-431d-b0b6-ebd2be11fde4
+
+Nvidia Architecture, detailed Memory Levels
+https://claude.ai/chat/2c271405-2df3-46ff-af2e-1d9b9ef85184
+
+AMD comparison, wave32 vs wave64
+https://claude.ai/chat/a73ec329-88d0-48b8-b116-a70b26e6302c
+
