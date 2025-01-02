@@ -102,6 +102,9 @@ While launched relatively recently (2019), the Radeon VII (gfx906; Radeon Pro VI
 The current ROCm release has limited support for this hardware. Existing features and capabilities are maintained, but no new features or optimizations will be added. A future ROCm release will remove support.
 ```
 This is a shame because while it's a bit weak on compute (27 FP16 TFLOPS), it has 16GB HBM2 w/ 1.02 TB/s of MBW, which is not too shabby for inference.
+## Legacy
+Here's a guide on getting PyTorch 2.1.1 working with Polaris (gfx803): https://github.com/nikos230/Run-Pytorch-with-AMD-Radeon-GPU
+
 # RDNA3 (navi3x) on Linux
 I have several gfx1100 RDNA3 cards, so this will be the the most detailed section of my guide. Some of this may be applicable to different generation GPUs, likely won't be fully tested.
 
