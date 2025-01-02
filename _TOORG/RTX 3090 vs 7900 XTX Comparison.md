@@ -17,6 +17,8 @@
 Architecture
 https://chipsandcheese.com/p/amds-cdna-3-compute-architecture
 
+https://espadrine.github.io/blog/posts/recomputing-gpu-performance.html
+
 # Prior
 https://www.reddit.com/r/LocalLLaMA/comments/191srof/amd_radeon_7900_xtxtx_inference_performance/
 https://www.reddit.com/r/LocalLLaMA/comments/1atvxu2/current_state_of_training_on_amd_radeon_7900_xtx/
