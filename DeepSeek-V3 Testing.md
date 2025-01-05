@@ -1,6 +1,6 @@
 
 
-# TP vs PP
+# vLLM TP vs PP
 
 ## PP=2 TP=8
 ``
@@ -55,4 +55,41 @@ Mean ITL (ms):                           5147.83
 Median ITL (ms):                         4947.29
 P99 ITL (ms):                            13139.99
 ==================================================
+
+
+❯ python ~/vllm/benchmarks/benchmark_serving.py --backend openai-chat --host ip-10-1-21-143 --port 8000 --endpoint='/v1/chat/completions' --model "deepseek-ai/DeepSeek-V3" --dataset-name sharegpt --dataset-path ./ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 1024 --max-concurrency 64 --seed 42
+Namespace(backend='openai-chat', base_url=None, host='ip-10-1-21-143', port=8000, endpoint='/v1/chat/completions', dataset=None, dataset_name='sharegpt', dataset_path='./ShareGPT_V3_unfiltered_cleaned_split.json', max_concurrency=64, model='deepseek-ai/DeepSeek-V3', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=1024, logprobs=None, request_rate=inf, burstiness=1.0, seed=42, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None, tokenizer_mode='auto')
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 64
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 1024/1024 [14:09<00:00,  1.21it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1024
+Benchmark duration (s):                  849.46
+Total input tokens:                      229783
+Total generated tokens:                  196323
+Request throughput (req/s):              1.21
+Output token throughput (tok/s):         231.11
+Total Token throughput (tok/s):          501.62
+---------------Time to First Token----------------
+Mean TTFT (ms):                          2639.01
+Median TTFT (ms):                        4076.09
+P99 TTFT (ms):                           5234.55
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          319.29
+Median TPOT (ms):                        236.82
+P99 TPOT (ms):                           1464.94
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           4421.57
+Median ITL (ms):                         4402.53
+P99 ITL (ms):                            5306.83
+==================================================
+```
+
+
+# llama.cpp
+```
+(base) ubuntu@ip-10-1-1-135:~/llama.cpp/DeepSeek-V3-Q5_K_M$ time ~/llama.cpp/llama.cpp/build/bin/llama-gguf-split --merge DeepSeek-V3-Q5_K_M-00001-of-00011.gguf DeepSeek-V3-Q5_K_M.gguf
 ```
