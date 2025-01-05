@@ -404,8 +404,17 @@ P99 ITL (ms):                            3330.43
 ```
 
 
+# sglang
+
+```
+# Hey way easy to run: https://sgl-project.github.io/backend/server_arguments.html#server-arguments
+
 mamba activate sglang
 python -m sglang.launch_server --model-path deepseek-ai/DeepSeek-V3 --tp 16 --nccl-init ip-10-1-21-143:50000 --nnodes 2 --node-rank 0 --trust-remote-code
 
 mamba activate
 python -m sglang.launch_server --model-path deepseek-ai/DeepSeek-V3 --tp 16 --nccl-init ip-10-1-21-143:50000 --nnodes 2 --node-rank 1 --trust-remote-code
+```
+
+```
+```
