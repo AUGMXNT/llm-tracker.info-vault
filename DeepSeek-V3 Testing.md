@@ -159,6 +159,124 @@ P99 ITL (ms):                            6421.38
 
 ## TP16
 ```
+❯ for c in 64 128 256 512; do echo "Running with concurrency $c..." && python ~/vllm/benchmarks/benchmark_serving.py --backend openai-chat --host ip-10-1-21-143 --port 8000 --endpoint='/v1/chat/completions' --model "deepseek-ai/DeepSeek-V3" --dataset-name sharegpt --dataset-path ./ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 1024 --max-concurrency $c --seed 42; done
+Running with concurrency 64...
+Namespace(backend='openai-chat', base_url=None, host='ip-10-1-21-143', port=8000, endpoint='/v1/chat/completions', dataset=None, dataset_name='sharegpt', dataset_path='./ShareGPT_V3_unfiltered_cleaned_split.json', max_concurrency=64, model='deepseek-ai/DeepSeek-V3', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=1024, logprobs=None, request_rate=inf, burstiness=1.0, seed=42, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None, tokenizer_mode='auto')
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 64
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████| 1024/1024 [11:39<00:00,  1.46it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1024
+Benchmark duration (s):                  699.36
+Total input tokens:                      229783
+Total generated tokens:                  196723
+Request throughput (req/s):              1.46
+Output token throughput (tok/s):         281.29
+Total Token throughput (tok/s):          609.85
+---------------Time to First Token----------------
+Mean TTFT (ms):                          2223.85
+Median TTFT (ms):                        3500.61
+P99 TTFT (ms):                           3836.83
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          250.66
+Median TPOT (ms):                        188.68
+P99 TPOT (ms):                           1163.99
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           3539.84
+Median ITL (ms):                         3373.03
+P99 ITL (ms):                            4265.99
+==================================================
+Running with concurrency 128...
+Namespace(backend='openai-chat', base_url=None, host='ip-10-1-21-143', port=8000, endpoint='/v1/chat/completions', dataset=None, dataset_name='sharegpt', dataset_path='./ShareGPT_V3_unfiltered_cleaned_split.json', max_concurrency=128, model='deepseek-ai/DeepSeek-V3', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=1024, logprobs=None, request_rate=inf, burstiness=1.0, seed=42, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None, tokenizer_mode='auto')
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 128
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████| 1024/1024 [06:46<00:00,  2.52it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1024
+Benchmark duration (s):                  406.81
+Total input tokens:                      229783
+Total generated tokens:                  196577
+Request throughput (req/s):              2.52
+Output token throughput (tok/s):         483.22
+Total Token throughput (tok/s):          1048.06
+---------------Time to First Token----------------
+Mean TTFT (ms):                          2340.63
+Median TTFT (ms):                        3499.54
+P99 TTFT (ms):                           3817.32
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          257.49
+Median TPOT (ms):                        192.60
+P99 TPOT (ms):                           1206.03
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           3592.16
+Median ITL (ms):                         3349.91
+P99 ITL (ms):                            4366.81
+==================================================
+Running with concurrency 256...
+Namespace(backend='openai-chat', base_url=None, host='ip-10-1-21-143', port=8000, endpoint='/v1/chat/completions', dataset=None, dataset_name='sharegpt', dataset_path='./ShareGPT_V3_unfiltered_cleaned_split.json', max_concurrency=256, model='deepseek-ai/DeepSeek-V3', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=1024, logprobs=None, request_rate=inf, burstiness=1.0, seed=42, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None, tokenizer_mode='auto')
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 256
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████| 1024/1024 [05:32<00:00,  3.08it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1024
+Benchmark duration (s):                  332.79
+Total input tokens:                      229783
+Total generated tokens:                  196895
+Request throughput (req/s):              3.08
+Output token throughput (tok/s):         591.65
+Total Token throughput (tok/s):          1282.12
+---------------Time to First Token----------------
+Mean TTFT (ms):                          13584.20
+Median TTFT (ms):                        16816.48
+P99 TTFT (ms):                           38278.11
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          359.57
+Median TPOT (ms):                        223.84
+P99 TPOT (ms):                           2436.09
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           3916.60
+Median ITL (ms):                         3904.36
+P99 ITL (ms):                            6149.72
+==================================================
+Running with concurrency 512...
+Namespace(backend='openai-chat', base_url=None, host='ip-10-1-21-143', port=8000, endpoint='/v1/chat/completions', dataset=None, dataset_name='sharegpt', dataset_path='./ShareGPT_V3_unfiltered_cleaned_split.json', max_concurrency=512, model='deepseek-ai/DeepSeek-V3', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=1024, logprobs=None, request_rate=inf, burstiness=1.0, seed=42, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None, tokenizer_mode='auto')
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 512
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████| 1024/1024 [05:24<00:00,  3.15it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1024
+Benchmark duration (s):                  324.76
+Total input tokens:                      229783
+Total generated tokens:                  196326
+Request throughput (req/s):              3.15
+Output token throughput (tok/s):         604.53
+Total Token throughput (tok/s):          1312.09
+---------------Time to First Token----------------
+Mean TTFT (ms):                          51245.90
+Median TTFT (ms):                        76532.73
+P99 TTFT (ms):                           93584.25
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          355.42
+Median TPOT (ms):                        219.52
+P99 TPOT (ms):                           2423.14
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           3868.20
+Median ITL (ms):                         3855.88
+P99 ITL (ms):                            6106.05
+==================================================
+
 
 ```
 
