@@ -1,0 +1,58 @@
+
+
+# TP vs PP
+
+## PP=2 TP=8
+``
+```
+$ PP=2 sbatch vllm-server.slurm
+...
+[2025-01-05 11:32:46] Starting vLLM server with tensor parallel size: 8
+[2025-01-05 11:32:46] Full vLLM command:
+[2025-01-05 11:32:46] vllm serve deepseek-ai/DeepSeek-V3 --tensor-parallel-size 8 --gpu-memory-utilization 0.95 --num-scheduler-steps 20 --host 0.0.0.0 --port 8000
+[2025-01-05 11:32:46] vLLM logs will be written to: /fsx/ubuntu/meti/experiments/00-enja-translation-eval/logs/278-20250105_113126/vllm_server.log
+[2025-01-05 11:32:46] Full vLLM command:
+[2025-01-05 11:32:46] vllm serve deepseek-ai/DeepSeek-V3 --tensor-parallel-size 8 --pipeline-parallel-size 2 --gpu-memory-utilization 0.95 --num-scheduler-steps 20 --max-model-len 8192 --host 0.0.0.0 --port 8000 --trust-remote-code
+[2025-01-05 11:32:46] vLLM server started with PID: 3427707
+[2025-01-05 11:32:46] Waiting for vLLM server to become ready...
+INFO 01-05 11:33:24 api_server.py:712] vLLM API server version 0.6.6.post2.dev5+g5ce4627a
+INFO 01-05 11:33:24 api_server.py:713] args: Namespace(subparser='serve', model_tag='deepseek-ai/DeepSeek-V3', config='', host='0.0.0.0', port=8000, uvicorn_log_level='info', allow_credentials=False, allowed_origins=['*'], allowed_methods=['*'], allowed_headers=['*'], api_key=None, lora_modules=None, prompt_adapters=None, chat_template=None, chat_template_content_format='auto', response_role='assistant', ssl_keyfile=None, ssl_certfile=None, ssl_ca_certs=None, ssl_cert_reqs=0, root_path=None, middleware=[], return_tokens_as_token_ids=False, disable_frontend_multiprocessing=False, enable_request_id_headers=False, enable_auto_tool_choice=False, tool_call_parser=None, tool_parser_plugin='', model='deepseek-ai/DeepSeek-V3', task='auto', tokenizer=None, skip_tokenizer_init=False, revision=None, code_revision=None, tokenizer_revision=None, tokenizer_mode='auto', trust_remote_code=True, allowed_local_media_path=None, download_dir=None, load_format='auto', config_format=<ConfigFormat.AUTO: 'auto'>, dtype='auto', kv_cache_dtype='auto', quantization_param_path=None, max_model_len=8192, guided_decoding_backend='xgrammar', logits_processor_pattern=None, distributed_executor_backend=None, worker_use_ray=False, pipeline_parallel_size=2, tensor_parallel_size=8, max_parallel_loading_workers=None, ray_workers_use_nsight=False, block_size=None, enable_prefix_caching=None, disable_sliding_window=False, use_v2_block_manager=True, num_lookahead_slots=0, seed=0, swap_space=4, cpu_offload_gb=0, gpu_memory_utilization=0.95, num_gpu_blocks_override=None, max_num_batched_tokens=None, max_num_seqs=None, max_logprobs=20, disable_log_stats=False, quantization=None, rope_scaling=None, rope_theta=None, hf_overrides=None, enforce_eager=False, max_seq_len_to_capture=8192, disable_custom_all_reduce=False, tokenizer_pool_size=0, tokenizer_pool_type='ray', tokenizer_pool_extra_config=None, limit_mm_per_prompt=None, mm_processor_kwargs=None, disable_mm_preprocessor_cache=False, enable_lora=False, enable_lora_bias=False, max_loras=1, max_lora_rank=16, lora_extra_vocab_size=256, lora_dtype='auto', long_lora_scaling_factors=None, max_cpu_loras=None, fully_sharded_loras=False, enable_prompt_adapter=False, max_prompt_adapters=1, max_prompt_adapter_token=0, device='auto', num_scheduler_steps=20, multi_step_stream_outputs=True, scheduler_delay_factor=0.0, enable_chunked_prefill=None, speculative_model=None, speculative_model_quantization=None, num_speculative_tokens=None, speculative_disable_mqa_scorer=False, speculative_draft_tensor_parallel_size=None, speculative_max_model_len=None, speculative_disable_by_batch_size=None, ngram_prompt_lookup_max=None, ngram_prompt_lookup_min=None, spec_decoding_acceptance_method='rejection_sampler', typical_acceptance_sampler_posterior_threshold=None, typical_acceptance_sampler_posterior_alpha=None, disable_logprobs_during_spec_decoding=None, model_loader_extra_config=None, ignore_patterns=[], preemption_mode=None, served_model_name=None, qlora_adapter_name_or_path=None, otlp_traces_endpoint=None, collect_detailed_traces=None, disable_async_output_proc=False, scheduling_policy='fcfs', override_neuron_config=None, override_pooler_config=None, compilation_config=None, kv_transfer_config=None, worker_cls='auto', generation_config=None, disable_log_requests=False, max_log_len=None, disable_fastapi_docs=False, enable_prompt_tokens_details=False, dispatch_function=<function serve at 0x7f3cdb0c6520>)
+
+...
+
+INFO 01-05 12:04:53 distributed_gpu_executor.py:57] # GPU blocks: 2889, # CPU blocks: 528
+INFO 01-05 12:04:53 distributed_gpu_executor.py:61] Maximum concurrency for 8192 tokens per request: 5.64x
+```
+- 34 minutes to load
+
+```
+❯ python ~/vllm/benchmarks/benchmark_serving.py --backend openai-chat --host ip-10-1-21-143 --port 8000 --endpoint='/v1/chat/completions' --model "deepseek-ai/DeepSeek-V3" --dataset-name sharegpt --dataset-path ./ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 1024 --max-concurrency 128 --seed 42
+Namespace(backend='openai-chat', base_url=None, host='ip-10-1-21-143', port=8000, endpoint='/v1/chat/completions', dataset=None, dataset_name='sharegpt', dataset_path='./ShareGPT_V3_unfiltered_cleaned_split.json', max_concurrency=128, model='deepseek-ai/DeepSeek-V3', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=1024, logprobs=None, request_rate=inf, burstiness=1.0, seed=42, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None, tokenizer_mode='auto')
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 128
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 1024/1024 [09:32<00:00,  1.79it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1024
+Benchmark duration (s):                  572.44
+Total input tokens:                      229783
+Total generated tokens:                  195623
+Request throughput (req/s):              1.79
+Output token throughput (tok/s):         341.74
+Total Token throughput (tok/s):          743.15
+---------------Time to First Token----------------
+Mean TTFT (ms):                          4602.03
+Median TTFT (ms):                        4990.24
+P99 TTFT (ms):                           15123.49
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          435.80
+Median TPOT (ms):                        279.78
+P99 TPOT (ms):                           2854.01
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           5147.83
+Median ITL (ms):                         4947.29
+P99 ITL (ms):                            13139.99
+==================================================
+```
