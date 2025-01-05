@@ -163,6 +163,8 @@ P99 ITL (ms):                            6421.38
 ```
 
 # llama.cpp
+
+## llama-bench
 ```
 (base) ubuntu@ip-10-1-1-135:~/llama.cpp/DeepSeek-V3-Q5_K_M$ time ~/llama.cpp/llama.cpp/build/bin/llama-gguf-split --merge DeepSeek-V3-Q5_K_M-00001-of-00011.gguf DeepSeek-V3-Q5_K_M.gguf
 
@@ -191,8 +193,43 @@ sys     7m58.478s
 ```
 
 
-
+## benchmark_serving.py
 ```
+# llama.cpp
+(vllm) ubuntu@ip-10-1-1-135:~/meti/benchmarks$ python ~/vllm/benchmarks/benchmark_serving.py --backend openai-chat --host localhost --port 8080 --endpoint='/v1/chat/completions' --model "deepseek-ai/DeepSeek-V3" --dataset-name share
+gpt --dataset-path ./ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 50 --max-concurrency 1 --seed 42
+Namespace(backend='openai-chat', base_url=None, host='localhost', port=8080, endpoint='/v1/chat/completions', dataset=None, dataset_name='sharegpt', dataset_path='./ShareGPT_V3_unfiltered_cleaned_split.json', max_concurrency=1, mode
+l='deepseek-ai/DeepSeek-V3', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=50, logprobs=None, request_rate=inf, burstiness=1.0, seed=42, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False,
+metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_l
+en=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None, tokenizer_mode='auto')
+Starting initial single prompt test run...
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 1
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████| 50/50 [26:52<00:00, 32.24s/it]
+============ Serving Benchmark Result ============
+Successful requests:                     50
+Benchmark duration (s):                  1612.14
+Total input tokens:                      12211
+Total generated tokens:                  35857
+Request throughput (req/s):              0.03
+Output token throughput (tok/s):         22.24
+Total Token throughput (tok/s):          29.82
+---------------Time to First Token----------------
+Mean TTFT (ms):                          1353.39
+Median TTFT (ms):                        1121.37
+P99 TTFT (ms):                           3898.91
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          43.01
+Median TPOT (ms):                        42.97
+P99 TPOT (ms):                           44.10
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           43.08
+Median ITL (ms):                         42.90
+P99 ITL (ms):                            46.61
+==================================================
+
 # vLLM PP=2 TP=8
 ❯ python ~/vllm/benchmarks/benchmark_serving.py --backend openai-chat --host ip-10-1-21-143 --port 8000 --endpoint='/v1/chat/completions' --model "deepseek-ai/DeepSeek-V3" --dataset-name sharegpt --dataset-path ./ShareGPT_V3_unfiltered_cleaned_split.json --num-prompts 50 --max-concurrency 1 --seed 42
 Namespace(backend='openai-chat', base_url=None, host='ip-10-1-21-143', port=8000, endpoint='/v1/chat/completions', dataset=None, dataset_name='sharegpt', dataset_path='./ShareGPT_V3_unfiltered_cleaned_split.json', max_concurrency=1, model='deepseek-ai/DeepSeek-V3', tokenizer=None, best_of=1, use_beam_search=False, num_prompts=50, logprobs=None, request_rate=inf, burstiness=1.0, seed=42, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, random_input_len=1024, random_output_len=128, random_range_ratio=1.0, random_prefix_len=0, hf_subset=None, hf_split=None, hf_output_len=None, tokenizer_mode='auto')
