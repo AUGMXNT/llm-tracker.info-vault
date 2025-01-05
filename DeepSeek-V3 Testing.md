@@ -262,5 +262,25 @@ P99 ITL (ms):                            6846.15
 ==================================================
 
 # vLLM TP=16
-
+============ Serving Benchmark Result ============
+Successful requests:                     50
+Benchmark duration (s):                  1826.67
+Total input tokens:                      12211
+Total generated tokens:                  10742
+Request throughput (req/s):              0.03
+Output token throughput (tok/s):         5.88
+Total Token throughput (tok/s):          12.57
+---------------Time to First Token----------------
+Mean TTFT (ms):                          394.63
+Median TTFT (ms):                        176.61
+P99 TTFT (ms):                           3931.75
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          207.92
+Median TPOT (ms):                        172.19
+P99 TPOT (ms):                           597.99
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           3226.57
+Median ITL (ms):                         3219.82
+P99 ITL (ms):                            3330.43
+==================================================
 ```
