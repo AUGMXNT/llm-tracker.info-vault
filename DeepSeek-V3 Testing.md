@@ -161,4 +161,28 @@ P99 ITL (ms):                            6421.38
 # llama.cpp
 ```
 (base) ubuntu@ip-10-1-1-135:~/llama.cpp/DeepSeek-V3-Q5_K_M$ time ~/llama.cpp/llama.cpp/build/bin/llama-gguf-split --merge DeepSeek-V3-Q5_K_M-00001-of-00011.gguf DeepSeek-V3-Q5_K_M.gguf
+
+(base) ubuntu@ip-10-1-1-135:~/llama.cpp/DeepSeek-V3-Q5_K_M$ time ../llama.cpp/build/bin/llama-bench -m DeepSeek-V3-Q5_K_M.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 8 CUDA devices:
+  Device 0: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 1: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 2: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 3: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 4: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 5: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 6: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 7: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+| model                          |       size |     params | backend    | ngl |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------------: | -------------------: |
+| deepseek2 671B Q5_K - Medium   | 442.74 GiB |   671.03 B | CUDA       |  99 |         pp512 |        290.28 ± 1.25 |
+| deepseek2 671B Q5_K - Medium   | 442.74 GiB |   671.03 B | CUDA       |  99 |         tg128 |         23.63 ± 0.04 |
+
+build: b56f079e (4418)
+
+real    9m18.083s
+user    1m18.287s
+sys     7m58.478s
+
 ```
