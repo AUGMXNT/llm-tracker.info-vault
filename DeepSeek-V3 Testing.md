@@ -571,3 +571,32 @@ Median ITL (ms):                         199.53
 P99 ITL (ms):                            867.67
 ==================================================
 ```
+
+
+# jp64
+https://huggingface.co/mmnga/DeepSeek-V3-slice-jp64-gguf
+- JA only subset of experts?
+
+llama-bench
+```
+(base) ubuntu@ip-10-1-33-173:~/llama.cpp/llama.cpp$ build/bin/llama-bench -m ../DeepSeek-V3-slice-jp64-gguf/Q5_K_M/Q5_K_M-000-fa 1
+Q5_K_M-00001-of-00012.gguf  Q5_K_M-00004-of-00012.gguf  Q5_K_M-00007-of-00012.gguf  Q5_K_M-00010-of-00012.gguf
+Q5_K_M-00002-of-00012.gguf  Q5_K_M-00005-of-00012.gguf  Q5_K_M-00008-of-00012.gguf  Q5_K_M-00011-of-00012.gguf
+Q5_K_M-00003-of-00012.gguf  Q5_K_M-00006-of-00012.gguf  Q5_K_M-00009-of-00012.gguf  Q5_K_M-00012-of-00012.gguf
+(base) ubuntu@ip-10-1-33-173:~/llama.cpp/llama.cpp$ build/bin/llama-bench -m ../DeepSeek-V3-slice-jp64-gguf/Q5_K_M/Q5_K_M-00001-of-00012.gguf -fa 1
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 8 CUDA devices:
+  Device 0: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 1: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 2: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 3: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 4: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 5: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 6: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+  Device 7: NVIDIA H100 80GB HBM3, compute capability 9.0, VMM: yes
+| model                          |       size |     params | backend    | ngl | fa |          test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | ------------: | -------------------: |
+| deepseek2 671B Q5_K - Medium   | 119.02 GiB |   180.52 B | CUDA       |  99 |  1 |         pp512 |        742.82 ± 1.23 |
+| deepseek2 671B Q5_K - Medium   | 119.02 GiB |   180.52 B | CUDA       |  99 |  1 |         tg128 |         31.00 ± 0.01 |
+```
