@@ -600,3 +600,13 @@ ggml_cuda_init: found 8 CUDA devices:
 | deepseek2 671B Q5_K - Medium   | 119.02 GiB |   180.52 B | CUDA       |  99 |  1 |         pp512 |        742.82 ± 1.23 |
 | deepseek2 671B Q5_K - Medium   | 119.02 GiB |   180.52 B | CUDA       |  99 |  1 |         tg128 |         31.00 ± 0.01 |
 ```
+- almost no gain w/ CUDA_VISIBLE_DEVICES=0,1
+
+llama-server
+```
+(base) ubuntu@ip-10-1-33-173:~/llama.cpp/llama.cpp$ build/bin/llama-server -m ../DeepSeek-V3-slice-jp64-gguf/Q5_K_M/Q5_K_M-00001-of-00012.gguf --alias
+DeepSeek-V3-slice-jp64-gguf --host 0.0.0.0 --port 8000 -ngl 99
+
+❯ OPENAI_BASE_URL='http://ip-10-1-33-173:8000/v1' python generate_answers.py --num_proc 1 --model_name DeepSeek-V3-slice-jp64-gguf
+```
+- `-np 8` has problems w/ context size being exceeded...
