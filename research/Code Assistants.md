@@ -9,6 +9,13 @@ As of 2025-01, all the top models have improved tremendously in coding. The best
 	- https://github.com/ComposioHQ/composio/tree/master/python/swe/agent
 	- https://github.com/OpenAutoCoder/Agentless
 
+
+# How To
+
+IndyDevDan: Aider - Architect vs Editor
+https://www.youtube.com/watch?v=dDbfmRDWAv0
+
+
 # Cursor
 # Windsurf
 
