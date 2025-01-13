@@ -1,5 +1,27 @@
 We'll probably move this somewhere else, but I figure it might be useful to put this in public somewhere since I'm researching Coding Assistants to help w/ a refactor of a largish code base.
 
+As of 2025-01, all the top models have improved tremendously in coding. The best coding leaderboards to look at:
+- https://www.swebench.com/ - almost all the top scorers use Claude-3.5 Sonnet (20241022)
+	- https://www.blackbox.ai/
+	- https://gru.ai/
+	- https://www.kodu.ai/
+	- https://docs.all-hands.dev/
+	- https://github.com/ComposioHQ/composio/tree/master/python/swe/agent
+	- https://github.com/OpenAutoCoder/Agentless
+
+# Cursor
+# Windsurf
+
+# Cline / Roo Cline
+
+# Aider
+
+
+
+
+
+
+
 I'm looking for practical tools for production use here, and less of the neat toys that's popular atm.
 
 See also: 
