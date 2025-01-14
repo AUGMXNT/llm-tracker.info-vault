@@ -650,6 +650,10 @@ I noticed that AMD has added a lot of simple tutorials in the ROCm docs:
 - https://rocm.docs.amd.com/en/latest/how-to/rocm-for-ai/index.html
 - https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/single-gpu-fine-tuning-and-inference.html
 - https://rocm.docs.amd.com/en/latest/how-to/llm-fine-tuning-optimization/multi-gpu-fine-tuning-and-inference.html
+
+You might also want to read this December 2024 article [SemiAnalysis: MI300X vs H100 vs H200 Benchmark Part 1: Training – CUDA Moat Still Alive](https://semianalysis.com/2024/12/22/mi300x-vs-h100-vs-h200-benchmark-part-1-training/) which focuses more on large-scale pre-training but adds some color on issues you might encounter with more advanced training. For MI300X in particular, you might also want to search for ROCm issues, [like this one](https://github.com/ROCm/ROCm/issues/4021) that took several months to resolve.
+
+(Interestingly, single GPU training, RDNA3 doesn't exhibit the same problems. Multi-GPU )
 ### axolotl
 This has been my preferred trainer for a while: https://github.com/axolotl-ai-cloud/axolotl
 It leverages [trl](https://github.com/huggingface/trl) and layers a bunch of optimizations, yaml configs, etc.
@@ -1233,12 +1237,29 @@ build: 69fdbb9 (1148)
 ### Unsupported Architectures
 On Windows, it may not be possible to apply an `HSA_OVERRIDE_GFX_VERSION` override. In that case, these instructions for compiling custom kernels may help: [https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/](https://www.reddit.com/r/LocalLLaMA/comments/16d1hi0/guide_build_llamacpp_on_windows_with_amd_gpus_and/)
 
-# Misc Resources
-Here's a ROCm fork of DeepSpeed (2023-09):
-- https://github.com/ascent-tek/rocm_containers/blob/main/README_DeepSpeed.md
+# Low Level Programming
+For general reference documentation, see:
+- [AMD GPU architecture programming documentation](https://gpuopen.com/amd-gpu-architecture-programming-documentation/) - includes reference docs for CDNA, RDNA, and earlier generations
+- 
+For the best general overview of GPU theoretical (and tested) performance for AI/ML I've found, see Stas Bekman's article on [Accelerators](https://github.com/stas00/ml-engineering/tree/master/compute/accelerator) from his amazingly useful [Machine Learning Engineering Open Book](https://github.com/stas00/ml-engineering). You can use the latest version of his [mamf-finder](https://github.com/stas00/ml-engineering/blob/master/compute/accelerator/benchmarks/mamf-finder.py) tool for testing FLOPS as well.
+## RDNA3
+In order to hit theoretical FLOPS, you must use the dual-issue wave32 VOPD pipeline optimally.
+- There are no separate tensor cores
+- WMMA has intrinsics FP16, BF16, IU8, IU4
+For the best summary, see this article: [AMD GPUOpen: How to accelerate AI applications on RDNA 3 using WMMA](https://gpuopen.com/learn/wmma_on_rdna3/) (2023-01-10)
+
+For those looking to get more into the nitty gritty, here is reference:
+- ["RDNA3" Instruction Set Architecture Reference Guide](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna3-shader-instruction-set-architecture-feb-2023_0.pdf) - Official reference PDF (2023-08-15, 600 pages)
+- ["RDNA3.5" Instruction Set Architecture Reference Guide](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna35_instruction_set_architecture.pdf) - Official reference PDF (2024-07-23, 650 pages)
+
+2023-01-08 [Chips and Cheese: Microbenchmarking AMD’s RDNA 3 Graphics Architecture]https://chipsandcheese.com/p/microbenchmarking-amds-rdna-3-graphics-architecture) - test memory bandwidth, WGP/SM throughput for various operations; compares vs RDNA2 (6900XT) and Ada (4090)
 
 2023-07 [Casey Primozic](https://cprimozic.net/) did some testing/benchmarking of the 7900 XTX (TensorFlow, TinyGrad):
 - https://cprimozic.net/notes/posts/machine-learning-benchmarks-on-the-7900-xtx/
+
+# Misc Resources
+Here's a ROCm fork of DeepSpeed (2023-09):
+- https://github.com/ascent-tek/rocm_containers/blob/main/README_DeepSpeed.md
 
 I have a document that updated from April-June 2024 focused on W7900 (RDNA3 gfx1100 workstation version of the 7900 XTX) but I'm folding all up to date info back to this doc:
 * [[W7900 Pervasive Computing Project]]
