@@ -1252,6 +1252,12 @@ For those looking to get more into the nitty gritty, here is reference:
 - ["RDNA3" Instruction Set Architecture Reference Guide](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna3-shader-instruction-set-architecture-feb-2023_0.pdf) - Official reference PDF (2023-08-15, 600 pages)
 - ["RDNA3.5" Instruction Set Architecture Reference Guide](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna35_instruction_set_architecture.pdf) - Official reference PDF (2024-07-23, 650 pages)
 
+For unofficial documentation/reverse engineering, see:
+- https://github.com/tinygrad/7900xtx
+- https://github.com/tinygrad/tinygrad/blob/master/docs/developer/am.md
+- https://github.com/tinygrad/tinygrad/blob/master/tinygrad/runtime/support/am/amdev.py
+
+
 2023-01-08 [Chips and Cheese: Microbenchmarking AMD’s RDNA 3 Graphics Architecture]https://chipsandcheese.com/p/microbenchmarking-amds-rdna-3-graphics-architecture) - test memory bandwidth, WGP/SM throughput for various operations; compares vs RDNA2 (6900XT) and Ada (4090)
 
 2023-07 [Casey Primozic](https://cprimozic.net/) did some testing/benchmarking of the 7900 XTX (TensorFlow, TinyGrad):
