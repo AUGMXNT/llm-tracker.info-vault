@@ -15,6 +15,24 @@ As of 2025-01, all the top models have improved tremendously in coding. The best
 IndyDevDan: Aider - Architect vs Editor
 https://www.youtube.com/watch?v=dDbfmRDWAv0
 
+# Real World Use and Comparisons
+Copilot Arena
+- https://www.youtube.com/watch?v=fafcGZS0QTI
+- Be sure to review the Privacy options carefully
+
+
+- 2025-01-15 Cursor vs Cline, real world testing
+	- https://www.youtube.com/watch?v=AtuB7p-JU8Y
+	- Testing 2 bug fixes
+	- Showing features for each
+# Best Practices
+- Request to document changes
+- Add to changelog
+- Document anything new they learn for future
+- Hmm...
+	- Link to issue / commit?
+	- Write tests?
+# Competitors
 
 # Cursor
 # Windsurf
