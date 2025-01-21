@@ -107,8 +107,18 @@ Here's a guide on getting PyTorch 2.1.1 working with Polaris (gfx803): https://g
 
 ## Why is ROCm Hardware Support So Limited?
 AMD has no intermediate IR, so must compile packages for every single ISA
+- 2025: https://github.com/ROCm/ROCm/discussions/4276
 - https://github.com/ROCm/ROCm/issues/4224
 - https://github.com/ROCm/ROCm/issues/3985
+- 2023: https://github.com/ROCm/ROCm/discussions/3893
+- 2023: https://github.com/ROCm/ROCm/discussions/4032
+- 2023: https://github.com/ROCm/ROCm/discussions/3893
+- SPIRV
+	- https://github.com/llvm/llvm-project/pull/89796
+	- https://github.com/ROCm/SPIRV-LLVM-Translator
+	- https://github.com/ROCm/ROCm/issues/3985
+- gfxX-generic
+	- https://llvm.org/docs/AMDGPUUsage.html#amdgpu-generic-processor-table
 AMD developers don't have hardware internally for testing against:
 - https://github.com/ROCm/composable_kernel/issues/1020#issuecomment-1896740852
 
