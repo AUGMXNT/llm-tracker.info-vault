@@ -105,6 +105,13 @@ This is a shame because while it's a bit weak on compute (27 FP16 TFLOPS), it ha
 ## Legacy
 Here's a guide on getting PyTorch 2.1.1 working with Polaris (gfx803): https://github.com/nikos230/Run-Pytorch-with-AMD-Radeon-GPU
 
+## Why is ROCm Hardware Support So Limited?
+AMD has no intermediate IR, so must compile packages for every single ISA
+- https://github.com/ROCm/ROCm/issues/4224
+- https://github.com/ROCm/ROCm/issues/3985
+AMD developers don't have hardware internally for testing against:
+- https://github.com/ROCm/composable_kernel/issues/1020#issuecomment-1896740852
+
 # RDNA3 (navi3x) on Linux
 I have several gfx1100 RDNA3 cards, so this will be the the most detailed section of my guide. Some of this may be applicable to different generation GPUs, likely won't be fully tested.
 
