@@ -1,6 +1,17 @@
-Early 2025 - best practices
+# Visual
+script that prompt runs
+big screen capture
 
+
+# Script
+Early 2025 - best practices
 LLMs image generation
+
+
+ML Performance refers to "Quality" vs how fast it goes.
+Quality
+Throughput
+Latency - specifically Time to First Token.
 
 Home vs Productoin
 
