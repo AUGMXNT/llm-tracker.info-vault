@@ -45,3 +45,7 @@ TorchTune
 Training
 
 Quality; MixEval, lighteval
+
+
+`export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH`
+`export CPATH=$CONDA_PREFIX/include:$CPATH`
