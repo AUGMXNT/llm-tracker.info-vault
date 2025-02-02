@@ -8,8 +8,16 @@ NOTE: US President Donald Trump [proposed up to 100% tariffs on Taiwanese import
 ![[Screenshot from 2025-02-02 16-16-12.png]]
 
 I would strongly under-index any analysis that failed to take this into account. It's worth noting that from a logical perspective, DeepSeek's success should help drive additional GPU demand:
-- Nvidia GPUs used for all training
-- Model made available means that
+- Strong open source models drives demand for on-prem inference
 
 
 # Technical
+
+
+# Analysis
+2024-11-27 Deepseek: The Quiet Giant Leading China’s AI Race
+https://www.chinatalk.media/p/deepseek-ceo-interview-with-chinas
+> In the face of disruptive technologies, moats created by closed source are temporary. Even OpenAI’s closed source approach can’t prevent others from catching up. So we anchor our value in our team — our colleagues grow through this process, accumulate know-how, and form an organization and culture capable of innovation. That’s our moat.
+
+
+# Bad Takes
