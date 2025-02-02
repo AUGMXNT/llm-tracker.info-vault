@@ -9,4 +9,7 @@ NOTE: US President Donald Trump [proposed up to 100% tariffs on Taiwanese import
 
 I would strongly under-index any analysis that failed to take this into account. It's worth noting that from a logical perspective, DeepSeek's success should help drive additional GPU demand:
 - Nvidia GPUs used for all training
-- Model made available means that 
+- Model made available means that
+
+
+# Technical
