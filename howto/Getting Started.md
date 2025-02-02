@@ -49,6 +49,8 @@ For good primers to hardware:
 - https://github.com/stas00/ml-engineering/tree/master/compute/accelerator
 
 - https://computewatch.llm-utils.org/
+- https://getdeploying.com/reference/cloud-gpu/nvidia-h100
+- https://gpulist.ai/
 
 
 - https://www.runpod.io/gpu-instance/pricing
