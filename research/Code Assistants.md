@@ -34,12 +34,18 @@ Copilot Arena
 	- Write tests?
 # Competitors
 
-# Cursor
-# Windsurf
+## Cursor
+## Windsurf
 
-# Cline / Roo Cline
+## Cline
 
-# Aider
+## Roo Coder
+
+## Continue.dev
+
+## Aider
+
+## Replit
 
 
 
