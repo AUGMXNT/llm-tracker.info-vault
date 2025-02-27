@@ -1,4 +1,28 @@
 For my main AMD GPU docs, see: [[AMD GPUs]]
+# vLLM 2025-02-27
+## Build Docker
+```
+sudo DOCKER_BUILDKIT=1 docker build --build-arg BASE_IMAGE="rocm/vllm-dev:navi_base" -f Dockerfile.rocm -t vllm-rocm .
+```
+- https://docs.vllm.ai/en/latest/getting_started/installation/gpu/index.html?device=rocm
+- Docker - https://docs.vllm.ai/en/latest/getting_started/installation/gpu/index.html?device=rocm#build-image-from-source
+
+## Run
+```
+sudo docker run -it \
+   --network=host \
+   --group-add=video \
+   --ipc=host \
+   --cap-add=SYS_PTRACE \
+   --security-opt seccomp=unconfined \
+   --device /dev/kfd \
+   --device /dev/dri \
+   -v /models:/app/model \
+   -v /home/lhl/.cache/huggingface:/root/.cache/huggingface \
+   vllm-rocm \
+   bash
+```
+
 # vLLM 2024-12-7
 See: https://embeddedllm.com/blog/vllm-now-supports-running-gguf-on-amd-radeon-gpu
 
