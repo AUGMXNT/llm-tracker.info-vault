@@ -29,7 +29,7 @@ This is a cheat sheet for running a simple benchmark on consumer hardware for LL
 
 ## Simple Benchmark
 * Download the model, eg direct link: https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_0.gguf
-* Download the latest release: https://github.com/ggml-org/llama.cpp/releases
+* Download and unzip the latest release: https://github.com/ggml-org/llama.cpp/releases
 ```
 # Default
 build/bin/llama-bench -m $MODEL_PATH
@@ -40,11 +40,17 @@ build/bin/llama-bench -m $MODEL_PATH -fa 1
 - This runs with prompt processing (compute limited) pp512 and token generation (memory limited) tg128 5 times and outputs a nice table for you - with this you can repeatedly test and compare these numbers in a much more reliable fashion
 	- pp512 measures how fast you will process context/existing conversation history - eg, if you have 4000 tokens of context and your pp is 100 tok/s, you will have to wait 40s before you start generating any tokens.
 	- tg128 is a measure of how fast your device will generate new tokens for a single user (batch size = 1, bs=1)
+- Generally GGUF models take up the model size in memory for weights with additional memory required for the kvcache depending on your max context size. You can therefore do a rough speed calculation of tok/s by dividing MBW/GGUF size
 - There are a lot of additional options - the big ones are if you have limited device memory and need to load specific layers with `-ngl` - if you get errors from running out of memory, lower the layer count until it all fits. The rest will be offloaded to system memory
 - If you have multiple devices, you may need to set `GGML_VK_VISIBLE_DEVICES` or `CUDA_VISIBLE_DEVICES` to select which ones you want to use/test. Typically inference will run as an average of your different device speeds
+- It's best to benchmark headless devices of course, but if you have to use a GPU for display, try to have it running as little as possible. It'd be best to SSH in remotely to do your testing.
+- `nvtop` (which works w/ Nvidia and AMD GPUs) is a useful tool for realtime debugging. `nvidia-smi` and `rocm-smi` can be used for logging runs (especially memory highwater marks, power consumption)
+- Flash Attention lowers memory usage for context and it also slightly increases speed for CUDA, but can make other devices dramatically slower (due to limitations of llama.cpp's current FA implementation, not intrinsic to hardware or the Flash Attention algorithm)
 
 ## More comprehensive benchmarks
 - use `nvidia-smi` and `rocm-smi` to track power usage
 - You can [adjust power limits and see how inference performance is affected](https://www.reddit.com/r/LocalLLaMA/comments/1hg6qrd/relative_performance_in_llamacpp_when_adjusting/)
-- `llama-bench` is good for a basic repeatable test for max throughput, but you probably want to use something like vLLM's benchmark for testing Time To First Token (TTFT) and Time Per Output Token (TPOT) 
+- `llama-bench` is good for a basic repeatable test for max throughput, but you probably want to use something like vLLM's benchmark for testing Time To First Token (TTFT) and Time Per Output Token (TPOT)
+- As mentioned, llama.cpp supports speculative decode
 - If you want to test multi-user or batched output (eg, you want to just process a lot of text), the llama.cpp kernels are usually not very good and you'll want to check out vLLM, SGLang, TGI, etc.
+- If you have >130GB of memory, you can give some of these R1 quants a try: https://unsloth.ai/blog/deepseekr1-dynamic
