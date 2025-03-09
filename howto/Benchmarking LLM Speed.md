@@ -54,3 +54,41 @@ build/bin/llama-bench -m $MODEL_PATH -fa 1
 - As mentioned, llama.cpp supports speculative decode
 - If you want to test multi-user or batched output (eg, you want to just process a lot of text), the llama.cpp kernels are usually not very good and you'll want to check out vLLM, SGLang, TGI, etc.
 - If you have >130GB of memory, you can give some of these R1 quants a try: https://unsloth.ai/blog/deepseekr1-dynamic
+
+# Examples
+
+## llama.cpp on WSL2 on Windows
+```
+# Install WSL if necessary: https://learn.microsoft.com/en-us/windows/wsl/install
+# this defaults to Ubuntu, is fine/recommended
+wsl --install
+
+# Assuming you have AMD Software: Adrenalin Edition 25.3.1 installed
+# follow install instructions: # https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/wsl/install-radeon.html
+# There's no clean upgrade so be sure to `sudo amdgpu-uninstall` first if upgrading ROCm versions
+
+# Note a known issue with 25.3.1: Intermittent build error may be observed when running ROCM/HIP workloads using CMake. Users experiencing this issue are recommended to replace the Native Linux library filename (for example `libhsa-runtime64.so.1.14.60304`) in `/opt/rocm/lib/cmake/hsa-runtime64/hsa-runtime64Targets-relwithdebinfo.cmake` with the WSL library filename `libhsa-runtime64.so.1.14.0` as a temporary workaround.
+# You can fix it with this one-liner (backup the file first if you're concerned)
+sed -i 's/libhsa-runtime64\.so\.1\.14\.60304/libhsa-runtime64.so.1.14.0/g' /opt/rocm/lib/cmake/hsa-runtime64/hsa-runtime64Targets-relwithdebinfo.cmake
+
+# llama.cpp install
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
+
+# Basically we can use the recommended compile command
+# https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
+HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
+    cmake -S . -B build -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1030 -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build build --config Release -- -j
+
+# Get the standard test model
+wget https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_0.gguf
+
+# run llama-bench
+❯ time llama-bench -m llama-2-7b.Q4_0.gguf
+```
+- https://learn.microsoft.com/en-us/windows/wsl/install
+- https://www.amd.com/en/resources/support-articles/release-notes/RN-RAD-WIN-25-3-1.html
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/wsl/install-radeon.html
+- https://rocm.docs.amd.com/projects/radeon/en/latest/docs/limitations.html#wsl-specific-issues
+- https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip

@@ -24,6 +24,11 @@ These are the latest officially supported cards:
 If you have a supported family, you can usually use set `HSA_OVERRIDE_GFX_VERSION` to the closest supported version (eg, if you have a gfx1031 card you can try `HSA_OVERRIDE_GFX_VERSION=10.3.0` and get things working).
 
 Here's also an interesting 2024-06 writeup of supporting mixed architecture ROCm overrides: https://adamniederer.com/blog/rocm-cross-arch.html
+
+If you are on Linux and want to build ROCm directly for "unsupported" hardware (that has LLVM targets, which is most of them), see also:
+- https://github.com/lamikr/rocm_sdk_builder
+- https://github.com/lamikr/rocm_sdk_builder/discussions/216
+- https://www.phoronix.com/news/ROCm-SDK-Builder-6.1.2
 ## RDNA3 (eg 7900 XT, XTX)
 As of ROCm 5.7, Radeon RX 7900 XTX, XT, and PRO W7900 are officially supported and many old hacks are no longer necessary:
 - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/compatibility.html
@@ -89,6 +94,11 @@ I won't be spending too much time on this since my 7940HS that I have is 10 TOPS
 	- https://github.com/AMD-AIG-AIMA/AMD-LLM
 	- https://github.com/AMD-AIG-AIMA/AMD-LLM/blob/main/speculative_decoding/codellama_spec.py
 	- https://github.com/AMD-AIG-AIMA/AMD-LLM?tab=readme-ov-file#speculative-decoding
+- OGA API for C++ and Python
+	- https://ryzenai.docs.amd.com/en/latest/hybrid_oga.html
+	- This allows hybrid execution (NPU+GPU) of ONNX models in Windows
+	- The OGA-based flow supports Strix (STX) and Krackan Point (KRK) processors running Windows 11. Phoenix (PHX) and HawkPoint (HPT) processors are not supported.
+	- https://www.amd.com/en/developer/resources/technical-articles/deepseek-distilled-models-on-ryzen-ai-processors.html
 
 ## Radeon VII
 We have some previous known good memory timings for an old Radeon VII card:
