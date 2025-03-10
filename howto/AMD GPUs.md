@@ -1299,3 +1299,5 @@ Here's a ROCm fork of DeepSpeed (2023-09):
 
 I have a document that updated from April-June 2024 focused on W7900 (RDNA3 gfx1100 workstation version of the 7900 XTX) but I'm folding all up to date info back to this doc:
 * [[W7900 Pervasive Computing Project]]
+
+# Building 

@@ -92,3 +92,15 @@ wget https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_
 - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/wsl/install-radeon.html
 - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/limitations.html#wsl-specific-issues
 - https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
+
+## PyTorch
+https://llm-tracker.info/howto/AMD-GPUs#pytorch-1
+## vLLM
+
+## Attention Gym
+https://github.com/pytorch-labs/attention-gym/
+run examples/benchmark.py
+
+TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 - faster but doesn't support SWA
+- reduce batch to 4
+- reduce sequence lengths
