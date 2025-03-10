@@ -1300,4 +1300,12 @@ Here's a ROCm fork of DeepSpeed (2023-09):
 I have a document that updated from April-June 2024 focused on W7900 (RDNA3 gfx1100 workstation version of the 7900 XTX) but I'm folding all up to date info back to this doc:
 * [[W7900 Pervasive Computing Project]]
 
-# Building 
+# Building ROCm From Source
+- ROCm SDK Builder
+	- https://github.com/lamikr/rocm_sdk_builder
+		- https://github.com/lamikr/rocm_sdk_builder/discussions/216
+	- https://www.phoronix.com/news/ROCm-SDK-Builder-6.1.2
+- Spack
+	- https://spack.io/
+	- https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/spack.html
+	- https://www.reddit.com/r/ROCm/comments/1j81b1s/did_you_know_you_can_build_rocm_from_source_with/
