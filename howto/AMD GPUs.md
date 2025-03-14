@@ -1301,6 +1301,9 @@ I have a document that updated from April-June 2024 focused on W7900 (RDNA3 gfx1
 * [[W7900 Pervasive Computing Project]]
 
 # Building ROCm From Source
+- ROCm/TheRock
+	- https://github.com/ROCm/TheRock
+	- https://x.com/dylan522p/status/1900352609271300572/photo/2
 - ROCm SDK Builder
 	- https://github.com/lamikr/rocm_sdk_builder
 		- https://github.com/lamikr/rocm_sdk_builder/discussions/216
