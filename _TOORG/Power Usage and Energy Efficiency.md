@@ -46,3 +46,17 @@ For those interested in a full analysis/table with all the citations (including 
 
 
 https://bsky.app/profile/lhl.bsky.social/post/3lfytnob3x22l
+
+
+# Feb 2025
+New analysis, directionally closer to my test results:
+- https://engineeringprompts.substack.com/p/ai-energy-use
+- https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use
+
+Of course we can use DeepSeek-V3/R1 as a new benchmark for GPT-4 class.
+- https://dstack.ai/blog/h200-mi300x-deepskeek-benchmark/
+- https://rocm.blogs.amd.com/artificial-intelligence/DeepSeekR1_Perf/README.html
+- https://github.com/deepseek-ai/open-infra-index?tab=readme-ov-file#day-6---one-more-thing-deepseek-v3r1-inference-system-overview
+ 73.7k/14.8k input/output tokens per second per H800 node
+ - 10KWh
+ 
