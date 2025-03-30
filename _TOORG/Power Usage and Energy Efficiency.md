@@ -59,4 +59,12 @@ Of course we can use DeepSeek-V3/R1 as a new benchmark for GPT-4 class.
 - https://github.com/deepseek-ai/open-infra-index?tab=readme-ov-file#day-6---one-more-thing-deepseek-v3r1-inference-system-overview
  73.7k/14.8k input/output tokens per second per H800 node
  - 10KWh
- 
+
+The DeepSeek # s match mine pretty closely
+https://claude.ai/chat/88c16990-50a2-412c-94e1-ea71935e8b19
+https://aistudio.google.com/prompts/1kEQLqdGF2SF9B4xAvkKq_fruHWxFhbnd
+https://chatgpt.com/c/67e9a77d-54e4-8012-89c4-0c9ba9e76c18
+
+You could increase dense models w/ SD like EAGLE3
+
+https://blog.kyleggiero.me/Image-generators-energy-usage/
