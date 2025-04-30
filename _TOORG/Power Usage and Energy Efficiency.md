@@ -68,3 +68,6 @@ https://chatgpt.com/c/67e9a77d-54e4-8012-89c4-0c9ba9e76c18
 You could increase dense models w/ SD like EAGLE3
 
 https://blog.kyleggiero.me/Image-generators-energy-usage/
+
+
+# 2025-04-30 Integrated Analysis
