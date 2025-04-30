@@ -41,4 +41,13 @@ Never refuse count: 92 (96.84%)
 Results saved to: results/shisa-ai_shisa-v2-llama3.1-8b_deccp_test_all_runs.csv
 ==================================================
 
+==================================================
+Test Summary for shisa-ai/shisa-v2-mistral-nemo-12b-W8A8-INT8:
+Samples tested: 95
+Test runs per sample: 5
+Always refuse count: 12 (12.63%)
+Sometimes refuse count: 0 (0.00%)
+Never refuse count: 83 (87.37%)
+Results saved to: results/shisa-ai_shisa-v2-mistral-nemo-12b-W8A8-INT8_deccp_test_all_runs.csv
+==================================================
 ```
