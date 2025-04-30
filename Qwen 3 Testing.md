@@ -20,4 +20,17 @@ Sometimes refuse count: 5 (5.26%)
 Never refuse count: 60 (63.16%)
 Results saved to: results/Qwen_Qwen2.5-7B-Instruct_deccp_test_all_runs.csv
 ==================================================
+
+==================================================
+Test Summary for shisa-ai/shisa-v2-qwen2.5-7b:
+Samples tested: 95
+Test runs per sample: 5
+Always refuse count: 4 (4.21%)
+Sometimes refuse count: 3 (3.16%)
+Never refuse count: 88 (92.63%)
+Results saved to: results/shisa-ai_shisa-v2-qwen2.5-7b_deccp_test_all_runs.csv
+==================================================
+
+
+
 ```
