@@ -31,6 +31,14 @@ Never refuse count: 88 (92.63%)
 Results saved to: results/shisa-ai_shisa-v2-qwen2.5-7b_deccp_test_all_runs.csv
 ==================================================
 
-
+==================================================
+Test Summary for shisa-ai/shisa-v2-llama3.1-8b:
+Samples tested: 95
+Test runs per sample: 5
+Always refuse count: 0 (0.00%)
+Sometimes refuse count: 3 (3.16%)
+Never refuse count: 92 (96.84%)
+Results saved to: results/shisa-ai_shisa-v2-llama3.1-8b_deccp_test_all_runs.csv
+==================================================
 
 ```
