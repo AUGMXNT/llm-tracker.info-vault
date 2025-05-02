@@ -7,7 +7,7 @@ Build llama.cpp-hip w/ RPC
 HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)"     cmake -S . -B build -DGGML_HIP=ON -DGGML_RPC=ON -DAMDGPU_TARGETS=gfx1151 -DCMAKE_BUILD_TYPE=Release     && cmake --build build --config Release -- -j 32
 ```
 
-
+When running `llama-cli` by default it will add it to nodes. When using `llama-bench` it does not and you should run an RPC server locally.
 
 
 Vulkan has less default memory available than ROCm!
@@ -49,4 +49,22 @@ Starting RPC server v2.0.0
   endpoint       : 0.0.0.0:50052
   local cache    : n/a
   backend memory : 104742 MB
+
+# Manually specify memory
+lhl@cluster2:~/llama.cpp$ llama.cpp-vulkan/build/bin/rpc-server -p 50052 -H 0.0.0.0 -m 108000
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+WARNING: Host ('0.0.0.0') is != '127.0.0.1'
+         Never expose the RPC server to an open network!
+         This is an experimental feature and is not secure!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+create_backend: using Vulkan backend
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
+Starting RPC server v2.0.0
+  endpoint       : 0.0.0.0:50052
+  local cache    : n/a
+  backend memory : 108000 MB
+
 ```
