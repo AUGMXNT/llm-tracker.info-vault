@@ -1,3 +1,8 @@
+For the latest Strix Halo / AMD RyzenAI Max with Radeon 8060S (`gfx1151`) support, check out:
+- 2025-05-02 https://github.com/ROCm/TheRock/discussions/244
+- 2025-05-02 https://github.com/ROCm/ROCm/issues/4499
+	- https://github.com/ROCm/ROCm/issues/4566
+
 # System Info
 ```
 ❯ lsb_release -a
@@ -113,5 +118,11 @@ Starting RPC server v2.0.0
   endpoint       : 0.0.0.0:50052
   local cache    : n/a
   backend memory : 108000 MB
-
 ```
+
+
+
+## Speculative Decode
+https://github.com/ggml-org/llama.cpp/issues/12968
+https://github.com/hjc4869/llama.cpp
+https://x.com/hjc4869/status/1913562550064799896
