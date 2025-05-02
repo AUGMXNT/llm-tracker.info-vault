@@ -3,6 +3,21 @@ For the latest Strix Halo / AMD RyzenAI Max with Radeon 8060S (`gfx1151`) suppor
 - 2025-05-02 https://github.com/ROCm/ROCm/issues/4499
 	- https://github.com/ROCm/ROCm/issues/4566
 
+# Checklist
+- [ ] ROCm
+- [x] llama.cpp
+	- [x] HIP (ROCm)
+	- [x] Vulkan
+	- [x] RPC
+- [x] mamf-finder
+- [x] PyTorch
+	- [ ] hipBLASlt
+	- [ ] FA2
+- [ ] vLLM
+- [ ] SGLang
+- [ ] trl
+- [ ] Axolotl
+- [ ] torchtune
 # System Info
 ```
 ❯ lsb_release -a
