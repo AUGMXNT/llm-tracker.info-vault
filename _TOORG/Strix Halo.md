@@ -1,10 +1,57 @@
+# System Info
+```
+❯ lsb_release -a
+LSB Version:    n/a
+Distributor ID: Fedora
+Description:    Fedora Linux 43 (Workstation Edition Prerelease)
+Release:        43
+Codename:       n/a
+
+❯ uname -a
+Linux cluster1 6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64
+
+❯ python -c "import torch; print(f'PyTorch version: {torch.__version__}\nCUDA available: {torch.cuda.is_available()}\nDevice count: {torch.cuda.device_count()}')"
+PyTorch version: 2.5.0a0
+CUDA available: True
+Device count: 1
+
+❯ python env-info.py
+=== System Information ===
+Os Info: Fedora Linux 43 (Workstation Edition Prerelease)
+Kernel: Linux cluster1 6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64
+Memory Info: Total Memory: 120554 MB
+
+=== GPU Information ===
+CUDA: Not found
+ROCm: ROCM-SMI version: 3.0.0+unknown
+ROCM-SMI-LIB version: 7.3.0
+PyTorch CUDA Available: True
+PyTorch CUDA Version: N/A
+PyTorch HIP Version: 6.3.42134-0
+
+GPU Count: 1
+GPU 0: AMD Radeon Graphics
+
+=== Package Versions ===
+triton: 3.3.0
+torch: 2.5.0a
+
+❯ hipconfig -l
+/usr/lib64/rocm/llvm/bin
+
+❯ hipconfig -R
+/usr
+```
+
 
 # llama.cpp
 
 ## RPC
 Build llama.cpp-hip w/ RPC
 ```
-HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)"     cmake -S . -B build -DGGML_HIP=ON -DGGML_RPC=ON -DAMDGPU_TARGETS=gfx1151 -DCMAKE_BUILD_TYPE=Release     && cmake --build build --config Release -- -j 32
+HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" cmake -S . -B build -DGGML_HIP=ON -DGGML_RPC=ON -DAMDGPU_TARGETS=gfx1151 -DCMAKE_BUILD_TYPE=Release     && cmake --build build --config Release -- -j 32
+
+cmake -B build -DGGML_VULKAN=ON -DGGML_RPC=ON && cmake --build build --config Release -j 32
 ```
 
 When running `llama-cli` by default it will add it to nodes. When using `llama-bench` it does not and you should run an RPC server locally.
