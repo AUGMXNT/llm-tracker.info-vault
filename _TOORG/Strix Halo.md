@@ -8,6 +8,9 @@ For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) 
 	- [x] HIP (ROCm)
 	- [x] Vulkan
 	- [x] RPC
+	- [ ] Speculative Decoding
+		- [ ] 70B
+		- [ ] 25-32 Dense
 - [x] mamf-finder
 - [x] PyTorch
 	- [ ] hipBLASlt
@@ -311,3 +314,11 @@ ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | 
 https://github.com/ggml-org/llama.cpp/issues/12968
 https://github.com/hjc4869/llama.cpp
 https://x.com/hjc4869/status/1913562550064799896
+
+RDNA3 gets a sizable performance uplift with speculative decoding on 4bit models (--draft-max 3 --draft-min 3), and you'll most likely get 8-12 t/s for a 70-72B dense model.
+
+Sweep
+https://github.com/AUGMXNT/speed-benchmarking/tree/main/llama.cpp-code
+
+# Voicechat
+https://github.com/AUGMXNT/speed-benchmarking
