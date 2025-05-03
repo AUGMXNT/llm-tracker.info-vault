@@ -67,7 +67,7 @@ torch: 2.5.0a
 
 ## PyTorch Setup
 
-Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still ROCm support ([ROCm #4499](https://github.com/ROCm/ROCm/issues/4499)). In theory it may be possible to build a custom ROCm with `gfx1151` support, but in practice this is non-trivial:
+Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still ROCm support ([ROCm #4499](https://github.com/ROCm/ROCm/issues/4499)). In theory it may be possible to build a custom ROCm with `gfx1151` support, but in practice setting this up locally is non-trivial:
 - https://github.com/ROCm/TheRock/discussions/244
 - https://github.com/lamikr/rocm_sdk_builder
 
