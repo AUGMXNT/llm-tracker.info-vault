@@ -1,9 +1,8 @@
-For the latest Strix Halo / AMD RyzenAI Max with Radeon 8060S (`gfx1151`) support, check out:
+For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) support, check out:
 - 2025-05-02 https://github.com/ROCm/TheRock/discussions/244
 - 2025-05-02 https://github.com/ROCm/ROCm/issues/4499
 	- https://github.com/ROCm/ROCm/issues/4566
-
-# Checklist
+# Testing Checklist
 - [ ] ROCm
 - [x] llama.cpp
 	- [x] HIP (ROCm)
@@ -63,14 +62,62 @@ torch: 2.5.0a
 /usr
 ```
 
+## PyTorch Setup
+
+Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still ROCm support ([ROCm #4499](https://github.com/ROCm/ROCm/issues/4499)). In theory it may be possible to build a custom ROCm with `gfx1151` support, but in practice this is non-trivial:
+- https://github.com/ROCm/TheRock/discussions/244
+- https://github.com/lamikr/rocm_sdk_builder
+
+As I prefer to use [Mamba envs](https://github.com/conda-forge/miniforge?tab=readme-ov-file#unix-like-platforms-macos-linux--wsl) and there is no supported PyTorch build beyond the system PyTorch, I do a slightly (very) janky workaround and symlink the system PyTorch from my venv `site-packages`:
+```
+torch -> /usr/lib64/python3.13/site-packages/torch
+torch-2.5.0a0+gitunknown-py3.13.egg-info -> /usr/lib64/python3.13/site-packages/torch-2.5.0a0+gitunknown-py3.13.egg-info
+torchgen -> /usr/lib64/python3.13/site-packages/torchgen
+```
+
+While it's not ideal, it beats trying to compile ROCm and PyTorch for an unsupported architecture.
+
+## ROCm
+
+
 # Peak Performance
 
+RDNA3 has a theoretical 512 FP16 FLOPS/clock/CU.
 
-Peak TFLOPS
+A Ryzen AI Max 395's Radeon 8060S has 40 CUs at a max clock of 2.9GHz shoul have a peak 59.392 FP16 TFLOPS:
+```
+512 * 40 * 2.9e9 / 1e12 = 59.392 FP16 TFLOPS
+```
 - https://chatgpt.com/share/68152629-33a8-8012-817b-62b4fe6bc010
+- https://gpuopen.com/learn/wmma_on_rdna3/
+- https://chipsandcheese.com/p/microbenchmarking-amds-rdna-3-graphics-architecture
+- https://cprimozic.net/notes/posts/machine-learning-benchmarks-on-the-7900-xtx/
 
-mamf-finder
-attention-gym
+This assumes you are using optimized libraries like [rocWMMA](https://github.com/ROCm/rocWMMA) (requires ROCm 6.4) or [hipBLASLt](https://github.com/ROCm/hipBLASLt) otherwise your peak TFLOPS will likely be half of that.
+
+Currently, my test system's results are much lower, however.
+
+There is no official ROCm build for `gfx1151` so I am benchmarking using a custom Fedora `gfx1151` build of PyTorch (2.5) on ROCm 6.3 which only has the [rocBLAS](https://github.com/ROCm/rocBLAS) TensileLibraries available for `gfx1151`.
+## mamf-finder
+Using my [mamf-finder](https://github.com/shisa-ai/mamf-finder) repo to test, it takes about just under 35 hours to test with mamf-finder:
+
+```
+Warming up the accelerator for 30 secs ... /home/lhl/mamf-finder/mamf-finder/./mamf-finder.py:252: UserWarning: Attempting to use hipBLASLt on an unsupported architecture! Overriding blas backend to hipblas (Triggered internally at /builddir/build/BUILD/python-torch-2.5.1-build/pytorch-v2.5.1/aten/src/ATen/
+Context.cpp:296.)
+  torch.mm(A, B, out=C)
+accelerator warmup finished
+
+Tried  3375 shapes => the best outcomes were:
+mean:   5.0 TFLOPS @ 4096x9216x1024 (MxNxK)
+median: 5.0 TFLOPS @ 12288x3072x1024 (MxNxK)
+max:    5.1 TFLOPS @ 11264x3072x1024 (MxNxK)
+
+Elapsed time: 1 day, 10:40:32
+```
+
+As you can see, the max performance is 5.1 BF16 TFLOPS. At the 2.8GHz clock I'm getting, that's an **8.9% efficiency** (57.344 max theoretical).
+
+## attention-gym
 
 Performance bug?
 https://github.com/ROCm/MIOpen/pull/3685
@@ -78,6 +125,88 @@ https://github.com/ROCm/MIOpen/pull/3685
 # llama.cpp
 ## Vulkan vs HIP
 2025-05-03: Currently, the Vulkan backend is significantly faster than the HIP/ROCm backend on every single `llama-bench` tested model.
+
+## HIP Instability
+Besides poor performance, I get frequent GPU hangs / core dumps with `6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64`:
+
+```
+May 02 13:01:34 cluster1 systemd-coredump[2426713]: [🡕] Process 2426590 (llama-bench) of user 1002 dumped core.
+
+Module [dso] without build-id.
+Module [dso] without build-id.
+Module [dso] without build-id.
+Module [dso] without build-id.
+Module [dso] without build-id.
+Module [dso] without build-id.
+Module libdrm.so.2 from rpm libdrm-2.4.124-2.fc42.x86_64
+Module libelf.so.1 from rpm elfutils-0.192-8.fc42.x86_64
+Module libdrm_amdgpu.so.1 from rpm libdrm-2.4.124-2.fc42.x86_64
+Module libkeyutils.so.1 without build-id.
+Module libkrb5support.so.0 without build-id.
+Module libcom_err.so.3 without build-id.
+Module libk5crypto.so.3 without build-id.
+Module libkrb5.so.3 without build-id.
+Module libnuma.so.1 from rpm numactl-2.0.19-2.fc42.x86_64
+Module libz.so.1 without build-id.
+Module libzstd.so.1 without build-id.
+Module libgssapi_krb5.so.2 without build-id.
+Module libcrypto.so.3 without build-id.
+Module libssl.so.3 without build-id.
+Module libssh2.so.1 without build-id.
+Module libnghttp2.so.14 without build-id.
+Module libgcc_s.so.1 without build-id.
+Module libstdc++.so.6 without build-id.
+Module libcurl.so.4 without build-id.
+
+Stack trace of thread 2426591:
+#0  0x00007f5b0b9b5bec __pthread_kill_implementation (libc.so.6 + 0x73bec)
+#1  0x00007f5b0b95babe raise (libc.so.6 + 0x19abe)
+#2  0x00007f5b0b9436d0 abort (libc.so.6 + 0x16d0)
+#3  0x00007f5af2612a06 _ZN4rocr4core7Runtime18HwExceptionHandlerElPv.cold (libhsa-runtime64.so.1 + 0x12a06)
+#4  0x00007f5af267dfab _ZN4rocr4core7Runtime15AsyncEventsLoopEPv (libhsa-runtime64.so.1 + 0x7dfab)
+#5  0x00007f5af261be9c _ZN4rocr2os16ThreadTrampolineEPv (libhsa-runtime64.so.1 + 0x1be9c)
+#6  0x00007f5b0b9b3c84 start_thread (libc.so.6 + 0x71c84)
+#7  0x00007f5b0ba3612c __clone3 (libc.so.6 + 0xf412c)
+
+Stack trace of thread 2426660:
+#0  0x00007f5b0ba31eed ioctl (libc.so.6 + 0xefeed)
+#1  0x00007f5af26f43d0 hsakmt_ioctl (libhsa-runtime64.so.1 + 0xf43d0)
+#2  0x00007f5af26f4b90 hsaKmtWaitOnMultipleEvents_Ext.part.0 (libhsa-runtime64.so.1 + 0xf4b90)
+#3  0x00007f5af267e64d _ZN4rocr4core7Runtime15AsyncEventsLoopEPv (libhsa-runtime64.so.1 + 0x7e64d)
+#4  0x00007f5af261be9c _ZN4rocr2os16ThreadTrampolineEPv (libhsa-runtime64.so.1 + 0x1be9c)
+#5  0x00007f5b0b9b3c84 start_thread (libc.so.6 + 0x71c84)
+#6  0x00007f5b0ba3612c __clone3 (libc.so.6 + 0xf412c)
+
+Stack trace of thread 2426590:
+#0  0x00007f5b0b9c4b87 free (libc.so.6 + 0x82b87)
+#1  0x00007f5af54f189a _ZNSt6vectorISt10unique_ptrIA_cSt14default_deleteIS1_EESaIS4_EE12emplace_backIJS4_EEERS4_DpOT_ (libamd_comgr.so.2 + 0x2af189a)
+#2  0x00007f5af54f1675 _ZN4llvm7msgpack8Document9addStringENS_9StringRefE (libamd_comgr.so.2 + 0x2af1675)
+#3  0x00007f5af54ee655 _ZN5COMGR8metadata14getIsaMetadataEN4llvm9StringRefERNS1_7msgpack8DocumentE (libamd_comgr.so.2 + 0x2aee655)
+#4  0x00007f5af54cf222 amd_comgr_get_isa_metadata (libamd_comgr.so.2 + 0x2acf222)
+#5  0x00007f5b02c13dc3 _ZN3amd6device6Kernel20SetAvailableSgprVgprEv (libamdhip64.so.6 + 0x413dc3)
+#6  0x00007f5b02c87e57 _ZN3amd3roc15LightningKernel8postLoadEv (libamdhip64.so.6 + 0x487e57)
+#7  0x00007f5b02c84365 _ZN3amd3roc16LightningProgram10setKernelsEPvmimNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE (libamdhip64.so.6 + 0x484365)
+#8  0x00007f5b02c033f2 _ZN3amd6device7Program6loadLCEv (libamdhip64.so.6 + 0x4033f2)
+#9  0x00007f5b02c4e12a _ZN3amd7Program4loadERKSt6vectorIPNS_6DeviceESaIS3_EE (libamdhip64.so.6 + 0x44e12a)
+#10 0x00007f5b029835dd _ZN3hip13FatBinaryInfo12BuildProgramEi (libamdhip64.so.6 + 0x1835dd)
+#11 0x00007f5b0298822e _ZN3hip8Function11getStatFuncEPP18ihipModuleSymbol_ti (libamdhip64.so.6 + 0x18822e)
+#12 0x00007f5b02925ca0 _ZN3hip6StatCO11getStatFuncEPP18ihipModuleSymbol_tPKvi (libamdhip64.so.6 + 0x125ca0)
+#13 0x00007f5b02b227bb _ZN3hip16ihipLaunchKernelEPKv4dim3S2_PPvmP12ihipStream_tP11ihipEvent_tS8_i (libamdhip64.so.6 + 0x3227bb)
+#14 0x00007f5b02af7c0a _ZN3hip22hipLaunchKernel_commonEPKv4dim3S2_PPvmP12ihipStream_t (libamdhip64.so.6 + 0x2f7c0a)
+#15 0x00007f5b02af8278 _ZN3hip15hipLaunchKernelEPKv4dim3S2_PPvmP12ihipStream_t (libamdhip64.so.6 + 0x2f8278)
+#16 0x00007f5b0c0b1f85 _Z13ggml_cuda_cpyR25ggml_backend_cuda_contextPK11ggml_tensorPS1_b (libggml-hip.so + 0xb1f85)
+#17 0x00007f5b0c0daffd _ZL31ggml_backend_cuda_graph_computeP12ggml_backendP11ggml_cgraph (libggml-hip.so + 0xdaffd)
+#18 0x00007f5b0bf2e110 ggml_backend_sched_graph_compute_async (libggml-base.so + 0x18110)
+#19 0x00007f5b0e643ea0 _ZN13llama_context13graph_computeEP11ggml_cgraphb (libllama.so + 0x2aea0)
+#20 0x00007f5b0e648a58 _ZN13llama_context6decodeER11llama_batch (libllama.so + 0x2fa58)
+#21 0x00007f5b0e649c7e llama_decode (libllama.so + 0x30c7e)
+#22 0x0000000000408f5b _ZL11test_promptP13llama_contextiii (/home/lhl/llama.cpp/llama.cpp-hip/build/bin/llama-bench + 0x8f5b)
+#23 0x0000000000406d7d main (/home/lhl/llama.cpp/llama.cpp-hip/build/bin/llama-bench + 0x6d7d)
+#24 0x00007f5b0b9455b5 __libc_start_call_main (libc.so.6 + 0x35b5)
+#25 0x00007f5b0b945668 __libc_start_main@@GLIBC_2.34 (libc.so.6 + 0x3668)
+#26 0x0000000000407ee5 _start (/home/lhl/llama.cpp/llama.cpp-hip/build/bin/llama-bench + 0x7ee5)
+ELF object binary architecture: AMD x86-64
+```
 
 
 ### Qwen 3 MoE
@@ -93,7 +222,7 @@ ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | 
 
 build: d24d5928 (5255)
 ```
-
+- https://www.reddit.com/r/LocalLLaMA/comments/1kd5rua/comment/mq8n7sc/
 
 ## RPC
 Build llama.cpp-hip w/ RPC
