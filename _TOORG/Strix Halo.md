@@ -178,6 +178,11 @@ At a max 2794MHz and a max 33.6 TFLOPS that is
 Performance bug?
 https://github.com/ROCm/MIOpen/pull/3685
 
+```
+# TORCH_BLAS_PREFER_HIPBLASLT=0 
+HIPBLASLT_TENSILE_LIBPATH=/opt/rocm/lib/hipblaslt/library TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 python examples/benchmark.py
+```
+
 # llama.cpp
 ## Vulkan vs HIP
 2025-05-03: Currently, the Vulkan backend is significantly faster than the HIP/ROCm backend on every single `llama-bench` tested model.
