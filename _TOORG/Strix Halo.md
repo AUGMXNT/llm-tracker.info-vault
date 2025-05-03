@@ -72,8 +72,28 @@ Peak TFLOPS
 mamf-finder
 attention-gym
 
+Performance bug?
+https://github.com/ROCm/MIOpen/pull/3685
 
 # llama.cpp
+## Vulkan vs HIP
+2025-05-03: Currently, the Vulkan backend is significantly faster than the HIP/ROCm backend on every single `llama-bench` tested model.
+
+
+### Qwen 3 MoE
+Currently there is a bug where batch size has to be below 360 to prevent a crash. 256 has been tested as the best performer:
+```
+❯ llama.cpp-vulkan/build/bin/llama-bench -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf -b 256
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           pp512 |        144.36 ± 0.54 |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           tg128 |         74.76 ± 0.07 |
+
+build: d24d5928 (5255)
+```
+
 
 ## RPC
 Build llama.cpp-hip w/ RPC
@@ -158,18 +178,6 @@ ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | 
 | llama4 17Bx128E (Maverick) Q4_K - Medium | 216.18 GiB |   400.71 B | Vulkan,RPC |  99 |           tg128 |         16.30 ± 0.14 |
 ```
 
-### Qwen 3
-```
-❯ llama.cpp-vulkan/build/bin/llama-bench -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf -b 256
-ggml_vulkan: Found 1 Vulkan devices:
-ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
-| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
-| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           pp512 |        144.36 ± 0.54 |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           tg128 |         74.76 ± 0.07 |
-
-build: d24d5928 (5255)
-```
 ## Speculative Decode
 https://github.com/ggml-org/llama.cpp/issues/12968
 https://github.com/hjc4869/llama.cpp
