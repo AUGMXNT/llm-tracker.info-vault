@@ -169,7 +169,7 @@ benchmark version: 2
 
 
 Warming up the accelerator for 30 secs ... accelerator warmup finished
-   153 |   29.1(mean)   29.2(median)   31.5(max) @ 1024x11264x3072      | best:   30.8(mean)   30.8(median)   33.6(max) TFLOPS
+   2916 |   25.6(mean)   25.6(median)   25.8(max) @ 13312x15360x6144     | best:   34.9(mean)   34.9(median)   36.9(max) TFLOPSPS
 ```
 
 At a max 2794MHz and a max 33.6 TFLOPS that is 
