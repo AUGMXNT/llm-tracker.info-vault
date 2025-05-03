@@ -135,8 +135,7 @@ Elapsed time: 1 day, 10:40:32
 
 As you can see, the max performance is 5.1 BF16 TFLOPS. At the 2.8GHz clock I'm getting, that's an **8.9% efficiency** (57.344 max theoretical).
 
-
-## Docker
+### in Docker
 We get *much* better results using the scottt docker image:
 ```
 [root@4b8fdc8ee74c mamf-finder]# ./test-node.sh
@@ -170,9 +169,16 @@ benchmark version: 2
 
 Warming up the accelerator for 30 secs ... accelerator warmup finished
    2916 |   25.6(mean)   25.6(median)   25.8(max) @ 13312x15360x6144     | best:   34.9(mean)   34.9(median)   36.9(max) TFLOPSPS
+
+Tried  3375 shapes => the best outcomes were:
+mean:   35.1 TFLOPS @ 15360x3072x1024 (MxNxK)
+median: 35.1 TFLOPS @ 15360x3072x1024 (MxNxK)
+max:    36.9 TFLOPS @ 6144x3072x3072 (MxNxK)
+
+Elapsed time: 6:04:34
 ```
 
-At a max 2794MHz and a max 33.6 TFLOPS that is 
+At 2.8GHz clock and a max 36.9 TFLOPS that is a much more respectable 64.4% efficiency.
 ## attention-gym
 
 Performance bug?
