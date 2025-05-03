@@ -133,6 +133,44 @@ Elapsed time: 1 day, 10:40:32
 
 As you can see, the max performance is 5.1 BF16 TFLOPS. At the 2.8GHz clock I'm getting, that's an **8.9% efficiency** (57.344 max theoretical).
 
+
+## Docker
+We get *much* better results using the scottt docker image:
+```
+[root@4b8fdc8ee74c mamf-finder]# ./test-node.sh
+Starting multi-GPU test at Sat May  3 06:17:41 UTC 2025
+Waiting for all GPU tests to complete...
+Starting tests for GPU 0
+Running bfloat16 test on GPU 0
+/share/libdrm/amdgpu.ids: No such file or directory
+
+Benchmark started on 2025-05-03 06:17:43
+
+** Command line:
+/usr/bin/python ./mamf-finder.py --dtype bfloat16 --m_range 0 16384 1024 --n_range 0 16384 1024 --k_range 0 16384 1024 --output_file=./gpu0-bfloat16-2025-05-03-06-17-41.txt
+
+** Dtype: torch.bfloat16
+
+** Platform/Device info:
+Linux 4b8fdc8ee74c 6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64 #1 SMP PREEMPT_DYNAMIC Tue Apr 22 15:25:32 UTC 2025 x86_64
+_CudaDeviceProperties(name='AMD Radeon Graphics', major=11, minor=5, gcnArchName='gfx1151', total_memory=104906MB, multi_processor_count=20, uuid=58580000-0000-0000-0000-000000000000, L2_cache_size=2MB)
+
+** Critical software versions:
+torch=2.6.0a0+git90b83a9
+hip=6.4.43480-9f04e2822, cuda=None
+
+** Additional notes:
+benchmark version: 2
+
+
+--------------------------------------------------------------------------------
+
+
+Warming up the accelerator for 30 secs ... accelerator warmup finished
+   153 |   29.1(mean)   29.2(median)   31.5(max) @ 1024x11264x3072      | best:   30.8(mean)   30.8(median)   33.6(max) TFLOPS
+```
+
+At a max 2794MHz and a max 33.6 TFLOPS that is 
 ## attention-gym
 
 Performance bug?
