@@ -11,9 +11,10 @@ For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) 
 	- [ ] Speculative Decoding
 		- [ ] 70B
 		- [ ] 25-32 Dense
+	- [ ] wmma
 - [x] mamf-finder
 - [x] PyTorch
-	- [ ] hipBLASlt
+	- [x] hipBLASlt
 	- [ ] FA2
 - [ ] vLLM
 - [ ] SGLang
