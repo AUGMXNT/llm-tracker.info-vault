@@ -80,7 +80,19 @@ torchgen -> /usr/lib64/python3.13/site-packages/torchgen
 
 While it's not ideal, it beats trying to compile ROCm and PyTorch for an unsupported architecture.
 
-## ROCm
+### Docker on Fedora
+```
+# Grab image
+podman pull docker.io/scottt/therock:pytorch-vision-dev-f41
+
+# 
+podman run -it --rm \
+  --device=/dev/kfd \
+  --device=/dev/dri \
+  --privileged \
+  docker.io/scottt/therock:pytorch-vision-dev-f41
+```
+
 
 
 # Peak Performance
