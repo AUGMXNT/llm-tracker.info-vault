@@ -189,6 +189,29 @@ https://github.com/ROCm/MIOpen/pull/3685
 HIPBLASLT_TENSILE_LIBPATH=/opt/rocm/lib/hipblaslt/library TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 python examples/benchmark.py
 ```
 
+## aotriton
+We need to build and install aotriton
+```
+mkdir -p /share/libdrm
+cp /home/lhl/amdgpu.ids /share/libdrm/
+dnf install gcc gcc-c++ make cmake
+dnf install python3-devel
+export HIP_PLATFORM=amd
+export GPU_TRAGETS=gfx1151
+git clone https://github.com/ROCm/aotriton
+cd aotriton
+git submodule sync && git submodule update --init --recursive --force
+mkdir build && cd build
+
+cmake .. -DCMAKE_INSTALL_PREFIX=./install_dir -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -G Ninja
+ninja install
+
+# ln -s /home/lhl/aotriton/build/install_dir/lib/pyaotriton.cpython-313-x86_64-linux-gnu.so /usr/local/lib/python3.13/site-packages/
+
+python -c 'import pyaotriton'
+```
+
+
 # llama.cpp
 ## Vulkan vs HIP
 2025-05-03: Currently, the Vulkan backend is significantly faster than the HIP/ROCm backend on every single `llama-bench` tested model.
