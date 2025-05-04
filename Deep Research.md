@@ -56,4 +56,10 @@ Linux Audio debugging
 
 Designing an Algae Bioreactor
 - https://mostlyobvious.org/?link=%2FReference%2FAlgae%20Bioreactor
+- https://claude.ai/share/2106f91e-af3e-479f-a1c1-c992e7262693
+- https://claude.ai/share/e4ec4614-afc5-4fe1-b2d9-f335c74ed439
 - https://chatgpt.com/share/69ebe901-d859-4a63-8ded-6e99eb318ec9
+Revisiting:
+- https://chatgpt.com/share/68170d65-1e58-8012-a5a6-3409be099c23
+- https://chatgpt.com/share/6817171a-81ec-8012-b800-7483b6850ef7
+- 
