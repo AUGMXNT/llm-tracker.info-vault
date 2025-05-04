@@ -62,4 +62,3 @@ Designing an Algae Bioreactor
 Revisiting:
 - https://chatgpt.com/share/68170d65-1e58-8012-a5a6-3409be099c23
 - https://chatgpt.com/share/6817171a-81ec-8012-b800-7483b6850ef7
-- 
