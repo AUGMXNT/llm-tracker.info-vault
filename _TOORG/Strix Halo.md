@@ -410,3 +410,18 @@ https://github.com/AUGMXNT/speed-benchmarking/tree/main/llama.cpp-code
 
 # Voicechat
 https://github.com/AUGMXNT/speed-benchmarking
+
+
+# Building PyTorch
+With AOTriton and FA2
+
+```
+mamba activate
+mamba install cmake ninja patchelf
+pip install uv
+uv pip install meson
+
+git clone https://github.com/scottt/rocm-TheRock
+python ./build_tools/fetch_sources.py
+cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
+```
