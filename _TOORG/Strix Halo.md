@@ -425,3 +425,72 @@ git clone https://github.com/scottt/rocm-TheRock
 python ./build_tools/fetch_sources.py
 cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
 ```
+
+
+## Docker Files
+
+### rocm-dev
+We need to build `rocm-dev` first:
+```
+❯ sh build-rocm-docker.sh
+# podman build --build-arg FEDORA_VER=41 -t rocm-dev:41 -f dockerfiles/pytorch-dev/rocm_fedora.Dockerfile .
+...
+
+--> 34544a2de4e0
+[3/3] STEP 5/5: RUN printf "export PATH=/opt/rocm/bin:$PATH\n" > /etc/profile.d/rocm.sh
+[3/3] COMMIT rocm-dev:41
+--> 758b36e33cae
+Successfully tagged localhost/rocm-dev:41
+758b36e33cae4706e6a7030b6ae2604d6655da5c4a6305bfada0ca04339a5f98
+
+lhl in 🌐 cluster1 in rocm-TheRock on  gfx1151 [?] via △ v4.0.2 took 1h1m10s
+```
+
+Tag it for pytorch-dev:
+```
+podman tag localhost/rocm-dev:41 rocm-dev-f41:latest
+```
+
+### pytorch-dev
+```
+❯ git diff dockerfiles/
+diff --git a/dockerfiles/pytorch-dev/pytorch_dev_fedora.Dockerfile b/dockerfiles/pytorch-dev/pytorch_dev_fedora.Dockerfile
+index 462af8c..46e58c2 100644
+--- a/dockerfiles/pytorch-dev/pytorch_dev_fedora.Dockerfile
++++ b/dockerfiles/pytorch-dev/pytorch_dev_fedora.Dockerfile
+@@ -1,6 +1,11 @@
++# https://github.com/scottt/rocm-TheRock/blob/gfx1151/dockerfiles/pytorch-dev/pytorch_dev_fedora.Dockerfile
++
+ ARG FEDORA_VER=41
+ FROM rocm-dev-f${FEDORA_VER} AS build
+
++ENV AMDGPU_TARGETS=gfx1151
++ENV AOTRITON_BUILD_FROM_SOURCE=1
++
+ # pytorch-fetch
+ RUN --mount=type=cache,id=pytorch-f${FEDORA_VER},target=/therock \
+        mkdir -p /therock/pytorch
+@@ -9,6 +14,7 @@ RUN --mount=type=cache,id=pytorch-f${FEDORA_VER},target=/therock \
+        --mount=type=bind,target=/therock/src,rw \
+        python3 /therock/src/external-builds/pytorch/ptbuild.py \
+                checkout \
++                --pytorch-ref v2.7.0 \
+                --repo /therock/pytorch \
+                --depth 1 \
+                --jobs 10 \
+@@ -24,6 +30,7 @@ RUN --mount=type=cache,id=pytorch-f${FEDORA_VER},target=/therock \
+        --mount=type=bind,target=/therock/src,rw \
+        python3 /therock/src/external-builds/pytorch/ptbuild.py \
+                checkout \
++                --pytorch-ref v2.7.0 \
+                --repo /therock/pytorch  \
+                --depth 1  \
+                --jobs 10
+```
+
+
+
+```
+❯ sh build-pytorch-dev.sh
+
+```
