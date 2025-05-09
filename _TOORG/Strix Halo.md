@@ -501,6 +501,8 @@ index 462af8c..46e58c2 100644
 ```
 
 ## Working Notes
+- https://chatgpt.com/c/681ae923-5244-8012-81a0-ffb56917533b
+	- Debugging CK issues when trying to build PyTorch from source
 - https://chatgpt.com/c/681d85c5-8700-8012-8d85-8381b5868fa0
 	- rocm-dev tagging
 	- pytorch cmake w/ roctx
