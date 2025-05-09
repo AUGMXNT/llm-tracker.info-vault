@@ -428,6 +428,7 @@ cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
 
 
 ## Docker Files
+- We run our commands from the rocm-TheRock repo root otherwise relative paths are broken
 
 ### rocm-dev
 We need to build `rocm-dev` first:
