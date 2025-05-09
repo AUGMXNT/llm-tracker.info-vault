@@ -502,7 +502,9 @@ index 462af8c..46e58c2 100644
 
 ## Working Notes
 - https://chatgpt.com/c/681d85c5-8700-8012-8d85-8381b5868fa0
-	- o3 - fixing rocm-dev -> torch_dev
+	- rocm-dev tagging
+	- pytorch cmake w/ roctx
+	- pytorch make - werror
 
 ```
 cluster1
