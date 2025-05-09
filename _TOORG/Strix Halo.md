@@ -452,6 +452,10 @@ Tag it for pytorch-dev:
 podman tag localhost/rocm-dev:41 rocm-dev-f41:latest
 ```
 
+Test it:
+```
+podman run -it --rm rocm-dev-f41:latest bash
+```
 ### pytorch-dev
 ```
 ❯ git diff dockerfiles/
@@ -494,4 +498,14 @@ index 462af8c..46e58c2 100644
 ```
 ❯ sh build-pytorch-dev.sh
 
+```
+
+## Working Notes
+- https://chatgpt.com/c/681d85c5-8700-8012-8d85-8381b5868fa0
+	- o3 - fixing rocm-dev -> torch_dev
+
+```
+cluster1
+checkout rock
+make changes to rocm, add build scripts, have run scripts
 ```
