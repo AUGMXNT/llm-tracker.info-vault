@@ -217,6 +217,15 @@ python -c 'import pyaotriton'
 ## Vulkan vs HIP
 2025-05-03: Currently, the Vulkan backend is significantly faster than the HIP/ROCm backend on every single `llama-bench` tested model.
 
+## Building
+
+### Vulkan
+```
+git clone https://github.com/ggml-org/llama.cpp llama.cpp-vulkan
+cmake -B build -DGGML_VULKAN=ON -DGGML_RPC=ON && cmake --build build --config Release -j 32
+```
+- takes about 1.5 minutes to build
+
 ## HIP Instability
 Besides poor performance, I get frequent GPU hangs / core dumps with `6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64`:
 
@@ -314,6 +323,33 @@ ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | 
 build: d24d5928 (5255)
 ```
 - https://www.reddit.com/r/LocalLLaMA/comments/1kd5rua/comment/mq8n7sc/
+
+UPDATE: This no longer crashes, but `-b 256` still performs better than without, prompt processing is almost 2X faster:
+```
+❯ build/bin/llama-bench -b 256 -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coo
+pmat
+| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           pp512 |        116.69 ± 0.22 |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           tg128 |         74.77 ± 0.12 |
+
+build: 43dfd741 (5338)
+
+❯ build/bin/llama-bench -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coo
+pmat
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |           pp512 |         69.31 ± 0.10 |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |           tg128 |         74.90 ± 0.10 |
+
+build: 43dfd741 (5338)
+```
+
+
 
 ## RPC
 Build llama.cpp-hip w/ RPC
