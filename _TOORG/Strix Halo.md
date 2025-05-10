@@ -513,3 +513,14 @@ cluster1
 checkout rock
 make changes to rocm, add build scripts, have run scripts
 ```
+
+Compare to: https://github.com/ROCm/TheRock/blob/main/dockerfiles/pytorch-dev/pytorch_dev_ubuntu_24.04.Dockerfile#L20
+
+https://github.com/ROCm/TheRock/discussions/244
+
+CK off PR: https://github.com/pytorch/pytorch/pull/152951
+-DUSE_ROCM_CK_GEMM=ON 
+
+Or use ROCm ≥ 6.5 where CK includes RDNA 3 defines – see ROCm issue #4499 for progress. https://github.com/ROCm/ROCm/issues/4499
+https://github.com/ROCm/composable_kernel/issues/775
+
