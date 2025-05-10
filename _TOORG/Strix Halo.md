@@ -351,6 +351,12 @@ build: 43dfd741 (5338)
 
 
 
+## Flash Attention
+
+Measuring memory usage:
+```
+initial=$(rocm-smi --showmeminfo vram --csv | awk -F, 'NR==2{print int($3/1048576)}'); max=$initial; while sleep 1; do cur=$(rocm-smi --showmeminfo vram --csv | awk -F, 'NR==2{print int($3/1048576)}'); (( cur > max )) && max=$cur; printf "\r%s  used=%4d MiB  Δ=%4d MiB  peak=%4d MiB  Δpeak=%4d MiB " "$(date +%T)" "$cur" "$((cur-initial))" "$max" "$((max-initial))"; done
+```
 ## RPC
 Build llama.cpp-hip w/ RPC
 ```
