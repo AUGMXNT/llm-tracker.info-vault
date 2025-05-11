@@ -387,6 +387,64 @@ And a quick comparison to Vulkan:
 | Vulkan + FA | 1516.73 ± 9.54  | 57.99 ± 4.25 | 3686          |
 On `gfx1100` Vulkan is about 20% slower for `pp512` (48% slower if you use Flash Attention with Vulkan) and 33% slower for `tg128` (40% slower if you use Flash Attention with Vulkan) so it makes the most sense to use the HIP backend with rocWMMA and Flash Attention when possible.
 
+### Building rocWMMA Version
+
+#### Fetch a gfx1151-aware rocWMMA
+This is if we have an old rocWMMA that does not have `gfx1151` support merged
+```bash
+git clone https://github.com/ROCm/rocWMMA ~/llama.cpp/rocWMMA   # PR #538 included
+```
+- The Fedora package is too old and aborts at compile-time._
+
+#### Make hipcc prefer the new headers
+Since we need to give precedence to the new includes...
+```bash
+export CPATH=$HOME/llama.cpp/rocWMMA/library/include:$CPATH
+# – or –
+export HIPCC_COMPILE_FLAGS_APPEND="-I$HOME/llama.cpp/rocWMMA/library/include"
+```
+- These env-vars are honoured by every hipcc invocation, putting your copy ahead of `/usr/include/rocwmma`. Can be done w/o root.
+
+#### Stage the ROCm CMake Build-Tools locally
+This is if say the Fedora install you have doesn't have `rocm-cmake` (grr)
+```bash
+git clone https://github.com/ROCm/rocm-cmake ~/src/rocm-cmake
+cmake -S ~/src/rocm-cmake -B ~/src/rocm-cmake/build \
+      -DCMAKE_INSTALL_PREFIX=$HOME/rocm
+cmake --install ~/src/rocm-cmake/build
+
+export CMAKE_PREFIX_PATH=$HOME/rocm:$CMAKE_PREFIX_PATH
+```
+- Provides `ROCmCMakeBuildToolsConfig.cmake`, satisfying `find_package()` without `sudo`.
+
+#### Stub out the legacy MFMA Flash-Attention kernel
+This isn't used but causes compile issues, so we skip it.
+```cpp
+// ggml/src/ggml-cuda/fattn-wmma-f16.cu (replacement)
+#include "common.cuh"
+#include "fattn-common.cuh"
+
+extern "C" __global__ void flash_attn_ext_f16_stub() { /* noop */ }
+
+void ggml_cuda_flash_attn_ext_wmma_f16(ggml_backend_cuda_context & ctx,
+                                       ggml_tensor * dst) {
+    GGML_UNUSED(ctx);
+    GGML_UNUSED(dst);
+}
+```
+-  `gfx1151` lacks MFMA; compiling the original file fails.  The stub keeps the symbol so the project still links.
+
+#### Configure and build llama.cpp for gfx1151
+```bash
+HIPCXX="$(hipconfig -l)/clang" \
+HIP_PATH="$(hipconfig -R)"     \
+cmake -S . -B build            \
+      -DGGML_HIP=ON            \
+      -DGGML_RPC=ON            \
+      -DAMDGPU_TARGETS=gfx1151 \
+      -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
+```
 
 ## RPC
 Build llama.cpp-hip w/ RPC
