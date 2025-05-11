@@ -387,11 +387,11 @@ At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WM
 | WMMA + FA   | 343.91 ± 0.60 | 50.88 ± 0.01 | 4218          |
 And a quick comparison to Vulkan:
 
-| Run         | pp512 (t/s)     | tg128 (t/s)  | Max Mem (MiB) |
-| ----------- | --------------- | ------------ | ------------- |
-| Vulkan      | 2293.52 ± 33.13 | 62.75 ± 5.17 | 3618          |
-| Vulkan + FA | 1516.73 ± 9.54  | 57.99 ± 4.25 | 3686          |
-On `gfx1100` Vulkan is about 20% slower for `pp512` (48% slower if you use Flash Attention with Vulkan) and 33% slower for `tg128` (40% slower if you use Flash Attention with Vulkan) so it makes the most sense to use the HIP backend with rocWMMA and Flash Attention when possible.
+| Run         | pp512 (t/s)   | tg128 (t/s)  | Max Mem (MiB) |
+| ----------- | ------------- | ------------ | ------------- |
+| Vulkan      | 881.71 ± 1.71 | 52.22 ± 0.05 | 3923          |
+| Vulkan + FA | 884.20 ± 6.23 | 52.73 ± 0.07 | 3923          |
+On `gfx1151` Vulkan is *much* faster than the HIP/ROCm backend..
 
 ### Building rocWMMA Version
 
