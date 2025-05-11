@@ -368,14 +368,17 @@ We compile the latest HEAD `b5343` and test as usual with [TheBloke/Llama-2-7B-G
 
 WMMA + FA is by far the best option for long context:
 
-| Run         | pp8192 (t/s) | tg8192 (t/s) | Max Mem (MiB) |
-| ----------- | ------------ | ------------ | ------------- |
-| Normal      |              |              |               |
-| Normal + FA |              |              |               |
-| WMMA        |              |              |               |
-| WMMA + FA   |              |              |               |
+| Run         | pp8192 (t/s)  | tg8192 (t/s) | Max Mem (MiB) |
+| ----------- | ------------- | ------------ | ------------- |
+| Normal      |               |              |               |
+| Normal + FA |               |              |               |
+| WMMA        | 230.10 ± 0.70 | 12.37 ± 0.00 | 6+10590       |
+| WMMA + FA   | 317.66 ± 4.39 |              | 7+8062        |
+| Vulkan      | 487.69 ± 0.83 | 7.54 ± 0.02  |               |
+| Vulkan + FA | 490.18 ± 4.89 |              | 7767+1180     |
 - You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
+- WMMA running on 
 
 At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WMMA you still take a big performance hit using Flash Attention:
 
@@ -691,6 +694,8 @@ index 462af8c..46e58c2 100644
 	- rocm-dev tagging
 	- pytorch cmake w/ roctx
 	- pytorch make - werror
+- https://chatgpt.com/c/6820b7a7-1d24-8012-8412-e8187098684e
+	- llama.cpp + rocwmma
 
 ```
 cluster1
