@@ -399,6 +399,14 @@ WMMA + FA is by far the best option for long context:
 - You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
 
+At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WMMA you take a huge performance hit using FA:
+
+| Run         | pp512 (t/s)     | tg128 (t/s)  | Max Mem (MiB) |
+| ----------- | --------------- | ------------ | ------------- |
+| Normal      | 2689.17 ± 18.02 | 96.08 ± 0.23 | 4407          |
+| Normal + FA | 2081.85 ± 22.60 | 85.33 ± 0.15 | 4470          |
+| WMMA        | 2717.28 ± 16.53 | 96.24 ± 0.40 | 4407          |
+| WMMA + FA   | 2891.59 ± 20.79 | 94.79 ± 0.31 | 4408          |
 
 ### 2024-01-08 Testing
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
