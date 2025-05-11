@@ -353,21 +353,27 @@ build: 43dfd741 (5338)
 
 ## Flash Attention
 
-Measuring memory usage:
+Measuring memory usage with `rocm-smi`:
 ```
 initial=$(rocm-smi --showmeminfo vram --csv | awk -F, 'NR==2{print int($3/1048576)}'); max=$initial; while sleep 1; do cur=$(rocm-smi --showmeminfo vram --csv | awk -F, 'NR==2{print int($3/1048576)}'); (( cur > max )) && max=$cur; printf "\r%s  used=%4d MiB  Δ=%4d MiB  peak=%4d MiB  Δpeak=%4d MiB " "$(date +%T)" "$cur" "$((cur-initial))" "$max" "$((max-initial))"; done
 ```
+
+And here's an APU friendly version (measures GTT) using `amdgpu_top`:
+```
+initial=$(amdgpu_top -d | awk '/^[[:space:]]*GTT/{print int($4)}'); max=$initial; while sleep 1; do cur=$(amdgpu_top -d | awk '/^[[:space:]]*GTT/{print int($4)}'); (( cur > max )) && max=$cur; printf "\r%s  used=%4d MiB  Δ=%4d MiB  peak=%4d MiB  Δpeak=%4d MiB " "$(date +%T)" "$cur" "$((cur-initial))" "$max" "$((max-initial))"; done
+```
+
 
 We compile the latest HEAD `b5343` and test as usual with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
 WMMA + FA is by far the best option for long context:
 
-| Run         | pp8192 (t/s)    | tg8192 (t/s) | Max Mem (MiB) |
-| ----------- | --------------- | ------------ | ------------- |
-| Normal      | 1408.18 ± 10.44 | 56.42 ± 0.05 | 10774         |
-| Normal + FA | 600.06 ± 4.56   | 56.42 ± 0.05 | 8348          |
-| WMMA        | 1416.47 ± 10.14 | 54.82 ± 0.08 | 10775         |
-| WMMA + FA   | 2175.75 ± 23.41 | 69.68 ± 0.09 | 8591          |
+| Run         | pp8192 (t/s) | tg8192 (t/s) | Max Mem (MiB) |
+| ----------- | ------------ | ------------ | ------------- |
+| Normal      |              |              |               |
+| Normal + FA |              |              |               |
+| WMMA        |              |              |               |
+| WMMA + FA   |              |              |               |
 - You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
 
@@ -377,8 +383,8 @@ At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WM
 | ----------- | ------------- | ------------ | ------------- |
 | Normal      | 348.96 ± 0.31 | 48.72 ± 0.01 | 4219          |
 | Normal + FA | 331.96 ± 0.41 | 45.78 ± 0.02 | 4245          |
-| WMMA        |               |              |               |
-| WMMA + FA   |               |              |               |
+| WMMA        | 322.63 ± 1.34 | 48.40 ± 0.02 | 4218          |
+| WMMA + FA   | 343.91 ± 0.60 | 50.88 ± 0.01 | 4218          |
 And a quick comparison to Vulkan:
 
 | Run         | pp512 (t/s)     | tg128 (t/s)  | Max Mem (MiB) |
