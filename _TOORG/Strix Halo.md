@@ -97,8 +97,6 @@ podman run -it --rm \
 - I wasn't able to successfully build from source
 - toolbox doesn't seem to work properly, but running in podman with the right flags did
 - See: https://claude.ai/chat/e9fc7ffd-734b-411b-8bb4-f4028d6c7576
-
-
 # Peak Performance
 
 RDNA3 has a theoretical 512 FP16 FLOPS/clock/CU.
@@ -370,12 +368,12 @@ WMMA + FA is by far the best option for long context:
 
 | Run         | pp8192 (t/s)  | tg8192 (t/s) | Max Mem (MiB) |
 | ----------- | ------------- | ------------ | ------------- |
-| Normal      |               |              |               |
+| Normal      |               |              | 6+10591       |
 | Normal + FA |               |              |               |
 | WMMA        | 230.10 ± 0.70 | 12.37 ± 0.00 | 6+10590       |
-| WMMA + FA   | 317.66 ± 4.39 |              | 7+8062        |
-| Vulkan      | 487.69 ± 0.83 | 7.54 ± 0.02  |               |
-| Vulkan + FA | 490.18 ± 4.89 |              | 7767+1180     |
+| WMMA + FA   | 317.66 ± 4.39 | 50.97 ± 0.00 | 7+8062        |
+| Vulkan      | 487.69 ± 0.83 | 7.54 ± 0.02  | 7761+1180     |
+| Vulkan + FA | 490.18 ± 4.89 | 32.03 ± 0.01 | 7767+1180     |
 - You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
 - WMMA running on 
