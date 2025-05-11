@@ -381,21 +381,24 @@ HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" cmake -S . -B build -D
 ~/ai/llama.cpp/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf -p 8192 -n 8192
 # Normal + FA - 13m29s
 ~/ai/llama.cpp/build/bin/llama-bench -m /models/gguf/llama-2-7b.Q4_0.gguf -p 8192 -n 8192 -fa 1
+
+# Compile w/ rocwmma - 1m38s
+HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" cmake -S . -B build -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1100 -DCMAKE_BUILD_TYPE=Release -DGGML_HIP_ROCW
+MMA_FATTN=ON && cmake --build build --config Release -- -j$(nproc)
 ```
+
+
+WMMA + FA is by far the best option for long context:
 
 | Run         | pp8192 (t/s)    | tg8192 (t/s) | Max Mem (MiB) |
 | ----------- | --------------- | ------------ | ------------- |
 | Normal      | 1408.18 ± 10.44 | 56.42 ± 0.05 | 10774         |
-| Normal + FA | 600.06 ± 4.56   |              | 8348          |
+| Normal + FA | 600.06 ± 4.56   | 56.42 ± 0.05 | 8348          |
 | WMMA        | 1416.47 ± 10.14 | 54.82 ± 0.08 | 10775         |
-| WMMA + FA   |                 |              |               |
+| WMMA + FA   | 2175.75 ± 23.41 | 69.68 ± 0.09 | 8591          |
+- You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
+- You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
 
-
-
-
-```
--DGGML_HIP_ROCWMMA_FATTN=ON
-```
 
 ### 2024-01-08 Testing
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
