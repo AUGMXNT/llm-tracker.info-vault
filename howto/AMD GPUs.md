@@ -364,7 +364,7 @@ ggml_cuda_init: found 1 ROCm devices:
 build: b6af36a5 (4277)
 ```
 
-## 2024-05-11 Testing
+#### 2024-05-11 Testing
 We compile the latest HEAD `b5343` and test as usual with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
 For highwater memory testing:
@@ -408,7 +408,8 @@ At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WM
 | WMMA        | 2717.28 ± 16.53 | 96.24 ± 0.40 | 4407          |
 | WMMA + FA   | 2891.59 ± 20.79 | 94.79 ± 0.31 | 4408          |
 
-### 2024-01-08 Testing
+
+#### 2024-01-08 Testing
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
 7900 XT + 7900 XTX used together segfaulted on `b7e7982 (1787)` (tested 2024-01-08) but ran with `6db2b41a (1988)` (tested 2024-01-28)
@@ -475,7 +476,7 @@ While the Radeon 7900 XTX has  theoretically competitive memory bandwidth and co
 | Inference % | -18.4% | 0% | +12.9% | +33.0% |
 * Tested 2024-01-28 with llama.cpp `6db2b41a (1988)` and latest ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04` ) and CUDA (`dkms nvidia/545.29.06, 6.7.0-arch3-1`, `nvcc cuda_12.3.r12.3/compiler.33492891_0` ) on similar platforms (5800X3D for Radeons, 5950X for RTXs)
 * RTX cards have much better FP16/BF16 Tensor FLOPS performance that the inferencing engines are taking advantage of. FP16 FLOPS (32-bit/16-bit accumulation numbers) sourced from Nvidia docs ([3090](https://images.nvidia.com/aem-dam/en-zz/Solutions/geforce/ampere/pdf/NVIDIA-ampere-GA102-GPU-Architecture-Whitepaper-V1.pdf), [4090](https://images.nvidia.com/aem-dam/Solutions/geforce/ada/nvidia-ada-gpu-architecture.pdf)_)
-#### Vulkan and CLBlast
+##### Vulkan and CLBlast
 ```bash
 ### CPU
 make clean && make LLAMA_CLBLAST=1
@@ -504,7 +505,7 @@ CUDA_VISIBLE_DEVICES=1 ./llama-bench -m /data/models/gguf/llama-2-7b.Q4_0.gguf -
 | Prompt tok/s | 24.5 | 219 | 758 | 2550 |
 | Inference tok/s | 10.7 | 35.4 | 52.3 | 119.0 |
 * Tested 2024-01-29 with llama.cpp `d2f650cb (1999)` and latest on a 5800X3D w/ DDR4-3600 system with CLBlast `libclblast-dev 1.5.2-2`, Vulkan  `mesa-vulkan-drivers 23.0.4-0ubuntu1~22.04.1`, and ROCm (`dkms amdgpu/6.3.6-1697589.22.04`, `rocm 6.0.0.60000-91~22.04`) 
-#### Radeon VII
+##### Radeon VII
 The Radeon VII was a Vega 20 XT (GCN 5.1) card that was released in February 2019 at $700. It has 16GB of HDM2 memory with a 1024GB/s of memory bandwidth and 26.88 TFLOPS of FP16. Honestly, while the prefill probably doesn't have much more that could be squeezed from it, I would expect with optimization, you would be able to double inference performance (if you could use all its memory bandwidth). 
 
 Radeon Vega VII
