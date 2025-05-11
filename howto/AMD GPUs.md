@@ -387,7 +387,6 @@ HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" cmake -S . -B build -D
 MMA_FATTN=ON && cmake --build build --config Release -- -j$(nproc)
 ```
 
-
 WMMA + FA is by far the best option for long context:
 
 | Run         | pp8192 (t/s)    | tg8192 (t/s) | Max Mem (MiB) |
@@ -399,7 +398,7 @@ WMMA + FA is by far the best option for long context:
 - You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
 
-At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WMMA you take a huge performance hit using FA:
+At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WMMA you still take a big performance hit using Flash Attention:
 
 | Run         | pp512 (t/s)     | tg128 (t/s)  | Max Mem (MiB) |
 | ----------- | --------------- | ------------ | ------------- |
@@ -407,8 +406,15 @@ At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WM
 | Normal + FA | 2081.85 ± 22.60 | 85.33 ± 0.15 | 4470          |
 | WMMA        | 2717.28 ± 16.53 | 96.24 ± 0.40 | 4407          |
 | WMMA + FA   | 2891.59 ± 20.79 | 94.79 ± 0.31 | 4408          |
+And a quick comparison to Vulkan:
 
+| Run         | pp512 (t/s)     | tg128 (t/s)  | Max Mem (MiB) |
+| ----------- | --------------- | ------------ | ------------- |
+| Vulkan      | 2293.52 ± 33.13 | 62.75 ± 5.17 | 3618          |
+| Vulkan + FA | 1516.73 ± 9.54  | 57.99 ± 4.25 | 3686          |
+On `gfx1100` Vulkan is about 20% slower for `pp512` (48% slower if you use Flash Attention with Vulkan) and 33% slower for `tg128` (40% slower if you use Flash Attention with Vulkan) so it makes the most sense to use the HIP backend with rocWMMA and Flash Attention when possible.
 
+One interesting thing is that Vulkan seems to use less VRAM measured by our `rocm-smi` memory watcher.
 #### 2024-01-08 Testing
 Let's run some testing with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 

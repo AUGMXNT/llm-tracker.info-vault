@@ -357,6 +357,37 @@ Measuring memory usage:
 ```
 initial=$(rocm-smi --showmeminfo vram --csv | awk -F, 'NR==2{print int($3/1048576)}'); max=$initial; while sleep 1; do cur=$(rocm-smi --showmeminfo vram --csv | awk -F, 'NR==2{print int($3/1048576)}'); (( cur > max )) && max=$cur; printf "\r%s  used=%4d MiB  Δ=%4d MiB  peak=%4d MiB  Δpeak=%4d MiB " "$(date +%T)" "$cur" "$((cur-initial))" "$max" "$((max-initial))"; done
 ```
+
+We compile the latest HEAD `b5343` and test as usual with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
+
+WMMA + FA is by far the best option for long context:
+
+| Run         | pp8192 (t/s)    | tg8192 (t/s) | Max Mem (MiB) |
+| ----------- | --------------- | ------------ | ------------- |
+| Normal      | 1408.18 ± 10.44 | 56.42 ± 0.05 | 10774         |
+| Normal + FA | 600.06 ± 4.56   | 56.42 ± 0.05 | 8348          |
+| WMMA        | 1416.47 ± 10.14 | 54.82 ± 0.08 | 10775         |
+| WMMA + FA   | 2175.75 ± 23.41 | 69.68 ± 0.09 | 8591          |
+- You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
+- You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
+
+At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WMMA you still take a big performance hit using Flash Attention:
+
+| Run         | pp512 (t/s)   | tg128 (t/s)  | Max Mem (MiB) |
+| ----------- | ------------- | ------------ | ------------- |
+| Normal      | 348.96 ± 0.31 | 48.72 ± 0.01 | 4219          |
+| Normal + FA | 331.96 ± 0.41 | 45.78 ± 0.02 | 4245          |
+| WMMA        |               |              |               |
+| WMMA + FA   |               |              |               |
+And a quick comparison to Vulkan:
+
+| Run         | pp512 (t/s)     | tg128 (t/s)  | Max Mem (MiB) |
+| ----------- | --------------- | ------------ | ------------- |
+| Vulkan      | 2293.52 ± 33.13 | 62.75 ± 5.17 | 3618          |
+| Vulkan + FA | 1516.73 ± 9.54  | 57.99 ± 4.25 | 3686          |
+On `gfx1100` Vulkan is about 20% slower for `pp512` (48% slower if you use Flash Attention with Vulkan) and 33% slower for `tg128` (40% slower if you use Flash Attention with Vulkan) so it makes the most sense to use the HIP backend with rocWMMA and Flash Attention when possible.
+
+
 ## RPC
 Build llama.cpp-hip w/ RPC
 ```
@@ -468,6 +499,53 @@ python ./build_tools/fetch_sources.py
 cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
 ```
 
+
+## Compile
+
+```
+aotriton
+```
+
+CK
+```
+
+cmake \
+        -D CMAKE_PREFIX_PATH=/opt/rocm \
+        -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc \
+        -D CMAKE_BUILD_TYPE=Release \
+        -D GPU_TARGETS="gfx1151" \
+        -D HIP_PLATFORM=amd \
+        ..
+
+# About 15 minutes
+time make -j
+
+time make -j install
+```
+
+PyTorch
+```
+# Enable ROCm (HIP) build and disable CUDA
+export USE_ROCM=1
+export USE_CUDA=0
+
+# Enable AOTriton integration (FlashAttention kernels)
+export USE_AOTRITON=1
+
+# Specify target GPU architectures for ROCm (limit to gfx1151 for Strix Halo)
+export PYTORCH_ROCM_ARCH="gfx1151"
+
+# Point to pre-installed AOTriton (adjust the path to your AOTriton install dir)
+export AOTRITON_INSTALLED_PREFIX="/home/lhl/aotriton/build/install_dir"
+
+# Add ROCm and custom library paths to CMake search path
+export CMAKE_PREFIX_PATH="/opt/rocm:${CMAKE_PREFIX_PATH}"
+
+# Ensure ROCm libs (and any custom build libs) are in the runtime library path
+export LD_LIBRARY_PATH="/opt/rocm/lib:${AOTRITON_INSTALLED_PREFIX}/lib:${LD_LIBRARY_PATH}"
+
+
+```
 
 ## Docker Files
 - We run our commands from the rocm-TheRock repo root otherwise relative paths are broken
