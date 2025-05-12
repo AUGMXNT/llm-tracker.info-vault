@@ -388,7 +388,7 @@ Vulkan + FA still has better pp but tg is significantly lower. It based on these
 | Normal      | 245.59 ± 0.10     | 12.43 ± 0.00     | 6+10591       |
 | Normal + FA | 190.86 ± 0.49     | 30.01 ± 0.00     | 7+8089        |
 | WMMA        | 230.10 ± 0.70     | 12.37 ± 0.00     | 6+10590       |
-| WMMA + FA   | 317.66 ± 4.39     | **50.97 ± 0.00** | **7+8062**    |
+| WMMA + FA   | 368.77 ± 1.22     | **50.97 ± 0.00** | **7+8062**    |
 | Vulkan      | 487.69 ± 0.83     | 7.54 ± 0.02      | 7761+1180     |
 | Vulkan + FA | **490.18 ± 4.89** | 32.03 ± 0.01     | 7767+1180     |
 - You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
@@ -569,6 +569,21 @@ cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
 
 
 ## Compile
+
+### hipBLASLt
+```
+git clone https://github.com/ROCm/hipBLASLt
+cd hipBLASLt
+python3 -m pip install -r tensilelite/requirements.txt
+
+
+# Tensilelite
+dnf install msgpack-devel boost-devel
+cd tensilelite && mkdir build && cd build
+HIP_PLATFORM=amd cmake -DTENSILE_DISABLE_CTEST=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo  -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DTensile_ROOT=$(pwd)/../Tensile ../HostLibraryTests
+ make -j
+ ./TensileTests 
+```
 
 ```
 aotriton
