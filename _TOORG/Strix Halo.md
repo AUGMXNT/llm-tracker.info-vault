@@ -663,7 +663,7 @@ time make -j
 time make -j install
 ```
 
-PyTorch
+### PyTorch
 ```
 # Enable ROCm (HIP) build and disable CUDA
 export USE_ROCM=1
@@ -692,6 +692,14 @@ export CMAKE_PREFIX_PATH="/opt/rocm:${CMAKE_PREFIX_PATH}"
 export LD_LIBRARY_PATH="/opt/rocm/lib:${AOTRITON_INSTALLED_PREFIX}/lib:${LD_LIBRARY_PATH}"
 
 export CXXFLAGS="$CXXFLAGS -Wno-unused-function -Wno-error=unused-function -Wno-error=deprecated-declarations"
+
+We need to add
+defined(__gfx1151__) || 
+to
+third_party/composable_kernel/include/ck/ck.hpp
+
+# Does this work?
+python -c 'import torch,os; print(torch.version.hip, torch.cuda.get_device_name(0))'
 ```
 
 ## Docker Files
