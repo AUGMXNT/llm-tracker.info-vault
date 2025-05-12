@@ -676,6 +676,9 @@ export USE_KINETO=OFF
 dnf install roctracer-devel
 ln -s /opt/rocm/lib/librocprofiler-sdk-roctx.so /opt/rocm/lib/libroctx64.so
 
+# Will complain about tracing which we're not building...
+export BUILD_TEST=OFF
+
 # Needed
 dnf install libdrm-devel
 
