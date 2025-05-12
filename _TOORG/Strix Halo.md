@@ -366,7 +366,22 @@ initial=$(amdgpu_top -d | awk '/^[[:space:]]*GTT/{print int($4)}'); max=$initial
 
 We compile the latest HEAD `b5343` and test as usual with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
-WMMA + FA is by far the best option for long context, Vulkan + FA still has better pp, but you take a big tg hit:
+#### pp512/tg128
+At the standard `pp512`/`tg128` tests, we see that as tested before, the Vulkan stomps over the HIP backend, and that WMMA makes basically no difference:
+
+| Run         | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
+| ----------- | ----------------- | ---------------- | ------------- |
+| Vulkan      | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
+| Vulkan + FA | **884.20 ± 6.23** | **52.73 ± 0.07** | **3923**      |
+| HIP         | 348.96 ± 0.31     | 48.72 ± 0.01     | 4219          |
+| HIP + FA    | 331.96 ± 0.41     | 45.78 ± 0.02     | 4245          |
+| WMMA        | 322.63 ± 1.34     | 48.40 ± 0.02     | 4218          |
+| WMMA + FA   | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
+
+#### pp8192/tg8192
+But when we switch to longer context, we see something interesting happen. WMMA + FA basically loses no performance at this longer context length!
+
+Vulkan + FA still has better pp but tg is significantly lower. It based on these data points it seems like Vulkan performance may continue to decrease as context extends.
 
 | Run         | pp8192 (t/s)      | tg8192 (t/s)     | Max Mem (MiB) |
 | ----------- | ----------------- | ---------------- | ------------- |
@@ -380,21 +395,7 @@ WMMA + FA is by far the best option for long context, Vulkan + FA still has bett
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
 - WMMA running on 
 
-At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WMMA you still take a big performance hit using Flash Attention:
 
-| Run         | pp512 (t/s)   | tg128 (t/s)  | Max Mem (MiB) |
-| ----------- | ------------- | ------------ | ------------- |
-| Normal      | 348.96 ± 0.31 | 48.72 ± 0.01 | 4219          |
-| Normal + FA | 331.96 ± 0.41 | 45.78 ± 0.02 | 4245          |
-| WMMA        | 322.63 ± 1.34 | 48.40 ± 0.02 | 4218          |
-| WMMA + FA   | 343.91 ± 0.60 | 50.88 ± 0.01 | 4218          |
-And a quick comparison to Vulkan:
-
-| Run         | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |     |
-| ----------- | ----------------- | ---------------- | ------------- | --- |
-| Vulkan      | 881.71 ± 1.71     | 52.22 ± 0.05     | 3923          |     |
-| Vulkan + FA | **884.20 ± 6.23** | **52.73 ± 0.07** | 3923          |     |
-On `gfx1151` Vulkan is *much* faster than the HIP/ROCm backend..
 
 ### Building rocWMMA Version
 
