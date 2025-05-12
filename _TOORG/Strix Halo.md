@@ -675,6 +675,9 @@ export USE_KINETO=OFF
 # still needed for ROCM_ROCTX_LIB
 dnf install roctracer-devel
 
+# Needed
+dnf install libdrm-devel
+
 # Enable AOTriton integration (FlashAttention kernels)
 export USE_AOTRITON=1
 export BUILD_AOTRITON=1
