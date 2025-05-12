@@ -189,19 +189,20 @@ HIPBLASLT_TENSILE_LIBPATH=/opt/rocm/lib/hipblaslt/library TORCH_ROCM_AOTRITON_EN
 ```
 
 ## aotriton
-We need to build and install aotriton
+We need to build and install aotriton:
 ```
 mkdir -p /share/libdrm
 cp /home/lhl/amdgpu.ids /share/libdrm/
 dnf install gcc gcc-c++ make cmake
 dnf install python3-devel
 export HIP_PLATFORM=amd
-export GPU_TRAGETS=gfx1151
+export GPU_TARGETS=gfx1151
 git clone https://github.com/ROCm/aotriton
 cd aotriton
 git submodule sync && git submodule update --init --recursive --force
 mkdir build && cd build
 
+#build
 cmake .. -DCMAKE_INSTALL_PREFIX=./install_dir -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -G Ninja
 ninja install
 
@@ -395,8 +396,6 @@ Vulkan + FA still has better pp but tg is significantly lower. It based on these
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
 - WMMA running on 
 
-
-
 ### Building rocWMMA Version
 
 #### Fetch a gfx1151-aware rocWMMA
@@ -571,26 +570,26 @@ cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
 ## Compile
 
 ### hipBLASLt
+We are in an env where we have hipBLASLt already but if you're building
 ```
 git clone https://github.com/ROCm/hipBLASLt
 cd hipBLASLt
 python3 -m pip install -r tensilelite/requirements.txt
-# You may need to comment out the PyYAML install...
+# You may need to comment out the PyYAML install
+# Also if the paths are wrong...
+sudo ln -s /opt/rocm/lib/llvm/bin/amdclang++ /opt/rocm/bin/amdclang++
+sudo ln -s /opt/rocm/lib/llvm/bin/amdclang     /opt/rocm/bin/amdclang
+export HIP_PLATFORM=amd
+export HIPBLASLT_ENABLE_MARKER=0
 ./install.sh -idc -a gfx1151
 
-# Tensilelite
-dnf install msgpack-devel boost-devel
-cd tensilelite && mkdir build && cd build
-HIP_PLATFORM=amd cmake -DTENSILE_DISABLE_CTEST=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo  -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DTensile_ROOT=$(pwd)/../Tensile ../HostLibraryTests
- make -j
- ./TensileTests 
+# Test if it's working
+./hipblaslt-test
 ```
 
-```
-aotriton
-```
-
-CK
+### aotriton
+See the `aotriton` section above, this gets built to `/home/lhl/aotriton/build/install_dir` which you can just point to.
+### Composable Kernel (CK)
 ```
 
 cmake \
