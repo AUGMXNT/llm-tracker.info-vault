@@ -691,7 +691,12 @@ export CMAKE_PREFIX_PATH="/opt/rocm:${CMAKE_PREFIX_PATH}"
 # Ensure ROCm libs (and any custom build libs) are in the runtime library path
 export LD_LIBRARY_PATH="/opt/rocm/lib:${AOTRITON_INSTALLED_PREFIX}/lib:${LD_LIBRARY_PATH}"
 
-export CXXFLAGS="$CXXFLAGS -Wno-unused-function -Wno-error=unused-function -Wno-error=deprecated-declarations"
+# export CXXFLAGS="$CXXFLAGS -Wno-unused-function -Wno-error=unused-function -Wno-error=deprecated-declarations"
+export CXXFLAGS="$CXXFLAGS -Wno-error"
+# export CFLAGS="$CFLAGS -Wno-error"
+# export HIPCC_FLAGS="$HIPCC_FLAGS -Wno-error"   # for hipcc-compiled kernels
+
+
 
 We need to add
 defined(__gfx1151__) || 
