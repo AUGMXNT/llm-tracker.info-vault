@@ -364,12 +364,12 @@ initial=$(amdgpu_top -d | awk '/^[[:space:]]*GTT/{print int($4)}'); max=$initial
 
 We compile the latest HEAD `b5343` and test as usual with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
 
-WMMA + FA is by far the best option for long context:
+WMMA + FA is by far the best option for long context, Vulkan + FA still has better pp, but you take a big tg hit:
 
 | Run         | pp8192 (t/s)  | tg8192 (t/s) | Max Mem (MiB) |
 | ----------- | ------------- | ------------ | ------------- |
-| Normal      |               |              | 6+10591       |
-| Normal + FA |               |              |               |
+| Normal      | 245.59 ± 0.10 | 12.43 ± 0.00 | 6+10591       |
+| Normal + FA |               |              | 7+8089        |
 | WMMA        | 230.10 ± 0.70 | 12.37 ± 0.00 | 6+10590       |
 | WMMA + FA   | 317.66 ± 4.39 | 50.97 ± 0.00 | 7+8062        |
 | Vulkan      | 487.69 ± 0.83 | 7.54 ± 0.02  | 7761+1180     |
