@@ -115,9 +115,64 @@ This assumes you are using optimized libraries like [rocWMMA](https://github.com
 Currently, my test system's results are much lower, however.
 
 There is no official ROCm build for `gfx1151` so I am benchmarking using a custom Fedora `gfx1151` build of PyTorch (2.5) on ROCm 6.3 which only has the [rocBLAS](https://github.com/ROCm/rocBLAS) TensileLibraries available for `gfx1151`.
-## mamf-finder
-Using my [mamf-finder](https://github.com/shisa-ai/mamf-finder) repo to test, it takes about just under 35 hours to test with mamf-finder:
 
+## rocm_bandwidth_test
+We get about 84GB/s from CPU to GPU and within the GPU, 212GB/s
+```
+git clone https://github.com/ROCm/rocm_bandwidth_test
+cd rocm_bandwidth_test
+cmake -B build && cmake --build build
+
+
+❯ build/rocm-bandwidth-test
+....................
+          RocmBandwidthTest Version: 2.6.0
+
+          Launch Command is: build/rocm-bandwidth-test (rocm_bandwidth -a + rocm_bandwidth -A)
+
+
+          Device: 0,  AMD Eng Sample: 100-000001243-50_Y
+          Device: 1,  AMD Radeon Graphics,  GPU-XX,  c2:0.0
+
+          Inter-Device Access
+
+          D/D       0         1
+
+          0         1         1
+
+          1         1         1
+
+
+          Inter-Device Numa Distance
+
+          D/D       0         1
+
+          0         0         20
+
+          1         20        0
+
+
+          Unidirectional copy peak bandwidth GB/s
+
+          D/D       0           1
+
+          0         N/A         84.364
+
+          1         84.147      212.419
+
+
+          Bidirectional copy peak bandwidth GB/s
+
+          D/D       0           1
+
+          0         N/A         83.489
+
+          1         83.489      N/A
+```
+
+
+## mamf-finder
+Using my [mamf-finder](https://github.com/shisa-ai/mamf-finder) repo to test, it takes about just under 35 hours (!) to test with mamf-finder:
 ```
 Warming up the accelerator for 30 secs ... /home/lhl/mamf-finder/mamf-finder/./mamf-finder.py:252: UserWarning: Attempting to use hipBLASLt on an unsupported architecture! Overriding blas backend to hipblas (Triggered internally at /builddir/build/BUILD/python-torch-2.5.1-build/pytorch-v2.5.1/aten/src/ATen/
 Context.cpp:296.)
@@ -133,7 +188,6 @@ Elapsed time: 1 day, 10:40:32
 ```
 
 As you can see, the max performance is 5.1 BF16 TFLOPS. At the 2.8GHz clock I'm getting, that's an **8.9% efficiency** (57.344 max theoretical).
-
 ### in Docker
 We get *much* better results using the scottt docker image:
 ```
@@ -588,9 +642,12 @@ export HIPBLASLT_ENABLE_MARKER=0
 ```
 
 ### aotriton
-See the `aotriton` section above, this gets built to `/home/lhl/aotriton/build/install_dir` which you can just point to.
+See the `aotriton` section above, this gets built to `/home/lhl/aotriton/build/install_dir` which you can just point to or you can download the latest release for your version of ROCm: https://github.com/ROCm/aotriton/releases
 ### Composable Kernel (CK)
 ```
+git clone https://github.com/ROCm/composable_kernel.git
+mkdir composable_kernel/build
+cd composable_kernel/build
 
 cmake \
         -D CMAKE_PREFIX_PATH=/opt/rocm \
