@@ -674,6 +674,7 @@ export USE_KINETO=OFF
 
 # still needed for ROCM_ROCTX_LIB
 dnf install roctracer-devel
+ln -s /opt/rocm/lib/librocprofiler-sdk-roctx.so /opt/rocm/lib/libroctx64.so
 
 # Needed
 dnf install libdrm-devel
@@ -708,6 +709,13 @@ third_party/composable_kernel/include/ck/ck.hpp
 
 # Does this work?
 python -c 'import torch,os; print(torch.version.hip, torch.cuda.get_device_name(0))'
+
+python - <<'PY'
+import torch
+print("HIP runtime:", torch.version.hip)
+print("Device:", torch.cuda.get_device_name(0))
+PY
+
 ```
 
 ## Docker Files
