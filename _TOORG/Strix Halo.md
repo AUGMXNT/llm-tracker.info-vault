@@ -690,6 +690,8 @@ export CMAKE_PREFIX_PATH="/opt/rocm:${CMAKE_PREFIX_PATH}"
 
 # Ensure ROCm libs (and any custom build libs) are in the runtime library path
 export LD_LIBRARY_PATH="/opt/rocm/lib:${AOTRITON_INSTALLED_PREFIX}/lib:${LD_LIBRARY_PATH}"
+
+export CXXFLAGS="$CXXFLAGS -Wno-unused-function -Wno-error=unused-function"
 ```
 
 ## Docker Files
