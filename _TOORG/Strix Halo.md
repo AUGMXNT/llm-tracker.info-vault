@@ -213,7 +213,11 @@ python -c 'import pyaotriton'
 
 # llama.cpp
 ## Vulkan vs HIP
-2025-05-03: Currently, the Vulkan backend is significantly faster than the HIP/ROCm backend on every single `llama-bench` tested model.
+2025-05-03: Currently, the Vulkan backend seems significantly faster than the HIP/ROCm backend on every single `llama-bench` tested model.
+
+2025-05-12: In long context, if you can get HIP to build with rocWMMA then token generation stays high performance w/ FA while it drops significantly with Vulkan.
+
+Interestingly, Vulkan w/ or w/o FA seems to use roughly the same reported memory, which doesn't seem right at all, but that's what the numbers seem to say.
 
 ## Building
 
@@ -306,7 +310,6 @@ Stack trace of thread 2426590:
 ELF object binary architecture: AMD x86-64
 ```
 
-
 ### Qwen 3 MoE
 Currently there is a bug where batch size has to be below 360 to prevent a crash. 256 has been tested as the best performer:
 ```
@@ -322,7 +325,7 @@ build: d24d5928 (5255)
 ```
 - https://www.reddit.com/r/LocalLLaMA/comments/1kd5rua/comment/mq8n7sc/
 
-UPDATE: This no longer crashes, but `-b 256` still performs better than without, prompt processing is almost 2X faster:
+UPDATE: This no longer crashes, but `-b 256` still performs better than without on Vulkan, prompt processing is almost 2X faster:
 ```
 ❯ build/bin/llama-bench -b 256 -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf
 ggml_vulkan: Found 1 Vulkan devices:
@@ -347,8 +350,7 @@ pmat
 build: 43dfd741 (5338)
 ```
 
-
-
+For the HIP backend `-b 256` slows things down.
 ## Flash Attention
 
 Measuring memory usage with `rocm-smi`:
@@ -366,14 +368,14 @@ We compile the latest HEAD `b5343` and test as usual with [TheBloke/Llama-2-7B-G
 
 WMMA + FA is by far the best option for long context, Vulkan + FA still has better pp, but you take a big tg hit:
 
-| Run         | pp8192 (t/s)  | tg8192 (t/s) | Max Mem (MiB) |
-| ----------- | ------------- | ------------ | ------------- |
-| Normal      | 245.59 ± 0.10 | 12.43 ± 0.00 | 6+10591       |
-| Normal + FA |               |              | 7+8089        |
-| WMMA        | 230.10 ± 0.70 | 12.37 ± 0.00 | 6+10590       |
-| WMMA + FA   | 317.66 ± 4.39 | 50.97 ± 0.00 | 7+8062        |
-| Vulkan      | 487.69 ± 0.83 | 7.54 ± 0.02  | 7761+1180     |
-| Vulkan + FA | 490.18 ± 4.89 | 32.03 ± 0.01 | 7767+1180     |
+| Run         | pp8192 (t/s)      | tg8192 (t/s)     | Max Mem (MiB) |
+| ----------- | ----------------- | ---------------- | ------------- |
+| Normal      | 245.59 ± 0.10     | 12.43 ± 0.00     | 6+10591       |
+| Normal + FA | 190.86 ± 0.49     | 30.01 ± 0.00     | 7+8089        |
+| WMMA        | 230.10 ± 0.70     | 12.37 ± 0.00     | 6+10590       |
+| WMMA + FA   | 317.66 ± 4.39     | **50.97 ± 0.00** | **7+8062**    |
+| Vulkan      | 487.69 ± 0.83     | 7.54 ± 0.02      | 7761+1180     |
+| Vulkan + FA | **490.18 ± 4.89** | 32.03 ± 0.01     | 7767+1180     |
 - You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
 - WMMA running on 
@@ -388,10 +390,10 @@ At the standard `pp512`/`tg128` tests, there is less of a difference, but w/o WM
 | WMMA + FA   | 343.91 ± 0.60 | 50.88 ± 0.01 | 4218          |
 And a quick comparison to Vulkan:
 
-| Run         | pp512 (t/s)   | tg128 (t/s)  | Max Mem (MiB) |
-| ----------- | ------------- | ------------ | ------------- |
-| Vulkan      | 881.71 ± 1.71 | 52.22 ± 0.05 | 3923          |
-| Vulkan + FA | 884.20 ± 6.23 | 52.73 ± 0.07 | 3923          |
+| Run         | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |     |
+| ----------- | ----------------- | ---------------- | ------------- | --- |
+| Vulkan      | 881.71 ± 1.71     | 52.22 ± 0.05     | 3923          |     |
+| Vulkan + FA | **884.20 ± 6.23** | **52.73 ± 0.07** | 3923          |     |
 On `gfx1151` Vulkan is *much* faster than the HIP/ROCm backend..
 
 ### Building rocWMMA Version
