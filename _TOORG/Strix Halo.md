@@ -575,7 +575,8 @@ cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
 git clone https://github.com/ROCm/hipBLASLt
 cd hipBLASLt
 python3 -m pip install -r tensilelite/requirements.txt
-
+# You may need to comment out the PyYAML install...
+./install.sh -idc -a gfx1151
 
 # Tensilelite
 dnf install msgpack-devel boost-devel
