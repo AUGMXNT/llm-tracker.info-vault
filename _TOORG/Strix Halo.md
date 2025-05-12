@@ -669,8 +669,15 @@ PyTorch
 export USE_ROCM=1
 export USE_CUDA=0
 
+# DISABLE KINETO
+export USE_KINETO=OFF
+
+# still needed for ROCM_ROCTX_LIB
+dnf install roctracer-devel
+
 # Enable AOTriton integration (FlashAttention kernels)
 export USE_AOTRITON=1
+export BUILD_AOTRITON=1
 
 # Specify target GPU architectures for ROCm (limit to gfx1151 for Strix Halo)
 export PYTORCH_ROCM_ARCH="gfx1151"
@@ -683,8 +690,6 @@ export CMAKE_PREFIX_PATH="/opt/rocm:${CMAKE_PREFIX_PATH}"
 
 # Ensure ROCm libs (and any custom build libs) are in the runtime library path
 export LD_LIBRARY_PATH="/opt/rocm/lib:${AOTRITON_INSTALLED_PREFIX}/lib:${LD_LIBRARY_PATH}"
-
-
 ```
 
 ## Docker Files
@@ -765,10 +770,12 @@ index 462af8c..46e58c2 100644
 	- Debugging CK issues when trying to build PyTorch from source
 - https://chatgpt.com/c/681d85c5-8700-8012-8d85-8381b5868fa0
 	- rocm-dev tagging
-	- pytorch cmake w/ roctx
+	- pytorch cmake w/ roctx , roctracer , kineto
 	- pytorch make - werror
 - https://chatgpt.com/c/6820b7a7-1d24-8012-8412-e8187098684e
 	- llama.cpp + rocwmma
+- https://chatgpt.com/c/6821ef0f-dec8-8012-b220-565b7ca7d517
+	- going through compiling PyTorch directly
 
 ```
 cluster1
