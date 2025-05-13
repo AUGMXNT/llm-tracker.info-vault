@@ -233,6 +233,13 @@ Elapsed time: 6:04:34
 
 At 2.8GHz clock and a max 36.9 TFLOPS that is a much more respectable 64.4% efficiency.
 ## attention-gym
+Install
+```
+git clone https://github.com/pytorch-labs/attention-gym
+cd attention-gym
+pip install -e ".[dev]"
+pip install -e ".[viz]"
+```
 
 Performance bug?
 https://github.com/ROCm/MIOpen/pull/3685
@@ -246,7 +253,7 @@ HIPBLASLT_TENSILE_LIBPATH=/opt/rocm/lib/hipblaslt/library TORCH_ROCM_AOTRITON_EN
 We need to build and install aotriton:
 ```
 mkdir -p /share/libdrm
-cp /home/lhl/amdgpu.ids /share/libdrm/
+cp /opt/rocm/lib/rocm_sysdeps/share/libdrm/amdgpu.ids /share/libdrm/
 dnf install gcc gcc-c++ make cmake
 dnf install python3-devel
 export HIP_PLATFORM=amd
@@ -708,21 +715,97 @@ export CXXFLAGS="$CXXFLAGS -Wno-unused-function -Wno-error=unused-function -Wno-
 # export HIPCC_FLAGS="$HIPCC_FLAGS -Wno-error"   # for hipcc-compiled kernels
 
 
-
 We need to add
 defined(__gfx1151__) || 
 to
 third_party/composable_kernel/include/ck/ck.hpp
 
+
+
+# If using CI, modify for STATIC benchmarks OFF
+time .ci/pytorch/build.sh
+
+# or just try to directly run:
+# cmake3 --build . --target install --config Release
+
+# To get things working/installed properly...
+python setup.py develop && python -c "import torch"
+
 # Does this work?
 python -c 'import torch,os; print(torch.version.hip, torch.cuda.get_device_name(0))'
 
-python - <<'PY'
+# python - <<'PY'
 import torch
 print("HIP runtime:", torch.version.hip)
 print("Device:", torch.cuda.get_device_name(0))
 PY
+HIP runtime: 6.4.43480-9f04e2822
+Device: AMD Radeon Graphics
+```
 
+#### Testing PyTorch
+```
+# python ../env-info.py
+=== System Information ===
+Kernel: Linux 2a571ed8a21f 6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64 #1 SMP PREEMPT_DYNAMIC Tue Apr 22 15:25:32 UTC 2025 x86_64 GNU/Linux
+Cpu Info: CPU: AMD Eng Sample (x32)
+Memory Info: Total Memory: 120554 MB
+
+=== GPU Information ===
+CUDA: Not found
+ROCm: ROCM-SMI version: 3.0.0+c865ebb
+ROCM-SMI-LIB version: 7.5.0
+PyTorch CUDA Available: True
+PyTorch CUDA Version: N/A
+PyTorch HIP Version: 6.4.43480-9f04e2822
+
+GPU Count: 1
+GPU 0: AMD Radeon Graphics
+
+=== Package Versions ===
+triton: 3.3.0
+torch: 2.8.0a0+git8511d21
+torchao: Not installed
+transformers: Not installed
+flash_attn: Not installed
+xformers: Not installed
+deepspeed: Not installed
+accelerate: Not installed
+bitsandbytes: Not installed
+axolotl: Not installed
+torchtune: Not installed
+```
+
+```
+# python 02-test-aotriton.py
+Triton version: 3.3.0
+Driver info: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__firstlineno__', '__format__', '__ge__', '__getattribute__', '__getstate__', '__gt__', '__hash__', '__init__', '__init_subclass__
+', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__static_attributes__', '__str__', '__subclasshook__', '__weakref__', 'active', 'defau
+lt', 'reset_active', 'set_active']
+Cannot import pyaotriton: No module named 'pyaotriton'
+Using device: cuda
+Kernel executed successfully: True
+LD_LIBRARY_PATH: /opt/rocm/lib:/home/lhl/torch/aotriton/lib:/opt/rocm/lib:
+[root@2a571ed8a21f fa]# python 03-test_aotriton_pytorch.py
+PyTorch version: 2.8.0a0+git8511d21
+CUDA available: True
+ROCm version: 6.4.43480-9f04e2822
+```
+
+```
+]# python 03-test_aotriton_pytorch.py
+PyTorch version: 2.8.0a0+git8511d21
+CUDA available: True
+ROCm version: 6.4.43480-9f04e2822
+
+Environment variables:
+TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL: Not set
+LD_LIBRARY_PATH: /opt/rocm/lib:/home/lhl/torch/aotriton/lib:/opt/rocm/lib:
+PYTORCH_ROCM_ARCH: gfx1151
+Could not import pyaotriton
+
+Testing scaled_dot_product_attention...
+Success! Result shape: torch.Size([1, 1, 128, 64])
 ```
 
 ## Docker Files
