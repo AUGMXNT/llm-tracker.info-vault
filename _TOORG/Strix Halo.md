@@ -272,13 +272,20 @@ python -c 'import pyaotriton'
 
 
 # llama.cpp
-## Vulkan vs HIP
+## Efficiency
 2025-05-03: Currently, the Vulkan backend seems significantly faster than the HIP/ROCm backend on every single `llama-bench` tested model.
 
 2025-05-12: In long context, if you can get HIP to build with rocWMMA then token generation stays high performance w/ FA while it drops significantly with Vulkan.
 
 Interestingly, Vulkan w/ or w/o FA seems to use roughly the same reported memory, which doesn't seem right at all, but that's what the numbers seem to say.
 
+The HIP version performs far below what you'd expect in terms of tok/TFLOP efficiency for prompt processing even vs other RDNA3 architectures: https://www.reddit.com/r/LocalLLaMA/comments/1ghvwsj/llamacpp_compute_and_memory_bandwidth_efficiency/
+- `gfx1103` Radeon 780M iGPU gets 14.51 tok/TFLOP. At that efficiency you'd expect the about 850 tok/s that the Vulkan backend delivers. The HIP backends deliver about 350 tok/s, about 40% of the efficiency.
+- `gfx1100` Radeon 7900 XTX gets 25.12 tok/TFLOP. At that efficiency you'd expect almost 1500 tok/s, almost double what the Vulkan backend delivers, and >4X what the current HIP backend delivers.
+
+Testing a similar system with Linux 6.14 vs 6.15 showed a 15% performance difference so it's possible future driver updates will improve/fix Strix Halo's ROCm/HIP compute efficiency problems. 
+
+Memory bandwidth efficiency seems better. At 50 tok/s with a 3.56 GB quant, that's about 180 GB/s. This is close to the `rocm_bandwidth_test` results of a peak 212 GB/s of transfer. For HIP and Vulkan we are seeing 70.8-73.3% MBW bandwidth (vs 256 GB/s theoretical peak), which is actually quite good an inline with previously tested RDNA3 APUs.
 ## Building
 
 ### Vulkan
@@ -369,9 +376,8 @@ Stack trace of thread 2426590:
 #26 0x0000000000407ee5 _start (/home/lhl/llama.cpp/llama.cpp-hip/build/bin/llama-bench + 0x7ee5)
 ELF object binary architecture: AMD x86-64
 ```
-
 ### Qwen 3 MoE
-Currently there is a bug where batch size has to be below 360 to prevent a crash. 256 has been tested as the best performer:
+Currently there is a bug where batch size has to be below 360 to prevent a crash. 256 has been tested as the best performer (multiple of 64):
 ```
 ❯ llama.cpp-vulkan/build/bin/llama-bench -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf -b 256
 ggml_vulkan: Found 1 Vulkan devices:
@@ -385,7 +391,7 @@ build: d24d5928 (5255)
 ```
 - https://www.reddit.com/r/LocalLLaMA/comments/1kd5rua/comment/mq8n7sc/
 
-UPDATE: This no longer crashes, but `-b 256` still performs better than without on Vulkan, prompt processing is almost 2X faster:
+UPDATE: This no longer crashes, but `-b 256` still performs better than on Vulkan, prompt processing is almost 2X faster:
 ```
 ❯ build/bin/llama-bench -b 256 -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf
 ggml_vulkan: Found 1 Vulkan devices:
@@ -410,7 +416,7 @@ pmat
 build: 43dfd741 (5338)
 ```
 
-For the HIP backend `-b 256` slows things down.
+For the HIP backend `-b 256` slows things down though, so this is like a Vulkan only optimization.
 ## Flash Attention
 
 Measuring memory usage with `rocm-smi`:
@@ -423,11 +429,9 @@ And here's an APU friendly version (measures GTT) using `amdgpu_top`:
 initial=$(amdgpu_top -d | awk '/^[[:space:]]*GTT/{print int($4)}'); max=$initial; while sleep 1; do cur=$(amdgpu_top -d | awk '/^[[:space:]]*GTT/{print int($4)}'); (( cur > max )) && max=$cur; printf "\r%s  used=%4d MiB  Δ=%4d MiB  peak=%4d MiB  Δpeak=%4d MiB " "$(date +%T)" "$cur" "$((cur-initial))" "$max" "$((max-initial))"; done
 ```
 
-
 We compile the latest HEAD `b5343` and test as usual with [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0).
-
 #### pp512/tg128
-At the standard `pp512`/`tg128` tests, we see that as tested before, the Vulkan stomps over the HIP backend, and that WMMA makes basically no difference:
+At the standard `pp512`/`tg128` tests, we see that as tested before, the Vulkan continues to stomp over the HIP backend, and that WMMA makes basically no difference:
 
 | Run         | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
 | ----------- | ----------------- | ---------------- | ------------- |
@@ -441,7 +445,7 @@ At the standard `pp512`/`tg128` tests, we see that as tested before, the Vulkan 
 #### pp8192/tg8192
 But when we switch to longer context, we see something interesting happen. WMMA + FA basically loses no performance at this longer context length!
 
-Vulkan + FA still has better pp but tg is significantly lower. It based on these data points it seems like Vulkan performance may continue to decrease as context extends.
+Vulkan + FA still has better pp but tg is significantly lower. More data points would be better, but seems like Vulkan performance may continue to decrease as context extends while the HIP+rocWMMA backend should perform better.
 
 | Run         | pp8192 (t/s)      | tg8192 (t/s)     | Max Mem (MiB) |
 | ----------- | ----------------- | ---------------- | ------------- |
@@ -453,8 +457,6 @@ Vulkan + FA still has better pp but tg is significantly lower. It based on these
 | Vulkan + FA | **490.18 ± 4.89** | 32.03 ± 0.01     | 7767+1180     |
 - You need to have `rocmwmma` installed - Arch has a package or you will need to build it: https://github.com/ROCm/rocWMMA
 - You should then rebuild with `-DGGML_HIP_ROCWMMA_FATTN=ON`
-- WMMA running on 
-
 ### Building rocWMMA Version
 
 #### Fetch a gfx1151-aware rocWMMA
@@ -462,7 +464,7 @@ This is if we have an old rocWMMA that does not have `gfx1151` support merged
 ```bash
 git clone https://github.com/ROCm/rocWMMA ~/llama.cpp/rocWMMA   # PR #538 included
 ```
-- The Fedora package is too old and aborts at compile-time._
+- The Fedora package is too old and aborts at compile-time
 
 #### Make hipcc prefer the new headers
 Since we need to give precedence to the new includes...
@@ -486,7 +488,7 @@ export CMAKE_PREFIX_PATH=$HOME/rocm:$CMAKE_PREFIX_PATH
 - Provides `ROCmCMakeBuildToolsConfig.cmake`, satisfying `find_package()` without `sudo`.
 
 #### Stub out the legacy MFMA Flash-Attention kernel
-This isn't used but causes compile issues, so we skip it.
+This isn't used but causes compile issues, so we zero it out/skip it.
 ```cpp
 // ggml/src/ggml-cuda/fattn-wmma-f16.cu (replacement)
 #include "common.cuh"
@@ -500,8 +502,7 @@ void ggml_cuda_flash_attn_ext_wmma_f16(ggml_backend_cuda_context & ctx,
     GGML_UNUSED(dst);
 }
 ```
--  `gfx1151` lacks MFMA; compiling the original file fails.  The stub keeps the symbol so the project still links.
-
+-  `gfx1151` lacks MFMA; compiling the original file fails.  The stub keeps the symbol so the project still links
 #### Configure and build llama.cpp for gfx1151
 ```bash
 HIPCXX="$(hipconfig -l)/clang" \
@@ -513,19 +514,17 @@ cmake -S . -B build            \
       -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j$(nproc)
 ```
-
 ## RPC
-Build llama.cpp-hip w/ RPC
+Build llama.cpp-hip w/ RPC to run multinode:
 ```
 HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" cmake -S . -B build -DGGML_HIP=ON -DGGML_RPC=ON -DAMDGPU_TARGETS=gfx1151 -DCMAKE_BUILD_TYPE=Release     && cmake --build build --config Release -- -j 32
 
 cmake -B build -DGGML_VULKAN=ON -DGGML_RPC=ON && cmake --build build --config Release -j 32
 ```
 
-When running `llama-cli` by default it will add it to nodes. When using `llama-bench` it does not and you should run an RPC server locally.
+When running `llama-cli` by default it will add itself to nodes and you don't have to run a separate RPC instance. When using `llama-bench` it does not and you should run an RPC server on the host machine as well.
 
-
-Vulkan has less default memory available than ROCm!
+Vulkan has less default memory available than ROCm for some reason!
 
 amdgpu_top / rocm_smi shows there is 14/110000 MiB , 108000 is probably pretty safe:
 ```
@@ -583,8 +582,8 @@ Starting RPC server v2.0.0
   backend memory : 108000 MB
 ```
 
-
 ### Llama 4 Maverick
+This is a big MoE model we run to test:
 https://huggingface.co/unsloth/Llama-4-Maverick-17B-128E-Instruct-GGUF
 Q4_K_XL = 243 GB
 ```
@@ -597,7 +596,7 @@ ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | 
 | llama4 17Bx128E (Maverick) Q4_K - Medium | 216.18 GiB |   400.71 B | Vulkan,RPC |  99 |           tg128 |         16.30 ± 0.14 |
 ```
 
-## Speculative Decode
+## TODO: Speculative Decode
 https://github.com/ggml-org/llama.cpp/issues/12968
 https://github.com/hjc4869/llama.cpp
 https://x.com/hjc4869/status/1913562550064799896
@@ -607,7 +606,7 @@ RDNA3 gets a sizable performance uplift with speculative decoding on 4bit models
 Sweep
 https://github.com/AUGMXNT/speed-benchmarking/tree/main/llama.cpp-code
 
-# Voicechat
+# TODO: Voicechat
 https://github.com/AUGMXNT/speed-benchmarking
 
 
@@ -929,3 +928,12 @@ CK off PR: https://github.com/pytorch/pytorch/pull/152951
 Or use ROCm ≥ 6.5 where CK includes RDNA 3 defines – see ROCm issue #4499 for progress. https://github.com/ROCm/ROCm/issues/4499
 https://github.com/ROCm/composable_kernel/issues/775
 
+# TODO: PyTorch Dependent
+
+- [ ] vLLM
+- [ ] SGLang
+- [ ] torchtune
+# Other Reviews
+
+David Huang maintains a llama.cpp fork which has AMD-specific optimizations before it is upstreamed: https://github.com/hjc4869/llama.cpp and did some sweeps/testing on a 60W Ryzen AI Max+ 395 ([HP ZBook Ultra G1a](https://www.hp.com/us-en/workstations/zbook-ultra.html)) on a `gfx1100` GPU_TARGET:
+- https://blog.hjc.im/strix-halo-local-llm.html
