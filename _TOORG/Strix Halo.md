@@ -101,7 +101,7 @@ podman run -it --rm \
 
 RDNA3 has a theoretical 512 FP16 FLOPS/clock/CU.
 
-A Ryzen AI Max 395's Radeon 8060S has 40 CUs at a max clock of 2.9GHz shoul have a peak 59.392 FP16 TFLOPS:
+A Ryzen AI Max 395's Radeon 8060S has 40 CUs at a max clock of 2.9GHz should have a peak 59.392 FP16 TFLOPS:
 ```
 512 * 40 * 2.9e9 / 1e12 = 59.392 FP16 TFLOPS
 ```
