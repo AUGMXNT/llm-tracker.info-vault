@@ -682,6 +682,10 @@ export BUILD_TEST=OFF
 # Needed
 dnf install libdrm-devel
 
+# for benchmark.h? - or export BUILD_TEST=OFF
+dnf install google-benchmark-devel
+
+
 # Enable AOTriton integration (FlashAttention kernels)
 export USE_AOTRITON=1
 export BUILD_AOTRITON=1
