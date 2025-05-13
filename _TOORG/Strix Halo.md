@@ -937,3 +937,6 @@ https://github.com/ROCm/composable_kernel/issues/775
 
 David Huang maintains a llama.cpp fork which has AMD-specific optimizations before it is upstreamed: https://github.com/hjc4869/llama.cpp and did some sweeps/testing on a 60W Ryzen AI Max+ 395 ([HP ZBook Ultra G1a](https://www.hp.com/us-en/workstations/zbook-ultra.html)) on a `gfx1100` GPU_TARGET:
 - https://blog.hjc.im/strix-halo-local-llm.html
+
+Jack Stone (Chinese YouTube Hardware Reviewer) did a review of the [GMK EVO-X2 MiniPC](https://www.gmktec.com/products/amd-ryzen%E2%84%A2-ai-max-395-evo-x2-ai-mini-pc) and had a section running some tests w/ LM Studio on Windows - a lot less technical information, but still maybe of interest:
+- https://youtu.be/UXjg6Iew9lg?t=238
