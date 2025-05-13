@@ -3,7 +3,7 @@ For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) 
 - 2025-05-02 https://github.com/ROCm/ROCm/issues/4499
 	- https://github.com/ROCm/ROCm/issues/4566
 # Testing Checklist
-- [ ] ROCm
+- [x] ROCm
 - [x] llama.cpp
 	- [x] HIP (ROCm)
 	- [x] Vulkan
