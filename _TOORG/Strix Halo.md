@@ -11,7 +11,7 @@ For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) 
 	- [ ] Speculative Decoding
 		- [ ] 70B
 		- [ ] 25-32 Dense
-	- [ ] wmma
+	- [x] wmma
 - [x] mamf-finder
 - [x] PyTorch
 	- [x] hipBLASlt
@@ -169,8 +169,6 @@ cmake -B build && cmake --build build
 
           1         83.489      N/A
 ```
-
-
 ## mamf-finder
 Using my [mamf-finder](https://github.com/shisa-ai/mamf-finder) repo to test, it takes about just under 35 hours (!) to test with mamf-finder:
 ```
@@ -264,7 +262,7 @@ git submodule sync && git submodule update --init --recursive --force
 mkdir build && cd build
 
 #build
-cmake .. -DCMAKE_INSTALL_PREFIX=./install_dir -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -G Ninja
+cmake .. -DCMAKE_INSTALL_PREFIX=./install_dir -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -DAOTRITON_TARGET_ARCH=gfx1151 -G Ninja
 ninja install
 
 # ln -s /home/lhl/aotriton/build/install_dir/lib/pyaotriton.cpython-313-x86_64-linux-gnu.so /usr/local/lib/python3.13/site-packages/
@@ -614,20 +612,7 @@ https://github.com/AUGMXNT/speed-benchmarking
 
 
 # Building PyTorch
-With AOTriton and FA2
-
-```
-mamba activate
-mamba install cmake ninja patchelf
-pip install uv
-uv pip install meson
-
-git clone https://github.com/scottt/rocm-TheRock
-python ./build_tools/fetch_sources.py
-cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
-```
-
-
+We want hipBLASLt for general performance and AOTriton for FA2. We should also be able to build with a gfx1151 compatible CK, but that's probably not so useful
 ## Compile
 
 ### hipBLASLt
@@ -692,8 +677,7 @@ dnf install libdrm-devel
 # for benchmark.h? - or export BUILD_TEST=OFF
 dnf install google-benchmark-devel
 
-
-# Enable AOTriton integration (FlashAttention kernels)
+# Enable AOTriton integration (FlashAttention kernels) - flag changed w/ 2.8?
 export USE_AOTRITON=1
 export BUILD_AOTRITON=1
 
@@ -720,7 +704,8 @@ defined(__gfx1151__) ||
 to
 third_party/composable_kernel/include/ck/ck.hpp
 
-
+# Before we start compiling we need to hipify:
+python tools/amd_build/build_amd.py
 
 # If using CI, modify for STATIC benchmarks OFF
 time .ci/pytorch/build.sh
@@ -730,6 +715,10 @@ time .ci/pytorch/build.sh
 
 # To get things working/installed properly...
 python setup.py develop && python -c "import torch"
+
+# see below for rocm-cmake
+# see bellow for rocm-core
+
 
 # Does this work?
 python -c 'import torch,os; print(torch.version.hip, torch.cuda.get_device_name(0))'
@@ -743,6 +732,25 @@ HIP runtime: 6.4.43480-9f04e2822
 Device: AMD Radeon Graphics
 ```
 
+#### rocm-cmake
+```
+git clone https://github.com/ROCm/rocm-cmake ~/src/rocm-cmake
+cmake -S ~/src/rocm-cmake -B ~/src/rocm-cmake/build \
+      -DCMAKE_INSTALL_PREFIX=$HOME/rocm
+cmake --install ~/src/rocm-cmake/build
+
+export CMAKE_PREFIX_PATH=$HOME/rocm:$CMAKE_PREFIX_PATH
+```
+#### rocm-core
+```
+git clone https://github.com/ROCm/rocm-core.git
+mkdir -p rocm-core/build
+cmake -S rocm-core -B rocm-core/build \
+      -DCMAKE_INSTALL_PREFIX=$HOME/rocm \
+      -DROCM_VERSION=6.4.0          # match the HIP version you’re using
+cmake --build rocm-core/build -j$(nproc)
+cmake --install rocm-core/build
+```
 #### Testing PyTorch
 ```
 # python ../env-info.py
@@ -811,6 +819,18 @@ Success! Result shape: torch.Size([1, 1, 128, 64])
 ## Docker Files
 - We run our commands from the rocm-TheRock repo root otherwise relative paths are broken
 
+
+Initial env setup:
+```
+mamba activate
+mamba install cmake ninja patchelf
+pip install uv
+uv pip install meson
+
+git clone https://github.com/scottt/rocm-TheRock
+python ./build_tools/fetch_sources.py
+cmake -B build -GNinja . -DTHEROCK_AMDGPU_TARGETS=gfx1151
+```
 ### rocm-dev
 We need to build `rocm-dev` first:
 ```
