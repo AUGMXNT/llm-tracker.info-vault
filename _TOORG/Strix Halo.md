@@ -267,9 +267,11 @@ ninja install
 
 # ln -s /home/lhl/aotriton/build/install_dir/lib/pyaotriton.cpython-313-x86_64-linux-gnu.so /usr/local/lib/python3.13/site-packages/
 
+export LD_LIBRARY_PATH=/opt/rocm/lib:/home/lhl/aotriton/install_dir/lib:/opt/rocm/lib:
+
 python -c 'import pyaotriton'
 ```
-
+- takes about 1h wall time to build (27h CPU)
 
 # llama.cpp
 ## Efficiency
@@ -286,6 +288,20 @@ The HIP version performs far below what you'd expect in terms of tok/TFLOP effic
 Testing a similar system with Linux 6.14 vs 6.15 showed a 15% performance difference so it's possible future driver updates will improve/fix Strix Halo's ROCm/HIP compute efficiency problems. 
 
 Memory bandwidth efficiency seems better. At 50 tok/s with a 3.56 GB quant, that's about 180 GB/s. This is close to the `rocm_bandwidth_test` results of a peak 212 GB/s of transfer. For HIP and Vulkan we are seeing 70.8-73.3% MBW bandwidth (vs 256 GB/s theoretical peak), which is actually quite good an inline with previously tested RDNA3 APUs.
+
+How bad is the perf? Testing with the standard [TheBloke/Llama-2-7B-GGUF](https://huggingface.co/TheBloke/Llama-2-7B-GGUF) (Q4_0), the HIP backend barely outperforms the CPU backend (!!!) for prompt processing. Interestingly, despite MBW being theoretically the same, the CPU tg is much worse:
+
+| Run         | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
+| ----------- | ----------------- | ---------------- | ------------- |
+| CPU         | 294.64 ± 0.58     | 28.94 ± 0.04     |               |
+| CPU + FA    | 294.36 ± 3.13     | 29.42 ± 0.03     |               |
+| Vulkan      | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
+| Vulkan + FA | **884.20 ± 6.23** | **52.73 ± 0.07** | **3923**      |
+| HIP         | 348.96 ± 0.31     | 48.72 ± 0.01     | 4219          |
+| HIP + FA    | 331.96 ± 0.41     | 45.78 ± 0.02     | 4245          |
+| WMMA        | 322.63 ± 1.34     | 48.40 ± 0.02     | 4218          |
+| WMMA + FA   | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
+
 ## Building
 
 ### Vulkan
@@ -295,88 +311,7 @@ cmake -B build -DGGML_VULKAN=ON -DGGML_RPC=ON && cmake --build build --config Re
 ```
 - takes about 1.5 minutes to build
 
-## HIP Instability
-Besides poor performance, I get frequent GPU hangs / core dumps with `6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64`:
-
-```
-May 02 13:01:34 cluster1 systemd-coredump[2426713]: [🡕] Process 2426590 (llama-bench) of user 1002 dumped core.
-
-Module [dso] without build-id.
-Module [dso] without build-id.
-Module [dso] without build-id.
-Module [dso] without build-id.
-Module [dso] without build-id.
-Module [dso] without build-id.
-Module libdrm.so.2 from rpm libdrm-2.4.124-2.fc42.x86_64
-Module libelf.so.1 from rpm elfutils-0.192-8.fc42.x86_64
-Module libdrm_amdgpu.so.1 from rpm libdrm-2.4.124-2.fc42.x86_64
-Module libkeyutils.so.1 without build-id.
-Module libkrb5support.so.0 without build-id.
-Module libcom_err.so.3 without build-id.
-Module libk5crypto.so.3 without build-id.
-Module libkrb5.so.3 without build-id.
-Module libnuma.so.1 from rpm numactl-2.0.19-2.fc42.x86_64
-Module libz.so.1 without build-id.
-Module libzstd.so.1 without build-id.
-Module libgssapi_krb5.so.2 without build-id.
-Module libcrypto.so.3 without build-id.
-Module libssl.so.3 without build-id.
-Module libssh2.so.1 without build-id.
-Module libnghttp2.so.14 without build-id.
-Module libgcc_s.so.1 without build-id.
-Module libstdc++.so.6 without build-id.
-Module libcurl.so.4 without build-id.
-
-Stack trace of thread 2426591:
-#0  0x00007f5b0b9b5bec __pthread_kill_implementation (libc.so.6 + 0x73bec)
-#1  0x00007f5b0b95babe raise (libc.so.6 + 0x19abe)
-#2  0x00007f5b0b9436d0 abort (libc.so.6 + 0x16d0)
-#3  0x00007f5af2612a06 _ZN4rocr4core7Runtime18HwExceptionHandlerElPv.cold (libhsa-runtime64.so.1 + 0x12a06)
-#4  0x00007f5af267dfab _ZN4rocr4core7Runtime15AsyncEventsLoopEPv (libhsa-runtime64.so.1 + 0x7dfab)
-#5  0x00007f5af261be9c _ZN4rocr2os16ThreadTrampolineEPv (libhsa-runtime64.so.1 + 0x1be9c)
-#6  0x00007f5b0b9b3c84 start_thread (libc.so.6 + 0x71c84)
-#7  0x00007f5b0ba3612c __clone3 (libc.so.6 + 0xf412c)
-
-Stack trace of thread 2426660:
-#0  0x00007f5b0ba31eed ioctl (libc.so.6 + 0xefeed)
-#1  0x00007f5af26f43d0 hsakmt_ioctl (libhsa-runtime64.so.1 + 0xf43d0)
-#2  0x00007f5af26f4b90 hsaKmtWaitOnMultipleEvents_Ext.part.0 (libhsa-runtime64.so.1 + 0xf4b90)
-#3  0x00007f5af267e64d _ZN4rocr4core7Runtime15AsyncEventsLoopEPv (libhsa-runtime64.so.1 + 0x7e64d)
-#4  0x00007f5af261be9c _ZN4rocr2os16ThreadTrampolineEPv (libhsa-runtime64.so.1 + 0x1be9c)
-#5  0x00007f5b0b9b3c84 start_thread (libc.so.6 + 0x71c84)
-#6  0x00007f5b0ba3612c __clone3 (libc.so.6 + 0xf412c)
-
-Stack trace of thread 2426590:
-#0  0x00007f5b0b9c4b87 free (libc.so.6 + 0x82b87)
-#1  0x00007f5af54f189a _ZNSt6vectorISt10unique_ptrIA_cSt14default_deleteIS1_EESaIS4_EE12emplace_backIJS4_EEERS4_DpOT_ (libamd_comgr.so.2 + 0x2af189a)
-#2  0x00007f5af54f1675 _ZN4llvm7msgpack8Document9addStringENS_9StringRefE (libamd_comgr.so.2 + 0x2af1675)
-#3  0x00007f5af54ee655 _ZN5COMGR8metadata14getIsaMetadataEN4llvm9StringRefERNS1_7msgpack8DocumentE (libamd_comgr.so.2 + 0x2aee655)
-#4  0x00007f5af54cf222 amd_comgr_get_isa_metadata (libamd_comgr.so.2 + 0x2acf222)
-#5  0x00007f5b02c13dc3 _ZN3amd6device6Kernel20SetAvailableSgprVgprEv (libamdhip64.so.6 + 0x413dc3)
-#6  0x00007f5b02c87e57 _ZN3amd3roc15LightningKernel8postLoadEv (libamdhip64.so.6 + 0x487e57)
-#7  0x00007f5b02c84365 _ZN3amd3roc16LightningProgram10setKernelsEPvmimNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE (libamdhip64.so.6 + 0x484365)
-#8  0x00007f5b02c033f2 _ZN3amd6device7Program6loadLCEv (libamdhip64.so.6 + 0x4033f2)
-#9  0x00007f5b02c4e12a _ZN3amd7Program4loadERKSt6vectorIPNS_6DeviceESaIS3_EE (libamdhip64.so.6 + 0x44e12a)
-#10 0x00007f5b029835dd _ZN3hip13FatBinaryInfo12BuildProgramEi (libamdhip64.so.6 + 0x1835dd)
-#11 0x00007f5b0298822e _ZN3hip8Function11getStatFuncEPP18ihipModuleSymbol_ti (libamdhip64.so.6 + 0x18822e)
-#12 0x00007f5b02925ca0 _ZN3hip6StatCO11getStatFuncEPP18ihipModuleSymbol_tPKvi (libamdhip64.so.6 + 0x125ca0)
-#13 0x00007f5b02b227bb _ZN3hip16ihipLaunchKernelEPKv4dim3S2_PPvmP12ihipStream_tP11ihipEvent_tS8_i (libamdhip64.so.6 + 0x3227bb)
-#14 0x00007f5b02af7c0a _ZN3hip22hipLaunchKernel_commonEPKv4dim3S2_PPvmP12ihipStream_t (libamdhip64.so.6 + 0x2f7c0a)
-#15 0x00007f5b02af8278 _ZN3hip15hipLaunchKernelEPKv4dim3S2_PPvmP12ihipStream_t (libamdhip64.so.6 + 0x2f8278)
-#16 0x00007f5b0c0b1f85 _Z13ggml_cuda_cpyR25ggml_backend_cuda_contextPK11ggml_tensorPS1_b (libggml-hip.so + 0xb1f85)
-#17 0x00007f5b0c0daffd _ZL31ggml_backend_cuda_graph_computeP12ggml_backendP11ggml_cgraph (libggml-hip.so + 0xdaffd)
-#18 0x00007f5b0bf2e110 ggml_backend_sched_graph_compute_async (libggml-base.so + 0x18110)
-#19 0x00007f5b0e643ea0 _ZN13llama_context13graph_computeEP11ggml_cgraphb (libllama.so + 0x2aea0)
-#20 0x00007f5b0e648a58 _ZN13llama_context6decodeER11llama_batch (libllama.so + 0x2fa58)
-#21 0x00007f5b0e649c7e llama_decode (libllama.so + 0x30c7e)
-#22 0x0000000000408f5b _ZL11test_promptP13llama_contextiii (/home/lhl/llama.cpp/llama.cpp-hip/build/bin/llama-bench + 0x8f5b)
-#23 0x0000000000406d7d main (/home/lhl/llama.cpp/llama.cpp-hip/build/bin/llama-bench + 0x6d7d)
-#24 0x00007f5b0b9455b5 __libc_start_call_main (libc.so.6 + 0x35b5)
-#25 0x00007f5b0b945668 __libc_start_main@@GLIBC_2.34 (libc.so.6 + 0x3668)
-#26 0x0000000000407ee5 _start (/home/lhl/llama.cpp/llama.cpp-hip/build/bin/llama-bench + 0x7ee5)
-ELF object binary architecture: AMD x86-64
-```
-### Qwen 3 MoE
+## Qwen 3 MoE
 Currently there is a bug where batch size has to be below 360 to prevent a crash. 256 has been tested as the best performer (multiple of 64):
 ```
 ❯ llama.cpp-vulkan/build/bin/llama-bench -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf -b 256
@@ -706,6 +641,11 @@ third_party/composable_kernel/include/ck/ck.hpp
 # Before we start compiling we need to hipify:
 python tools/amd_build/build_amd.py
 
+# see below for rocm-cmake
+
+# see below for rocm-core
+
+
 # If using CI, modify for STATIC benchmarks OFF
 time .ci/pytorch/build.sh
 
@@ -714,9 +654,6 @@ time .ci/pytorch/build.sh
 
 # To get things working/installed properly...
 python setup.py develop && python -c "import torch"
-
-# see below for rocm-cmake
-# see bellow for rocm-core
 
 
 # Does this work?
@@ -730,7 +667,6 @@ PY
 HIP runtime: 6.4.43480-9f04e2822
 Device: AMD Radeon Graphics
 ```
-
 #### rocm-cmake
 ```
 git clone https://github.com/ROCm/rocm-cmake ~/src/rocm-cmake
