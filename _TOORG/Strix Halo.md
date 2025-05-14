@@ -945,20 +945,20 @@ SDPA with mask: 149.673 ms, 0.92 TFLOPS
 4. Force Flash Attention backend:
 /usr/lib64/python3.13/contextlib.py:109: FutureWarning: `torch.backends.cuda.sdp_kernel()` is deprecated. In the future, this context manager will be removed. Please see `torch.nn.attention.sdpa_kernel()` for the new context manager, with updated signature.
   self.gen = func(*args, **kwds)
-/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py:95: UserWarning: Memory efficient kernel not used because: (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:859.)
+/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py:95: UserWarning: Memory efficient kernel not used because: (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:859.)
   lambda q, k, v: F.scaled_dot_product_attention(q, k, v, is_causal=True)
-/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py:95: UserWarning: Memory Efficient attention has been runtime disabled. (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/sdp_utils_cpp.h:550.)
+/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py:95: UserWarning: Memory Efficient attention has been runtime disabled. (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/sdp_utils_cpp.h:550.)
   lambda q, k, v: F.scaled_dot_product_attention(q, k, v, is_causal=True)
-/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py:95: UserWarning: Flash attention kernel not used because: (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:861.)
+/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py:95: UserWarning: Flash attention kernel not used because: (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:861.)
   lambda q, k, v: F.scaled_dot_product_attention(q, k, v, is_causal=True)
-/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py:95: UserWarning: Flash attention was not compiled for current AMD GPU architecture. Attempting to run on architecture gfx1151 (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:241.)
+/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py:95: UserWarning: Flash attention was not compiled for current AMD GPU architecture. Attempting to run on architecture gfx1151 (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:241.)
   lambda q, k, v: F.scaled_dot_product_attention(q, k, v, is_causal=True)
-/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py:95: UserWarning: CuDNN attention kernel not used because: (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:863.)
+/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py:95: UserWarning: CuDNN attention kernel not used because: (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:863.)
   lambda q, k, v: F.scaled_dot_product_attention(q, k, v, is_causal=True)
-/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py:95: UserWarning: Torch was not compiled with cuDNN attention. (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:618.)
+/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py:95: UserWarning: Torch was not compiled with cuDNN attention. (Triggered internally at /home/lhl/torch/pytorch/aten/src/ATen/native/transformers/hip/sdp_utils.cpp:618.)
   lambda q, k, v: F.scaled_dot_product_attention(q, k, v, is_causal=True)
 Traceback (most recent call last):
-  File "/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py", line 93, in <module>
+  File "/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py", line 93, in <module>
     test_attention_variant(
     ~~~~~~~~~~~~~~~~~~~~~~^
         "Flash Attention",
@@ -967,9 +967,9 @@ Traceback (most recent call last):
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     )
     ^
-  File "/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py", line 58, in test_attention_variant
+  File "/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py", line 58, in test_attention_variant
     _ = func(q, k, v)
-  File "/home/lhl/framework-desktop-testing/fa/09-test-attention-backend.py", line 95, in <lambda>
+  File "/home/lhl/strix-halo-testing/flash-attention/09-test-attention-backend.py", line 95, in <lambda>
     lambda q, k, v: F.scaled_dot_product_attention(q, k, v, is_causal=True)
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
 RuntimeError: No available kernel. Aborting execution.
