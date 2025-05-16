@@ -304,6 +304,10 @@ How bad is the perf? Testing with the standard [TheBloke/Llama-2-7B-GGUF](https:
 | WMMA        | 322.63 ± 1.34     | 48.40 ± 0.02     | 4218          |
 | WMMA + FA   | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
 
+If you have hipBLASLt installed, you should be able to basically match Vulkan pp512 performance with `ROCBLAS_USE_HIPBLASLT=1` (as long as rocBLAS is compiled with hipBLASLt support, which it should be by default now):
+- See: https://github.com/ggml-org/llama.cpp/issues/13565
+
+
 ## Building
 
 ### Vulkan
