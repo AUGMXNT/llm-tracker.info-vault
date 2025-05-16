@@ -559,6 +559,10 @@ cd rocBLAS
 sudo ln -s /opt/rocm/lib/llvm/bin/amdclang++ /opt/rocm/bin/amdclang++
 sudo ln -s /opt/rocm/lib/llvm/bin/amdclang     /opt/rocm/bin/amdclang
 
+dnf install libdrm-devel -y
+ldconfig -p | grep -E 'libdrm(_amdgpu)?\.so$'
+
+
 HIP_PLATFORM=amd ./install.sh -idc -j$(nproc) -a gfx1151
 ```
 ## TODO: Speculative Decode
