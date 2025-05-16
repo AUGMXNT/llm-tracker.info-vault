@@ -533,6 +533,34 @@ ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | 
 | llama4 17Bx128E (Maverick) Q4_K - Medium | 216.18 GiB |   400.71 B | Vulkan,RPC |  99 |           tg128 |         16.30 ± 0.14 |
 ```
 
+## Improving Performance
+
+### rocBLAS w/ hipBLASLt
+First we test:
+```
+rocblas-bench -f gemm_ex -m 1024 -n 1024 -k 1024 \
+              --a_type f16_r --b_type f16_r --c_type f16_r \
+              --d_type f16_r --compute_type f16_r | grep -i BLASLT
+
+export ROCBLAS_USE_HIPBLASLT=1
+
+rocblas-bench -f gemm_ex -m 1024 -n 1024 -k 1024 \
+              --a_type f16_r --b_type f16_r --c_type f16_r \
+              --d_type f16_r --compute_type f16_r | grep -i BLASLT
+```
+
+If results deon't 
+```
+git clone https://github.com/ROCm/rocBLAS
+cd rocBLAS
+
+# May need to edit install.sh to `elevate_if_not_root dnf install -y ${package_dependencies} --skip-unavailable`
+# Also if the paths are wrong...
+sudo ln -s /opt/rocm/lib/llvm/bin/amdclang++ /opt/rocm/bin/amdclang++
+sudo ln -s /opt/rocm/lib/llvm/bin/amdclang     /opt/rocm/bin/amdclang
+
+HIP_PLATFORM=amd ./install.sh -idc -j$(nproc) -a gfx1151
+```
 ## TODO: Speculative Decode
 https://github.com/ggml-org/llama.cpp/issues/12968
 https://github.com/hjc4869/llama.cpp
