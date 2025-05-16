@@ -564,6 +564,9 @@ ldconfig -p | grep -E 'libdrm(_amdgpu)?\.so$'
 
 # -c gives still gives errors, so we just skip the client for now
 HIP_PLATFORM=amd ./install.sh -id -j$(nproc) -a gfx1151
+
+# If we want to point ot the new rocblas
+export LD_LIBRARY_PATH=/home/lhl/rocBLAS/build/release/rocblas-install/lib:$LD_LIBRARY_PATH
 ```
 ## TODO: Speculative Decode
 https://github.com/ggml-org/llama.cpp/issues/12968
