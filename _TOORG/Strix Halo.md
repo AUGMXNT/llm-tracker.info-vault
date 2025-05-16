@@ -562,8 +562,8 @@ sudo ln -s /opt/rocm/lib/llvm/bin/amdclang     /opt/rocm/bin/amdclang
 dnf install libdrm-devel -y
 ldconfig -p | grep -E 'libdrm(_amdgpu)?\.so$'
 
-
-HIP_PLATFORM=amd ./install.sh -idc -j$(nproc) -a gfx1151
+# -c gives still gives errors, so we just skip the client for now
+HIP_PLATFORM=amd ./install.sh -id -j$(nproc) -a gfx1151
 ```
 ## TODO: Speculative Decode
 https://github.com/ggml-org/llama.cpp/issues/12968
