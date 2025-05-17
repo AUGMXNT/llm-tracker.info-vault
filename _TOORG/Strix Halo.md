@@ -1502,3 +1502,25 @@ David Huang maintains a llama.cpp fork which has AMD-specific optimizations befo
 
 Jack Stone (Chinese YouTube Hardware Reviewer) did a review of the [GMK EVO-X2 MiniPC](https://www.gmktec.com/products/amd-ryzen%E2%84%A2-ai-max-395-evo-x2-ai-mini-pc) and had a section running some tests w/ LM Studio on Windows - a lot less technical information, but still maybe of interest:
 - https://youtu.be/UXjg6Iew9lg?t=238
+
+# NPU
+- XDNA Drivers
+	- https://github.com/amd/xdna-driver
+- XRT
+	- https://github.com/Xilinx/XRT
+- Vitis
+	- https://github.com/Xilinx/Vitis-Tutorials
+	- https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vitis/vitis-libraries/vitis-blas.html
+- GAIA
+	- https://github.com/amd/gaia
+- Riallto
+	- https://riallto.ai/index.html
+- MLIR
+	- https://xilinx.github.io/mlir-aie/
+- OGA
+	- https://github.com/amd/RyzenAI-SW/tree/main/example/llm
+- Peano
+	- https://discourse.llvm.org/t/peano-llvm-support-for-amd-xilinx-ai-engine-processors/79458
+
+See also:
+https://github.com/ggml-org/llama.cpp/issues/1499
