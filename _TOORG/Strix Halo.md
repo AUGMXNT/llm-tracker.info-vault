@@ -1517,6 +1517,7 @@ Jack Stone (Chinese YouTube Hardware Reviewer) did a review of the [GMK EVO-X2 M
 	- https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vitis/vitis-libraries/vitis-blas.html
 - GAIA
 	- https://github.com/amd/gaia
+	- https://github.com/amd/gaia/issues/9
 - Riallto
 	- https://riallto.ai/index.html
 - MLIR
