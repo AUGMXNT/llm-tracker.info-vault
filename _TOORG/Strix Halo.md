@@ -1506,6 +1506,10 @@ Jack Stone (Chinese YouTube Hardware Reviewer) did a review of the [GMK EVO-X2 M
 # NPU
 - XDNA Drivers
 	- https://github.com/amd/xdna-driver
+- RyzenAI
+	- https://github.com/amd/RyzenAI-SW
+- Lemonade
+	- https://github.com/lemonade-sdk/lemonade
 - XRT
 	- https://github.com/Xilinx/XRT
 - Vitis
