@@ -1529,3 +1529,53 @@ Jack Stone (Chinese YouTube Hardware Reviewer) did a review of the [GMK EVO-X2 M
 
 See also:
 https://github.com/ggml-org/llama.cpp/issues/1499
+
+# Benchmarks
+
+
+| Run             | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
+| :-------------- | :---------------- | :--------------- | :------------ |
+| CPU             | 294.64 ± 0.58     | 28.94 ± 0.04     |               |
+| CPU + FA        | 294.36 ± 3.13     | 29.42 ± 0.03     |               |
+| HIP             | 348.96 ± 0.31     | 48.72 ± 0.01     | 4219          |
+| HIP + FA        | 331.96 ± 0.41     | 45.78 ± 0.02     | 4245          |
+| HIP + WMMA      | 322.63 ± 1.34     | 48.40 ± 0.02     | 4218          |
+| HIP + WMMA + FA | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
+| Vulkan          | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
+| Vulkan + FA     | **884.20 ± 6.23** | **52.73 ± 0.07** | **3923**      |
+
+
+
+
+Aborted (core dumped)
+[root@01880d41c33b llama.cpp]# ROCBLAS_USE_HIPBLASLT=1 llama.cpp-hip/build/bin/llama-bench -m /home/lhl/models/Qwen3-235B-A22B-UD-Q3_K_XL-00001-of-00003.gguf
+/share/libdrm/amdgpu.ids: No such file or directory
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+rocBLAS error: No hipBLASLt solution found
+This message will be only be displayed once, unless the ROCBLAS_VERBOSE_HIPBLASLT_ERROR environment variable is set.
+
+rocBLAS warning: hipBlasLT failed, falling back to tensile.
+This message will be only be displayed once, unless the ROCBLAS_VERBOSE_TENSILE_ERROR environment variable is set.
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |           pp512 |        122.68 ± 0.58 |
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |           tg128 |         12.30 ± 0.02 |
+
+build: c753d7be (5392)
+[root@01880d41c33b llama.cpp]# time llama.cpp-hip/build/bin/llama-bench -m /home/lhl/models/Qwen3-235B-A22B-UD-Q3_K_XL-00001-of-00003.gguf
+/share/libdrm/amdgpu.ids: No such file or directory
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+HW Exception by GPU node-1 (Agent handle: 0x12eed60) reason :GPU Hang
+Aborted (core dumped)
+
+real    1m20.327s
+user    0m5.927s
+sys     0m46.562s

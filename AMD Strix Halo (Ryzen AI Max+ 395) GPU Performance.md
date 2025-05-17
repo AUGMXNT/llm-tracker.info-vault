@@ -18,16 +18,16 @@ Raw perf is fine, but probably what most people in the sub are interested is how
 
 I ran with a few different backends, and this was a bit surprising to me:
 
-|Run|pp512 (t/s)|tg128 (t/s)|Max Mem (MiB)|
-|:-|:-|:-|:-|
-|CPU|294.64 ± 0.58|28.94 ± 0.04||
-|CPU + FA|294.36 ± 3.13|29.42 ± 0.03||
-|HIP|348.96 ± 0.31|48.72 ± 0.01|4219|
-|HIP + FA|331.96 ± 0.41|45.78 ± 0.02|4245|
-|HIP + WMMA|322.63 ± 1.34|48.40 ± 0.02|4218|
-|HIP + WMMA + FA|343.91 ± 0.60|50.88 ± 0.01|4218|
-|Vulkan|881.71 ± 1.71|52.22 ± 0.05|**3923**|
-|Vulkan + FA|**884.20 ± 6.23**|**52.73 ± 0.07**|**3923**|
+| Run             | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
+| :-------------- | :---------------- | :--------------- | :------------ |
+| CPU             | 294.64 ± 0.58     | 28.94 ± 0.04     |               |
+| CPU + FA        | 294.36 ± 3.13     | 29.42 ± 0.03     |               |
+| HIP             | 348.96 ± 0.31     | 48.72 ± 0.01     | 4219          |
+| HIP + FA        | 331.96 ± 0.41     | 45.78 ± 0.02     | 4245          |
+| HIP + WMMA      | 322.63 ± 1.34     | 48.40 ± 0.02     | 4218          |
+| HIP + WMMA + FA | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
+| Vulkan          | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
+| Vulkan + FA     | **884.20 ± 6.23** | **52.73 ± 0.07** | **3923**      |
 
 The HIP version performs far below what you'd expect in terms of tok/TFLOP efficiency for prompt processing even vs other RDNA3 architectures:
 
@@ -127,16 +127,16 @@ First I'll test with the standard TheBloke/Llama-2-7B-GGUF Q4_0 so you can easil
 
 I ran with a number of different backends, and the results were actually pretty surprising:
 
-|Run|pp512 (t/s)|tg128 (t/s)|Max Mem (MiB)|
-|:-|:-|:-|:-|
-|CPU|294.64 ± 0.58|28.94 ± 0.04||
-|CPU + FA|294.36 ± 3.13|29.42 ± 0.03||
-|HIP|348.96 ± 0.31|48.72 ± 0.01|4219|
-|HIP + FA|331.96 ± 0.41|45.78 ± 0.02|4245|
-|HIP + WMMA|322.63 ± 1.34|48.40 ± 0.02|4218|
-|HIP + WMMA + FA|343.91 ± 0.60|50.88 ± 0.01|4218|
-|Vulkan|881.71 ± 1.71|52.22 ± 0.05|**3923**|
-|Vulkan + FA|**884.20 ± 6.23**|**52.73 ± 0.07**|**3923**|
+| Run             | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
+| :-------------- | :---------------- | :--------------- | :------------ |
+| CPU             | 294.64 ± 0.58     | 28.94 ± 0.04     |               |
+| CPU + FA        | 294.36 ± 3.13     | 29.42 ± 0.03     |               |
+| HIP             | 348.96 ± 0.31     | 48.72 ± 0.01     | 4219          |
+| HIP + FA        | 331.96 ± 0.41     | 45.78 ± 0.02     | 4245          |
+| HIP + WMMA      | 322.63 ± 1.34     | 48.40 ± 0.02     | 4218          |
+| HIP + WMMA + FA | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
+| Vulkan          | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
+| Vulkan + FA     | **884.20 ± 6.23** | **52.73 ± 0.07** | **3923**      |
 
 The HIP version performs **far** below what you'd expect in terms of tok/TFLOP efficiency for prompt processing even vs other RDNA3 architectures:
 
