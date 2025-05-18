@@ -1620,3 +1620,91 @@ build: 3cc1f1f1 (5393)
 01:58:50  used=91437 MiB  Δ=91423 MiB  peak=91437 MiB  Δpeak=91423 MiB
 01:58:47  used=7359 MiB  Δ=7204 MiB  peak=8192 MiB  Δpeak=8037 MiB
 ```
+
+HIP - also crashes?
+```
+...
+llama_context: max_nodes = 65536
+llama_context: worst-case: n_tokens = 512, n_seqs = 1, n_outputs = 0
+llama_context: reserving graph for n_tokens = 512, n_seqs = 1
+llama_context: reserving graph for n_tokens = 1, n_seqs = 1
+llama_context: reserving graph for n_tokens = 512, n_seqs = 1
+llama_context:      ROCm0 compute buffer size =   304.75 MiB
+llama_context:  ROCm_Host compute buffer size =     9.01 MiB
+llama_context: graph nodes  = 6116
+llama_context: graph splits = 2
+attach_threadpool: call
+set_n_threads: n_threads = 16, n_threads_batch = 16
+HW Exception by GPU node-1 (Agent handle: 0xfe79af0) reason :GPU Hang
+Aborted (core dumped)
+```
+
+-b 256
+```
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |     256 |           pp512 |         65.34 ± 0.18 |
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |     256 |           tg128 |         10.55 ± 0.01 |
+```
+
+
+hipBLASLt b256
+```
+[root@7a4039b9c011 llama.cpp]# ROCBLAS_USE_HIPBLASLT=1 llama.cpp-hip/build/bin/llama-bench -m /home/lhl/models/Qwen3-235B-A22B-UD-Q3_K_XL-00001-of-00003.gguf -b 256
+/share/libdrm/amdgpu.ids: No such file or directory
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
+rocBLAS error: No hipBLASLt solution found
+This message will be only be displayed once, unless the ROCBLAS_VERBOSE_HIPBLASLT_ERROR environment variable is set.
+
+rocBLAS warning: hipBlasLT failed, falling back to tensile.
+This message will be only be displayed once, unless the ROCBLAS_VERBOSE_TENSILE_ERROR environment variable is set.
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |     256 |           pp512 |         87.62 ± 0.40 |
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |     256 |           tg128 |         10.61 ± 0.03 |
+
+build: c753d7be (5392)
+```
+
+hipblaslt b128
+```
+[root@7a4039b9c011 llama.cpp]# ROCBLAS_USE_HIPBLASLT=1 llama.cpp-hip/build/bin/llama-bench -m /home/lhl/models/Qwen3-235B-A22B-UD-Q3_K_XL-00001-of-00003.gguf -b 128
+/share/libdrm/amdgpu.ids: No such file or directory
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
+rocBLAS error: No hipBLASLt solution found
+This message will be only be displayed once, unless the ROCBLAS_VERBOSE_HIPBLASLT_ERROR environment variable is set.
+
+rocBLAS warning: hipBlasLT failed, falling back to tensile.
+This message will be only be displayed once, unless the ROCBLAS_VERBOSE_TENSILE_ERROR environment variable is set.
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |     128 |           pp512 |         62.87 ± 0.35 |
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |     128 |           tg128 |         10.61 ± 0.01 |
+
+build: c753d7be (5392)
+```
+
+hipblaslt - best pp
+```
+[root@7a4039b9c011 llama.cpp]# ROCBLAS_USE_HIPBLASLT=1 llama.cpp-hip/build/bin/llama-bench -m /home/lhl/models/Qwen3-235B-A22B-UD-Q3_K_XL-00001-of-00003.gguf
+/share/libdrm/amdgpu.ids: No such file or directory
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+rocBLAS error: No hipBLASLt solution found
+This message will be only be displayed once, unless the ROCBLAS_VERBOSE_HIPBLASLT_ERROR environment variable is set.
+
+rocBLAS warning: hipBlasLT failed, falling back to tensile.
+This message will be only be displayed once, unless the ROCBLAS_VERBOSE_TENSILE_ERROR environment variable is set.
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |           pp512 |        120.46 ± 0.39 |
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | ROCm,RPC   |  99 |           tg128 |         10.63 ± 0.03 |
+
+build: c753d7be (5392)
+```
