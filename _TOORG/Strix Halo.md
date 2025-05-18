@@ -1579,3 +1579,34 @@ Aborted (core dumped)
 real    1m20.327s
 user    0m5.927s
 sys     0m46.562s
+
+Measuring System Memory Usage
+```bash
+initial=$(free --mebi | awk '/^Mem:/ {print $3}'); max=$initial; while sleep 1; do cur=$(free --mebi | awk '/^Mem:/ {print $3}'); (( cur > max )) && max=$cur; printf "\r%s  used=%6d MiB  Δ=%6d MiB  peak=%6d MiB  Δpeak=%6d MiB " "$(date +%T)" "$cur" "$((cur-initial))" "$max" "$((max-initial))"; done
+```
+
+
+CPU
+```
+lhl in 🌐 cluster1 in ~/llama.cpp took 3m5s
+❯ time ./llama.cpp-cpu/build/bin/llama-bench -fa 1 -m ~/models/Qwen3-235B-A22B-UD-Q3_K_XL-00001-of-00003.gguf
+| model                          |       size |     params | backend    | threads | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ------: | -: | --------------: | -------------------: |
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | CPU        |      16 |  1 |           pp512 |         32.58 ± 0.13 |
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | CPU        |      16 |  1 |           tg128 |          9.03 ± 0.01 |
+
+build: c753d7be (5392)
+
+real    2m49.389s
+user    43m50.907s
+sys     0m4.578s
+
+
+01:54:19  used=  2029 MiB  Δ=    55 MiB  peak= 10578 MiB  Δpeak=  8604 MiB
+```
+
+Vulkan
+```
+01:58:50  used=91437 MiB  Δ=91423 MiB  peak=91437 MiB  Δpeak=91423 MiB
+01:58:47  used=7359 MiB  Δ=7204 MiB  peak=8192 MiB  Δpeak=8037 MiB
+```
