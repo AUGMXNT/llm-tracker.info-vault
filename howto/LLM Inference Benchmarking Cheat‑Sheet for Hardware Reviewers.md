@@ -1,4 +1,69 @@
-NOTE: This document tries to avoid using the term "performance" since in ML research the term performance typically refers to measuring model quality/capabilities.
+**NOTE**: This document tries to avoid using the term "performance" since in ML research the term performance typically refers to measuring model quality/capabilities.
+
+##  ⏱️ TL;DR — 60 s to first numbers
+### Get llama.cpp
+Go to https://github.com/ggml-org/llama.cpp/releases/ and get the appropriate build/backend for your system:
+- **CUDA** for Nvidia GPUs
+- **HIP** for AMD GPUs (architecture specific)
+- **Vulkan** for general GPU
+- **CPU** for baseline
+- **Metal** for Mac
+- For Intel Arc there is a **SYCL** backend, but use the **IPEX-LLM** portable zip for easiest setup/best performance:
+	- https://github.com/intel/ipex-llm/blob/main/docs/mddocs/Quickstart/llama_cpp_quickstart.md
+Building your own version is relatively easy if necessary:
+- https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md
+
+Performance changes frequently so be sure to use the same build # when comparing performance.
+### Get the baseline model (requires 4GB VRAM)
+```
+wget https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_0.gguf
+```
+- This Llama 2 7B Q4_0 model is historically frequently used for testing so is a good baseline to easily compare online
+### Run llama-bench
+```
+llama-bench -m llama-2-7b.Q4_0.gguf -fa 1
+```
+- `--help` to see options, use `-v` for debug info
+- by default runs with `-p` 512, `-n` 128, `-r` 5
+- Can output `-o` CSV, JSON, and more
+- Use `CUDA_VISIBLE_DEVICES` or `GGML_VK_VISIBLE_DEVICES` if you need to control for multiple GPUs
+
+## 🖥️ Important Specs for Inference
+It's important that when we are looking at inference hardware, we are looking at primarily 3 things:
+
+|                                 | What it limits           | Easy rule‑of‑thumb                 | Shows up as   |
+| ------------------------------- | ------------------------ | ---------------------------------- | ------------- |
+| **VRAM / RAM**                  | model size & max context | GGUF file size + KV‑cache          | OOM or `-ngl` |
+| **Compute (FP16 TFLOPS)**       | prompt replay speed      | higher ⇒ faster **pp512**          | `pp512`       |
+| **Memory bandwidth (MBW GB/s)** | token generation speed   | `tg128 ≈ bandwidth / weights_size` | `tg128`       |
+
+> **Token primer**  1 English word ≈ 0.75 token.  LLMs only see integer IDs.
+
+### Conversation replay cost
+
+Every turn re‑feeds the full context unless the engine pre‑caches it. The cost grows **O(context)** and `pp512` is your proxy. Eg, if you are having a conversation with an LLM, the entire history of the chat gets fed every single time you submit and then generates a response after first processing the entire history.
+
+## Raw Performance Testing
+
+nvidia_smi
+nvtop
+nvitop
+
+amdgpu_top
+rocm_smi
+
+likwid 
+
+
+https://github.com/NVIDIA/nvbandwidth
+https://github.com/ROCm/rocm_bandwidth_test
+
+
+
+
+
+
+# OLD
 
 This is a cheat sheet for running a simple benchmark on consumer hardware for LLM inference using the most popular end-user inferencing engine, `llama.cpp` and its included `llama-bench`. Feel free to skip to the HOWTO section if you want.
 - If you're looking for more information and industrial benchmarking, the best place to start is probably Stas Bekman's [Machine Learning Engineering Open Book](https://github.com/stas00/ml-engineering/), particularly the [Compute/Accelerator](https://github.com/stas00/ml-engineering/tree/master/compute/accelerator) section. Last year I did a long writeup on [tuning vLLM for MI300X](https://shisa.ai/posts/tuning-vllm-mi300x/) that links to many resources as a good starting point as well. I recommend using `mamf-finder.py` for hardware testing, and vLLM/SGLang's `benchmark_serving` implementations to generate throughput, TTFT, TPOT measurements at different concurrencies.
@@ -104,3 +169,6 @@ run examples/benchmark.py
 TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 - faster but doesn't support SWA
 - reduce batch to 4
 - reduce sequence lengths
+
+
+See: https://www.localscore.ai/latest
