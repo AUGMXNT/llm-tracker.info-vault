@@ -1605,8 +1605,18 @@ sys     0m4.578s
 01:54:19  used=  2029 MiB  Δ=    55 MiB  peak= 10578 MiB  Δpeak=  8604 MiB
 ```
 
-Vulkan
+Vulkan - hard crashes (lockup) w/o `-b 256`
 ```
+$ llama.cpp-vulkan/build/bin/llama-bench -fa 1 -m ~/models/Qwen3-235B-A22B-UD-Q3_K_XL-00001-of-00003.gguf -b 256
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl | n_batch | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -: | --------------: | -------------------: |
+n| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | Vulkan,RPC |  99 |     256 |  1 |           pp512 |         23.79 ± 0.10 |
+| qwen3moe 235B.A22B Q3_K - Medium |  96.59 GiB |   235.09 B | Vulkan,RPC |  99 |     256 |  1 |           tg128 |         16.09 ± 0.01 |
+
+build: 3cc1f1f1 (5393)
+
 01:58:50  used=91437 MiB  Δ=91423 MiB  peak=91437 MiB  Δpeak=91423 MiB
 01:58:47  used=7359 MiB  Δ=7204 MiB  peak=8192 MiB  Δpeak=8037 MiB
 ```
