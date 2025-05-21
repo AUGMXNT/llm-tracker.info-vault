@@ -2,25 +2,29 @@ For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) 
 - 2025-05-02 https://github.com/ROCm/TheRock/discussions/244
 - 2025-05-02 https://github.com/ROCm/ROCm/issues/4499
 	- https://github.com/ROCm/ROCm/issues/4566
+
+For some discussion and additional benchmarks on this testing, see: 
+- https://www.reddit.com/r/LocalLLaMA/comments/1kmi3ra/amd_strix_halo_ryzen_ai_max_395_gpu_llm/
+
 # Testing Checklist
-- [x] ROCm
+- [ ] ROCm 6.5 (custom compiles)
+	- [ ] rocBLAS
+	- [ ] hipBLAS
+	- [ ] hipBLASLt
+	- [ ] rocWMMA
+	- [ ] AOTriton
 - [x] llama.cpp
-	- [x] HIP (ROCm)
-	- [x] Vulkan
-	- [x] RPC
-	- [ ] Speculative Decoding
+	- [ ] backend/compile scripts - HIP vs HIP WMMA vs Vulkan
+	- [ ] speculative decoding
+		- [ ] ShareGPT benchmark scripts
 		- [ ] 70B
 		- [ ] 25-32 Dense
-	- [x] wmma
-- [x] mamf-finder
-- [x] PyTorch
-	- [x] hipBLASlt
-	- [ ] FA2
-- [ ] vLLM
-- [ ] SGLang
-- [ ] trl
-- [ ] Axolotl
-- [ ] torchtune
+- [ ] Torch w/ AOTriton FA w/ hipBLASLt
+	- [ ] vLLM
+	- [ ] SGLang
+	- [ ] trl
+	- [ ] Axolotl
+	- [ ] torchtune
 # System Info
 ```
 ❯ lsb_release -a
@@ -68,18 +72,20 @@ torch: 2.5.0a
 
 ## PyTorch Setup
 
-Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still ROCm support ([ROCm #4499](https://github.com/ROCm/ROCm/issues/4499)). In theory it may be possible to build a custom ROCm with `gfx1151` support, but in practice setting this up locally is non-trivial:
-- https://github.com/ROCm/TheRock/discussions/244
-- https://github.com/lamikr/rocm_sdk_builder
+Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still relatively poor ROCm support ([ROCm #4499](https://github.com/ROCm/ROCm/issues/4499)).
 
-As I prefer to use [Mamba envs](https://github.com/conda-forge/miniforge?tab=readme-ov-file#unix-like-platforms-macos-linux--wsl) and there is no supported PyTorch build beyond the system PyTorch, I do a slightly (very) janky workaround and symlink the system PyTorch from my venv `site-packages`:
+The important components can be built, but there are still performance regressions w/ the gfx1151 kernels:
+- https://github.com/ROCm/TheRock/discussions/244
+- https://github.com/ROCm/ROCm/issues/4748
+
+As I prefer to use [Mamba envs](https://github.com/conda-forge/miniforge?tab=readme-ov-file#unix-like-platforms-macos-linux--wsl) if you have a working system PyTorch you can do a slightly (very) janky workaround and symlink the system PyTorch from my venv `site-packages`:
 ```
 torch -> /usr/lib64/python3.13/site-packages/torch
 torch-2.5.0a0+gitunknown-py3.13.egg-info -> /usr/lib64/python3.13/site-packages/torch-2.5.0a0+gitunknown-py3.13.egg-info
 torchgen -> /usr/lib64/python3.13/site-packages/torchgen
 ```
 
-While it's not ideal, it beats trying to compile ROCm and PyTorch for an unsupported architecture.
+It is possible to use these self contained 3.11 wheels w/ AOTriton SDPA (but no hipBLASLt seeminingly): https://github.com/ROCm/TheRock/discussions/655
 
 ### Docker on Fedora
 We can use scottt's Docker image: https://github.com/ROCm/TheRock/discussions/244
@@ -1530,7 +1536,7 @@ Jack Stone (Chinese YouTube Hardware Reviewer) did a review of the [GMK EVO-X2 M
 See also:
 https://github.com/ggml-org/llama.cpp/issues/1499
 
-# Benchmarks
+# Benchmarks WIP
 
 
 | Run             | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
@@ -1543,8 +1549,6 @@ https://github.com/ggml-org/llama.cpp/issues/1499
 | HIP + WMMA + FA | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
 | Vulkan          | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
 | Vulkan + FA     | **884.20 ± 6.23** | **52.73 ± 0.07** | **3923**      |
-
-
 
 
 Aborted (core dumped)
