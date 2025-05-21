@@ -1539,16 +1539,19 @@ https://github.com/ggml-org/llama.cpp/issues/1499
 # Benchmarks WIP
 
 
-| Run             | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
-| :-------------- | :---------------- | :--------------- | :------------ |
-| CPU             | 294.64 ± 0.58     | 28.94 ± 0.04     |               |
-| CPU + FA        | 294.36 ± 3.13     | 29.42 ± 0.03     |               |
-| HIP             | 348.96 ± 0.31     | 48.72 ± 0.01     | 4219          |
-| HIP + FA        | 331.96 ± 0.41     | 45.78 ± 0.02     | 4245          |
-| HIP + WMMA      | 322.63 ± 1.34     | 48.40 ± 0.02     | 4218          |
-| HIP + WMMA + FA | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
-| Vulkan          | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
-| Vulkan + FA     | **884.20 ± 6.23** | **52.73 ± 0.07** | **3923**      |
+| Run                         | pp512 (t/s)       | tg128 (t/s)      | Max Mem (MiB) |
+| :-------------------------- | :---------------- | :--------------- | :------------ |
+| CPU                         | 294.64 ± 0.58     | 28.94 ± 0.04     |               |
+| CPU + FA                    | 294.36 ± 3.13     | 29.42 ± 0.03     |               |
+| HIP                         | 348.96 ± 0.31     | 48.72 ± 0.01     | 4219          |
+| HIP + FA                    | 331.96 ± 0.41     | 45.78 ± 0.02     | 4245          |
+| HIP + FA + hipBLASLt        | 765.54 ± 1.84     | 45.05 ± 0.01     |               |
+| HIP + WMMA                  | 322.63 ± 1.34     | 48.40 ± 0.02     | 4218          |
+| HIP + WMMA + FA             | 343.91 ± 0.60     | 50.88 ± 0.01     | 4218          |
+| HIP + WMMA + FA + hipBLASLt | **986.12 ± 1.44** | 50.58 ± 0.01     |               |
+| Vulkan                      | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
+| Vulkan + FA                 | 884.20 ± 6.23     | **52.73 ± 0.07** | **3923**      |
+- hipBLASLt runs with `ROCBLAS_USE_HIPBLASLT=1`
 
 ```
 
@@ -1717,8 +1720,99 @@ build: c753d7be (5392)
 
 Qwen3-30B-A3B UD-Q4_K_XL:
 
-| Run         | pp512 (t/s)   | tg128 (t/s)  |
-| ----------- | ------------- | ------------ |
-| Vulkan      | 70.03 ± 0.18  | 75.32 ± 0.08 |
-| Vulkan b256 | 118.78 ± 0.64 | 74.76 ± 0.07 |
-| HIP         |               |              |
+| Run                         | pp512 (t/s)   | tg128 (t/s)  |
+| --------------------------- | ------------- | ------------ |
+| CPU                         | 252.15 ± 2.95 | 44.05 ± 0.08 |
+| Vulkan                      | 70.03 ± 0.18  | 75.32 ± 0.08 |
+| Vulkan b128                 | 163.78 ± 1.03 | 69.32 ± 0.05 |
+| Vulkan b256                 | 118.78 ± 0.64 | 74.76 ± 0.07 |
+| HIP + FA                    | 357.32 ± 0.84 | 51.26        |
+| HIP + FA + hipBLASLt        | 510.86 ± 3.30 | 51.18 ± 0.01 |
+| HIP + WMMA + FA + hipBLASLt | 547.84 ± 3.23 | 60.29 ± 0.03 |
+- hipBLASLt runs with `ROCBLAS_USE_HIPBLASLT=1`
+
+Qwen 3 32B Q8_0
+```
+(peak GTT 35 MiB, peak GART 33386 MiB):
+❯ time llama.cpp-rocwmma/build/bin/llama-bench -fa 1 -m ~/models/Qwen3-32B-Q8_0.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
+| qwen3 32B Q8_0                 |  32.42 GiB |    32.76 B | ROCm,RPC   |  99 |  1 |           pp512 |         77.43 ± 0.05 |
+| qwen3 32B Q8_0                 |  32.42 GiB |    32.76 B | ROCm,RPC   |  99 |  1 |           tg128 |          6.43 ± 0.00 |
+
+build: 09232370 (5348)
+
+real    2m25.304s
+user    2m18.208s
+sys     0m3.982s
+```
+
+
+For pp8192 (peak GTT 33 MiB, peak GART 35306 MiB):
+```
+❯ time llama.cpp-rocwmma/build/bin/llama-bench -fa 1 -m ~/models/Qwen3-32B-Q8_0.gguf -p 8192
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
+| qwen3 32B Q8_0                 |  32.42 GiB |    32.76 B | ROCm,RPC   |  99 |  1 |          pp8192 |         75.68 ± 0.23 |
+| qwen3 32B Q8_0                 |  32.42 GiB |    32.76 B | ROCm,RPC   |  99 |  1 |           tg128 |          6.42 ± 0.00 |
+
+build: 09232370 (5348)
+
+real    12m33.586s
+user    11m48.942s
+sys     0m4.186s
+```
+
+I won't wait around for 128K context (at 75 tok/s, a single pass will take 30 minutes) but running it, I can report that memory usage is peak GTT 35 MiB, peak GART 66156 MiB, os it easily fits, but with such poor pp perf, probably it isn't very pleasant/generally useful.
+
+```
+load_tensors:        ROCm0 model buffer size = 32410.82 MiB
+load_tensors:   CPU_Mapped model buffer size =   788.24 MiB
+llama_kv_cache_unified:      ROCm0 KV buffer size = 32768.00 MiB
+llama_kv_cache_unified: KV self size  = 32768.00 MiB, K (f16): 16384.00 MiB, V (f16): 16384.00 MiB
+| qwen3 32B Q8_0                 |  32.42 GiB |    32.76 B | ROCm,RPC   |  99 |   16384 |  1 |        pp131072 |         75.80 ± 0.00 |
+```
+
+70B
+```
+❯ time llama.cpp-vulkan/build/bin/llama-bench -fa 1 -m ~/models/shisa-v2-llama3.3-70b.i1-Q4_K_M.gguf
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
+| llama 70B Q4_K - Medium        |  39.59 GiB |    70.55 B | Vulkan,RPC |  99 |  1 |           pp512 |         77.28 ± 0.69 |
+| llama 70B Q4_K - Medium        |  39.59 GiB |    70.55 B | Vulkan,RPC |  99 |  1 |           tg128 |          5.02 ± 0.00 |
+
+build: 9a390c48 (5349)
+
+real    3m0.783s
+user    0m38.376s
+sys     0m8.628s
+```
+
+HIP
+```
+❯ time llama.cpp-rocwmma/build/bin/llama-bench -fa 1 -m ~/models/shisa-v2-llama3.3-70b.i1-Q4_K_M.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
+| llama 70B Q4_K - Medium        |  39.59 GiB |    70.55 B | ROCm,RPC   |  99 |  1 |           pp512 |         34.36 ± 0.02 |
+| llama 70B Q4_K - Medium        |  39.59 GiB |    70.55 B | ROCm,RPC   |  99 |  1 |           tg128 |          4.70 ± 0.00 |
+
+build: 09232370 (5348)
+
+real    3m53.133s
+user    3m34.265s
+sys     0m4.752s
+```
