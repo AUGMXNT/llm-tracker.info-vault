@@ -1550,6 +1550,7 @@ https://github.com/ggml-org/llama.cpp/issues/1499
 | Vulkan          | 881.71 ± 1.71     | 52.22 ± 0.05     | **3923**      |
 | Vulkan + FA     | **884.20 ± 6.23** | **52.73 ± 0.07** | **3923**      |
 
+```
 
 Aborted (core dumped)
 [root@01880d41c33b llama.cpp]# ROCBLAS_USE_HIPBLASLT=1 llama.cpp-hip/build/bin/llama-bench -m /home/lhl/models/Qwen3-235B-A22B-UD-Q3_K_XL-00001-of-00003.gguf
@@ -1712,3 +1713,12 @@ This message will be only be displayed once, unless the ROCBLAS_VERBOSE_TENSILE_
 
 build: c753d7be (5392)
 ```
+
+
+Qwen3-30B-A3B UD-Q4_K_XL:
+
+| Run         | pp512 (t/s)   | tg128 (t/s)  |
+| ----------- | ------------- | ------------ |
+| Vulkan      | 70.03 ± 0.18  | 75.32 ± 0.08 |
+| Vulkan b256 | 118.78 ± 0.64 | 74.76 ± 0.07 |
+| HIP         |               |              |
