@@ -144,10 +144,8 @@ Arch Linux setup is fairly straightforward (can be easier than the official inst
 
 Install ROCm:
 ```shell
-# More up to date - 6.3.0
-paru -S opencl-amd-dev
-# These are  at 6.2.2
-# yay -S rocm-hip-sdk rocm-ml-sdk rocm-opencl-sdk
+# As of 2025-05-23: is version 6.4.0
+paru -S rocm-hip-sdk rocm-opencl-sdk hip-runtime-amd
 
 # third party monitoring
 paru -S amdgpu_top radeontop
