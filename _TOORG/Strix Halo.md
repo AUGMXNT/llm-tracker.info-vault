@@ -20,15 +20,57 @@ Additional discussions worth tracking:
 **2025-05-30 UPDATE**: I am now able to reveal that all my Strix Halo has been done on pre-release [Framework Desktop](https://frame.work/desktop?tab=specs) systems. Per the published specs page, it is able to boost to 140W and sustain at 120W. It doesn't not thermal throttle.
 
 ```
-❯ lsb_release -a
+❯ /opt/rocm/bin/hipconfig --full
+HIP version: 6.5.25213-f04c626a9
+
+==hipconfig
+HIP_PATH           :/opt/rocm
+ROCM_PATH          :/opt/rocm
+HIP_COMPILER       :clang
+HIP_PLATFORM       :amd
+HIP_RUNTIME        :rocclr
+CPP_CONFIG         : -D__HIP_PLATFORM_HCC__= -D__HIP_PLATFORM_AMD__= -I/opt/rocm/include -I/include
+
+==hip-clang
+HIP_CLANG_PATH     :/opt/rocm/lib/llvm/bin
+AMD clang version 19.0.0git (https://github.com/ROCm/llvm-project.git 1f12d7d701d2407db6a7b9dc097fa4ef7f1ab36b)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /opt/rocm/lib/llvm/bin
+sh: line 1: /opt/rocm/lib/llvm/bin/llc: No such file or directory
+hip-clang-cxxflags :
+ -O3
+hip-clang-ldflags :
+--driver-mode=g++ -O3 --hip-link
+
+== Linux Kernel
+Hostname      :
+cluster2
+Linux cluster2 6.15.0-0.rc7.58.fc43.x86_64 #1 SMP PREEMPT_DYNAMIC Tue May 20 14:10:49 UTC 2025 x86_64 GNU/Linux
 LSB Version:    n/a
 Distributor ID: Fedora
 Description:    Fedora Linux 43 (Workstation Edition Prerelease)
 Release:        43
 Codename:       n/a
+```
 
-❯ uname -a
-Linux cluster2 6.15.0-0.rc7.58.fc43.x86_64 #1 SMP PREEMPT_DYNAMIC Tue May 20 14:10:49 UTC 2025 x86_64 GNU/Linux
+You probably want something like this for your ROCm env vars:
+```bash
+# ---- ROCm nightly from /opt/rocm ---------------------------------
+export ROCM_PATH=/opt/rocm           # canonical root
+export HIP_PLATFORM=amd
+export HIP_PATH=$ROCM_PATH           # some tools still look for it
+export HIP_CLANG_PATH=$ROCM_PATH/llvm/bin
+export HIP_INCLUDE_PATH=$ROCM_PATH/include
+export HIP_LIB_PATH=$ROCM_PATH/lib
+export HIP_DEVICE_LIB_PATH=$ROCM_PATH/lib/llvm/amdgcn/bitcode   # this has moved!
+
+# search paths
+export PATH=$ROCM_PATH/bin:$HIP_CLANG_PATH:$PATH
+export LD_LIBRARY_PATH=$ROCM_PATH/lib:$ROCM_PATH/lib64:$ROCM_PATH/llvm/lib:$LD_LIBRARY_PATH
+export LIBRARY_PATH=$ROCM_PATH/lib:$ROCM_PATH/lib64:$LIBRARY_PATH
+export CPATH=$HIP_INCLUDE_PATH:$CPATH           # for clang/gcc
+export PKG_CONFIG_PATH=$ROCM_PATH/lib/pkgconfig:$PKG_CONFIG_PATH
 ```
 
 
