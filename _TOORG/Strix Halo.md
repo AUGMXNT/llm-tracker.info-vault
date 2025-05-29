@@ -76,55 +76,7 @@ export CPATH=$HIP_INCLUDE_PATH:$CPATH           # for clang/gcc
 export PKG_CONFIG_PATH=$ROCM_PATH/lib/pkgconfig:$PKG_CONFIG_PATH
 ```
 
-## PyTorch Setup
-
-Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still relatively poor ROCm support. (See links at the top tracking issues).
-
-A community developer @scottt (along with @jammm) have been most responsible for getting PyTorch easily usable. Outside of some (outdated) docker files, the easiest way to get PyTorch working is to set up a venv w/ the appropriate Python version (eg 3.11 on Linux) and `pip install` the wheel:
-- https://github.com/scottt/rocm-TheRock/releases
-
-The important components can be built, but there are still performance regressions w/ the gfx1151 kernels:
-- https://github.com/ROCm/TheRock/discussions/244
-- https://github.com/ROCm/ROCm/issues/4748
-
-As I prefer to use [Mamba envs](https://github.com/conda-forge/miniforge?tab=readme-ov-file#unix-like-platforms-macos-linux--wsl) if you have a working system PyTorch you can do a slightly (very) janky workaround and symlink the system PyTorch from my venv `site-packages`:
-```
-torch -> /usr/lib64/python3.13/site-packages/torch
-torch-2.5.0a0+gitunknown-py3.13.egg-info -> /usr/lib64/python3.13/site-packages/torch-2.5.0a0+gitunknown-py3.13.egg-info
-torchgen -> /usr/lib64/python3.13/site-packages/torchgen
-```
-
-For some more details, see:  https://github.com/ROCm/TheRock/discussions/655
-
-### Instaling PyTorch w/ @scottt's wheel
-
-```
-mamba create -n torch python=3.12
-mamba activate torch
-pip install https://github.com/scottt/rocm-TheRock/releases/download/v6.5.0rc-pytorch/torch-2.7.0a0+gitbfd8155-cp311-cp311-linux_x86_64.whl
-```
-- https://github.com/scottt/rocm-TheRock/releases
-### Installing PyTorch Nightly
-This doesn't run:
-```
-❯ pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.4
-```
-
-### Docker on Fedora
-We can use scottt's Docker image: https://github.com/ROCm/TheRock/discussions/244
-```
-# Grab image
-podman pull docker.io/scottt/therock:pytorch-vision-dev-f41
-
-# 
-podman run -it --rm \
-  --device=/dev/kfd \
-  --device=/dev/dri \
-  --privileged \
-  docker.io/scottt/therock:pytorch-vision-dev-f41
-```
-- Here are some notes for running w/ podman: https://claude.ai/share/65942208-d41b-4d3d-b2dc-6c5f5f9b07e5
-# Peak Performance
+# Hardware Performance
 
 RDNA3 has a theoretical 512 FP16 FLOPS/clock/CU.
 
@@ -257,6 +209,114 @@ Elapsed time: 6:04:34
 ```
 
 At 2.8GHz clock and a max 36.9 TFLOPS that is a much more respectable 64.4% efficiency.
+
+## hgemm
+Compile: https://github.com/adelj88/rocm_wmma_samples
+
+`hgemm/bench --benchmark_filter=rocblas`:
+- gfx1100 rocBLAS has 2.5-6X the performance as gfx1151 rocBLAS
+- gfx1100 rocBLAS is 1.5-3X faster than gfx1151 hipBLASLt
+
+gfx1151 rocBLAS:
+```
+{hgemm:kernel_type::rocblas,m:1024,n:1024,k:1024}/manual_time                       0.352 ms        0.379 ms         1943 TFLOPS=6.10924 bytes_per_second=16.6634Gi/s
+{hgemm:kernel_type::rocblas,m:2048,n:2048,k:2048}/manual_time                        2.83 ms         2.85 ms          250 TFLOPS=6.07286 bytes_per_second=8.27458Gi/s
+{hgemm:kernel_type::rocblas,m:4096,n:4096,k:4096}/manual_time                        13.8 ms         13.8 ms           49 TFLOPS=9.98742 bytes_per_second=6.78644Gi/s
+{hgemm:kernel_type::rocblas,m:8192,n:8192,k:8192}/manual_time                         102 ms          102 ms            6 TFLOPS=10.754 bytes_per_second=3.6613Gi/s
+```
+
+gfx1151 rocBLAS ROCBLAS_USE_HIPBLASLT=1:
+```
+{hgemm:kernel_type::rocblas,m:1024,n:1024,k:1024}/manual_time      0.109 ms        0.135 ms         6420 TFLOPS=19.6586 bytes_per_second=53.6028Gi/s
+{hgemm:kernel_type::rocblas,m:2048,n:2048,k:2048}/manual_time      0.600 ms        0.625 ms         1125 TFLOPS=28.6657 bytes_per_second=39.0436Gi/s
+{hgemm:kernel_type::rocblas,m:4096,n:4096,k:4096}/manual_time       6.61 ms         6.62 ms          104 TFLOPS=20.7887 bytes_per_second=14.1747Gi/s
+{hgemm:kernel_type::rocblas,m:8192,n:8192,k:8192}/manual_time        146 ms          145 ms            5 TFLOPS=7.57158 bytes_per_second=2.57652Gi/s
+```
+
+gfx1100 rocBLAS HSA_OVERRIDE_GFX_VERSION=11.0.0:
+```
+{hgemm:kernel_type::rocblas,m:1024,n:1024,k:1024}/manual_time      0.063 ms        0.087 ms        11305 TFLOPS=34.3626 bytes_per_second=93.6554Gi/s
+{hgemm:kernel_type::rocblas,m:2048,n:2048,k:2048}/manual_time      0.445 ms        0.472 ms         1577 TFLOPS=38.599 bytes_per_second=52.6245Gi/s
+{hgemm:kernel_type::rocblas,m:4096,n:4096,k:4096}/manual_time       3.11 ms         3.14 ms          221 TFLOPS=44.1693 bytes_per_second=30.1057Gi/s
+{hgemm:kernel_type::rocblas,m:8192,n:8192,k:8192}/manual_time       43.5 ms         43.5 ms           16 TFLOPS=25.2763 bytes_per_second=8.61588Gi/s
+```
+
+gfx1100 rocBLAS HSA_OVERRIDE_GFX_VERSION=11.0.0 ROCBLAS_USE_HIPBLASLT=1:
+```
+{hgemm:kernel_type::rocblas,m:1024,n:1024,k:1024}/manual_time      0.109 ms        0.135 ms         6246 TFLOPS=19.6989 bytes_per_second=53.7266Gi/s
+{hgemm:kernel_type::rocblas,m:2048,n:2048,k:2048}/manual_time      0.600 ms        0.625 ms         1120 TFLOPS=28.6679 bytes_per_second=39.0454Gi/s
+{hgemm:kernel_type::rocblas,m:4096,n:4096,k:4096}/manual_time       9.44 ms         9.44 ms           74 TFLOPS=14.5921 bytes_per_second=9.9338Gi/s
+{hgemm:kernel_type::rocblas,m:8192,n:8192,k:8192}/manual_time        175 ms          174 ms            4 TFLOPS=6.29111 bytes_per_second=2.14501Gi/s
+```
+# PyTorch Setup
+
+Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still relatively poor ROCm support. (See links at the top tracking issues).
+
+A community developer @scottt (along with @jammm) have been most responsible for getting PyTorch easily usable. Outside of some (outdated) docker files, the easiest way to get PyTorch working is to set up a venv w/ the appropriate Python version (eg 3.11 on Linux) and `pip install` the wheel:
+- https://github.com/scottt/rocm-TheRock/releases
+
+The important components can be built, but there are still performance regressions w/ the gfx1151 kernels:
+- https://github.com/ROCm/TheRock/discussions/244
+- https://github.com/ROCm/ROCm/issues/4748
+
+As I prefer to use [Mamba envs](https://github.com/conda-forge/miniforge?tab=readme-ov-file#unix-like-platforms-macos-linux--wsl) if you have a working system PyTorch you can do a slightly (very) janky workaround and symlink the system PyTorch from my venv `site-packages`:
+```
+torch -> /usr/lib64/python3.13/site-packages/torch
+torch-2.5.0a0+gitunknown-py3.13.egg-info -> /usr/lib64/python3.13/site-packages/torch-2.5.0a0+gitunknown-py3.13.egg-info
+torchgen -> /usr/lib64/python3.13/site-packages/torchgen
+```
+
+For some more details, see:  https://github.com/ROCm/TheRock/discussions/655
+
+## Instaling PyTorch w/ @scottt's wheel
+For ROCm 6.5:
+```
+mamba create -n torch python=3.12
+mamba activate torch
+pip install https://github.com/scottt/rocm-TheRock/releases/download/v6.5.0rc-pytorch/torch-2.7.0a0+gitbfd8155-cp311-cp311-linux_x86_64.whl
+```
+- https://github.com/scottt/rocm-TheRock/releases
+## Installing PyTorch Nightly
+This doesn't run (6.4):
+```
+❯ pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.4
+```
+## Build from Source
+We already have hipBLASLt
+### AOTriton
+```bash
+mamba create -n torch python=3.12
+# sudo dnf install xz-devel
+mamba install liblzma-devel
+pip install ninja
+
+git clone https://github.com/ROCm/aotriton
+cd aotriton
+git submodule sync && git submodule update --init --recursive --force
+mkdir build && cd build
+
+cmake .. -DCMAKE_INSTALL_PREFIX=./install_dir -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -DAOTRITON_TARGET_ARCH="gfx1100;gfx1151" -G Ninja
+
+ninja install
+```
+- We can't use releases https://github.com/ROCm/aotriton/releases unless it's built after (2025-04-25) https://github.com/ROCm/aotriton/commit/dcecad059661a01306531fe02eba56eedffca604
+- takes about 1h wall time to build (27h CPU)
+
+### Docker on Fedora
+We can use scottt's Docker image: https://github.com/ROCm/TheRock/discussions/244
+```
+# Grab image
+podman pull docker.io/scottt/therock:pytorch-vision-dev-f41
+
+# 
+podman run -it --rm \
+  --device=/dev/kfd \
+  --device=/dev/dri \
+  --privileged \
+  docker.io/scottt/therock:pytorch-vision-dev-f41
+```
+- Here are some notes for running w/ podman: https://claude.ai/share/65942208-d41b-4d3d-b2dc-6c5f5f9b07e5
+
 ## attention-gym
 Install
 ```
