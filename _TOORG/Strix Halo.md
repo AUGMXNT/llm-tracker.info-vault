@@ -2,13 +2,16 @@ Those looking for my testing code: https://github.com/lhl/strix-halo-testing
 
 I will try to datestamp and version most of these sections since there is amount of flux/work going on and some of this will be outdated soon.
 
-2025-05-30
+# ROCm
+You might be able to use ROCm 6.4.1 for basic support (rocBLAS should have gfx1151 support) but hipBLASLt does not.
+
 For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) Linux support:
 - It's probably best to use the latest kernels as there is a constant stream of improvements to the `amdgpu` driver: https://github.com/torvalds/linux/commits/master/drivers/gpu/drm/amd/amdgpu
 - Some distros like Fedora Rawhide ship with support with `gfx1151` compiled, but your best bet for ROCm support is probably to use the latest TheRock nightlies: https://github.com/ROCm/TheRock/releases/tag/nightly-tarball
 	- These tarballs expand a full tree into the path root. I recommend using either `/opt/rocm-nightly` or `/opt/rocm` (if it doesn't already exist) and symlinking 
 	- I also recommend installing the matching `gfx110X` package first and then the `gfx1151` package - this is because currently the `gfx1100` kernels are 2-6X faster than the `gfx1151` kernels, so if they work for your use case, then you might want to use those...
 		- I filed a bug here: https://github.com/ROCm/ROCm/issues/4748
+	- Note, the nightlies are for **ROCm 6.5** and they remove support for some APIs that were previously only deprecated so you might need updated code or get compile errors (eg, w/ llama.cpp)
 
 Additional discussions worth tracking:
 - https://github.com/ROCm/TheRock/discussions/244
@@ -17,7 +20,7 @@ Additional discussions worth tracking:
 - https://www.reddit.com/r/LocalLLaMA/comments/1kmi3ra/amd_strix_halo_ryzen_ai_max_395_gpu_llm/
 
 # System Info
-**2025-05-30 UPDATE**: I am now able to reveal that all my Strix Halo has been done on pre-release [Framework Desktop](https://frame.work/desktop?tab=specs) systems. Per the published specs page, it is able to boost to 140W and sustain at 120W. It doesn't not thermal throttle.
+**2025-05-30 UPDATE**: I am now able to reveal that all my Strix Halo has been done on pre-release [Framework Desktop](https://frame.work/desktop?tab=specs) systems. Per the published specs page, it is able to boost to 140W and sustain at 120W. I won't be going deep into any hardware/system benchmarks (will leave it for others) but in my `llama-bench` runs it does not appear to thermal throttle.
 
 ```
 ❯ /opt/rocm/bin/hipconfig --full
@@ -73,45 +76,12 @@ export CPATH=$HIP_INCLUDE_PATH:$CPATH           # for clang/gcc
 export PKG_CONFIG_PATH=$ROCM_PATH/lib/pkgconfig:$PKG_CONFIG_PATH
 ```
 
-
-
-```
-❯ python -c "import torch; print(f'PyTorch version: {torch.__version__}\nCUDA available: {torch.cuda.is_available()}\nDevice count: {torch.cuda.device_count()}')"
-PyTorch version: 2.5.0a0
-CUDA available: True
-Device count: 1
-
-❯ python env-info.py
-=== System Information ===
-Os Info: Fedora Linux 43 (Workstation Edition Prerelease)
-Kernel: Linux cluster1 6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64
-Memory Info: Total Memory: 120554 MB
-
-=== GPU Information ===
-CUDA: Not found
-ROCm: ROCM-SMI version: 3.0.0+unknown
-ROCM-SMI-LIB version: 7.3.0
-PyTorch CUDA Available: True
-PyTorch CUDA Version: N/A
-PyTorch HIP Version: 6.3.42134-0
-
-GPU Count: 1
-GPU 0: AMD Radeon Graphics
-
-=== Package Versions ===
-triton: 3.3.0
-torch: 2.5.0a
-
-❯ hipconfig -l
-/usr/lib64/rocm/llvm/bin
-
-❯ hipconfig -R
-/usr
-```
-
 ## PyTorch Setup
 
-Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still relatively poor ROCm support ([ROCm #4499](https://github.com/ROCm/ROCm/issues/4499)).
+Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still relatively poor ROCm support. (See links at the top tracking issues).
+
+A community developer @scottt (along with @jammm) have been most responsible for getting PyTorch easily usable. Outside of some (outdated) docker files, the easiest way to get PyTorch working is to set up a venv w/ the appropriate Python version (eg 3.11 on Linux) and `pip install` the wheel:
+- https://github.com/scottt/rocm-TheRock/releases
 
 The important components can be built, but there are still performance regressions w/ the gfx1151 kernels:
 - https://github.com/ROCm/TheRock/discussions/244
@@ -124,7 +94,12 @@ torch-2.5.0a0+gitunknown-py3.13.egg-info -> /usr/lib64/python3.13/site-packages/
 torchgen -> /usr/lib64/python3.13/site-packages/torchgen
 ```
 
-It is possible to use these self contained 3.11 wheels w/ AOTriton SDPA (but no hipBLASLt seeminingly): https://github.com/ROCm/TheRock/discussions/655
+For some more details, see:  https://github.com/ROCm/TheRock/discussions/655
+
+### Installing PyTorch Nightly
+```
+❯ pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.4
+```
 
 ### Docker on Fedora
 We can use scottt's Docker image: https://github.com/ROCm/TheRock/discussions/244
@@ -139,9 +114,7 @@ podman run -it --rm \
   --privileged \
   docker.io/scottt/therock:pytorch-vision-dev-f41
 ```
-- I wasn't able to successfully build from source
-- toolbox doesn't seem to work properly, but running in podman with the right flags did
-- See: https://claude.ai/chat/e9fc7ffd-734b-411b-8bb4-f4028d6c7576
+- Here are some notes for running w/ podman: https://claude.ai/share/65942208-d41b-4d3d-b2dc-6c5f5f9b07e5
 # Peak Performance
 
 RDNA3 has a theoretical 512 FP16 FLOPS/clock/CU.
