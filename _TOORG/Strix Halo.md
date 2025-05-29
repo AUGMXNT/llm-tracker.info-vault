@@ -1,32 +1,23 @@
-For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) support, check out:
-- 2025-05-02 https://github.com/ROCm/TheRock/discussions/244
-- 2025-05-02 https://github.com/ROCm/ROCm/issues/4499
-	- https://github.com/ROCm/ROCm/issues/4566
+Those looking for my testing code: https://github.com/lhl/strix-halo-testing
 
-For some discussion and additional benchmarks on this testing, see: 
+I will try to datestamp and version most of these sections since there is amount of flux/work going on and some of this will be outdated soon.
+
+2025-05-30
+For the latest Strix Halo / AMD Ryzen AI Max+ 395 with Radeon 8060S (`gfx1151`) Linux support:
+- It's probably best to use the latest kernels as there is a constant stream of improvements to the `amdgpu` driver: https://github.com/torvalds/linux/commits/master/drivers/gpu/drm/amd/amdgpu
+- Some distros like Fedora Rawhide ship with support with `gfx1151` compiled, but your best bet for ROCm support is probably to use the latest TheRock nightlies: https://github.com/ROCm/TheRock/releases/tag/nightly-tarball
+	- These tarballs expand a full tree into the path root. I recommend using either `/opt/rocm-nightly` or `/opt/rocm` (if it doesn't already exist) and symlinking 
+	- I also recommend installing the matching `gfx110X` package first and then the `gfx1151` package - this is because currently the `gfx1100` kernels are 2-6X faster than the `gfx1151` kernels, so if they work for your use case, then you might want to use those...
+		- I filed a bug here: https://github.com/ROCm/ROCm/issues/4748
+
+Additional discussions worth tracking:
+- https://github.com/ROCm/TheRock/discussions/244
+- https://github.com/ROCm/ROCm/issues/4499
+- https://github.com/ROCm/ROCm/issues/4566
 - https://www.reddit.com/r/LocalLLaMA/comments/1kmi3ra/amd_strix_halo_ryzen_ai_max_395_gpu_llm/
 
-# Testing Checklist
-- [ ] ROCm 6.5 (custom compiles)
-	- [ ] rocBLAS
-	- [ ] hipBLAS
-	- [ ] hipBLASLt
-	- [ ] rocWMMA
-	- [ ] AOTriton
-- [x] llama.cpp
-	- [ ] backend/compile scripts - HIP vs HIP WMMA vs Vulkan
-	- [ ] speculative decoding
-		- [ ] ShareGPT benchmark scripts
-		- [ ] 70B
-		- [ ] 25-32 Dense
-- [ ] Torch w/ AOTriton FA w/ hipBLASLt
-	- [ ] vLLM
-	- [ ] SGLang
-	- [ ] trl
-	- [ ] Axolotl
-	- [ ] torchtune
 # System Info
-**2025-05-30 UPDATE**: I am now able to reveal that all my Strix Halo has been done on a pre-release [Framework Desktop](https://frame.work/desktop?tab=specs) system. Per the published specs page, it is able to boost to 140W and sustain at 120W. It doesn't not thermal throttle.
+**2025-05-30 UPDATE**: I am now able to reveal that all my Strix Halo has been done on pre-release [Framework Desktop](https://frame.work/desktop?tab=specs) systems. Per the published specs page, it is able to boost to 140W and sustain at 120W. It doesn't not thermal throttle.
 
 ```
 ❯ lsb_release -a
@@ -1818,3 +1809,25 @@ real    3m53.133s
 user    3m34.265s
 sys     0m4.752s
 ```
+
+
+
+# Testing Checklist
+- [x] ROCm 6.5
+	- [ ] rocBLAS
+	- [ ] hipBLAS
+	- [ ] hipBLASLt
+	- [ ] rocWMMA
+	- [ ] AOTriton
+- [x] llama.cpp
+	- [ ] backend/compile scripts - HIP vs HIP WMMA vs Vulkan
+	- [ ] speculative decoding
+		- [ ] ShareGPT benchmark scripts
+		- [ ] 70B
+		- [ ] 25-32 Dense
+- [ ] Torch w/ AOTriton FA w/ hipBLASLt
+	- [ ] vLLM
+	- [ ] SGLang
+	- [ ] trl
+	- [ ] Axolotl
+	- [ ] torchtune
