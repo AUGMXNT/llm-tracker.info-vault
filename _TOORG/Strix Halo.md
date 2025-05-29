@@ -96,7 +96,16 @@ torchgen -> /usr/lib64/python3.13/site-packages/torchgen
 
 For some more details, see:  https://github.com/ROCm/TheRock/discussions/655
 
+### Instaling PyTorch w/ @scottt's wheel
+
+```
+mamba create -n torch python=3.12
+mamba activate torch
+pip install https://github.com/scottt/rocm-TheRock/releases/download/v6.5.0rc-pytorch/torch-2.7.0a0+gitbfd8155-cp311-cp311-linux_x86_64.whl
+```
+- https://github.com/scottt/rocm-TheRock/releases
 ### Installing PyTorch Nightly
+This doesn't run:
 ```
 ❯ pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.4
 ```
