@@ -28,8 +28,12 @@ Release:        43
 Codename:       n/a
 
 ❯ uname -a
-Linux cluster1 6.15.0-0.rc3.20250422gita33b5a08cbbd.29.fc43.x86_64
+Linux cluster2 6.15.0-0.rc7.58.fc43.x86_64 #1 SMP PREEMPT_DYNAMIC Tue May 20 14:10:49 UTC 2025 x86_64 GNU/Linux
+```
 
+
+
+```
 ❯ python -c "import torch; print(f'PyTorch version: {torch.__version__}\nCUDA available: {torch.cuda.is_available()}\nDevice count: {torch.cuda.device_count()}')"
 PyTorch version: 2.5.0a0
 CUDA available: True
