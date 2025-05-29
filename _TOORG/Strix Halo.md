@@ -295,14 +295,42 @@ cd aotriton
 git submodule sync && git submodule update --init --recursive --force
 mkdir build && cd build
 
-cmake .. -DCMAKE_INSTALL_PREFIX=./install_dir -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -DAOTRITON_TARGET_ARCH="gfx1100;gfx1151" -G Ninja
+cmake .. -DCMAKE_INSTALL_PREFIX=/opt/rocm -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -DAOTRITON_TARGET_ARCH="gfx1100;gfx1151" -G Ninja
 
-ninja install
+sudo ninja install
+
+# if you need to move to a different location
+# sudo cmake --install . --prefix /opt/rocm
+
+
+# you will need to manual copy or symlink or add the pythonpath to the pyaotriton lib to your python libs if you want to use it
+ln -s /opt/rocm/lib/pyaotriton.cpython-312-x86_64-linux-gnu.so ~/miniforge3/envs/torch/lib/python3.12/site-packages/pyaotriton.cpython-312-x86_64-linux-gnu.so
+
+python -c 'import pyaotriton; help(pyaotriton)'
 ```
 - We can't use releases https://github.com/ROCm/aotriton/releases unless it's built after (2025-04-25) https://github.com/ROCm/aotriton/commit/dcecad059661a01306531fe02eba56eedffca604
 - takes about 1h wall time to build (27h CPU) for "gfx1151" or "gfx1100;gfx1151"
+### Composable Kernel (CK)
+```
+git clone https://github.com/ROCm/composable_kernel.git
+mkdir composable_kernel/build
+cd composable_kernel/build
 
-### Docker on Fedora
+cmake \
+        -D CMAKE_PREFIX_PATH=/opt/rocm \
+        -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc \
+        -D CMAKE_BUILD_TYPE=Release \
+        -D GPU_TARGETS="gfx1151" \
+        -D HIP_PLATFORM=amd \
+        ..
+
+# About 15 minutes
+time make -j
+
+time make -j install
+```
+
+## Docker on Fedora
 We can use scottt's Docker image: https://github.com/ROCm/TheRock/discussions/244
 ```
 # Grab image
@@ -335,33 +363,6 @@ https://github.com/ROCm/MIOpen/pull/3685
 HIPBLASLT_TENSILE_LIBPATH=/opt/rocm/lib/hipblaslt/library TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1 python examples/benchmark.py
 ```
 
-## aotriton
-We need to build and install aotriton:
-```
-mkdir -p /share/libdrm
-cp /opt/rocm/lib/rocm_sysdeps/share/libdrm/amdgpu.ids /share/libdrm/
-dnf install gcc gcc-c++ make cmake
-dnf install python3-devel
-export HIP_PLATFORM=amd
-export GPU_TARGETS=gfx1151
-git clone https://github.com/ROCm/aotriton
-cd aotriton
-git submodule sync && git submodule update --init --recursive --force
-mkdir build && cd build
-
-#build
-cmake .. -DCMAKE_INSTALL_PREFIX=./install_dir -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -DAOTRITON_TARGET_ARCH=gfx1151 -G Ninja
-ninja install
-
-# make sure pyaotriton linked
-ln -s /home/lhl/aotriton/build/install_dir/lib/pyaotriton.cpython-313-x86_64-linux-gnu.so /usr/local/lib/python3.13/site-packages/
-
-# make sure c lib is linked
-export LD_LIBRARY_PATH=/opt/rocm/lib:/home/lhl/aotriton/build/install_dir/lib:/opt/rocm/lib:
-
-python -c 'import pyaotriton'
-```
-- takes about 1h wall time to build (27h CPU)
 
 # llama.cpp
 ## Efficiency
@@ -698,25 +699,6 @@ export HIPBLASLT_ENABLE_MARKER=0
 
 ### aotriton
 See the `aotriton` section above, this gets built to `/home/lhl/aotriton/build/install_dir` which you can just point to or you can download the latest release for your version of ROCm: https://github.com/ROCm/aotriton/releases
-### Composable Kernel (CK)
-```
-git clone https://github.com/ROCm/composable_kernel.git
-mkdir composable_kernel/build
-cd composable_kernel/build
-
-cmake \
-        -D CMAKE_PREFIX_PATH=/opt/rocm \
-        -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc \
-        -D CMAKE_BUILD_TYPE=Release \
-        -D GPU_TARGETS="gfx1151" \
-        -D HIP_PLATFORM=amd \
-        ..
-
-# About 15 minutes
-time make -j
-
-time make -j install
-```
 
 ### PyTorch
 ```
