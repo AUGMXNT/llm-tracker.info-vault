@@ -277,12 +277,12 @@ pip install https://github.com/scottt/rocm-TheRock/releases/download/v6.5.0rc-py
 ```
 - https://github.com/scottt/rocm-TheRock/releases
 ## Installing PyTorch Nightly
-This doesn't run (6.4):
+This doesn't run w/ ROCm 6.5:
 ```
 ❯ pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm6.4
 ```
 ## Build from Source
-We already have hipBLASLt
+If you are using the latest TheRock nightly, you  already have rocBLAS, hipBLAS, and hipBLASLt.
 ### AOTriton
 ```bash
 mamba create -n torch python=3.12
@@ -300,7 +300,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=./install_dir -DCMAKE_BUILD_TYPE=Release -DAOTRI
 ninja install
 ```
 - We can't use releases https://github.com/ROCm/aotriton/releases unless it's built after (2025-04-25) https://github.com/ROCm/aotriton/commit/dcecad059661a01306531fe02eba56eedffca604
-- takes about 1h wall time to build (27h CPU)
+- takes about 1h wall time to build (27h CPU) for "gfx1151" or "gfx1100;gfx1151"
 
 ### Docker on Fedora
 We can use scottt's Docker image: https://github.com/ROCm/TheRock/discussions/244
@@ -316,6 +316,7 @@ podman run -it --rm \
   docker.io/scottt/therock:pytorch-vision-dev-f41
 ```
 - Here are some notes for running w/ podman: https://claude.ai/share/65942208-d41b-4d3d-b2dc-6c5f5f9b07e5
+
 
 ## attention-gym
 Install
