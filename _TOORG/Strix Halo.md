@@ -26,6 +26,8 @@ For some discussion and additional benchmarks on this testing, see:
 	- [ ] Axolotl
 	- [ ] torchtune
 # System Info
+**2025-05-30 UPDATE**: I am now able to reveal that all my Strix Halo has been done on a pre-release [Framework Desktop](https://frame.work/desktop?tab=specs) system. Per the published specs page, it is able to boost to 140W and sustain at 120W. It doesn't not thermal throttle.
+
 ```
 ❯ lsb_release -a
 LSB Version:    n/a
