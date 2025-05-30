@@ -321,9 +321,7 @@ cmake \
         -D GPU_TARGETS="gfx1100;gfx1151" \
         -D DISABLE_DL_KERNELS=ON \
         -D CMAKE_CXX_FLAGS="-U_GLIBCXX_ASSERTIONS" \
-        # -DCK_ENABLE_TESTS=OFF \
-        # -DCK_ENABLE_EXAMPLES=OFF \
-        # -DCK_ENABLE_BENCHMARK=OFF \ 
+        -D BUILD_MHA_LIB=ON \
         ..
 
 cmake --build . -j12
