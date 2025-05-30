@@ -320,16 +320,20 @@ cmake \
         -D CMAKE_BUILD_TYPE=Release \
         -D GPU_TARGETS="gfx1100;gfx1151" \
         -D DISABLE_DL_KERNELS=ON \
+        -D CMAKE_CXX_FLAGS="-U_GLIBCXX_ASSERTIONS" \
+        # -DCK_ENABLE_TESTS=OFF \
+        # -DCK_ENABLE_EXAMPLES=OFF \
+        # -DCK_ENABLE_BENCHMARK=OFF \ 
         ..
 
-# About 15 minutes
 cmake --build . -j8
 
 make -j install
 ```
-- we don't need no legacy DL/DPP kernels and reduces compile by >50% on RDNA3
-- 
-Setting DISABLE_DL_KERNELS=ON cuts the compile count by ~60 % on RDNA3 where you’ll use WMMA/XDL anyway .
+- We don't need no legacy DL/DPP kernels and reduces compile by >50% on RDNA3
+- either add `-D CMAKE_CXX_FLAGS="-U_GLIBCXX_ASSERTIONS"` to cmake or use `CXXFLAGS` ENV
+Setting DISABLE_DL_KERNELS=ON cuts the compile count by ~60 % on RDNA3 where you’ll use WMMA/XDL anyway
+- `-j8` b/c will OOM (even w/ basically 110GB) even at `-j16` much less `-j$(nproc)`
 
 
 ## Docker on Fedora
