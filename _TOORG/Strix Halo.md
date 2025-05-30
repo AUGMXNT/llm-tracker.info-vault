@@ -317,17 +317,14 @@ mkdir composable_kernel/build
 cd composable_kernel/build
 
 cmake \
-        -D CMAKE_PREFIX_PATH=/opt/rocm \
-        -D CMAKE_CXX_COMPILER=/opt/rocm/bin/hipcc \
         -D CMAKE_BUILD_TYPE=Release \
-        -D GPU_TARGETS="gfx1151" \
-        -D HIP_PLATFORM=amd \
+        -D GPU_TARGETS="gfx1100;gfx1151" \
         ..
 
 # About 15 minutes
-time make -j
+make -j
 
-time make -j install
+make -j install
 ```
 
 ## Docker on Fedora
