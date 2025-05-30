@@ -7,6 +7,18 @@ If you have the cash:
 - $250 for a 6U "mining" GPU server case (AliExpress), should be able to easily fit 4 GPUs on risers (not an issue for inferencing) - say $200 for good quality risers
 - $400 for a good 1300-1500W power supply
 
+Either way you'll want GPUs, depending on your price:
 
-Either way you'll want GPUs:
-- MI100
+
+| GPU | Memory | MBW | FP16 TFLOPS |
+| --- | ------ | --- | ----------- |
+|     |        |     |             |
+
+
+- 96GB
+	- $8000 - RTX Pro 6000
+	- 
+- $2500 - 5090 32GB
+
+
+- I would only recommend AMD MI100 32GB for <$1000 and if you feel confident in your ability to fight w/ software and know you don't need CUDA

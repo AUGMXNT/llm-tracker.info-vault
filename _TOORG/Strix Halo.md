@@ -319,13 +319,18 @@ cd composable_kernel/build
 cmake \
         -D CMAKE_BUILD_TYPE=Release \
         -D GPU_TARGETS="gfx1100;gfx1151" \
+        -D DISABLE_DL_KERNELS=ON \
         ..
 
 # About 15 minutes
-make -j
+cmake --build . -j8
 
 make -j install
 ```
+- we don't need no legacy DL/DPP kernels and reduces compile by >50% on RDNA3
+- 
+Setting DISABLE_DL_KERNELS=ON cuts the compile count by ~60 % on RDNA3 where you’ll use WMMA/XDL anyway .
+
 
 ## Docker on Fedora
 We can use scottt's Docker image: https://github.com/ROCm/TheRock/discussions/244
