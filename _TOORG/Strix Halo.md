@@ -329,7 +329,6 @@ make -j install
 ```
 - We don't need no legacy DL/DPP kernels and reduces compile by >50% on RDNA3
 - either add `-D CMAKE_CXX_FLAGS="-U_GLIBCXX_ASSERTIONS"` to cmake or use `CXXFLAGS` ENV
-Setting DISABLE_DL_KERNELS=ON cuts the compile count by ~60 % on RDNA3 where you’ll use WMMA/XDL anyway
 - `-j12` (peaks at 100GB+ mem used) b/c will OOM above that. Lower to `-j8` (70GB mem used) if you're OOMing
 
 
