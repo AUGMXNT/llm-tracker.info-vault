@@ -1905,8 +1905,19 @@ build: 1caae7fc (5599)
 
 ```
 
+H200 `-DGGML_CUDA_F16=ON` (no difference)
 ```
+❯ CUDA_VISIBLE_DEVICES=7 build/bin/llama-bench -ngl 999 -fa 1 -m /data/models/shisa-v2-llama3.1-405b-IQ2_XXS-00001-of-00003.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA H200, compute capability 9.0, VMM: yes
+| model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
+| llama ?B IQ2_XXS - 2.0625 bpw  |  99.90 GiB |   405.85 B | CUDA       | 999 |  1 |           pp512 |        225.56 ± 0.02 |
+| llama ?B IQ2_XXS - 2.0625 bpw  |  99.90 GiB |   405.85 B | CUDA       | 999 |  1 |           tg128 |          7.49 ± 0.00 |
 
+build: 1caae7fc (5599)
 ```
 # Testing Checklist
 - [x] ROCm 6.5
