@@ -1885,7 +1885,16 @@ sys     0m4.752s
 
 ## Shisa V2 405B
 IQ2_XXS - 100GB
+```
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
+| llama ?B IQ2_XXS - 2.0625 bpw  |  99.90 GiB |   405.85 B | Vulkan,RPC | 999 |  1 |           pp512 |         11.90 ± 0.02 |
+| llama ?B IQ2_XXS - 2.0625 bpw  |  99.90 GiB |   405.85 B | Vulkan,RPC | 999 |  1 |           tg128 |          1.93 ± 0.00 |
 
+build: 3cc1f1f1 (5393)
+```
 
 
 ### H200
