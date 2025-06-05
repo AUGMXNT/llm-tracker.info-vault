@@ -1888,8 +1888,8 @@ IQ2_XXS - 100GB
 
 
 
-
-H200
+### H200
+Note, the perf sucks - vLLM FP8 runs at 28 tok/s
 ```
 ❯ CUDA_VISIBLE_DEVICES=7 build/bin/llama-bench -ngl 999 -fa 1 -m /data/models/shisa-v2-llama3.1-405b-IQ2_XXS-00001-of-00003.gguf
 ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
@@ -1905,7 +1905,8 @@ build: 1caae7fc (5599)
 
 ```
 
-H200 `-DGGML_CUDA_F16=ON` (no difference)
+### H200 `-DGGML_CUDA_F16=ON`
+No difference in speed
 ```
 ❯ CUDA_VISIBLE_DEVICES=7 build/bin/llama-bench -ngl 999 -fa 1 -m /data/models/shisa-v2-llama3.1-405b-IQ2_XXS-00001-of-00003.gguf
 ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
