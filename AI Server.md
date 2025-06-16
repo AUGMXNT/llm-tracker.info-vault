@@ -23,3 +23,12 @@ Either way you'll want GPUs, depending on your price:
 |      | $250                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Intel B580          | 12GB   | 456        | 116.8       | Keep an eye out for 24GB/48GB versions and see where that slots (not until Q4 2025)                                         |
 - If you are doing text inference you have options, but for video/image generation you will probably want CUDA
 - I wouldn't get the MI60 (or even the MI100) unless you knew what are doing (able to build your own ROCm and support libs if necessary); also some things like FA may simply not work. Be sure to carefully check https://rocm.docs.amd.com/en/latest/compatibility/compatibility-matrix.html and to search online for features that you require, but in general the 7900 XT/XTX / W7900 is or maybe soon the 9070XT / R9700 (and MI300X on server side, but those are aren't reasonably available for purchase) are the only AMD cards I'd recommend for compatibility.
+
+
+
+2 x EPYC 9135 = 884 GB/s
+https://www.reddit.com/r/LocalLLaMA/comments/1h3doy8/stream_triad_memory_bandwidth_benchmark_values/
+https://jp.fujitsu.com/platform/server/primergy/performance/pdf/wp-performance-report-primergy-rx2450-m2-ww-ja.pdf
+https://sp.ts.fujitsu.com/dmsp/Publications/public/wp-genoa-memory-performance-ww-en.pdf
+https://sp.ts.fujitsu.com/dmsp/Publications/public/wp-performance-report-primergy-rx1440-m2-ww-en.pdf
+$1200 x 2 = https://www.wiredzone.com/shop/product/10031917-amd-100-000001150-epyc-9135-3-65ghz-16-core-processor-5th-generation-turin-14609
