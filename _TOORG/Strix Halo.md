@@ -1944,7 +1944,45 @@ ggml_cuda_init: found 1 ROCm devices:
 build: 6adc3c3e (5684)
 ```
 
+## Llama 4 Scout
 
+hipBLASLt dies...
+```
+❯ build/bin/llama-bench -m /models/gguf/Llama-4-Scout-17B-16E-Instruct-UD-Q4_K_XL-00001-of-00002.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+| llama4 17Bx16E (Scout) Q4_K - Medium |  57.73 GiB |   107.77 B | ROCm       |  99 |           pp512 |        104.93 ± 2.00 |
+| llama4 17Bx16E (Scout) Q4_K - Medium |  57.73 GiB |   107.77 B | ROCm       |  99 |           tg128 |         16.70 ± 0.00 |
+
+build: 6adc3c3e (5684)
+
+❯ ROCBLAS_USE_HIPBLASLT=1 build/bin/llama-bench -m /models/gguf/Llama-4-Scout-17B-16E-Instruct-UD-Q4_K_XL-00001-of-00002.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+fish: Job 1, 'ROCBLAS_USE_HIPBLASLT=1 build/b…' terminated by signal SIGABRT (Abort)
+
+```
+
+Vulkan
+```
+❯ build/bin/llama-bench -m /models/gguf/Llama-4-Scout-17B-16E-Instruct-UD-Q4_K_XL-00001-of-00002.gguf
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = Radeon 8060S Graphics (AMD open-source driver) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 32768 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+| llama4 17Bx16E (Scout) Q4_K - Medium |  57.73 GiB |   107.77 B | Vulkan     |  99 |           pp512 |        125.92 ± 0.50 |
+| llama4 17Bx16E (Scout) Q4_K - Medium |  57.73 GiB |   107.77 B | Vulkan     |  99 |           tg128 |         19.95 ± 0.01 |
+
+build: 6adc3c3e (5684)
+```
 
 ## Shisa V2 405B
 IQ2_XXS - 100GB
