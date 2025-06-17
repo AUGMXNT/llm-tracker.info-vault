@@ -408,47 +408,7 @@ cmake -B build -DGGML_VULKAN=ON -DGGML_RPC=ON && cmake --build build --config Re
 ```
 - takes about 1.5 minutes to build
 
-## Qwen 3 MoE
-Currently there is a bug where batch size has to be below 360 to prevent a crash. 256 has been tested as the best performer (multiple of 64):
-```
-❯ llama.cpp-vulkan/build/bin/llama-bench -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf -b 256
-ggml_vulkan: Found 1 Vulkan devices:
-ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
-| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
-| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           pp512 |        144.36 ± 0.54 |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           tg128 |         74.76 ± 0.07 |
 
-build: d24d5928 (5255)
-```
-- https://www.reddit.com/r/LocalLLaMA/comments/1kd5rua/comment/mq8n7sc/
-
-UPDATE: This no longer crashes, but `-b 256` still performs better than on Vulkan, prompt processing is almost 2X faster:
-```
-❯ build/bin/llama-bench -b 256 -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf
-ggml_vulkan: Found 1 Vulkan devices:
-ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coo
-pmat
-| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
-| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           pp512 |        116.69 ± 0.22 |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           tg128 |         74.77 ± 0.12 |
-
-build: 43dfd741 (5338)
-
-❯ build/bin/llama-bench -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf
-ggml_vulkan: Found 1 Vulkan devices:
-ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coo
-pmat
-| model                          |       size |     params | backend    | ngl |            test |                  t/s |
-| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |           pp512 |         69.31 ± 0.10 |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |           tg128 |         74.90 ± 0.10 |
-
-build: 43dfd741 (5338)
-```
-
-For the HIP backend `-b 256` slows things down though, so this is like a Vulkan only optimization.
 ## Flash Attention
 
 Measuring memory usage with `rocm-smi`:
@@ -1882,6 +1842,109 @@ real    3m53.133s
 user    3m34.265s
 sys     0m4.752s
 ```
+
+## Qwen 3 MoE
+This test was done with Unsloth's UD 2.0 Q4_K_XL quant (17GB).
+```
+wget https://huggingface.co/unsloth/Qwen3-30B-A3B-GGUF/resolve/main/Qwen3-30B-A3B-UD-Q4_K_XL.gguf
+```
+
+There was a Vulkan bug that would lead to crashes with batch sizes >360. This is fixed, but `-b 256` (multiple of 64) still performs significantly better:
+- - https://www.reddit.com/r/LocalLLaMA/comments/1kd5rua/comment/mq8n7sc/
+
+```
+# Normal Batch Size
+❯ build/bin/llama-bench -m /models/gguf/Qwen3-30B-A3B-UD-Q4_K_XL.gguf
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = Radeon 8060S Graphics (AMD open-source driver) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 32768 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | Vulkan     |  99 |           pp512 |        109.37 ± 0.52 |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | Vulkan     |  99 |           tg128 |         72.35 ± 0.05 |
+
+build: 6adc3c3e (5684)
+
+# 256 batch size
+❯ build/bin/llama-bench -m /models/gguf/Qwen3-30B-A3B-UD-Q4_K_XL.gguf -b 256
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = Radeon 8060S Graphics (AMD open-source driver) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 32768 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | Vulkan     |  99 |     256 |           pp512 |        178.03 ± 0.84 |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | Vulkan     |  99 |     256 |           tg128 |         72.31 ± 0.06 |
+
+build: 6adc3c3e (5684)
+```
+
+Currently there is a bug where batch size has to be below 360 to prevent a crash. 256 has been tested as the best performer (multiple of 64). Prompt processing remains significantly faster
+
+
+
+```
+❯ llama.cpp-vulkan/build/bin/llama-bench -m ~/models/Qwen3-30B-A3B-Q4_K_M.gguf -b 256
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Graphics (RADV GFX1151) (radv) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl | n_batch |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           pp512 |        144.36 ± 0.54 |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | Vulkan,RPC |  99 |     256 |           tg128 |         74.76 ± 0.07 |
+
+build: d24d5928 (5255)
+```
+
+Note, token generation slows down significantly with `-fa 1`
+```
+❯ build/bin/llama-bench -m /models/gguf/Qwen3-30B-A3B-UD-Q4_K_XL.gguf -fa 1
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = Radeon 8060S Graphics (AMD open-source driver) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 32768 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | Vulkan     |  99 |  1 |           pp512 |        109.70 ± 0.33 |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | Vulkan     |  99 |  1 |           tg128 |         56.23 ± 0.06 |
+
+build: 6adc3c3e (5684)
+
+
+❯ build/bin/llama-bench -m /models/gguf/Qwen3-30B-A3B-UD-Q4_K_XL.gguf -b 256 -fa 1
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = Radeon 8060S Graphics (AMD open-source driver) | uma: 1 | fp16: 1 | warp size: 64 | shared memory: 32768 | int dot: 1 | matrix cores: KHR_coopmat
+| model                          |       size |     params | backend    | ngl | n_batch | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | Vulkan     |  99 |     256 |  1 |           pp512 |        178.23 ± 0.69 |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | Vulkan     |  99 |     256 |  1 |           tg128 |         56.35 ± 0.09 |
+
+build: 6adc3c3e (5684)
+```
+
+For HIP, there is a slowdown if you use `-b 256` (also for `-fa 1`). Disappointingly, token generation is slower than Vulkan, however prompt processing is many times faster, so you will need to decide which fits your use case better. `ROCBLAS_USE_HIPBLASLT=1` is significantly faster than regular rocBLAS.
+
+```
+❯ build/bin/llama-bench -m /models/gguf/Qwen3-30B-A3B-UD-Q4_K_XL.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | ROCm       |  99 |           pp512 |        387.64 ± 2.01 |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | ROCm       |  99 |           tg128 |         54.75 ± 0.02 |
+
+build: 6adc3c3e (5684)
+
+❯ ROCBLAS_USE_HIPBLASLT=1 build/bin/llama-bench -m /models/gguf/Qwen3-30B-A3B-UD-Q4_K_XL.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 ROCm devices:
+  Device 0: AMD Radeon Graphics, gfx1151 (0x1151), VMM: no, Wave Size: 32
+| model                          |       size |     params | backend    | ngl |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | --------------: | -------------------: |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | ROCm       |  99 |           pp512 |        558.73 ± 2.88 |
+| qwen3moe 30B.A3B Q4_K - Medium |  16.49 GiB |    30.53 B | ROCm       |  99 |           tg128 |         54.45 ± 0.01 |
+
+build: 6adc3c3e (5684)
+```
+
+
 
 ## Shisa V2 405B
 IQ2_XXS - 100GB
