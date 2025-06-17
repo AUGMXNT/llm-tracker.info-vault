@@ -296,7 +296,7 @@ cd aotriton
 git submodule sync && git submodule update --init --recursive --force
 mkdir build && cd build
 
-cmake .. -DCMAKE_INSTALL_PREFIX=/opt/rocm -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -DAOTRITON_TARGET_ARCH="gfx1100;gfx1151" -G Ninja
+cmake .. -DCMAKE_INSTALL_PREFIX=$ROCM_PATH -DCMAKE_BUILD_TYPE=Release -DAOTRITON_GPU_BUILD_TIMEOUT=0 -DAOTRITON_TARGET_ARCH="gfx1100;gfx1151" -G Ninja
 
 sudo ninja install
 
