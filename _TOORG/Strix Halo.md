@@ -248,6 +248,11 @@ gfx1100 rocBLAS HSA_OVERRIDE_GFX_VERSION=11.0.0 ROCBLAS_USE_HIPBLASLT=1:
 {hgemm:kernel_type::rocblas,m:4096,n:4096,k:4096}/manual_time       9.44 ms         9.44 ms           74 TFLOPS=14.5921 bytes_per_second=9.9338Gi/s
 {hgemm:kernel_type::rocblas,m:8192,n:8192,k:8192}/manual_time        175 ms          174 ms            4 TFLOPS=6.29111 bytes_per_second=2.14501Gi/s
 ```
+
+## phawx review
+https://youtu.be/yiHr8CQRZi4?t=1156
+- Max MBW above 24W
+
 # PyTorch Setup
 
 Despite the first Ryzen AI Max+ processor [launching February 25, 2025](https://www.asus.com/us/news/s02topwrxdtvtura/) with the Asus ROG Flow Z13, as of May 2025 there is still relatively poor ROCm support. (See links at the top tracking issues).
