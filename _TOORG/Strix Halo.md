@@ -2,6 +2,13 @@ Those looking for my testing code: https://github.com/lhl/strix-halo-testing
 
 I will try to datestamp and version most of these sections since there is amount of flux/work going on and some of this will be outdated soon.
 
+If you're just interested in the latest on inferencing performance, see:
+- https://github.com/lhl/strix-halo-testing/tree/main/llm-bench
+- 2025-07-22 latest update/discussion:
+	- https://www.reddit.com/r/LocalLLaMA/comments/1m6b151/updated_strix_halo_ryzen_ai_max_395_llm_benchmark/
+	- https://community.frame.work/t/amd-strix-halo-ryzen-ai-max-395-gpu-llm-performance-tests/72521
+	- https://forum.level1techs.com/t/strix-halo-ryzen-ai-max-395-llm-benchmark-results/233796
+
 # ROCm
 You might be able to use ROCm 6.4.1 for basic support (rocBLAS should have gfx1151 support) but hipBLASLt does not.
 
