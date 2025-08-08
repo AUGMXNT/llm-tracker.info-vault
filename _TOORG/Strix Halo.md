@@ -1,9 +1,15 @@
 Those looking for my testing code: https://github.com/lhl/strix-halo-testing
+I will probably consolidate and redirect to the Github repo at some point.
 
 I will try to datestamp and version most of these sections since there is amount of flux/work going on and some of this will be outdated soon.
 
+
+
+
 If you're just interested in the latest on inferencing performance, see:
 - https://github.com/lhl/strix-halo-testing/tree/main/llm-bench
+	- Please read the README in this folder, it includes all most of the tuning that you'll need assuming you want to set things up, tweak, tune, etc
+- There is a [Strix Halo Toolbox](https://github.com/kyuz0/amd-strix-halo-toolboxes) project that will let you download preset llama.cpp docker builds that might be easier. You still might want to take a look at my repo for some performance/setup wins
 - 2025-07-22 latest update/discussion:
 	- https://www.reddit.com/r/LocalLLaMA/comments/1m6b151/updated_strix_halo_ryzen_ai_max_395_llm_benchmark/
 	- https://community.frame.work/t/amd-strix-halo-ryzen-ai-max-395-gpu-llm-performance-tests/72521
