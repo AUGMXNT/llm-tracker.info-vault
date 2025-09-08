@@ -375,3 +375,275 @@ None
 Block Mask:
 None
 ```
+
+
+# vLLM
+
+## c=max
+```
+❯ vllm bench serve --dataset-name sharegpt --model shisa-ai/shisa-v2-unphi4-14b --dataset-path ShareGPT_V3_unfiltered_cleaned_split.json
+INFO 09-09 03:24:41 [__init__.py:216] Automatically detected platform cuda.
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7ff17daa8040>, seed=0, num_prompts=1000, dataset_name='sharegpt', no_stream=False, da
+taset_path='ShareGPT_V3_unfiltered_cleaned_split.json', custom_output_len=256, custom_skip_chat_template=False, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_le
+n=None, random_input_len=1024, random_output_len=128, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, ra
+ndom_mm_limit_mm_per_prompt={'image': 255, 'video': 0}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_outpu
+t_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, endpoint_type='openai', label=None, backend='vllm
+', base_url=None, host='127.0.0.1', port=8000, endpoint='/v1/completions', max_concurrency=None, model='shisa-ai/shisa-v2-unphi4-14b', tokenizer=None, use_beam_search=False, logprobs=None, request_r
+ate=inf, burstiness=1.0, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename=None
+, ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, request_id_prefix='benchmark-serving', top_p=None, top_k=None, min_p=None, temperature=None, tokenizer_
+mode='auto', served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=600)
+Starting initial single prompt test run...
+Waiting for endpoint to become up in 600 seconds
+ |                                                                                                                                                              | 00:50 elapsed, 12105:01:31 remaining
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: None
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:43<00:00, 22.81it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1000
+Benchmark duration (s):                  43.85
+Total input tokens:                      214316
+Total generated tokens:                  91942
+Request throughput (req/s):              22.81
+Output token throughput (tok/s):         2096.79
+Total Token throughput (tok/s):          6984.37
+---------------Time to First Token----------------
+Mean TTFT (ms):                          9718.01
+Median TTFT (ms):                        9388.28
+P99 TTFT (ms):                           19349.72
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          305.36
+Median TPOT (ms):                        170.61
+P99 TPOT (ms):                           729.54
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           98.99
+Median ITL (ms):                         40.35
+P99 ITL (ms):                            733.29
+==================================================
+```
+
+## c=32
+```
+❯ vllm bench serve --dataset-name sharegpt --model shisa-ai/shisa-v2-unphi4-14b --dataset-path ShareGPT_V3_unfiltered_cleaned_split.json --max-concurrency=32
+INFO 09-09 03:27:26 [__init__.py:216] Automatically detected platform cuda.
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7f20e9a63ba0>, seed=0, num_prompts=1000, dataset_name='sharegpt', no_stream=False, da
+taset_path='ShareGPT_V3_unfiltered_cleaned_split.json', custom_output_len=256, custom_skip_chat_template=False, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_le
+n=None, random_input_len=1024, random_output_len=128, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, ra
+ndom_mm_limit_mm_per_prompt={'image': 255, 'video': 0}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_outpu
+t_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, endpoint_type='openai', label=None, backend='vllm
+', base_url=None, host='127.0.0.1', port=8000, endpoint='/v1/completions', max_concurrency=32, model='shisa-ai/shisa-v2-unphi4-14b', tokenizer=None, use_beam_search=False, logprobs=None, request_rat
+e=inf, burstiness=1.0, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename=None,
+ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, request_id_prefix='benchmark-serving', top_p=None, top_k=None, min_p=None, temperature=None, tokenizer_mo
+de='auto', served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=600)
+Starting initial single prompt test run...
+Waiting for endpoint to become up in 600 seconds
+ |                                                                                                                                                                | 00:01 elapsed, 450:28:28 remaining
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 32
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [01:24<00:00, 11.86it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1000
+Maximum request concurrency:             32
+Benchmark duration (s):                  84.29
+Total input tokens:                      214316
+Total generated tokens:                  91928
+Request throughput (req/s):              11.86
+Output token throughput (tok/s):         1090.59
+Total Token throughput (tok/s):          3633.14
+---------------Time to First Token----------------
+Mean TTFT (ms):                          62.26
+Median TTFT (ms):                        49.91
+P99 TTFT (ms):                           135.56
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          26.26
+Median TPOT (ms):                        25.61
+P99 TPOT (ms):                           38.10
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           26.17
+Median ITL (ms):                         23.01
+P99 ITL (ms):                            84.66
+==================================================
+```
+
+## c=64
+```
+❯ vllm bench serve --dataset-name sharegpt --model shisa-ai/shisa-v2-unphi4-14b --dataset-path ShareGPT_V3_unfiltered_cleaned_split.json --max-concurrency=64
+INFO 09-09 03:29:24 [__init__.py:216] Automatically detected platform cuda.
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7f761cd87ba0>, seed=0, num_prompts=1000, dataset_name='sharegpt', no_stream=False, da
+taset_path='ShareGPT_V3_unfiltered_cleaned_split.json', custom_output_len=256, custom_skip_chat_template=False, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_le
+n=None, random_input_len=1024, random_output_len=128, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, ra
+ndom_mm_limit_mm_per_prompt={'image': 255, 'video': 0}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_outpu
+t_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, endpoint_type='openai', label=None, backend='vllm
+', base_url=None, host='127.0.0.1', port=8000, endpoint='/v1/completions', max_concurrency=64, model='shisa-ai/shisa-v2-unphi4-14b', tokenizer=None, use_beam_search=False, logprobs=None, request_rat
+e=inf, burstiness=1.0, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename=None,
+ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, request_id_prefix='benchmark-serving', top_p=None, top_k=None, min_p=None, temperature=None, tokenizer_mo
+de='auto', served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=600)
+Starting initial single prompt test run...
+Waiting for endpoint to become up in 600 seconds
+ |                                                                                                                                                                | 00:01 elapsed, 134:22:41 remaining
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 64
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:51<00:00, 19.52it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1000
+Maximum request concurrency:             64
+Benchmark duration (s):                  51.22
+Total input tokens:                      214316
+Total generated tokens:                  92278
+Request throughput (req/s):              19.52
+Output token throughput (tok/s):         1801.67
+Total Token throughput (tok/s):          5986.06
+---------------Time to First Token----------------
+Mean TTFT (ms):                          61.08
+Median TTFT (ms):                        57.94
+P99 TTFT (ms):                           126.50
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          28.14
+Median TPOT (ms):                        28.16
+P99 TPOT (ms):                           30.75
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           27.87
+Median ITL (ms):                         27.05
+P99 ITL (ms):                            32.06
+==================================================
+```
+
+## c=128
+```
+❯ vllm bench serve --dataset-name sharegpt --model shisa-ai/shisa-v2-unphi4-14b --dataset-path ShareGPT_V3_unfiltered_cleaned_split.json --max-concurrency=128
+INFO 09-09 03:31:06 [__init__.py:216] Automatically detected platform cuda.
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7fd36325bba0>, seed=0, num_prompts=1000, dataset_name='sharegpt', no_stream=False, da
+taset_path='ShareGPT_V3_unfiltered_cleaned_split.json', custom_output_len=256, custom_skip_chat_template=False, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_le
+n=None, random_input_len=1024, random_output_len=128, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, ra
+ndom_mm_limit_mm_per_prompt={'image': 255, 'video': 0}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_outpu
+t_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, endpoint_type='openai', label=None, backend='vllm
+', base_url=None, host='127.0.0.1', port=8000, endpoint='/v1/completions', max_concurrency=128, model='shisa-ai/shisa-v2-unphi4-14b', tokenizer=None, use_beam_search=False, logprobs=None, request_ra
+te=inf, burstiness=1.0, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename=None,
+ ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, request_id_prefix='benchmark-serving', top_p=None, top_k=None, min_p=None, temperature=None, tokenizer_m
+ode='auto', served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=600)
+Starting initial single prompt test run...
+Waiting for endpoint to become up in 600 seconds
+ |                                                                                                                                                                | 00:01 elapsed, 348:02:54 remaining
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 128
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:35<00:00, 28.09it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1000
+Maximum request concurrency:             128
+Benchmark duration (s):                  35.60
+Total input tokens:                      214316
+Total generated tokens:                  90886
+Request throughput (req/s):              28.09
+Output token throughput (tok/s):         2553.30
+Total Token throughput (tok/s):          8574.17
+---------------Time to First Token----------------
+Mean TTFT (ms):                          84.11
+Median TTFT (ms):                        68.22
+P99 TTFT (ms):                           217.02
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          33.08
+Median TPOT (ms):                        32.83
+P99 TPOT (ms):                           39.59
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           32.09
+Median ITL (ms):                         32.56
+P99 ITL (ms):                            38.51
+==================================================
+```
+
+## c=256
+```
+❯ vllm bench serve --dataset-name sharegpt --model shisa-ai/shisa-v2-unphi4-14b --dataset-path ShareGPT_V3_unfiltered_cleaned_split.json --max-concurrency=256
+INFO 09-09 03:32:21 [__init__.py:216] Automatically detected platform cuda.
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7f38e0ee7ba0>, seed=0, num_prompts=1000, dataset_name='sharegpt', no_stream=False, da
+taset_path='ShareGPT_V3_unfiltered_cleaned_split.json', custom_output_len=256, custom_skip_chat_template=False, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_le
+n=None, random_input_len=1024, random_output_len=128, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, ra
+ndom_mm_limit_mm_per_prompt={'image': 255, 'video': 0}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_outpu
+t_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, endpoint_type='openai', label=None, backend='vllm
+', base_url=None, host='127.0.0.1', port=8000, endpoint='/v1/completions', max_concurrency=256, model='shisa-ai/shisa-v2-unphi4-14b', tokenizer=None, use_beam_search=False, logprobs=None, request_ra
+te=inf, burstiness=1.0, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename=None,
+ ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, request_id_prefix='benchmark-serving', top_p=None, top_k=None, min_p=None, temperature=None, tokenizer_m
+ode='auto', served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=600)
+Starting initial single prompt test run...
+Waiting for endpoint to become up in 600 seconds
+ |                                                                                                                                                                | 00:01 elapsed, 291:13:45 remaining
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 256
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:30<00:00, 32.89it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1000
+Maximum request concurrency:             256
+Benchmark duration (s):                  30.40
+Total input tokens:                      214316
+Total generated tokens:                  91334
+Request throughput (req/s):              32.89
+Output token throughput (tok/s):         3004.18
+Total Token throughput (tok/s):          10053.51
+---------------Time to First Token----------------
+Mean TTFT (ms):                          174.58
+Median TTFT (ms):                        121.58
+P99 TTFT (ms):                           380.03
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          53.93
+Median TPOT (ms):                        56.78
+P99 TPOT (ms):                           77.49
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           45.53
+Median ITL (ms):                         41.37
+P99 ITL (ms):                            67.17
+==================================================
+```
+
+## c=512
+```
+❯ vllm bench serve --dataset-name sharegpt --model shisa-ai/shisa-v2-unphi4-14b --dataset-path ShareGPT_V3_unfiltered_cleaned_split.json --max-concurrency=512
+INFO 09-09 03:33:38 [__init__.py:216] Automatically detected platform cuda.
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7fc7f29dbba0>, seed=0, num_prompts=1000, dataset_name='sharegpt', no_stream=False, da
+taset_path='ShareGPT_V3_unfiltered_cleaned_split.json', custom_output_len=256, custom_skip_chat_template=False, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_le
+n=None, random_input_len=1024, random_output_len=128, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, ra
+ndom_mm_limit_mm_per_prompt={'image': 255, 'video': 0}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_outpu
+t_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, endpoint_type='openai', label=None, backend='vllm
+', base_url=None, host='127.0.0.1', port=8000, endpoint='/v1/completions', max_concurrency=512, model='shisa-ai/shisa-v2-unphi4-14b', tokenizer=None, use_beam_search=False, logprobs=None, request_ra
+te=inf, burstiness=1.0, trust_remote_code=False, disable_tqdm=False, profile=False, save_result=False, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename=None,
+ ignore_eos=False, percentile_metrics='ttft,tpot,itl', metric_percentiles='99', goodput=None, request_id_prefix='benchmark-serving', top_p=None, top_k=None, min_p=None, temperature=None, tokenizer_m
+ode='auto', served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=600)
+Starting initial single prompt test run...
+Waiting for endpoint to become up in 600 seconds
+ |                                                                                                                                                                | 00:01 elapsed, 330:21:19 remaining
+Initial test run completed. Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 512
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:26<00:00, 37.30it/s]
+============ Serving Benchmark Result ============
+Successful requests:                     1000
+Maximum request concurrency:             512
+Benchmark duration (s):                  26.81
+Total input tokens:                      214316
+Total generated tokens:                  92521
+Request throughput (req/s):              37.30
+Output token throughput (tok/s):         3451.19
+Total Token throughput (tok/s):          11445.53
+---------------Time to First Token----------------
+Mean TTFT (ms):                          430.01
+Median TTFT (ms):                        380.60
+P99 TTFT (ms):                           733.46
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          75.76
+Median TPOT (ms):                        69.05
+P99 TPOT (ms):                           153.60
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           47.72
+Median ITL (ms):                         40.44
+P99 ITL (ms):                            139.67
+==================================================
+```
