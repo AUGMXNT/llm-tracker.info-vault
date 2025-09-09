@@ -154,6 +154,21 @@ ggml_cuda_init: found 1 CUDA devices:
 build: 233d773d0 (6413)
 ```
 
+## Mistral Nemo 12B
+```
+❯ build/bin/llama-bench -fa 1 -m /models/llm/gguf/shisa-v2-mistral-nemo-12b.i1-Q4_K_M.gguf
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA RTX PRO 6000 Blackwell Workstation Edition, compute capability 12.0, VMM: yes
+| model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
+| llama 13B Q4_K - Medium        |   6.96 GiB |    12.25 B | CUDA       |  99 |  1 |           pp512 |      9876.68 ± 41.64 |
+| llama 13B Q4_K - Medium        |   6.96 GiB |    12.25 B | CUDA       |  99 |  1 |           tg128 |        163.31 ± 0.05 |
+
+build: 233d773d0 (6413)
+```
+
 ## gpt-oss-120b
 ```❯ build/bin/llama-bench -fa 1 -m /models/llm/gguf/gpt-oss-120b-UD-Q8_K_XL-00001-of-00002.gguf
 ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
@@ -178,8 +193,8 @@ ggml_cuda_init: found 1 CUDA devices:
   Device 0: NVIDIA RTX PRO 6000 Blackwell Workstation Edition, compute capability 12.0, VMM: yes
 | model                          |       size |     params | backend    | ngl | fa |            test |                  t/s |
 | ------------------------------ | ---------: | ---------: | ---------- | --: | -: | --------------: | -------------------: |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | CUDA       |  99 |  1 |           pp512 |     7432.36 ± 248.16 |
-| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | CUDA       |  99 |  1 |           tg128 |        251.04 ± 0.43 |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | CUDA       |  99 |  1 |           pp512 |      7640.08 ± 25.58 |
+| qwen3moe 30B.A3B Q4_K - Medium |  17.28 GiB |    30.53 B | CUDA       |  99 |  1 |           tg128 |        251.61 ± 0.39 |
 
 build: 233d773d0 (6413)
 ```
@@ -379,6 +394,7 @@ None
 
 # vLLM
 
+### Shisa V2 UnPhi 14B
 ## c=max
 ```
 ❯ vllm bench serve --dataset-name sharegpt --model shisa-ai/shisa-v2-unphi4-14b --dataset-path ShareGPT_V3_unfiltered_cleaned_split.json
