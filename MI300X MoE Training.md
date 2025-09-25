@@ -38,4 +38,5 @@ docker run -it --rm \
 megablocks
 ```
 
-docker exec
+
+docker exec│   docker exec 5213585f178c bash -c "cd /workspace/project/megablocks && MAX_JOBS=8 PYTORCH_ROCM_ARCH=gfx942 python setup.py build_ext --inplace"                         │
