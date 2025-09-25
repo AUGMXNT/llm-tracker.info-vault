@@ -37,3 +37,5 @@ docker run -it --rm \
 --ipc=host --shm-size 16G \
 megablocks
 ```
+
+docker exec
