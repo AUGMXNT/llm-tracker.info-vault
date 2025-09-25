@@ -25,3 +25,15 @@ root@amd2:/app/src# du -sh *
 52K     train.log
 
 ```
+
+Context
+```
+docker run -it --rm \
+--privileged -v ./:/app \
+--network=host --device=/dev/kfd \
+--device=/dev/dri --group-add video \
+--name=my_megablocks --cap-add=SYS_PTRACE \
+--security-opt seccomp=unconfined \
+--ipc=host --shm-size 16G \
+megablocks
+```
